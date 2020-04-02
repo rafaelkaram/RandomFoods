@@ -9,6 +9,12 @@ module.exports = {
             .where('ong_id', ong_id)
             .select('*');
 
+        const [ qtde ] = await connection('incidents')
+            .where('ong_id', ong_id)
+            .count();
+
+        response.header('X-Total-Count', qtde['count']);
+
         return response.json(incidents);
     }
 }
