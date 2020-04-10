@@ -5,6 +5,8 @@ exports.up = function(knex) {
         table.integer('id_receita').notNullable();
         table.integer('id_comentario_pai').notNullable();
         table.text('valor').notNullable();
+
+        table.foreign('id_usuario').references('id').inTable('');
     });
 };
 
