@@ -9,7 +9,7 @@ module.exports = {
       host : '127.0.0.1',
       user : 'postgres',
       password : '0795',
-      database : 'aula_js'
+      database : 'random_foods'
     },
     migrations: {
       directory: './src/database/migrations'
@@ -23,7 +23,7 @@ module.exports = {
       host : '127.0.0.1',
       user : 'postgres',
       password : '0795',
-      database : 'aula_js'
+      database : 'random_foods'
     },
     migrations: {
       directory: './src/database/migrations'
@@ -37,7 +37,7 @@ module.exports = {
       host : '127.0.0.1',
       user : 'postgres',
       password : '0795',
-      database : 'aula_js'
+      database : 'random_foods'
     },
     migrations: {
       directory: './src/database/migrations'

@@ -1,7 +1,7 @@
 exports.up = function(knex) {
     return knex.schema.createTable('receita', function (table) {
         table.increments();
-        table.integer('id_usuario');defaultTo(null);
+        table.integer('id_usuario').defaultTo(null);
         table.string('nome', 100).notNullable();
         table.text('descricao').notNullable();
         table.enu('tipo', ['doce', 'salgado']).notNullable();
