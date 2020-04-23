@@ -2,7 +2,9 @@ exports.up = function(knex) {
     return knex.schema.createTable('tipo_unidade', function (table) {
         table.increments();
         table.string('nome', 30).notNullable();
-        table.decimal('taxa_conversao').notNullable();
+        table.integer('id_unidade').notNullable();
+
+        table.foreign('id_unidade').references('id').inTable('unidade');
     });
 };
 
