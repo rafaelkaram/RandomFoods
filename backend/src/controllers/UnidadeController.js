@@ -7,6 +7,16 @@ module.exports = {
         return response.json(users);
     },
 
+    async search(request, response) {
+        const id = request.params;
+        const [ unit ] = await connection('unidade')
+            .where('id', id)
+            .select('*')
+            .orderBy('id');
+
+        return response.json(unit);
+    },
+
     async create(request, response) {
         const { nome, id_tipo_unidade } = request.body;
 

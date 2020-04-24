@@ -5,8 +5,7 @@ exports.up = function(knex) {
         table.integer('id_tipo_unidade');
         table.boolean('derivado_leite').notNullable();
         table.boolean('gluten').notNullable();
-  
-        table.foreign('id_tipo_unidade').references('id').inTable('tipo_unidade');
+        // adicionar outros tipo
     });
 };
 

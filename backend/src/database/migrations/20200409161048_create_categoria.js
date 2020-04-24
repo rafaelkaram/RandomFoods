@@ -16,4 +16,5 @@ exports.down = function(knex) {
  * Diet
  * Detox
  * Fitness
+ * Outros
  */

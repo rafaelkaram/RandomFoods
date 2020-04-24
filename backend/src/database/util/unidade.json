@@ -1,0 +1,22 @@
+[
+    {
+        "nome": "Litros",
+        "sigla": "L",
+        "tipo_unidade": "Volume",
+        "taxa_conversao": 1,
+        "si": true
+    },
+    {
+        "nome": "Mililitros",
+        "sigla": "ml",
+        "tipo_unidade": "Volume",
+        "taxa_conversao": 1000,
+        "si": true
+    },
+    {
+        "nome": "Xícaras",
+        "sigla": "xícara(s)",
+        "tipo_unidade": "Volume",
+        "taxa_conversao": 5
+    }
+]
