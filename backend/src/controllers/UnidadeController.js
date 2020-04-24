@@ -18,16 +18,32 @@ module.exports = {
     },
 
     async create(request, response) {
-        const { nome, id_tipo_unidade } = request.body;
+        const ids = [];
+        for (var key in request.body) {
+            const un = request.body;
 
-        const [ id ] = await connection('unidade')
-            .returning('id')
-            .insert({
-                nome,
-                id_tipo_unidade,
-            });
+            const { nome, sigla, tipo_unidade, si, taxa_conversao } = un;
 
-        return response.json({ id });
+            const [ unidade ] = await connection('unidade')
+            .where('id', id)
+            .select('*')
+            .orderBy('id');
+
+
+            const [ id ] = await connection('unidade')
+                .returning('id')
+                .insert({
+                    nome,
+                    sigla,
+                    id_tipo_unidade,
+                    si,
+                    taxa_conversao
+                });
+
+            ids.push(id);
+        }
+
+        return response.json(ids);
     },
 
     async delete(request, response) {

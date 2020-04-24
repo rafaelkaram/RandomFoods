@@ -7,8 +7,8 @@ module.exports = {
     version: '12.1',
     connection: {
       host : '127.0.0.1',
-      user : 'postgres',
-      password : '0795',
+      user : 'random_foods',
+      password : 'random_foods',
       database : 'random_foods'
     },
     migrations: {
@@ -21,8 +21,8 @@ module.exports = {
     version: '12.1',
     connection: {
       host : '127.0.0.1',
-      user : 'postgres',
-      password : '0795',
+      user : 'random_foods',
+      password : 'random_foods',
       database : 'random_foods'
     },
     migrations: {
@@ -35,8 +35,8 @@ module.exports = {
     version: '12.1',
     connection: {
       host : '127.0.0.1',
-      user : 'postgres',
-      password : '0795',
+      user : 'random_foods',
+      password : 'random_foods',
       database : 'random_foods'
     },
     migrations: {
