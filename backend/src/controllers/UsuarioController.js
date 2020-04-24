@@ -9,21 +9,34 @@ module.exports = {
     },
 
     async create(request, response) {
-        const { nome, email, senha } = request.body;
-        // const id = crypto.randomBytes(4).toString('HEX');
-        const data = new Date();
-        const ativo = true;
+        const ids = [];
+        for (var key in request.body) {
+            var user = request.body[key];
 
-        const [ id ] = await connection('usuario')
-            .returning('id')
-            .insert({
-                nome,
-                email,
-                senha,
-                ativo,
-            });
+            const { nome, email, senha } = user;
+            const hash = crypto.createHmac('sha256', senha)
+                .update('TADS')
+                .digest('hex');
+            const ativo = true;
 
-        return response.json({ id });
+            const [ id ] = await connection('usuario')
+                .returning('id')
+                .insert({
+                    nome,
+                    email,
+                    senha,
+                    ativo,
+                });
+            
+            ids.push(id);
+
+            console.log('Usuario inserido\nId: ' + id);
+            console.log('Nome: ' + nome);
+            console.log('\nSenha: ' + senha + ' || ' + hash);
+            console.log('E-mail: ' + email + '\n');
+        }
+
+        return response.json(ids);
     },
 
     async delete(request, response) {

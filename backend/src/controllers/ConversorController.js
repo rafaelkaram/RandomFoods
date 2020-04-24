@@ -10,6 +10,8 @@ module.exports = {
 
     async create(request, response) {
         const { nome, email, senha } = request.body;
+        // const id = crypto.randomBytes(4).toString('HEX');
+        const data = new Date();
         const ativo = true;
 
         const [ id ] = await connection('usuario')

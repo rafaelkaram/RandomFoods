@@ -2,19 +2,19 @@ const connection = require('../database/connection');
 
 module.exports = {
     async index(request, response) {
-        const users = await connection('unidade').select('*').orderBy('id');
+        const users = await connection('tipo_unidade').select('*').orderBy('id');
 
         return response.json(users);
     },
 
     async create(request, response) {
-        const { nome, id_tipo_unidade } = request.body;
+        const { nome, id_unidade } = request.body;
 
-        const [ id ] = await connection('unidade')
+        const [ id ] = await connection('tipo_unidade')
             .returning('id')
             .insert({
                 nome,
-                id_tipo_unidade,
+                id_unidade,
             });
 
         return response.json({ id });

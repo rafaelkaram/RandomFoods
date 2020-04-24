@@ -9,7 +9,7 @@
     {
         "nome": "Mililitros",
         "sigla": "ml",
-        "tipo_unidade": "Volume",
+        "tipo_unidade": 1,
         "taxa_conversao": 1000,
         "si": true
     },
