@@ -13,6 +13,7 @@ routes.get('/avaliar/user', AvaliacaoController.userIndex);
 routes.post('/avaliar/:id_receita', AvaliacaoController.create);
 
 routes.get('/unidade', UnidadeController.index);
+routes.get('/unidade/:id', UnidadeController.search);
 routes.post('/unidade', UnidadeController.create);
 routes.delete('/unidade/:id', UnidadeController.delete);
 

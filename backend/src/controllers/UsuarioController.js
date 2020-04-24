@@ -31,7 +31,7 @@ module.exports = {
         const user_id = request.headers.authorization;
 
         const user = await connection('usuario')
-            .where('id', id)
+            .where('id', user_id)
             .select('id')
             .first();
 

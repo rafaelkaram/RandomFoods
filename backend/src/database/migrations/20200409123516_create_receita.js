@@ -7,8 +7,6 @@ exports.up = function(knex) {
         table.enu('tipo', ['doce', 'salgado']).notNullable();
         table.datetime('data_cadastro').notNullable().defaultTo(knex.fn.now());
         table.boolean('ativa').notNullable().defaultTo(true);
-
-        table.foreign('id_usuario').references('id').inTable('usuario');
     });
 };
 

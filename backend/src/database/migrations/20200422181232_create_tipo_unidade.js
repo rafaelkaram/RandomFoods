@@ -4,7 +4,7 @@ exports.up = function(knex) {
         table.string('nome', 30).notNullable();
         table.integer('id_unidade').notNullable();
 
-        table.foreign('id_unidade').references('id').inTable('unidade');
+        table.unique('nome');
     });
 };
 
