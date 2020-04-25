@@ -1,6 +1,11 @@
 [
-    {
-        "nome": "Volume",
-        "unidade_padrao": "Litro"
-    }
+  {
+    "nome": "VOLUME"
+  },
+  {
+    "nome": "PESO"
+  },
+  {
+    "nome": "UNIDADE"
+  }
 ]

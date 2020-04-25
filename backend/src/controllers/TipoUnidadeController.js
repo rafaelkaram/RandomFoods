@@ -2,22 +2,43 @@ const connection = require('../database/connection');
 
 module.exports = {
     async index(request, response) {
-        const users = await connection('tipo_unidade').select('*').orderBy('id');
+        const tipo_unidade = await connection('tipo_unidade').select('*').orderBy('id');
 
-        return response.json(users);
+        return response.json(tipo_unidade);
+    },
+
+    async search(request, response) {
+        const id = request.params;
+        const tu = await connection('tipo_unidade')
+            .where('id', id)
+            .select('*')
+            .first();
+
+        if (!tu) {
+            return response.status(400).json({ error: 'Tipo Unidade não encontrada!'});
+        }
+
+        return response.json(tu);
     },
 
     async create(request, response) {
-        const { nome, id_unidade } = request.body;
+        const ids = [];
+        for (var key in request.body) {
+            const item = request.body[key];
 
-        const [ id ] = await connection('tipo_unidade')
-            .returning('id')
-            .insert({
-                nome,
-                id_unidade,
-            });
+            const { nome } = item;
 
-        return response.json({ id });
+            const [ id ] = await connection('tipo_unidade')
+                .returning('id')
+                .insert({
+                    nome
+                });
+
+            ids.push(id);
+
+        }
+
+        return response.json(ids);
     },
 
     async delete(request, response) {

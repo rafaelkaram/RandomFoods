@@ -1,46 +1,37 @@
 const connection = require('../database/connection');
-const crypto = require('crypto');
 
 module.exports = {
-    async index(request, response) {
-        const users = await connection('usuario').select('*').orderBy('id');
+    async convert(request, response) {
+        const { id_origem, id_destino, valor } = request.body;
 
-        return response.json(users);
-    },
-
-    async create(request, response) {
-        const { nome, email, senha } = request.body;
-        // const id = crypto.randomBytes(4).toString('HEX');
-        const data = new Date();
-        const ativo = true;
-
-        const [ id ] = await connection('usuario')
-            .returning('id')
-            .insert({
-                nome,
-                email,
-                senha,
-                ativo,
-            });
-
-        return response.json({ id });
-    },
-
-    async delete(request, response) {
-        const { id } = request.params;
-        const user_id = request.headers.authorization;
-
-        const user = await connection('usuario')
-            .where('id', id)
-            .select('id')
-            .first();
-
-        if (user_id != user.id) {
-            return response.status(401).json({ error: 'Operation not permitted.' });
+        if (isNaN(valor)) {
+            return response.status(400).json({ error: 'Valor inserido não é um número!'});
         }
 
-        await connection('usuario').where('id', id).delete();
+        const { unidade_origem, unidade_destino } = await module.exports.findUnits(id_origem, id_destino);
+        
+        if (!unidade_origem || !unidade_destino) {
+            return response.status(400).json({ error: 'Unidade não encontrada!'});
+        }
 
-        return response.status(204).send();
+        const valorConvertido = (valor * (unidade_origem.taxa_conversao)) / unidade_destino.taxa_conversao;
+
+        const unidade = unidade_destino.nome;
+
+        return response.json({ unidade, valorConvertido });
+    },
+
+    findUnits: async function (id_origem, id_destino) { 
+        const unidade_origem =  await connection('unidade')
+            .where('id', id_origem)
+            .select('*')
+            .first();
+
+        const unidade_destino = await connection('unidade')
+            .where('id', id_destino)
+            .select('*')
+            .first();
+
+        return { unidade_origem, unidade_destino };
     }
 }

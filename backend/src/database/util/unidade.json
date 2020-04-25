@@ -1,22 +1,66 @@
 [
     {
-        "nome": "Litros",
+        "nome": "Litro",
         "sigla": "L",
-        "tipo_unidade": "Volume",
         "taxa_conversao": 1,
-        "si": true
+        "id_tipo_unidade": 1
     },
     {
-        "nome": "Mililitros",
-        "sigla": "ml",
-        "tipo_unidade": 1,
+        "nome": "Mililitro",
+        "sigla": "Ml",
+        "taxa_conversao": 0.001,
+        "id_tipo_unidade": 1
+    },
+    {
+        "nome": "Grama",
+        "sigla": "g",
+        "taxa_conversao": 1,
+        "id_tipo_unidade": 2
+    },
+    {
+        "nome": "Miligrama",
+        "sigla": "Mg",
+        "taxa_conversao": 0.001,
+        "id_tipo_unidade": 2
+    },
+    {
+        "nome": "Quilograma",
+        "sigla": "Kg",
         "taxa_conversao": 1000,
-        "si": true
+        "id_tipo_unidade": 2
     },
     {
-        "nome": "Xícaras",
-        "sigla": "xícara(s)",
-        "tipo_unidade": "Volume",
-        "taxa_conversao": 5
+        "nome": "Unidade",
+        "sigla": "U",
+        "taxa_conversao": 1,
+        "id_tipo_unidade": 3
+    },
+    {
+        "nome": "Xicara (Farinha)",
+        "sigla": "Xicara",
+        "taxa_conversao": 120,
+        "id_tipo_unidade": 2,
+        "id_ingrediente": 4
+    },
+    {
+        "nome": "Xicara (Amido Milho)",
+        "sigla": "Xicara",
+        "taxa_conversao": 150,
+        "id_tipo_unidade": 2,
+        "id_ingrediente": 5
+    },
+    {
+        "nome": "Xicara (Sal)",
+        "sigla": "Xicara",
+        "taxa_conversao": 300,
+        "id_tipo_unidade": 2,
+        "id_ingrediente": 6
+    },
+    {
+        "nome": "Xicara (Açucar)",
+        "sigla": "Xicara",
+        "taxa_conversao": 160,
+        "id_tipo_unidade": 2,
+        "id_ingrediente": 7
     }
 ]

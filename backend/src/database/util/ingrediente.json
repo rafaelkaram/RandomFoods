@@ -1,0 +1,30 @@
+[
+    {
+      "nome": "Leite",
+      "id_tipo_unidade": 1
+    },
+    {
+      "nome": "Manteiga",
+      "id_tipo_unidade": 2
+    },
+    {
+      "nome": "Ovo",
+      "id_tipo_unidade": 3
+    },
+    {
+      "nome": "Farinha de Trigo",
+      "id_tipo_unidade": 2
+    },
+    {
+      "nome": "Amido de Milho",
+      "id_tipo_unidade": 2
+    },
+    {
+      "nome": "Sal",
+      "id_tipo_unidade": 2
+    },
+    {
+      "nome": "Açucar",
+      "id_tipo_unidade": 2
+    }
+]
