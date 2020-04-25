@@ -9,26 +9,24 @@ module.exports = {
 
     async search(request, response) {
         const id = request.params;
-        const [ unit ] = await connection('unidade')
+        const unidade = await connection('unidade')
             .where('id', id)
             .select('*')
-            .orderBy('id');
+            .first();
 
-        return response.json(unit);
+        if (!unidade) {
+            return response.status(400).json({ error: 'Unidade não encontrada!'});
+        }
+
+        return response.json(unidade);
     },
 
     async create(request, response) {
         const ids = [];
         for (var key in request.body) {
-            const un = request.body;
+            const unidade = request.body[key];
 
-            const { nome, sigla, tipo_unidade, si, taxa_conversao } = un;
-
-            const [ unidade ] = await connection('unidade')
-            .where('id', id)
-            .select('*')
-            .orderBy('id');
-
+            const { nome, sigla, id_tipo_unidade, id_ingrediente, taxa_conversao } = unidade;            
 
             const [ id ] = await connection('unidade')
                 .returning('id')
@@ -36,11 +34,16 @@ module.exports = {
                     nome,
                     sigla,
                     id_tipo_unidade,
-                    si,
+                    id_ingrediente,
                     taxa_conversao
                 });
 
             ids.push(id);
+
+            console.log('Unidade inserida\nId: ' + id);
+            console.log('Nome: ' + nome);
+            console.log('Sigla: ' + sigla);
+            console.log('Taxa de Conversão' + taxa_conversao + '\n');
         }
 
         return response.json(ids);
