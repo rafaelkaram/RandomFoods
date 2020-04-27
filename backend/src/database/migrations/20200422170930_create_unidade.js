@@ -9,8 +9,6 @@ exports.up = function(knex) {
 
         table.unique(['nome', 'id_tipo_unidade']);
         table.unique(['sigla', 'id_tipo_unidade']);
-        table.foreign('id_tipo_unidade').references('id').inTable('tipo_unidade');
-        table.foreign('id_ingrediente').references('id').inTable('ingrediente');
     });
 };
 
