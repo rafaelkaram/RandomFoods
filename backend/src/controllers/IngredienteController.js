@@ -7,21 +7,32 @@ module.exports = {
 
         return response.json(users);
     },
-
+    
     async create(request, response) {
-        const { nome, email, senha } = request.body;
-        const ativo = true;
+        const ids = [];
+        for (var key in request.body) {
+            const unidade = request.body[key];
 
-        const [ id ] = await connection('usuario')
-            .returning('id')
-            .insert({
-                nome,
-                email,
-                senha,
-                ativo,
-            });
+            const { nome, id_tipo_unidade, sem_medida, derivado_leite, gluten } = unidade;            
 
-        return response.json({ id });
+            const [ id ] = await connection('ingrediente')
+                .returning('id')
+                .insert({
+                    nome,
+                    id_tipo_unidade,
+                    sem_medida,
+                    derivado_leite,
+                    gluten
+                });
+
+            ids.push(id);
+
+            console.log('Ingrediente inserido\nId: ' + id);
+            console.log('Nome: ' + nome);
+            console.log('Medida única')
+        }
+
+        return response.json(ids);
     },
 
     async delete(request, response) {

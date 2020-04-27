@@ -21,7 +21,8 @@
     },
     {
       "nome": "Sal",
-      "id_tipo_unidade": 2
+      "id_tipo_unidade": 2,
+      "sem_medida": true
     },
     {
       "nome": "Açucar",

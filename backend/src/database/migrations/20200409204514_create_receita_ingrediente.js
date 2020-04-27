@@ -7,9 +7,6 @@ exports.up = function(knex) {
         table.decimal('quantidade').notNullable();
         
         table.unique(['id_ingrediente', 'id_receita']);
-        table.foreign('id_ingrediente').references('id').inTable('usuario');
-        table.foreign('id_receita').references('id').inTable('receita');
-        table.foreign('id_unidade').references('id').inTable('unidade');
     });
 };
 
