@@ -30,4 +30,6 @@ routes.get('/user', UsuarioController.index);
 routes.post('/user', UsuarioController.create);
 routes.delete('/user/:id', UsuarioController.delete);
 
+routes.post('/ingrediente', IngredienteController.create);
+
 module.exports = routes;
