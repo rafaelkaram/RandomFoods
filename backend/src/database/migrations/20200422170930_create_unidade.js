@@ -8,7 +8,6 @@ exports.up = function(knex) {
         table.decimal('taxa_conversao', 8, 3).notNullable();
 
         table.unique(['nome', 'id_tipo_unidade']);
-        table.unique(['sigla', 'id_tipo_unidade']);
     });
 };
 
