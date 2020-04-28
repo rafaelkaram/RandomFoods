@@ -10,15 +10,25 @@ module.exports = {
 
         const { unidade_origem, unidade_destino } = await module.exports.findUnits(id_origem, id_destino);
         
+
         if (!unidade_origem || !unidade_destino) {
             return response.status(400).json({ error: 'Unidade não encontrada!'});
         }
 
+        if (unidade_origem.id_tipo_unidade != unidade_destino.id_tipo_unidade) {
+            return response.status(400).json({ error: 'Unidade são de tipos diferentes!'});
+                    }
+
+
+        const valorAnterior = valor;
+
         const valorConvertido = (valor * (unidade_origem.taxa_conversao)) / unidade_destino.taxa_conversao;
 
-        const unidade = unidade_destino.nome;
+        const unidadeAnterior = unidade_origem.nome;
 
-        return response.json({ unidade, valorConvertido });
+        const unidadeAtual = unidade_destino.nome;
+
+        return response.json({ unidadeAnterior, unidadeAtual, valorAnterior, valorConvertido });
     },
 
     findUnits: async function (id_origem, id_destino) { 
