@@ -8,7 +8,7 @@ module.exports = {
     },
 
     async search(request, response) {
-        const id = request.params;
+        const {id} = request.params;
         const unidade = await connection('unidade')
             .where('id', id)
             .select('*')
