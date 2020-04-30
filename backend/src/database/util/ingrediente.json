@@ -1,31 +1,74 @@
 [
-    {
-      "nome": "Leite",
-      "id_tipo_unidade": 1
-    },
-    {
-      "nome": "Manteiga",
-      "id_tipo_unidade": 2
-    },
-    {
-      "nome": "Ovo",
-      "id_tipo_unidade": 3
-    },
-    {
-      "nome": "Farinha de Trigo",
-      "id_tipo_unidade": 2
-    },
-    {
-      "nome": "Amido de Milho",
-      "id_tipo_unidade": 2
-    },
-    {
-      "nome": "Sal",
-      "id_tipo_unidade": 2,
-      "sem_medida": true
-    },
-    {
-      "nome": "Açucar",
-      "id_tipo_unidade": 2
-    }
+  {
+    "nome": "Leite",
+    "id_tipo_unidade": 1
+  },
+  {
+    "nome": "Manteiga",
+    "id_tipo_unidade": 2
+  },
+  {
+    "nome": "Ovo",
+    "id_tipo_unidade": 3
+  },
+  {
+    "nome": "Farinha de Trigo",
+    "id_tipo_unidade": 2
+  },
+  {
+    "nome": "Amido de Milho",
+    "id_tipo_unidade": 2
+  },
+  {
+    "nome": "Sal",
+    "id_tipo_unidade": 2,
+    "sem_medida": true
+  },
+  {
+    "nome": "Açucar",
+    "id_tipo_unidade": 2,
+    "sem_medida": true
+  },
+  {
+    "nome": "Farinha de Mandioca",
+    "id_tipo_unidade": 2
+  },
+  {
+    "nome": "Farinha de Rosca",
+    "id_tipo_unidade": 2
+  },
+  {
+    "nome": "Fubá",
+    "id_tipo_unidade": 2
+  },
+  {
+    "nome": "Achocolatado",
+    "id_tipo_unidade": 2,
+    "sem_medida": true
+  },
+  {
+    "nome": "Arroz",
+    "id_tipo_unidade": 2
+  },
+  {
+    "nome": "Feijão",
+    "id_tipo_unidade": 2
+  },
+  {
+    "nome": "Mel",
+    "id_tipo_unidade": 2,
+    "sem_medida": true
+  },
+  {
+    "nome": "Aveia",
+    "id_tipo_unidade": 2
+  },
+  {
+    "nome": "Polvilho",
+    "id_tipo_unidade": 2
+  },
+  {
+    "nome": "Coco Ralado",
+    "id_tipo_unidade": 2
+  }
 ]
