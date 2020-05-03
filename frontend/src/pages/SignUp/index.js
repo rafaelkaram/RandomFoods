@@ -1,13 +1,41 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 
 import './styles.css';
 
 import logoImg from '../../assets/random_foods.svg'
-import pagImg from '../../assets/food.png';
+import api from '../../services/api';
 
 export default function SignUp() {
+    const [ nome, setNome ] = useState('');
+    const [ email, setEmail ] = useState('');
+    const [ senha, setSenha ] = useState('');
+
+    const history = useHistory;
+
+    async function handleRegister(e) {
+        e.preventDefault();
+
+        const data = {
+            nome,
+            email,
+            senha
+        };
+
+        try {
+            console.log(data);
+
+            const response = await api.post('/user', data);
+
+            alert(`Ususario cadastrado com sucesso!`);
+
+            history.push('/');
+        } catch (error) {
+            alert('Erro no cadastro, se fodeo mermão!');
+        }
+    }
+
     return (
         <div className="signup-container">
             <div className="content">
@@ -22,10 +50,26 @@ export default function SignUp() {
                         Voltar
                     </Link>
                 </section>
-                <form>
-                    <input placeholder="Nome" />
-                    <input type="email" placeholder="E-mail"/>
-                    <input placeholder="Whatsapp"/>
+                <form onSubmit={ handleRegister }>
+                    <input
+                        placeholder="Nome"
+                        value={ nome }
+                        required
+                        onChange={ e => setNome(e.target.value) }
+                    />
+                    <input 
+                        placeholder="E-mail"
+                        value={ email }
+                        type="email"
+                        required
+                        onChange={ e => setEmail(e.target.value) }
+                    />
+                    <input
+                        placeholder="senha"
+                        value={ senha }
+                        type="password"
+                        required
+                        onChange={ e => setSenha(e.target.value) }                    />
                     <div className="input-group">
                         <input placeholder="Cidade"/>
                         <input placeholder="UF" style={{ width: 80 }}/>

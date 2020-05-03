@@ -7,8 +7,6 @@ exports.up = function(knex) {
         table.datetime('data').notNullable().defaultTo(knex.fn.now());
 
         table.unique(['id_usuario', 'id_receita']);
-        table.foreign('id_usuario').references('id').inTable('usuario');
-        table.foreign('id_receita').references('id').inTable('receita');
     });
 };
 

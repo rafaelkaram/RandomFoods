@@ -27,9 +27,13 @@ routes.post('/tipo-unidade', TipoUnidadeController.create);
 routes.delete('/tipo-unidade/:id', TipoUnidadeController.delete);
 
 routes.get('/user', UsuarioController.index);
-routes.post('/user', UsuarioController.create);
+routes.post('/users', UsuarioController.create);
+routes.post('/user', UsuarioController.createUnique);
 routes.delete('/user/:id', UsuarioController.delete);
 
+routes.get('/ingrediente', IngredienteController.index);
+routes.get('/ingrediente/:id', IngredienteController.search);
 routes.post('/ingrediente', IngredienteController.create);
+routes.delete('/ingrediente/:id', IngredienteController.delete);
 
 module.exports = routes;

@@ -1,19 +1,32 @@
 const connection = require('../database/connection');
-const crypto = require('crypto');
 
 module.exports = {
     async index(request, response) {
-        const users = await connection('usuario').select('*').orderBy('id');
+        const ingredients = await connection('ingrediente').select('*').orderBy('id');
 
-        return response.json(users);
+        return response.json(ingredients);
+    },
+    
+    async search(request, response) {          
+        const { id } = request.params;
+        const ingrediente = await connection('ingrediente')
+            .where('id', id)
+            .select('*')
+            .first();
+
+        if (!ingrediente) {
+            return response.status(400).json({ error: 'Ingrediente não encontrado!'});
+        }
+
+        return response.json(ingrediente);
     },
     
     async create(request, response) {
         const ids = [];
         for (var key in request.body) {
-            const unidade = request.body[key];
+            const ingrediente = request.body[key];
 
-            const { nome, id_tipo_unidade, sem_medida, derivado_leite, gluten } = unidade;            
+            const { nome, id_tipo_unidade, sem_medida, derivado_leite, gluten } = ingrediente;            
 
             const [ id ] = await connection('ingrediente')
                 .returning('id')
@@ -29,7 +42,7 @@ module.exports = {
 
             console.log('Ingrediente inserido\nId: ' + id);
             console.log('Nome: ' + nome);
-            console.log('Medida única')
+            console.log('Medida única' + sem_medida);
         }
 
         return response.json(ids);
@@ -39,7 +52,7 @@ module.exports = {
         const { id } = request.params;
         const user_id = request.headers.authorization;
 
-        const user = await connection('usuario')
+        const user = await connection('ingrediente')
             .where('id', id)
             .select('id')
             .first();
@@ -48,7 +61,7 @@ module.exports = {
             return response.status(401).json({ error: 'Operation not permitted.' });
         }
 
-        await connection('usuario').where('id', id).delete();
+        await connection('ingrediente').where('id', id).delete();
 
         return response.status(204).send();
     }

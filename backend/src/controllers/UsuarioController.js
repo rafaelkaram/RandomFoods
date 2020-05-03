@@ -39,6 +39,31 @@ module.exports = {
         return response.json(ids);
     },
 
+    async createUnique(request, response) {
+        const { nome, email, senha } = request.body;
+
+        const hash = crypto.createHmac('sha256', senha)
+            .update('TADS')
+            .digest('hex');
+        const ativo = true;
+
+        const [ id ] = await connection('usuario')
+            .returning('id')
+            .insert({
+                nome,
+                email,
+                senha,
+                ativo,
+            });
+
+        console.log('Usuario inserido\nId: ' + id);
+        console.log('Nome: ' + nome);
+        console.log('\nSenha: ' + senha + ' || ' + hash);
+        console.log('E-mail: ' + email + '\n');
+
+        return response.json(id);
+    },
+
     async delete(request, response) {
         const { id } = request.params;
         const user_id = request.headers.authorization;
