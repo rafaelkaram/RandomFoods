@@ -13,8 +13,8 @@ export default function SignUp() {
                 <section>
                     <img src={logoImg} alt="Random Foods" className="random-foods" />
 
-                    <h1>Cadastrar novo caso</h1>
-                    <p>Descreva o caso detalhadamente para encontrar um herói para resolver isso.</p>
+                    <h1>Cadastrar nova receita</h1>
+                    <p>De um titulo, liste os ingredientes e faça o passo-a-passo para ajudar quem está querendo cozinhar.</p>
 
                     <Link to='/' className="back-link">
                         <FiArrowLeft size={16} color="#E02041"/>
