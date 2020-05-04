@@ -1,112 +1,81 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { FiPower } from 'react-icons/fi';
 import { FiTrash2 } from 'react-icons/fi';
 
 import './styles.css';
 
-import logoImg from '../../assets/random_foods.svg'
-import foodImg from '../../assets/food.png';
+import logoImg from '../../assets/random_foods.svg';
+import api from '../../services/api';
 
-export default function Logon() {
+export default function Profile() {
+    const id = localStorage.getItem('userId');
+    const name = localStorage.getItem('userName');
+    const email = localStorage.getItem('userEmail');
+
+    const [ recipes, setRecipes ] = useState([]);
+
+    useEffect(() => {
+        api.get('profile', {
+            headers: {
+                AuthorizationId: id,
+                AuthorizationLogin: email,
+            }
+        }).then(response => {
+            setRecipes(response.data);
+
+        })
+    }, [ name ]);
+
+    async function handleDeleteRecipe(id) {
+        try {
+            await api.delete(`receita/${id}`, {
+                headers: {
+                    AuthorizationId: id,
+                }
+            });
+
+            setRecipes(recipes.filter(recipe => recipe.id !== id));
+        } catch (error) {
+            console.log(error);
+            alert('')
+        }
+
+    }
+
     return (
         <div className="profile-container">
             <header className="form">
                 <img src={logoImg} alt="Random Foods" className="random-foods" />
-                <span>Bem vindo, tãnãnã</span>
-                <Link to="/recipe/new" className="button">Cadastrar Novo Caso</Link>
+                <span>Bem vindo, { name }</span>
+                <Link to="/recipe/new" className="button">Cadastrar Nova Receita</Link>
                 <button type="button">
                     <FiPower size={18} color="#E02041" />
                 </button>
             </header>
             
-            <h1>Casos Cadastrados</h1>
+            <h1>Receitas Cadastradas</h1>
             
             <ul>
-                <li>
-                    <strong>CASO:</strong>
-                    <p>Caso teste</p>
+                { recipes.map(recipe => (
+                    <li key={ recipe.id }>
+                        <strong>CASO:</strong>
+                        <p>{ recipe.nome }</p>
 
-                    <strong>DESCRIÇÃO:</strong>
-                    <p>Descrição teste</p>
+                        <strong>DESCRIÇÃO:</strong>
+                        <p>{ recipe.descricao }</p>
 
-                    <strong>VALOR:</strong>
-                    <p>R$120,00</p>
+                        <strong>TIPO:</strong>
+                        <p>{ recipe.tipo }</p>
 
-                    <button>
-                        <FiTrash2 size={20} color="#a8a8b3" />
-                    </button>
-                </li>
-                <li>
-                    <strong>CASO:</strong>
-                    <p>Caso teste</p>
+                        <strong>DATA CADASTRO:</strong>
+                        <p>{ Intl.DateTimeFormat('pt-BR').format(recipe.data_cadastro) }</p>
 
-                    <strong>DESCRIÇÃO:</strong>
-                    <p>Descrição teste</p>
-
-                    <strong>VALOR:</strong>
-                    <p>R$120,00</p>
-
-                    <button>
-                        <FiTrash2 size={20} color="#a8a8b3" />
-                    </button>
-                </li>
-                <li>
-                    <strong>CASO:</strong>
-                    <p>Caso teste</p>
-
-                    <strong>DESCRIÇÃO:</strong>
-                    <p>Descrição teste</p>
-
-                    <strong>VALOR:</strong>
-                    <p>R$120,00</p>
-
-                    <button>
-                        <FiTrash2 size={20} color="#a8a8b3" />
-                    </button>
-                </li>
-                <li>
-                    <strong>CASO:</strong>
-                    <p>Caso teste</p>
-
-                    <strong>DESCRIÇÃO:</strong>
-                    <p>Descrição teste</p>
-
-                    <strong>VALOR:</strong>
-                    <p>R$120,00</p>
-
-                    <button>
-                        <FiTrash2 size={20} color="#a8a8b3" />
-                    </button>
-                </li>
-                <li>
-                    <strong>CASO:</strong>
-                    <p>Caso teste</p>
-
-                    <strong>DESCRIÇÃO:</strong>
-                    <p>Descrição teste</p>
-
-                    <strong>VALOR:</strong>
-                    <p>R$120,00</p>
-
-                    <button>
-                        <FiTrash2 size={20} color="#a8a8b3" />
-                    </button>
-                </li>
-                <li>
-                    <strong>CASO:</strong>
-                    <p>Caso teste</p>
-
-                    <strong>DESCRIÇÃO:</strong>
-                    <p>Descrição teste</p>
-
-                    <strong>VALOR:</strong>
-                    <p>R$120,00</p>
-
-                    <button>
-                        <FiTrash2 size={20} color="#a8a8b3" />
-                    </button>
-                </li>
+                        <button onClick={() => handleDeleteRecipe(recipe.id)} type="button">
+                            <FiTrash2 size={20} color="#a8a8b3" />
+                        </button>
+                    </li>
+                ))}
             </ul>
         </div>
     );

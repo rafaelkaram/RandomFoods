@@ -14,8 +14,9 @@ const routes = express.Router();
 routes.get('/avaliar/user', AvaliacaoController.userIndex);
 routes.post('/avaliar/:id_receita', AvaliacaoController.create);
 
-routes.get('/converter', ConversorController.convert);
+routes.post('/converter', ConversorController.convert);
 
+routes.get('/unidadeList', UnidadeController.list);
 routes.get('/unidade', UnidadeController.index);
 routes.get('/unidade/:id', UnidadeController.search);
 routes.post('/unidade', UnidadeController.create);
@@ -27,6 +28,7 @@ routes.post('/tipo-unidade', TipoUnidadeController.create);
 routes.delete('/tipo-unidade/:id', TipoUnidadeController.delete);
 
 routes.get('/user', UsuarioController.index);
+routes.post('/session', UsuarioController.validate);
 routes.post('/users', UsuarioController.create);
 routes.post('/user', UsuarioController.createUnique);
 routes.delete('/user/:id', UsuarioController.delete);

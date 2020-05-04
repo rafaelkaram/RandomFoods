@@ -2,13 +2,29 @@ const connection = require('../database/connection');
 
 module.exports = {
     async index(request, response) {
-        const users = await connection('unidade').select('*').orderBy('id');
+        const unidades = await connection('unidade').select('*').orderBy('id');
 
-        return response.json(users);
+        return response.json(unidades);
+    },
+
+    async list(request, response) {
+        const unidades = await connection('unidade').select('*').orderBy('id');
+        const list = [];
+        for (const key in unidades) {
+            const unidade = unidades[key];
+            
+            if (!unidade.id_ingrediente) {
+                list.push({ value: unidade.id, label: unidade.nome + " (" + unidade.sigla + ")" });
+            } else {
+                list.push({ value: unidade.id, label: unidade.nome });
+            }
+        }
+
+        return response.json(list);
     },
 
     async search(request, response) {
-        const {id} = request.params;
+        const { id } = request.params;
         const unidade = await connection('unidade')
             .where('id', id)
             .select('*')

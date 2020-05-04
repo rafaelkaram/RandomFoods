@@ -1,11 +1,30 @@
 const connection = require('../database/connection');
 const crypto = require('crypto');
+const factor = 'TADS';
 
 module.exports = {
     async index(request, response) {
         const users = await connection('usuario').select('*').orderBy('id');
 
         return response.json(users);
+    },
+
+    async validate(request, response) {
+        const { email , senha } = request.body;
+        const user = await connection('usuario')
+            .where('email', email)
+            .select('*')
+            .first();
+            
+        const hash = crypto.createHmac('sha256', senha)
+            .update(factor)
+            .digest('hex');
+
+        if (!user && user.senha != hash) {
+            return response.status(400).json({ error: 'Usuario ou senha inválidos!'});
+        }
+
+        return response.json(user);
     },
 
     async create(request, response) {
@@ -15,7 +34,7 @@ module.exports = {
 
             const { nome, email, senha } = user;
             const hash = crypto.createHmac('sha256', senha)
-                .update('TADS')
+                .update(factor)
                 .digest('hex');
             const ativo = true;
 

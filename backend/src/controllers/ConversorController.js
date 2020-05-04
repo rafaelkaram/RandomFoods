@@ -4,6 +4,8 @@ module.exports = {
     async convert(request, response) {
         const { id_origem, id_destino, valor } = request.body;
 
+        console.log({ id_origem, id_destino, valor });
+
         if (isNaN(valor)) {
             return response.status(400).json({ error: 'Valor inserido não é um número!'});
         }
