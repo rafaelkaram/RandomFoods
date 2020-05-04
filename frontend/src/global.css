@@ -14,7 +14,7 @@ body {
     -webkit-font-smothing: antialiasied;
 }
 
-input, button, textarea {
+input, button, textarea, select {
     font: 400 18px Quicksand, sans-serif;
 }
 

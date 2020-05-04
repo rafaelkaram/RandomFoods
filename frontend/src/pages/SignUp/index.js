@@ -24,11 +24,9 @@ export default function SignUp() {
         };
 
         try {
-            console.log(data);
+            const response = await api.post('user', data);
 
-            const response = await api.post('/user', data);
-
-            alert(`Ususario cadastrado com sucesso!`);
+            alert('Ususario cadastrado com sucesso!');
 
             history.push('/');
         } catch (error) {
