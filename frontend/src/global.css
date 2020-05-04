@@ -85,3 +85,8 @@ form textarea {
 .random-foods {
     max-width: 200px;
 }
+
+.img-big {
+    max-width: 600px;
+    max-height: 60%;
+}
