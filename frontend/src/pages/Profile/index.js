@@ -59,7 +59,7 @@ export default function Profile() {
             <ul>
                 { recipes.map(recipe => (
                     <li key={ recipe.id }>
-                        <strong>CASO:</strong>
+                        <strong>RECEITA:</strong>
                         <p>{ recipe.nome }</p>
 
                         <strong>DESCRIÇÃO:</strong>

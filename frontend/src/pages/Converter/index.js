@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import './styles.css';
 
 import logoImg from '../../assets/random_foods.svg';
-import foodImg from '../../assets/food.png';
+import foodImg from '../../assets/carlos.png';
 import api from '../../services/api';
 
 export default function Converter() {
@@ -64,7 +64,7 @@ export default function Converter() {
                     <button className="button" type="submit">Converter</button>
                 </form>
             </section>
-            <img src={foodImg} alt="Imagem" style={{ maxWidth: 600 }}/>
+            <img src={foodImg} alt="Imagem" className="img-big" />
         </div>
     );
 }
