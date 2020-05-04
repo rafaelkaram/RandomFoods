@@ -40,12 +40,14 @@ export default function Login() {
                     <h1>Faça seu login</h1>
                     <input
                         placeholder="E-mail"
+                        type="email"
                         value={ email }
                         required
                         onChange={ e => setEmail(e.target.value) }
                     />
                     <input
                         placeholder="Senha"
+                        type="password"
                         value={ senha }
                         required
                         onChange={ e => setSenha(e.target.value) }
