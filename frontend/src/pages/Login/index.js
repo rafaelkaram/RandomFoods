@@ -5,7 +5,7 @@ import { FiLogIn } from 'react-icons/fi';
 import './styles.css';
 
 import logoImg from '../../assets/random_foods.svg'
-import foodImg from '../../assets/food.png';
+import foodImg from '../../assets/rafael.png';
 import api from '../../services/api';
 
 export default function Login() {
@@ -58,7 +58,7 @@ export default function Login() {
                     </Link>
                 </form>
             </section>
-            <img src={foodImg} alt="Imagem" />
+            <img src={foodImg} className="img-big" alt="Imagem" />
         </div>
     );
 }
