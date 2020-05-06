@@ -3,7 +3,7 @@ exports.seed = function(knex) {
     .then(function () {
       return knex('tipo_unidade').insert([
         { id: 1, nome: 'VOLUME' },
-        { id: 2, nome: 'PÈSO' },
+        { id: 2, nome: 'PESO' },
         { id: 3, nome: 'UNIDADE' }
       ]);
     });
