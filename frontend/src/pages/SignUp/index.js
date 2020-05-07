@@ -4,7 +4,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 
 import './styles.css';
 
-import logoImg from '../../assets/random_foods.svg'
+import logoImg from '../../assets/random_foods.png'
 import api from '../../services/api';
 
 export default function SignUp() {

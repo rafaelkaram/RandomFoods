@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import './styles.css';
 
-import logoImg from '../../assets/random_foods.svg';
+import logoImg from '../../assets/random_foods.png';
 import foodImg from '../../assets/carlos.png';
 import api from '../../services/api';
 
@@ -45,7 +45,7 @@ export default function Converter() {
             <section className="form">
                 <img src={logoImg} alt="Random Foods" className="random-foods" />
 
-                <form onSubmit={ handleConverter }>
+                <form className="combo-box" onSubmit={ handleConverter }>
                     <h1>Converta já!</h1>
                     <Select
                         options={unidades}
