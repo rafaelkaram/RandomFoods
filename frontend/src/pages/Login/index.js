@@ -4,8 +4,8 @@ import { FiLogIn } from 'react-icons/fi';
 
 import './styles.css';
 
-import logoImg from '../../assets/random_foods.svg'
-import foodImg from '../../assets/rafael.png';
+import logoImg from '../../assets/random_foods.png'
+import foodImg from '../../assets/carlao.png';
 import api from '../../services/api';
 
 export default function Login() {
