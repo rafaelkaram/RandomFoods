@@ -7,6 +7,18 @@ module.exports = {
         return response.json(tipo_unidade);
     },
 
+    async list(request, response) {
+        const tipo_unidades = await connection('tipo_unidade').select('*').orderBy('id');
+        const list = [];
+        for (const key in tipo_unidades) {
+            const tipo_unidade = tipo_unidades[key];
+
+            list.push({ value: tipo_unidade.id, label: tipo_unidade.nome });
+        }
+
+        return response.json(list);
+    },
+
     async search(request, response) {
         const { id } = request.params;
         const tu = await connection('tipo_unidade')

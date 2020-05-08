@@ -23,6 +23,7 @@ routes.post('/unidade', UnidadeController.create);
 routes.delete('/unidade/:id', UnidadeController.delete);
 
 routes.get('/tipo-unidade', TipoUnidadeController.index);
+routes.get('/tipo-unidades', TipoUnidadeController.list);
 routes.get('/tipo-unidade/:id', TipoUnidadeController.search);
 routes.post('/tipo-unidade', TipoUnidadeController.create);
 routes.delete('/tipo-unidade/:id', TipoUnidadeController.delete);
@@ -35,7 +36,8 @@ routes.delete('/user/:id', UsuarioController.delete);
 
 routes.get('/ingrediente', IngredienteController.index);
 routes.get('/ingrediente/:id', IngredienteController.search);
-routes.post('/ingrediente', IngredienteController.create);
+routes.post('/ingrediente', IngredienteController.createIngredient);
+routes.post('/ingredientes', IngredienteController.create);
 routes.delete('/ingrediente/:id', IngredienteController.delete);
 
 module.exports = routes;
