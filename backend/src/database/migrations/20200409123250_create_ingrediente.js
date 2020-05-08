@@ -7,6 +7,7 @@ exports.up = function(knex) {
         table.boolean('derivado_leite').notNullable().defaultTo(false);
         table.boolean('gluten').notNullable().defaultTo(false);
         // adicionar outros tipos
+        table.unique('nome');
     });
 };
 

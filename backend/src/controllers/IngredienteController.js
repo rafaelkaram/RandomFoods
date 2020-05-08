@@ -20,13 +20,56 @@ module.exports = {
 
         return response.json(ingrediente);
     },
+
+    async createIngredient(request, response) {
+        const ingrediente = request.body;
+
+        var { nome, id_tipo_unidade, sem_medida, derivado_leite, gluten } = ingrediente;
+        
+        if (!sem_medida) {
+            sem_medida = false;
+        }
+        if (!gluten) {
+            gluten = false;
+        }
+        if (!derivado_leite) {
+            derivado_leite = false;
+        }
+
+        const [ id ] = await connection('ingrediente')
+            .returning('id')
+            .insert({
+                nome,
+                id_tipo_unidade,
+                sem_medida,
+                derivado_leite,
+                gluten
+            });
+
+
+        console.log('Ingrediente inserido\nId: ' + id);
+        console.log('Nome: ' + nome);
+        console.log('Medida única: ' + sem_medida);
+
+        return response.json(id);
+
+    },
     
     async create(request, response) {
         const ids = [];
         for (var key in request.body) {
             const ingrediente = request.body[key];
 
-            const { nome, id_tipo_unidade, sem_medida, derivado_leite, gluten } = ingrediente;            
+            const { nome, id_tipo_unidade, sem_medida, derivado_leite, gluten } = ingrediente;
+            if (!sem_medida) {
+                sem_medida = false;
+            }
+            if (!gluten) {
+                gluten = false;
+            }
+            if (!derivado_leite) {
+                derivado_leite = false;
+            }
 
             const [ id ] = await connection('ingrediente')
                 .returning('id')
@@ -42,7 +85,7 @@ module.exports = {
 
             console.log('Ingrediente inserido\nId: ' + id);
             console.log('Nome: ' + nome);
-            console.log('Medida única' + sem_medida);
+            console.log('Medida única: ' + sem_medida);
         }
 
         return response.json(ids);
