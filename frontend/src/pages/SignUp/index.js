@@ -50,12 +50,14 @@ export default function SignUp() {
                 </section>
                 <form onSubmit={ handleRegister }>
                     <input
+                        className="input-text"
                         placeholder="Nome"
                         value={ nome }
                         required
                         onChange={ e => setNome(e.target.value) }
                     />
                     <input 
+                        className="input-text"
                         placeholder="E-mail"
                         value={ email }
                         type="email"
@@ -63,14 +65,15 @@ export default function SignUp() {
                         onChange={ e => setEmail(e.target.value) }
                     />
                     <input
+                        className="input-text"
                         placeholder="Senha"
                         value={ senha }
                         type="password"
                         required
                         onChange={ e => setSenha(e.target.value) }                    />
                     <div className="input-group">
-                        <input placeholder="Cidade"/>
-                        <input placeholder="UF" style={{ width: 80 }}/>
+                        <input className="input-text" placeholder="Cidade"/>
+                        <input className="input-text" placeholder="UF" style={{ width: 80 }}/>
                     </div>
 
                     <button className="button" type="submit">Cadastrar</button>
