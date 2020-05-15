@@ -48,14 +48,17 @@ export default function Converter() {
                 <form className="combo-box" onSubmit={ handleConverter }>
                     <h1>Converta já!</h1>
                     <Select
+                        className="input-select"
                         options={unidades}
                         onChange={ e => setIdOrigem(e.value) }
                     />
                     <Select
+                        className="input-select"
                         options={unidades}
                         onChange={ e => setIdDestino(e.value) }
                     />
                     <input
+                        className="input-text"
                         placeholder="Quantidade"
                         value={ valor }
                         required

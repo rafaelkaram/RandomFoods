@@ -22,9 +22,9 @@ export default function SignUp() {
                     </Link>
                 </section>
                 <form>
-                    <input placeholder="Nome da Receita" />
+                    <input className="input-text" placeholder="Nome da Receita" />
                     <textarea placeholder="Descrição"/>
-                    <input placeholder="Tipo"/>
+                    <input className="input-text" placeholder="Tipo"/>
 
                     <button className="button" type="submit">Cadastrar</button>
                 </form>

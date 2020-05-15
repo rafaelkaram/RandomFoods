@@ -25,6 +25,8 @@ module.exports = {
         const ingrediente = request.body;
 
         var { nome, id_tipo_unidade, sem_medida, derivado_leite, gluten } = ingrediente;
+
+        console.log(sem_medida);
         
         if (!sem_medida) {
             sem_medida = false;
@@ -50,6 +52,8 @@ module.exports = {
         console.log('Ingrediente inserido\nId: ' + id);
         console.log('Nome: ' + nome);
         console.log('Medida única: ' + sem_medida);
+        console.log('E vaca: ' + derivado_leite);
+        console.log('Possui Gluten: ' + gluten);
 
         return response.json(id);
 
@@ -86,6 +90,8 @@ module.exports = {
             console.log('Ingrediente inserido\nId: ' + id);
             console.log('Nome: ' + nome);
             console.log('Medida única: ' + sem_medida);
+            console.log('E vaca: ' + derivado_leite);
+            console.log('Possui Gluten: ' + gluten);
         }
 
         return response.json(ids);
