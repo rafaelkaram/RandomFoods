@@ -35,7 +35,7 @@ export default function Converter() {
 
             alert(`${ valor } ${ response.data.unidadeAnterior }(s)\n   equivale à\n${ response.data.valorConvertido } ${ response.data.unidadeAtual }(s)`);
         } catch (error) {
-            alert('Falha na conversão, faz essa porra direito.');
+            alert(error.response.data.error);
         }
 
     }
@@ -67,7 +67,6 @@ export default function Converter() {
                     <button className="button" type="submit">Converter</button>
                 </form>
             </section>
-            <img src={foodImg} alt="Imagem" className="img-big" />
         </div>
     );
 }

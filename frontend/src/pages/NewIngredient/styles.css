@@ -29,3 +29,10 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.input-checkbox{
+    width: 10%;
+    height: 10px;
+    color: #333;
+    padding: 0 5px;
+}

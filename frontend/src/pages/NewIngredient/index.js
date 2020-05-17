@@ -42,7 +42,7 @@ export default function Ingrediente() {
 
             alert(`${ nome } cadastrado com sucesso!`);
         } catch (error) {
-            alert('Falha na cadastração, faz essa porra direito.');
+            alert(error.response.data.error);
         }
 
     }
@@ -79,7 +79,7 @@ export default function Ingrediente() {
                             type="checkbox"
                             onChange={changeSemMedida}
                         />
-                        <span>Sem Medida coroi?</span>
+                        <span>Permite não ter medida?</span>
                     </label>
                     <label>
                         <input
@@ -87,7 +87,7 @@ export default function Ingrediente() {
                             type="checkbox"
                             onChange={changeDerivadoLeite}
                         />
-                        <span>É da vaca?</span>
+                        <span>Contém Lactose?</span>
                     </label>
                     <label>
                         <input
@@ -95,7 +95,7 @@ export default function Ingrediente() {
                             type="checkbox"
                             onChange={changeGluten}
                         />
-                        <span>Gluteos?</span>
+                        <span>Contém Gluten?</span>
                     </label>
                     <Select
                         className="input-select"

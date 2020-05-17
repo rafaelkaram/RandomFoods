@@ -20,7 +20,9 @@ module.exports = {
             .update(factor)
             .digest('hex');
 
-        if (!user && user.senha != hash) {
+        console.log({ email, senha, hash, user });
+
+        if (!user || user.senha != hash) {
             return response.status(400).json({ error: 'Usuario ou senha inválidos!'});
         }
 
@@ -51,7 +53,7 @@ module.exports = {
 
             console.log('Usuario inserido\nId: ' + id);
             console.log('Nome: ' + nome);
-            console.log('\nSenha: ' + senha + ' || ' + hash);
+            console.log('Senha: ' + senha + ' || ' + hash);
             console.log('E-mail: ' + email + '\n');
         }
 
@@ -77,7 +79,7 @@ module.exports = {
 
         console.log('Usuario inserido\nId: ' + id);
         console.log('Nome: ' + nome);
-        console.log('\nSenha: ' + senha + ' || ' + hash);
+        console.log('Senha: ' + senha + ' || ' + hash);
         console.log('E-mail: ' + email + '\n');
 
         return response.json(id);
