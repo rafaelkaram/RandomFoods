@@ -7,6 +7,7 @@ import Converter from './pages/Converter';
 import Profile from './pages/Profile';
 import NewRecipe from './pages/NewRecipe';
 import NewIngredient from './pages/NewIngredient';
+import NewIngredientType from './pages/NewIngredientType';
 
 export default function Routes() {
     return (
@@ -18,6 +19,7 @@ export default function Routes() {
                 <Route path="/profile" component={Profile} />
                 <Route path="/recipe/new" component={NewRecipe} />
                 <Route path="/ingredient/new" component={NewIngredient} />
+                <Route path="/ingredient-type/new" component={NewIngredientType} />
             </Switch>
         </BrowserRouter>
     )

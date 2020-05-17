@@ -3,6 +3,7 @@ exports.up = function(knex) {
         table.increments();
         table.string('nome', 100).notNullable();
         table.integer('id_tipo_unidade');
+        table.integer('id_tipo_ingrediente');
         table.boolean('sem_medida').notNullable().defaultTo(false);
         table.boolean('derivado_leite').notNullable().defaultTo(false);
         table.boolean('gluten').notNullable().defaultTo(false);

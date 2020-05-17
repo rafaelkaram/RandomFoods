@@ -9,8 +9,6 @@ import api from '../../services/api';
 
 export default function SignUp() {
     const [ nome, setNome ] = useState('');
-    const [ email, setEmail ] = useState('');
-    const [ senha, setSenha ] = useState('');
 
     const history = useHistory();
 
@@ -18,15 +16,13 @@ export default function SignUp() {
         e.preventDefault();
 
         const data = {
-            nome,
-            email,
-            senha
+            nome
         };
 
         try {
-            const response = await api.post('user', data);
+            const response = await api.post('tipo-ingrediente', data);
 
-            alert('Ususario cadastrado com sucesso!');
+            alert('Tipo de ingrediente cadastrado com sucesso!');
 
             history.push('/');
         } catch (error) {
@@ -35,13 +31,13 @@ export default function SignUp() {
     }
 
     return (
-        <div className="signup-container">
+        <div className="ingredient-type-container">
             <div className="content">
                 <section>
                     <img src={logoImg} alt="Random Foods" className="random-foods" />
 
-                    <h1>Cadastro</h1>
-                    <p>Faça seu cadastro, entre na plataforma e ajude pessoas a encontrarem receitas bacanas.</p>
+                    <h1>Tipo de Ingrediente</h1>
+                    <p>Cadastre seu tipo de ingrediente abaixo.</p>
 
                     <Link to='/' className="back-link">
                         <FiArrowLeft size={16} color="#E02041"/>
@@ -56,25 +52,6 @@ export default function SignUp() {
                         required
                         onChange={ e => setNome(e.target.value) }
                     />
-                    <input 
-                        className="input-text"
-                        placeholder="E-mail"
-                        value={ email }
-                        type="email"
-                        required
-                        onChange={ e => setEmail(e.target.value) }
-                    />
-                    <input
-                        className="input-text"
-                        placeholder="Senha"
-                        value={ senha }
-                        type="password"
-                        required
-                        onChange={ e => setSenha(e.target.value) }                    />
-                    <div className="input-group">
-                        <input className="input-text" placeholder="Cidade"/>
-                        <input className="input-text" placeholder="UF" style={{ width: 80 }}/>
-                    </div>
 
                     <button className="button" type="submit">Cadastrar</button>
                 </form>

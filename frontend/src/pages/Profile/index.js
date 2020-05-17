@@ -37,8 +37,7 @@ export default function Profile() {
 
             setRecipes(recipes.filter(recipe => recipe.id !== id));
         } catch (error) {
-            console.log(error);
-            alert('')
+            alert(error.response.data.error);
         }
 
     }

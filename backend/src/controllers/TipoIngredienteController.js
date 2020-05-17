@@ -2,18 +2,18 @@ const connection = require('../database/connection');
 
 module.exports = {
     async index(request, response) {
-        const tipo_unidade = await connection('tipo_unidade').select('*').orderBy('id');
+        const tipo_ingrediente = await connection('tipo_ingrediente').select('*').orderBy('id');
 
-        return response.json(tipo_unidade);
+        return response.json(tipo_ingrediente);
     },
 
     async list(request, response) {
-        const tipo_unidades = await connection('tipo_unidade').select('*').orderBy('id');
+        const tipo_ingredientes = await connection('tipo_ingrediente').select('*').orderBy('id');
         const list = [];
-        for (const key in tipo_unidades) {
-            const tipo_unidade = tipo_unidades[key];
+        for (const key in tipo_ingredientes) {
+            const tipo_ingrediente = tipo_ingredientes[key];
 
-            list.push({ value: tipo_unidade.id, label: tipo_unidade.nome });
+            list.push({ value: tipo_ingrediente.id, label: tipo_ingrediente.nome });
         }
 
         return response.json(list);
@@ -21,7 +21,7 @@ module.exports = {
 
     async search(request, response) {
         const { id } = request.params;
-        const tu = await connection('tipo_unidade')
+        const tu = await connection('tipo_ingrediente')
             .where('id', id)
             .select('*')
             .first();
@@ -34,23 +34,18 @@ module.exports = {
     },
 
     async create(request, response) {
-        const ids = [];
-        for (var key in request.body) {
-            const item = request.body[key];
 
-            const { nome } = item;
+        const item = request.body;
 
-            const [ id ] = await connection('tipo_unidade')
-                .returning('id')
-                .insert({
-                    nome
-                });
+        const { nome } = item;
 
-            ids.push(id);
+        const [ id ] = await connection('tipo_ingrediente')
+            .returning('id')
+            .insert({
+                nome
+            });
 
-        }
-
-        return response.json(ids);
+        return response.status(200).json({ id });
     },
 
     async delete(request, response) {
@@ -66,7 +61,7 @@ module.exports = {
             return response.status(401).json({ error: 'Operation not permitted.' });
         }
 
-        await connection('tipo_unidade').where('id', id).delete();
+        await connection('tipo_ingrediente').where('id', id).delete();
 
         return response.status(204).send();
     }
