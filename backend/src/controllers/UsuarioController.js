@@ -45,7 +45,7 @@ module.exports = {
                 .insert({
                     nome,
                     email,
-                    senha,
+                    senha : hash,
                     ativo,
                 });
             
@@ -64,7 +64,7 @@ module.exports = {
         const { nome, email, senha } = request.body;
 
         const hash = crypto.createHmac('sha256', senha)
-            .update('TADS')
+            .update(factor)
             .digest('hex');
         const ativo = true;
 
@@ -73,7 +73,7 @@ module.exports = {
             .insert({
                 nome,
                 email,
-                senha,
+                senha: hash,
                 ativo,
             });
 
