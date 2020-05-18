@@ -24,7 +24,7 @@ module.exports = {
     async createIngredient(request, response) {
         const ingrediente = request.body;
 
-        var { nome, id_tipo_unidade, sem_medida, derivado_leite, gluten } = ingrediente;
+        var { nome, id_tipo_unidade, sem_medida, derivado_leite, gluten,id_tipo_ingrediente } = ingrediente;
 
         console.log(sem_medida);
         
@@ -45,7 +45,8 @@ module.exports = {
                 id_tipo_unidade,
                 sem_medida,
                 derivado_leite,
-                gluten
+                gluten,
+                id_tipo_ingrediente
             });
 
 

@@ -10,18 +10,19 @@ export default function Ingrediente() {
 
     const [ nome, setNome ] = useState('');
     const [ id_tipo_unidade, setTipoUnidade] = useState('');
+    const [ id_tipo_ingrediente, setTipoIngrediente] = useState('');
     const [ sem_medida, setSemMedida] = useState('');
     const [ derivado_leite, setDerivadoLeite] = useState('');
     const [ gluten, setGluten] = useState('');
     const [ tipoUnidades, setTipoUnidades ] = useState([]);
-    const [ tipoIngredientes, setTipoIngrediente ] = useState([]);
+    const [ tipoIngredientes, setTipoIngredientes ] = useState([]);
     
     useEffect(() => {
         api.get('tipo-unidades', ).then(response => {
             setTipoUnidades(response.data);
         });
         api.get('tipo-ingredientes', ).then(response => {
-            setTipoIngrediente(response.data);
+            setTipoIngredientes(response.data);
         });
     }, []);
     
@@ -31,9 +32,11 @@ export default function Ingrediente() {
         const data = {
             nome,
             id_tipo_unidade,
+            id_tipo_ingrediente,
             sem_medida,
             derivado_leite,
             gluten
+            
 
         };
 
