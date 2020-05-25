@@ -8,12 +8,34 @@ module.exports = {
     },
 
     async search(request, response) {
+        const id = request.params;
+        
+        if ( !id ) {
+            return response.status(401).json({ error: 'Recipe not found.' });
+        }
+
         return response.json('vá se fude');
+    },
+
+    async fetch(request, response) {
+        const user = request.headers.authorizationId;
+
+        if ( !user ) {
+            return response.status(401).json({ error: 'Operation not permitted.' });
+        }
+
+
+
+        return;
     },
 
     async create(request, response) {
         const { nome, descricao, tipo, ingredientes, categorias } = request.body;
         const user = request.headers.authorizationId;
+
+        if ( !user ) {
+            return response.status(401).json({ error: 'Operation not permitted.' });
+        }
 
         const [ id ] = await connection('receita')
             .returning('id')
@@ -83,5 +105,19 @@ module.exports = {
         await connection('receita').where('id', id).delete();
 
         return response.status(204).send();
+    }, 
+
+    findUnits: async function (id_origem, id_destino) { 
+        const unidade_origem = await connection('unidade')
+            .where('id', id_origem)
+            .select('*')
+            .first();
+
+        const unidade_destino = await connection('unidade')
+            .where('id', id_destino)
+            .select('*')
+            .first();
+
+        return { unidade_origem, unidade_destino };
     }
 }
