@@ -18,20 +18,36 @@ module.exports = {
     },
 
     async fetch(request, response) {
-        const user = request.headers.authorizationId;
+        const user = request.headers.authorization;
 
         if ( !user ) {
             return response.status(401).json({ error: 'Operation not permitted.' });
         }
 
+        const receitas = await connection('receita')
+            .innerJoin('usuario', '', '=', '')
+            .where('id_usuario', user)
+            .select('*')
+            .orderBy('data_cadastro');
 
+        const resp = [];
 
-        return;
+        for ( var key in receitas ) {
+            const receita = receitas[key];
+
+            const ingredientes = await module.exports.findIngredientes(receita.id);
+            const categorias = await module.exports.findCategorias(receita.id);
+            
+
+            resp.push({ receita: receita.nome, descricao: receita.descricao, tipo: receita.tipo, dataCadastro: receita.data_cadastro, ativa: receita.ativa, ingredientes, categorias });
+        }
+
+        return response.json(resp);
     },
 
     async create(request, response) {
         const { nome, descricao, tipo, ingredientes, categorias } = request.body;
-        const user = request.headers.authorizationId;
+        const user = request.headers.authorization;
 
         if ( !user ) {
             return response.status(401).json({ error: 'Operation not permitted.' });
@@ -72,7 +88,7 @@ module.exports = {
             const [ idCategoria ] = await connection('receita_categoria')
                 .returning('id')
                 .insert({
-                    id_ingrediente: categoria.id,
+                    id_categoria: categoria,
                     id_receita: id
                 });
 
@@ -105,18 +121,20 @@ module.exports = {
         await connection('receita').where('id', id).delete();
 
         return response.status(204).send();
-    }, 
+    },
 
-    findUnits: async function (id_origem, id_destino) { 
-        const unidade_origem = await connection('unidade')
-            .where('id', id_origem)
-            .select('*')
-            .first();
+    findIngredientes: async function (id) { 
+        const unidade_origem = await connection('receita_ingrediente')
+            .where('id_receita', id)
+            .select('*');
 
-        const unidade_destino = await connection('unidade')
-            .where('id', id_destino)
-            .select('*')
-            .first();
+        return { unidade_origem, unidade_destino };
+    },
+
+    findCategorias: async function (id) { 
+        const unidade_origem = await connection('receita_categoria')
+            .where('id_receita', id)
+            .select('*');
 
         return { unidade_origem, unidade_destino };
     }
