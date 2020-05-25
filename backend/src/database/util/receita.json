@@ -1,0 +1,23 @@
+{
+    "nome": "Suco de Ovo",
+    "descricao": "Mexe tudo bem gostoso",
+    "tipo": "doce",
+    "ingredientes": [
+        {
+            "id": ,
+            "id_unidade": ,
+            "quantidade": 200
+        },
+        {
+            "id": ,
+            "id_unidade": ,
+            "quantidade": 200
+        },
+        {
+            "id": ,
+            "id_unidade": ,
+            "quantidade": 200
+        },
+    ],
+    "categroias": [ 1, 2, 3, 4 ]
+}

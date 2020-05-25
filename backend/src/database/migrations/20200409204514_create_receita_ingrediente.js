@@ -4,7 +4,7 @@ exports.up = function(knex) {
         table.integer('id_ingrediente').notNullable();
         table.integer('id_receita').notNullable();
         table.integer('id_unidade');
-        table.decimal('quantidade').notNullable();
+        table.decimal('quantidade');
         
         table.unique(['id_ingrediente', 'id_receita']);
     });

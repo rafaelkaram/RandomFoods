@@ -10,6 +10,10 @@ const TipoUnidadeController = require('./controllers/TipoUnidadeController');
 const TipoIngredienteController = require('./controllers/TipoIngredienteController');
 const ConversorController = require('./controllers/ConversorController');
 
+const ReceitaIngredienteController = require('./controllers/ReceitaIngredienteController');
+const ReceitaCategoriaController = require('./controllers/ReceitaCategoriaController');
+
+
 const routes = express.Router();
 
 routes.get('/avaliar/user', AvaliacaoController.userIndex);
@@ -22,6 +26,12 @@ routes.get('/unidade', UnidadeController.index);
 routes.get('/unidade/:id', UnidadeController.search);
 routes.post('/unidade', UnidadeController.create);
 routes.delete('/unidade/:id', UnidadeController.delete);
+
+
+routes.get('/receita', ReceitaController.index);
+routes.get('/receita/:id', ReceitaController.search);
+routes.post('/receita', ReceitaController.create);
+routes.delete('/receita/:id', ReceitaController.delete);
 
 routes.get('/tipo-unidade', TipoUnidadeController.index);
 routes.get('/tipo-unidades', TipoUnidadeController.list);
