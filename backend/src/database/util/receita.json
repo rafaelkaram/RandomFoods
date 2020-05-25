@@ -1,23 +1,24 @@
 {
     "nome": "Suco de Ovo",
-    "descricao": "Mexe tudo bem gostoso",
+    "descricao": "Joga tudo no liquidificador e bate por 2min",
     "tipo": "doce",
     "ingredientes": [
-        {
-            "id": ,
-            "id_unidade": ,
-            "quantidade": 200
-        },
-        {
-            "id": ,
-            "id_unidade": ,
-            "quantidade": 200
-        },
-        {
-            "id": ,
-            "id_unidade": ,
-            "quantidade": 200
-        },
+      {
+        "id": 3,
+        "id_unidade": 6,
+        "quantidade": 3
+      },
+      {
+        "id": 1,
+        "id_unidade": 2,
+        "quantidade": 200
+      },
+      {
+        "id": 17,
+        "id_unidade": 45,
+        "quantidade": 5
+      }
+  
     ],
-    "categroias": [ 1, 2, 3, 4 ]
-}
+    "categorias": [ 1, 2, 3, 4 ]
+  }

@@ -27,8 +27,8 @@ routes.get('/unidade/:id', UnidadeController.search);
 routes.post('/unidade', UnidadeController.create);
 routes.delete('/unidade/:id', UnidadeController.delete);
 
-
 routes.get('/receita', ReceitaController.index);
+routes.get('/receitas', ReceitaController.fetch);
 routes.get('/receita/:id', ReceitaController.search);
 routes.post('/receita', ReceitaController.create);
 routes.delete('/receita/:id', ReceitaController.delete);
