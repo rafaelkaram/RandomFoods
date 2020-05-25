@@ -25,21 +25,19 @@ module.exports = {
         }
 
         const receitas = await connection('receita')
-            .innerJoin('usuario', '', '=', '')
+            .innerJoin('usuario', 'receita.id_usuario', '=', 'usuario.id')
             .where('id_usuario', user)
-            .select('*')
-            .orderBy('data_cadastro');
+            .select('receita.*', 'usuario.nome as usuario')
+            .orderBy('receita.data_cadastro');
 
         const resp = [];
 
         for ( var key in receitas ) {
-            const receita = receitas[key];
+            const obj = receitas[key];
 
-            const ingredientes = await module.exports.findIngredientes(receita.id);
-            const categorias = await module.exports.findCategorias(receita.id);
-            
+            const receita = await module.exports.findReceita(obj);
 
-            resp.push({ receita: receita.nome, descricao: receita.descricao, tipo: receita.tipo, dataCadastro: receita.data_cadastro, ativa: receita.ativa, ingredientes, categorias });
+            resp.push(receita);
         }
 
         return response.json(resp);
@@ -123,19 +121,70 @@ module.exports = {
         return response.status(204).send();
     },
 
-    findIngredientes: async function (id) { 
-        const unidade_origem = await connection('receita_ingrediente')
-            .where('id_receita', id)
-            .select('*');
+    findReceita: async function (receita) { 
+        const listaIngredientes = await connection('receita_ingrediente')
+            .innerJoin('ingrediente', 'receita_ingrediente.id_ingrediente', '=', 'ingrediente.id')
+            .leftJoin('unidade', 'receita_ingrediente.id_unidade', '=', 'unidade.id')
+            .where('receita_ingrediente.id_receita', receita.id)
+            .select('receita_ingrediente.quantidade as quantidade',
+                'ingrediente.nome as ingrediente',
+                'ingrediente.id_tipo_unidade as tipo_unidade',
+                'unidade.nome as unidade',
+                'unidade.sigla as sigla',
+                'unidade.taxa_conversao as taxa',
+                'unidade.id_ingrediente as temIngrediente');
 
-        return { unidade_origem, unidade_destino };
-    },
+        const ingredientes = [];
 
-    findCategorias: async function (id) { 
-        const unidade_origem = await connection('receita_categoria')
-            .where('id_receita', id)
-            .select('*');
+        for(var key in listaIngredientes) {
+            const ingrediente = listaIngredientes[key];
 
-        return { unidade_origem, unidade_destino };
+            if (!ingrediente.quantidade || ingrediente.quantidade === 0 || !ingrediente.unidade) {
+                ingredientes.push({ nome: ingrediente.ingrediente });
+            } else {
+                if (!ingrediente.tipo_unidade || !ingrediente.temIngrediente) {
+                    ingredientes.push({ nome: ingrediente.ingrediente, quantidade: `${ingrediente.quantidade}${ingrediente.sigla}`});
+                } else {
+                    const unSI = await connection('unidade')
+                        .where('id_tipo_unidade', ingrediente.tipo_unidade)
+                        .andWhere('id_ingrediente', null)
+                        .select('*');
+
+                    for (var key2 in unSI) {
+                        const un = unSI[key2];
+                        const valor = (ingrediente.quantidade * (ingrediente.taxa)) / un.taxa_conversao;
+
+                        if (valor > 1 && valor < 1000) {
+                            ingredientes.push({ nome: ingrediente.ingrediente, quantidade: `${ingrediente.quantidade} ${ingrediente.sigla} ou ${valor}${un.sigla}`});
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+            
+        const categorias = [];
+
+        const listaCategoria = await connection('receita_categoria')
+            .innerJoin('categoria', 'receita_categoria.id_categoria', '=', 'categoria.id')
+            .where('receita_categoria.id_receita', receita.id)
+            .select('categoria.nome');
+
+        for (var key in listaCategoria) {
+            const categoria = listaCategoria[key];
+
+            categorias.push(categoria.nome);
+        }
+            
+        return {
+            receita: receita.nome,
+            descricao: receita.descricao,
+            tipo: receita.tipo,
+            usuario: receita.usuario,
+            dataCadastro: receita.data_cadastro,
+            ativa: receita.ativa,
+            ingredientes,
+            categorias
+        };
     }
 }
