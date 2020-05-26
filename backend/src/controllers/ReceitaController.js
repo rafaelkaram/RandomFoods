@@ -2,19 +2,40 @@ const connection = require('../database/connection');
 
 module.exports = {
     async index(request, response) {
-        const users = await connection('receita').select('*').orderBy('id');
+        const receitas = await connection('receita')
+            .innerJoin('usuario', 'receita.id_usuario', '=', 'usuario.id')
+            .select('receita.*', 'usuario.nome as usuario')
+            .orderBy('receita.data_cadastro');
 
-        return response.json(users);
+        const resp = [];
+
+        for ( var key in receitas ) {
+            const obj = receitas[key];
+
+            const receita = await module.exports.findReceita(obj);
+
+            resp.push(receita);
+        }
+
+        return response.json(resp);
     },
 
     async search(request, response) {
-        const id = request.params;
-        
-        if ( !id ) {
+        const { id } = request.params;
+
+        const obj = await connection('receita')
+            .innerJoin('usuario', 'receita.id_usuario', '=', 'usuario.id')
+            .where('receita.id', id)
+            .select('receita.*', 'usuario.nome as usuario')
+            .first();
+
+        if ( !obj ) {
             return response.status(401).json({ error: 'Recipe not found.' });
         }
 
-        return response.json('vá se fude');
+        const receita = await module.exports.findReceita(obj);
+
+        return response.json(receita);
     },
 
     async fetch(request, response) {
