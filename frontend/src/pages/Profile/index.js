@@ -16,14 +16,13 @@ export default function Profile() {
     const [ recipes, setRecipes ] = useState([]);
 
     useEffect(() => {
-        api.get('profile', {
+        api.get('receitas', {
             headers: {
-                AuthorizationId: id,
-                AuthorizationLogin: email,
+                Authorization: id,
             }
         }).then(response => {
             setRecipes(response.data);
-
+            console.log(response.data);
         })
     }, [ name ]);
 
@@ -31,7 +30,7 @@ export default function Profile() {
         try {
             await api.delete(`receita/${id}`, {
                 headers: {
-                    AuthorizationId: id,
+                    Authorization: id,
                 }
             });
 
@@ -59,7 +58,7 @@ export default function Profile() {
                 { recipes.map(recipe => (
                     <li key={ recipe.id }>
                         <strong>RECEITA:</strong>
-                        <p>{ recipe.nome }</p>
+                        <p>{ recipe.receita }</p>
 
                         <strong>DESCRIÇÃO:</strong>
                         <p>{ recipe.descricao }</p>
@@ -67,8 +66,15 @@ export default function Profile() {
                         <strong>TIPO:</strong>
                         <p>{ recipe.tipo }</p>
 
-                        <strong>DATA CADASTRO:</strong>
-                        <p>{ Intl.DateTimeFormat('pt-BR').format(recipe.data_cadastro) }</p>
+                        <strong>INGREDIENTES:</strong>
+                        { recipe.ingredientes.map(ingredient => (
+                            <p>&nbsp;&nbsp;<b>{ ingredient.nome }&nbsp;:</b>&nbsp;{ ingredient.quantidade }</p>
+                        ))}
+
+                        <strong>CATEGORIAS:</strong>
+                        { recipe.categorias.map(categoria => (
+                            <p>&nbsp;&nbsp;{ categoria }</p>
+                        ))}
 
                         <button onClick={() => handleDeleteRecipe(recipe.id)} type="button">
                             <FiTrash2 size={20} color="#a8a8b3" />
@@ -79,3 +85,8 @@ export default function Profile() {
         </div>
     );
 }
+
+/*
+    <strong>DATA CADASTRO:</strong>
+    <p>{ Intl.DateTimeFormat('pt-BR').format(recipe.dataCadastro) }</p>
+*/
