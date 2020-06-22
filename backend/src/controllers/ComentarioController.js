@@ -57,9 +57,8 @@ module.exports = {
     },
 
     async create(request, response) {
-        const { id_receita } = request.params;
+        const { id_receita, id_usuario } = request.params;
         const { comentario, id_pai } = request.body;
-        const id_usuario = request.headers.authorization;
 
         const [ id ] = await connection('comentario')
             .returning('id')
