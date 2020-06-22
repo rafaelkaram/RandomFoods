@@ -17,7 +17,12 @@ const ReceitaCategoriaController = require('./controllers/ReceitaCategoriaContro
 const routes = express.Router();
 
 routes.get('/avaliar/user', AvaliacaoController.userIndex);
+routes.get('/avaliar/:id', AvaliacaoController.search);
 routes.post('/avaliar/:id_receita', AvaliacaoController.create);
+
+// routes.get('/comentar/user', ComentarioController.userIndex);
+routes.get('/comentar/:id', ComentarioController.search);
+routes.post('/comentar/:id_receita', ComentarioController.create);
 
 routes.post('/converter', ConversorController.convert);
 

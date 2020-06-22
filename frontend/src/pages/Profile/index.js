@@ -22,7 +22,6 @@ export default function Profile() {
             }
         }).then(response => {
             setRecipes(response.data);
-            console.log(response.data);
         })
     }, [ name ]);
 
@@ -58,7 +57,7 @@ export default function Profile() {
                 { recipes.map(recipe => (
                     <li key={ recipe.id }>
                         <strong>RECEITA:</strong>
-                        <p>{ recipe.receita }</p>
+                        <p><Link to='${ recipe.id }'>{ recipe.receita }</Link></p>
 
                         <strong>DESCRIÇÃO:</strong>
                         <p>{ recipe.descricao }</p>

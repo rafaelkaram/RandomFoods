@@ -204,6 +204,7 @@ module.exports = {
             usuario: receita.usuario,
             dataCadastro: receita.data_cadastro,
             ativa: receita.ativa,
+            nota: receita.nota,
             ingredientes,
             categorias
         };

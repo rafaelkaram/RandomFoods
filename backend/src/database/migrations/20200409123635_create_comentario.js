@@ -3,7 +3,7 @@ exports.up = function(knex) {
         table.increments();
         table.integer('id_usuario').notNullable();
         table.integer('id_receita').notNullable();
-        table.integer('id_pai').notNullable();
+        table.integer('id_pai');defaulTo(null);
         table.text('valor').notNullable();
         table.datetime('data').notNullable().defaultTo(knex.fn.now());
     });

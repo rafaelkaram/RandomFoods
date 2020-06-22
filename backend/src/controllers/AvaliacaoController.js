@@ -29,21 +29,85 @@ module.exports = {
         return response.json(avaliacao);
     },
 
+    async search(request, response) {
+        const { id } = request.params;
+
+        const { nome, nota, num_notas } = await connection('receita')
+            .where('id', id)
+            .first()
+            .select([
+                'nome',
+                'nota',
+                'num_notas'
+            ]);
+
+            console.log({ nome, nota, num_notas });
+
+        const avaliacoes = await connection('avaliacao')
+            .join('usuario', 'usuario.id', '=', 'avaliacao.id_usuario')
+            .where('id_receita', id)
+            .select([
+                'avaliacao.valor as nota',
+                'avaliacao.data',
+                'usuario.nome as usuario',
+            ]);
+
+        return response.json({
+            receita: nome,
+            nota,
+            count: num_notas,
+            avaliacoes
+        });
+    },
+
     async create(request, response) {
         const { id_receita } = request.params;
         const { valor } = request.body;
         const id_usuario = request.headers.authorization;
-        const data = new Date();
 
-        const [ id ] = await connection('avaliacao')
+        const trx = await connection.transaction();
+
+        const [ id ] = await trx('avaliacao')
             .returning('id')
             .insert({
                 id_usuario,
                 id_receita,
-                valor,
-                data
+                valor
             });
 
+        const { nota, num_notas } = await trx('receita')
+            .where('id', id_receita)
+            .first()
+            .select([
+                'nota',
+                'num_notas'
+            ]);
+
+            console.log({ nota, num_notas });
+
+        if (num_notas != 0)  {
+            const novaNota = ((nota * num_notas) + valor) / (num_notas + 1);
+            const novoNum = num_notas + 1;
+            console.log('Entrou na média.');
+
+            await trx('receita')
+                .where('id', id_receita)
+                .update({
+                    nota: novaNota,
+                    num_notas: novoNum
+                });
+        } else {
+            console.log('Entrou na atribuição');
+            await trx('receita')
+                .where('id', id_receita)
+                .update({
+                    nota: valor,
+                    num_notas: 1
+                });
+        }
+
+        await trx.commit();
+        
         return response.json({ id });
     },
 
