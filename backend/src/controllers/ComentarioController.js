@@ -1,29 +1,81 @@
 const connection = require('../database/connection');
 const crypto = require('crypto');
+const { search } = require('./ReceitaController');
 
 module.exports = {
     async index(request, response) {
-        const users = await connection('usuario').select('*').orderBy('id');
+        const comentarios = await connection('comentario')
+        .join('avaliacao', 'avaliacao.id_receita', '=', 'comentario.id_receita')
+        .select([
+            'comentario.*',
+            'avaliacao.valor'
+        ])
+        .orderBy('comentario.id');
 
-        return response.json(users);
+        return response.json(comentarios);
+    },
+
+    async search(request, response) {
+        const { id } = request.params;
+
+        const comentarios = await connection('comentario')
+            .innerJoin('usuario', 'usuario.id', '=', 'comentario.id_usuario')
+            .leftOuterJoin('avaliacao', function () {
+                this
+                  .on('comentario.id_usuario', 'avaliacao.id_usuario')
+                  .on('comentario.id_receita', 'avaliacao.id_receita');
+              })
+            // .whereNull('comentario.id_pai);
+            .where('comentario.id_pai', 0)
+            .andWhere('comentario.id_receita', id)
+            .select([
+                'usuario.nome as usuario',
+                'comentario.*',
+                'avaliacao.valor as avaliacao'
+            ]);
+
+        const filhos = await connection('comentario')
+            .innerJoin('usuario', 'usuario.id', '=', 'comentario.id_usuario')
+            .leftOuterJoin('avaliacao', function () {
+                this
+                  .on('comentario.id_usuario', 'avaliacao.id_usuario')
+                  .on('comentario.id_receita', 'avaliacao.id_receita');
+              })
+            // .whereNotNull('comentario.id_pai);
+            .whereNot('comentario.id_pai', 0)
+            .andWhere('comentario.id_receita', id)
+            .select([
+                'usuario.nome as usuario',
+                'comentario.*',
+                'avaliacao.valor as avaliacao'
+            ]);
+
+        if (filhos)
+            return response.json({ comentarios, filhos });
+        else
+            return response.json({ comentarios });
     },
 
     async create(request, response) {
-        const { nome, email, senha } = request.body;
-        // const id = crypto.randomBytes(4).toString('HEX');
-        const data = new Date();
-        const ativo = true;
+        const { id_receita } = request.params;
+        const { comentario, id_pai } = request.body;
+        const id_usuario = request.headers.authorization;
 
-        const [ id ] = await connection('usuario')
+        const [ id ] = await connection('comentario')
             .returning('id')
             .insert({
-                nome,
-                email,
-                senha,
-                ativo,
+                id_usuario,
+                id_receita,
+                'id_pai': id_pai === undefined ? 0 : id_pai,
+                'valor': comentario,
             });
 
-        return response.json({ id });
+        const nome = await connection('usuario')
+            .where('id', id_usuario)
+            .first()
+            .select('nome');
+
+        return response.json({ id, nome, comentario });
     },
 
     async delete(request, response) {
