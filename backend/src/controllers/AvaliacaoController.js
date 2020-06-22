@@ -61,9 +61,8 @@ module.exports = {
     },
 
     async create(request, response) {
-        const { id_receita } = request.params;
+        const { id_receita, id_usuario } = request.params;
         const { valor } = request.body;
-        const id_usuario = request.headers.authorization;
 
         const trx = await connection.transaction();
 
