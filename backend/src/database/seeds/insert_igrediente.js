@@ -23,7 +23,106 @@ exports.seed = function(knex) {
         { id:19, nome: 'Abacaxi', id_tipo_unidade: 3, sem_medida: false, derivado_leite: false, gluten: false,id_tipo_ingrediente:3 },
         { id:20, nome: 'Leite Condensado', id_tipo_unidade: 1, sem_medida: false, derivado_leite: true, gluten: false, id_tipo_ingrediente:7},
         { id:21, nome: 'Chocolate Granulado', id_tipo_unidade: 2, sem_medida: false, derivado_leite: true, gluten: false, id_tipo_ingrediente:7 },
-        { id:22, nome: 'Água', id_tipo_unidade: 1, sem_medida: true, derivado_leite: false, gluten: false,id_tipo_ingrediente:8 }
+        { id:22, nome: 'Água', id_tipo_unidade: 1, sem_medida: true, derivado_leite: false, gluten: false,id_tipo_ingrediente:8 },
+        {
+          id: 23,
+          nome: 'Margarina',
+          id_tipo_unidade: 2,
+          id_tipo_ingrediente: 7,
+          sem_medida: false,
+          derivado_leite: true,
+          gluten: false
+        },
+        {
+          id: 24,
+          nome: 'Noz-moscada',
+          id_tipo_unidade: 2,
+          id_tipo_ingrediente: 2,
+          sem_medida: true,
+          derivado_leite: false,
+          gluten: false
+        },
+        {
+          id: 25,
+          nome: 'Cebola',
+          id_tipo_unidade: 3,
+          id_tipo_ingrediente: 5,
+          sem_medida: false,
+          derivado_leite: false,
+          gluten: false
+        },
+        {
+          id: 26,
+          nome: 'Dente de Alho',
+          id_tipo_unidade: 3,
+          id_tipo_ingrediente: 5,
+          sem_medida: false,
+          derivado_leite: false,
+          gluten: false
+        },
+        {
+          id: 27,
+          nome: 'Carne Moída',
+          id_tipo_unidade: 2,
+          id_tipo_ingrediente: 6,
+          sem_medida: false,
+          derivado_leite: false,
+          gluten: false
+        },
+        {
+          id: 28,
+          nome: 'Tomate',
+          id_tipo_unidade: 3,
+          id_tipo_ingrediente: 4,
+          sem_medida: false,
+          derivado_leite: false,
+          gluten: false
+        },
+        {
+          id: 29,
+          nome: 'Presunto',
+          id_tipo_unidade: 2,
+          id_tipo_ingrediente: 6,
+          sem_medida: false,
+          derivado_leite: false,
+          gluten: false
+        },
+        {
+          id: 30,
+          nome: 'Queijo Mussarela',
+          id_tipo_unidade: 2,
+          id_tipo_ingrediente: 7,
+          sem_medida: false,
+          derivado_leite: true,
+          gluten: false
+        },
+        {
+          id: 31,
+          nome: 'Massa para Lasanha',
+          id_tipo_unidade: 2,
+          id_tipo_ingrediente: 10,
+          sem_medida: false,
+          derivado_leite: false,
+          gluten: true
+        },
+        {
+          id: 32,
+          nome: 'Creme de Leite',
+          id_tipo_unidade: 1,
+          id_tipo_ingrediente: 7,
+          sem_medida: false,
+          derivado_leite: true,
+          gluten: false
+        },
+        {
+          id: 33,
+          nome: 'Óleo',
+          id_tipo_unidade: 1,
+          id_tipo_ingrediente: 11,
+          sem_medida: false,
+          derivado_leite: false,
+          gluten: false
+        }
       ]);
     });
 };

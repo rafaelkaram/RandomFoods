@@ -11,6 +11,8 @@ exports.seed = function(knex) {
         { id: 7, nome: 'Lacticínios' },
         { id: 8, nome: 'Outros' },
         { id: 9, nome: 'Confeitaria' },
+        { id: 10, nome: 'Massas' },
+        { id: 11, nome: 'Óleos' },
       ]);
     });
 };
