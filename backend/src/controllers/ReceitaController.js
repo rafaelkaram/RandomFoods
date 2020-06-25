@@ -87,16 +87,20 @@ module.exports = {
         for (var key in ingredientes) {
             const ingrediente = ingredientes[key];
 
-            const [ idIngrediente ] = await connection('receita_ingrediente')
+            const [ idIngredienteReceita ] = await connection('receita_ingrediente')
                 .returning('id')
                 .insert({
                     id_ingrediente: ingrediente.id,
                     id_receita: id,
                     id_unidade: ingrediente.id_unidade,
-                    quantidade: ingrediente.quantidade
+                    quantidade: ingrediente.quantidade ? ingrediente.quantidade : null
                 });
 
-            idsIngrediente.push(idIngrediente);
+            if (!idIngredienteReceita) {
+
+            }
+
+            idsIngrediente.push(idIngredienteReceita);
         }
 
         const idsCategoria = [];
@@ -135,9 +139,13 @@ module.exports = {
             return response.status(401).json({ error: 'Operation not permitted.' });
         }
 
-        await connection('receita_categoria').where('id_receita', id).delete();
-        await connection('receita_ingrediente').where('id_receita', id).delete();
-        await connection('receita').where('id', id).delete();
+        const trx = connection.transaction();
+
+        await trx('receita_categoria').where('id_receita', id).delete();
+        await trx('receita_ingrediente').where('id_receita', id).delete();
+        await trx('receita').where('id', id).delete();
+
+        await trx.commit();
 
         return response.status(204).send();
     },
@@ -164,7 +172,7 @@ module.exports = {
                 ingredientes.push({ nome: ingrediente.ingrediente });
             } else {
                 if (!ingrediente.tipo_unidade || !ingrediente.temIngrediente) {
-                    ingredientes.push({ nome: ingrediente.ingrediente, quantidade: `${ingrediente.quantidade}${ingrediente.sigla}`});
+                    ingredientes.push({ nome: ingrediente.ingrediente, quantidade: `${ingrediente.quantidade} ${ingrediente.sigla}`});
                 } else {
                     const unSI = await connection('unidade')
                         .where('id_tipo_unidade', ingrediente.tipo_unidade)

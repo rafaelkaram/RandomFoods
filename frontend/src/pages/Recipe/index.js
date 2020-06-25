@@ -33,7 +33,7 @@ export default function Recipe({ match }) {
 
     function ShowRecipe() {
         if (recipe) {
-            const valor = (recipe.nota).toFixed(2);
+            const valor = recipe.nota ? (recipe.nota).toFixed(2) : null;
             return (
                 <div>
                     <div className="display-group">
@@ -74,7 +74,7 @@ export default function Recipe({ match }) {
 
                     <strong>INGREDIENTES:</strong>
                     { recipe.ingredientes.map(ingredient => (
-                        <p>&nbsp;&nbsp;<b>{ ingredient.nome }&nbsp;:</b>&nbsp;{ ingredient.quantidade }</p>
+                        <p>&nbsp;&nbsp;<b>{ ingredient.nome }&nbsp;</b>{ ingredient.quantidade ? `: ${ ingredient.quantidade }` : 'a gosto' }</p>
                     ))}
                 </div>
             );

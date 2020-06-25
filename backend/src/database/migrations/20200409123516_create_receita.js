@@ -4,6 +4,8 @@ exports.up = function(knex) {
         table.integer('id_usuario').defaultTo(null);
         table.string('nome', 100).notNullable();
         table.text('descricao').notNullable();
+        table.decimal('nota');
+        table.integer('num_notas').notNullable().defaultTo(0);
         table.enu('tipo', ['doce', 'salgado']).notNullable();
         table.datetime('data_cadastro').notNullable().defaultTo(knex.fn.now());
         table.boolean('ativa').notNullable().defaultTo(true);
