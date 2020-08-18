@@ -21,6 +21,10 @@
     justify-content: space-between;
 }
 
+.new-recipe-container section.form img {
+    margin-left: -55px;
+}
+
 .new-recipe-container .content section {
     width: 100%;
     max-width: 380px;
@@ -45,4 +49,36 @@
 .new-recipe-container .content form input,
 .new-recipe-container .content form textarea {
     margin-top: 8px;
+}
+
+.new-recipe-container .content form .input-group {
+    display: flex;
+    -webkit-box-align: center;
+}
+
+.new-recipe-container .content form .input-group input {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.new-recipe-container .content form .input-group input {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.new-recipe-container .content form select-items {
+    width: 100%;
+    height: 60px;
+    color: #333;
+    border: 1px solid #dcdce6;
+    border-radius: 8px;
+    padding: 0 24px;
+}
+
+.size1 {
+    width: 220px;
+}
+
+.size2 {
+    width: 100px;
 }

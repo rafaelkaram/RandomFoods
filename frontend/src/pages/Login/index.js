@@ -33,36 +33,37 @@ export default function Login() {
 
     return (
         <div className="login-container">
-            <section className="form">
-                <img src={logoImg} alt="Random Foods" className="random-foods" />
+            <div className="content">
+                <section className="form">
+                    <img src={logoImg} alt="Random Foods" className="random-foods" />
 
-                <form onSubmit={ handleLogin } >
-                    <h1>Faça seu login</h1>
-                    <input
-                        className="input-text"
-                        placeholder="E-mail"
-                        type="email"
-                        value={ email }
-                        required
-                        onChange={ e => setEmail(e.target.value) }
-                    />
-                    <input
-                        className="input-text"
-                        placeholder="Senha"
-                        type="password"
-                        value={ senha }
-                        required
-                        onChange={ e => setSenha(e.target.value) }
-                    />
-                    <button type="submit" className="button">Entrar</button>
+                    <form onSubmit={ handleLogin } >
+                        <h1>Faça seu login</h1>
+                        <input
+                            className="input-text"
+                            placeholder="E-mail"
+                            type="email"
+                            value={ email }
+                            required
+                            onChange={ e => setEmail(e.target.value) }
+                        />
+                        <input
+                            className="input-text"
+                            placeholder="Senha"
+                            type="password"
+                            value={ senha }
+                            required
+                            onChange={ e => setSenha(e.target.value) }
+                        />
+                        <button type="submit" className="button">Entrar</button>
 
-                    <Link to='/signup' className="back-link">
-                        <FiLogIn size={16} color="#E02041"/>
-                        Não tenho cadastro
-                    </Link>
-                </form>
-            </section>
-            <img src={foodImg} className="img-big" alt="Imagem" />
+                        <Link to='/signup' className="back-link">
+                            <FiLogIn size={16} color="#E02041"/>
+                            Não tenho cadastro
+                        </Link>
+                    </form>
+                </section>
+            </div>
         </div>
     );
 }

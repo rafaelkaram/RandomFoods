@@ -1,12 +1,27 @@
 .converter-container {
-    width: 100%;
-    max-width: 1120px;
-    height: 100vh;
+    width: 90%;
+    max-width: 1920px;
     margin: 0 auto;
+    margin-top: 30px;
 
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+}
+
+.converter-container .content {
+    min-width: 500px;
+    padding: 96px;
+    margin-bottom: 24px;
+    background: #F0F0F5;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+
+    align-items: top;
+}
+
+.converter-container section.form img {
+    margin-left: -55px;
 }
 
 .converter-container section.form {
@@ -38,6 +53,3 @@
     border-radius: 8px;
     padding: 0 24px;
 }
-
-
-

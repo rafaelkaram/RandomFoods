@@ -64,55 +64,57 @@ export default function Ingrediente() {
     
     return (
         <div className="ingredient-container">
-            <section className="form">
-                <img src={logoImg} alt="Random Foods" className="random-foods" />
+            <div className="content">
+                <section className="form">
+                    <img src={logoImg} alt="Random Foods" className="random-foods" />
 
-                <form className="combo-box" onSubmit={ handleIngredient }>
-                    <h1>Cadastre já!</h1>
-                    <input
-                        className="input-text"
-                        placeholder="Nome"
-                        value={ nome }
-                        required
-                        onChange={ e => setNome(e.target.value) }
-                    />
-                    <label>
+                    <form className="combo-box" onSubmit={ handleIngredient }>
+                        <h1>Cadastre Ingrediente!</h1>
                         <input
-                            className="input-checkbox"
-                            type="checkbox"
-                            onChange={changeSemMedida}
+                            className="input-text"
+                            placeholder="Nome"
+                            value={ nome }
+                            required
+                            onChange={ e => setNome(e.target.value) }
                         />
-                        <span>Permite não ter medida?</span>
-                    </label>
-                    <label>
-                        <input
-                            className="input-checkbox"
-                            type="checkbox"
-                            onChange={changeDerivadoLeite}
+                        <label>
+                            <input
+                                className="input-checkbox"
+                                type="checkbox"
+                                onChange={changeSemMedida}
+                            />
+                            <span>Permite não ter medida?</span>
+                        </label>
+                        <label>
+                            <input
+                                className="input-checkbox"
+                                type="checkbox"
+                                onChange={changeDerivadoLeite}
+                            />
+                            <span>Contém Lactose?</span>
+                        </label>
+                        <label>
+                            <input
+                                className="input-checkbox"
+                                type="checkbox"
+                                onChange={changeGluten}
+                            />
+                            <span>Contém Gluten?</span>
+                        </label>
+                        <Select
+                            className="input-select"
+                            options={tipoUnidades}
+                            onChange={ e => setTipoUnidade(e.value) }
                         />
-                        <span>Contém Lactose?</span>
-                    </label>
-                    <label>
-                        <input
-                            className="input-checkbox"
-                            type="checkbox"
-                            onChange={changeGluten}
+                        <Select
+                            className="input-select"
+                            options={tipoIngredientes}
+                            onChange={ e => setTipoIngrediente(e.value) }
                         />
-                        <span>Contém Gluten?</span>
-                    </label>
-                    <Select
-                        className="input-select"
-                        options={tipoUnidades}
-                        onChange={ e => setTipoUnidade(e.value) }
-                    />
-                    <Select
-                        className="input-select"
-                        options={tipoIngredientes}
-                        onChange={ e => setTipoIngrediente(e.value) }
-                    />
-                    <button className="button" type="submit">Cadastrar</button>
-                </form>
-            </section>
+                        <button className="button" type="submit">Cadastrar</button>
+                    </form>
+                </section>
+            </div>
         </div>
     );
 }

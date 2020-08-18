@@ -33,6 +33,8 @@ module.exports = {
             return response.status(401).json({ error: 'Recipe not found.' });
         }
 
+        console.log(obj.descricao);
+
         const receita = await module.exports.findReceita(obj);
 
         return response.json(receita);
@@ -72,11 +74,13 @@ module.exports = {
             return response.status(401).json({ error: 'Operation not permitted.' });
         }
 
-        const [ id ] = await connection('receita')
+        const trx = await connection.transaction();
+
+        const [ id ] = await trx('receita')
             .returning('id')
             .insert({
                 nome,
-                descricao,
+                descricao: descricao.replace(/\n/g, "<br/>"),
                 tipo,
                 ativa : true,
                 id_usuario : user
@@ -87,7 +91,7 @@ module.exports = {
         for (var key in ingredientes) {
             const ingrediente = ingredientes[key];
 
-            const [ idIngredienteReceita ] = await connection('receita_ingrediente')
+            const [ idIngredienteReceita ] = await trx('receita_ingrediente')
                 .returning('id')
                 .insert({
                     id_ingrediente: ingrediente.id,
@@ -108,7 +112,7 @@ module.exports = {
         for (var key in categorias) {
             const categoria = categorias[key];
 
-            const [ idCategoria ] = await connection('receita_categoria')
+            const [ idCategoria ] = await trx('receita_categoria')
                 .returning('id')
                 .insert({
                     id_categoria: categoria,
@@ -117,6 +121,8 @@ module.exports = {
 
             idsCategoria.push(idCategoria);
         }
+
+        await trx.commit();
 
         return response.json({ id, ingredientes: idsIngrediente, categorias: idsCategoria });
     },

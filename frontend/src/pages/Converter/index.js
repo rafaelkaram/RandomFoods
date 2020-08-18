@@ -42,31 +42,33 @@ export default function Converter() {
     
     return (
         <div className="converter-container">
-            <section className="form">
-                <img src={logoImg} alt="Random Foods" className="random-foods" />
+            <div className="content">
+                <section className="form">
+                    <img src={logoImg} alt="Random Foods" className="random-foods" />
 
-                <form className="combo-box" onSubmit={ handleConverter }>
-                    <h1>Converta já!</h1>
-                    <Select
-                        className="input-select"
-                        options={unidades}
-                        onChange={ e => setIdOrigem(e.value) }
-                    />
-                    <Select
-                        className="input-select"
-                        options={unidades}
-                        onChange={ e => setIdDestino(e.value) }
-                    />
-                    <input
-                        className="input-text"
-                        placeholder="Quantidade"
-                        value={ valor }
-                        required
-                        onChange={ e => setValor(e.target.value) }
-                    />
-                    <button className="button" type="submit">Converter</button>
-                </form>
-            </section>
+                    <form className="combo-box" onSubmit={ handleConverter }>
+                        <h1>Converta já!</h1>
+                        <Select
+                            className="input-select"
+                            options={unidades}
+                            onChange={ e => setIdOrigem(e.value) }
+                        />
+                        <Select
+                            className="input-select"
+                            options={unidades}
+                            onChange={ e => setIdDestino(e.value) }
+                        />
+                        <input
+                            className="input-text"
+                            placeholder="Quantidade"
+                            value={ valor }
+                            required
+                            onChange={ e => setValor(e.target.value) }
+                        />
+                        <button className="button" type="submit">Converter</button>
+                    </form>
+                </section>
+            </div>
         </div>
     );
 }
