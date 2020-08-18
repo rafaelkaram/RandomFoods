@@ -8,6 +8,7 @@ const UsuarioController = require('./controllers/UsuarioController');
 const UnidadeController = require('./controllers/UnidadeController');
 const TipoUnidadeController = require('./controllers/TipoUnidadeController');
 const TipoIngredienteController = require('./controllers/TipoIngredienteController');
+const CategoriaController = require('./controllers/CategoriaController');
 const ConversorController = require('./controllers/ConversorController');
 
 const ReceitaIngredienteController = require('./controllers/ReceitaIngredienteController');
@@ -55,6 +56,8 @@ routes.post('/session', UsuarioController.validate);
 routes.post('/users', UsuarioController.create);
 routes.post('/user', UsuarioController.createUnique);
 routes.delete('/user/:id', UsuarioController.delete);
+
+routes.get('/categorias', CategoriaController.index);
 
 routes.get('/ingrediente', IngredienteController.index);
 routes.get('/ingrediente/:id', IngredienteController.search);
