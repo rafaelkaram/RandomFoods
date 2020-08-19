@@ -3,17 +3,17 @@
 module.exports = {
 
   development: {
-    client: 'sqlite3',
+    client: 'pg',
+    version: '12.1',
     connection: {
-      filename: './src/database/db.sqlite'
+      host : 'tcctads.c97xz2y9jkrb.sa-east-1.rds.amazonaws.com',
+      user : 'postgres',
+      password : 'abc123**',
+      database : 'rf_dev'
     },
     migrations: {
       directory: './src/database/migrations'
-    },
-    seeds: {
-      directory: './src/database/seeds'
-    },
-    useNullAsDefault: true,
+    }
   },
 
   homolog: {
@@ -30,9 +30,9 @@ module.exports = {
     client: 'pg',
     version: '12.1',
     connection: {
-      host : '127.0.0.1',
+      host : 'tcctads.c97xz2y9jkrb.sa-east-1.rds.amazonaws.com',
       user : 'random_foods',
-      password : 'random_foods',
+      password : 'abc123**',
       database : 'random_foods'
     },
     migrations: {
