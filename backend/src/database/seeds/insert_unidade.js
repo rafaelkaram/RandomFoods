@@ -442,7 +442,7 @@ exports.seed = function(knex) {
           nome: 'Xicara',
           sigla: 'Xicara',
           id_tipo_unidade: 1,
-          id_ingrediente: '',
+          id_ingrediente: null,
           taxa_conversao: 0.24
         },
         {
@@ -450,7 +450,7 @@ exports.seed = function(knex) {
           nome: 'Colher de Sopa',
           sigla: 'Colher de Sopa',
           id_tipo_unidade: 1,
-          id_ingrediente: '',
+          id_ingrediente: null,
           taxa_conversao: 0.015
         },
         {
@@ -458,7 +458,7 @@ exports.seed = function(knex) {
           nome: 'Colher de Chá',
           sigla: 'Colher de Chá',
           id_tipo_unidade: 1,
-          id_ingrediente: '',
+          id_ingrediente: null,
           taxa_conversao: 0.005
         }
       ]);
