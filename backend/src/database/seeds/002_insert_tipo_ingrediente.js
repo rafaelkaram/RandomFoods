@@ -13,6 +13,7 @@ exports.seed = function(knex) {
         { id: 9, nome: 'Confeitaria' },
         { id: 10, nome: 'Massas' },
         { id: 11, nome: 'Óleos' },
+        { id: 12, nome: 'Molhos' }
       ]);
     });
 };
