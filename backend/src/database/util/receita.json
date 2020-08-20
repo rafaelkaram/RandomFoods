@@ -27,7 +27,7 @@
   {
     "nome": "Omelete",
     "descricao": "1- Quebrar os ovos em uma vasilia\n2- Acresentar Sal\n3- Acresentar Leite\n4- Misturar\n5- Levar ao fogo em uma frigireira\n6- Esperar ficar pronto",
-    "tipo": "salgada",
+    "tipo": "salgado",
     "ingredientes": [
       {
           "id": 1,
