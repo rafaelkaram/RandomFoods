@@ -80,7 +80,7 @@ module.exports = {
             .returning('id')
             .insert({
                 nome,
-                descricao: descricao.replace(/\n/g, "<br/>"),
+                descricao: descricao.replace(/\n/g, "<br />"),
                 tipo,
                 ativa : true,
                 id_usuario : user
