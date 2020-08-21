@@ -49,8 +49,8 @@ export default function Recipe({ match }) {
                     </div>
                     </div>
                     <strong>DESCRIÇÃO:</strong>
-                    <p>{ recipe.descricao }</p>
-
+                        { recipe.descricao.split('\\n').map(desc => (
+                                <p>&nbsp;&nbsp;{ desc }</p> )) }
                     <div className="display-group">
                         <div className="title">
                             <strong>CATEGORIAS:</strong>
@@ -62,14 +62,10 @@ export default function Recipe({ match }) {
 
                     <div className="display-group">
                         <div className="title">
-                            
-                            { 
-                            recipe.categorias.length >= 1 ?
-                            recipe.categorias.map(categoria => (
-                                <p>&nbsp;&nbsp;{ categoria }</p>
-                            ))
-                        : <p>&nbsp;&nbsp;Sem categoria</p>
-                        }
+                            { recipe.categorias.length >= 1 ?
+                                    recipe.categorias.map(categoria => (
+                                                <p>&nbsp;&nbsp;{ categoria }</p>
+                                    )) : <p>&nbsp;&nbsp;Sem categoria</p> }
                         </div>
                         <div className="title">
                             <p>&nbsp;&nbsp;{ recipe.tipo }</p>
@@ -133,7 +129,7 @@ export default function Recipe({ match }) {
         }
         return (<p></p>);
     }
-
+    
     return (
         <div className="recipe-container">
             <div className="content">
