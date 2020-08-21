@@ -34,7 +34,10 @@ exports.seed = function(knex) {
         { id:30, nome: 'Queijo Mussarela', id_tipo_unidade: 2, id_tipo_ingrediente: 7, sem_medida: false, derivado_leite: true, gluten: false },
         { id:31, nome: 'Massa para Lasanha', id_tipo_unidade: 2, id_tipo_ingrediente: 10, sem_medida: false, derivado_leite: false, gluten: true },
         { id:32, nome: 'Creme de Leite', id_tipo_unidade: 1, id_tipo_ingrediente: 7, sem_medida: false, derivado_leite: true, gluten: false },
-        { id:33, nome: 'Óleo', id_tipo_unidade: 1, id_tipo_ingrediente: 11, sem_medida: false, derivado_leite: false, gluten: false }
+        { id:33, nome: 'Óleo', id_tipo_unidade: 1, id_tipo_ingrediente: 11, sem_medida: false, derivado_leite: false, gluten: false },
+        { id:34, nome: 'Azeite de Oliva', id_tipo_unidade: 1, id_tipo_ingrediente: 11, sem_medida: false, derivado_leite: false, gluten: false },
+        { id:35, nome: 'Pimenta do Reino', id_tipo_unidade: 2, id_tipo_ingrediente:2, sem_medida: true, derivado_leite: false, gluten: false },
+        { id:36, nome: 'Molho de Tomate', id_tipo_unidade: 2, id_tipo_ingrediente:12, sem_medida: false, derivado_leite: false, gluten: true }
       ]);
     });
 };
