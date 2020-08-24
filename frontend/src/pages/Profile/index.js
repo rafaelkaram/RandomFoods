@@ -68,7 +68,7 @@ export default function Profile() {
 
                         <strong>INGREDIENTES:</strong>
                         { recipe.ingredientes.map(ingredient => (
-                            <p>&nbsp;&nbsp;<b>{ ingredient.nome }&nbsp;</b>{ ingredient.quantidade  ? `: ${ ingredient.quantidade }` : <b>a gosto</b> }</p>
+                            <p>&nbsp;&nbsp;<b>{ ingredient.nome }&nbsp;</b>{ ingredient.quantidade  ? `: ${ ingredient.quantidade.replace('.00', '') }` : <b>a gosto</b> }</p>
                         ))}
 
                         <strong>CATEGORIAS:</strong>
