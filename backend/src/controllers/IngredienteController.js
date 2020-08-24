@@ -65,7 +65,7 @@ module.exports = {
         for (var key in request.body) {
             const ingrediente = request.body[key];
 
-            var { id, nome, id_tipo_unidade, sem_medida, derivado_leite, gluten } = ingrediente;
+            var { id, nome, id_tipo_unidade, sem_medida, derivado_leite, gluten ,id_tipo_ingrediente} = ingrediente;
             if (!sem_medida) {
                 sem_medida = false;
             }
@@ -84,7 +84,8 @@ module.exports = {
                     id_tipo_unidade,
                     sem_medida,
                     derivado_leite,
-                    gluten
+                    gluten,
+                    id_tipo_ingrediente
                 });
 
             ids.push(id);
