@@ -65,7 +65,7 @@ module.exports = {
         for (var key in request.body) {
             const ingrediente = request.body[key];
 
-            const { nome, id_tipo_unidade, sem_medida, derivado_leite, gluten } = ingrediente;
+            var { id, nome, id_tipo_unidade, sem_medida, derivado_leite, gluten } = ingrediente;
             if (!sem_medida) {
                 sem_medida = false;
             }
@@ -76,9 +76,10 @@ module.exports = {
                 derivado_leite = false;
             }
 
-            const [ id ] = await connection('ingrediente')
+            const [ id_ingrediente ] = await connection('ingrediente')
                 .returning('id')
                 .insert({
+                    id,
                     nome,
                     id_tipo_unidade,
                     sem_medida,
