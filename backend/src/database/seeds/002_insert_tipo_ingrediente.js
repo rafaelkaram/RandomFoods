@@ -8,12 +8,12 @@ exports.seed = function(knex) {
         { id: 4, nome: 'Vegetal' },
         { id: 5, nome: 'Legume' },
         { id: 6, nome: 'Carne' },
-        { id: 7, nome: 'Lacticínios' },
+        { id: 7, nome: 'Lacticínio' },
         { id: 8, nome: 'Outros' },
         { id: 9, nome: 'Confeitaria' },
-        { id: 10, nome: 'Massas' },
-        { id: 11, nome: 'Óleos' },
-        { id: 12, nome: 'Molhos' }
+        { id: 10, nome: 'Massa' },
+        { id: 11, nome: 'Óleo' },
+        { id: 12, nome: 'Molho' }
       ]);
     });
 };
