@@ -74,7 +74,7 @@ export default function Recipe({ match }) {
 
                     <strong>INGREDIENTES:</strong>
                     { recipe.ingredientes.map(ingredient => (
-                        <p>&nbsp;&nbsp;<b>{ ingredient.nome }&nbsp;</b>{ ingredient.quantidade  ? `: ${ ingredient.quantidade }` : 'a gosto' }</p>
+                        <p>&nbsp;&nbsp;<b>{ ingredient.nome }&nbsp;</b>{ ingredient.quantidade  ? `: ${ ingredient.quantidade.replace('.00','') }` : 'a gosto' }</p>
                     ))}
                 </div>
             );
