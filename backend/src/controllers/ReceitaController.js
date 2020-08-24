@@ -33,8 +33,6 @@ module.exports = {
             return response.status(401).json({ error: 'Recipe not found.' });
         }
 
-        console.log(obj.descricao);
-
         const receita = await module.exports.findReceita(obj);
 
         return response.json(receita);
@@ -80,7 +78,7 @@ module.exports = {
             .returning('id')
             .insert({
                 nome,
-                descricao: descricao.replace(/\n/g, "<br/>"),
+                descricao,
                 tipo,
                 ativa : true,
                 id_usuario : user
@@ -212,6 +210,7 @@ module.exports = {
         }
             
         return {
+            id: receita.id,
             receita: receita.nome,
             descricao: receita.descricao,
             tipo: receita.tipo,

@@ -33,7 +33,7 @@ export default function Recipe({ match }) {
 
     function ShowRecipe() {
         if (recipe) {
-            const valor = recipe.nota ? (recipe.nota).toFixed(2) : null;
+            const valor = recipe.nota ? recipe.nota : null;
             return (
                 <div>
                     <div className="display-group">
@@ -45,13 +45,12 @@ export default function Recipe({ match }) {
                             <p>{ recipe.receita }</p>
                         </div>
                         <div className="title">
-                            <p>{ valor == -1 ? 'Receita sem nota.' : valor }</p>
-                        </div>
+                            <p>{ !valor ? 'Receita sem nota.' : valor }</p>
                     </div>
-
+                    </div>
                     <strong>DESCRIÇÃO:</strong>
-                    <p>{ recipe.descricao }</p>
-
+                        { recipe.descricao.split('\\n').map(desc => (
+                                <p>&nbsp;&nbsp;{ desc }</p> )) }
                     <div className="display-group">
                         <div className="title">
                             <strong>CATEGORIAS:</strong>
@@ -63,18 +62,19 @@ export default function Recipe({ match }) {
 
                     <div className="display-group">
                         <div className="title">
-                            { recipe.categorias.map(categoria => (
-                                <p>&nbsp;&nbsp;{ categoria }</p>
-                            ))}
+                            { recipe.categorias.length >= 1 ?
+                                    recipe.categorias.map(categoria => (
+                                                <p>&nbsp;&nbsp;{ categoria }</p>
+                                    )) : <p>&nbsp;&nbsp;Sem categoria</p> }
                         </div>
                         <div className="title">
-                            <p>{ recipe.tipo }</p>
+                            <p>&nbsp;&nbsp;{ recipe.tipo }</p>
                         </div>
                     </div>
 
                     <strong>INGREDIENTES:</strong>
                     { recipe.ingredientes.map(ingredient => (
-                        <p>&nbsp;&nbsp;<b>{ ingredient.nome }&nbsp;</b>{ ingredient.quantidade ? `: ${ ingredient.quantidade }` : 'a gosto' }</p>
+                        <p>&nbsp;&nbsp;<b>{ ingredient.nome }&nbsp;</b>{ ingredient.quantidade  ? `: ${ ingredient.quantidade }` : 'a gosto' }</p>
                     ))}
                 </div>
             );
@@ -129,7 +129,7 @@ export default function Recipe({ match }) {
         }
         return (<p></p>);
     }
-
+    
     return (
         <div className="recipe-container">
             <div className="content">
