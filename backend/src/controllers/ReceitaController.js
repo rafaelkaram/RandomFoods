@@ -210,6 +210,7 @@ module.exports = {
         }
             
         return {
+            id: receita.id,
             receita: receita.nome,
             descricao: receita.descricao,
             tipo: receita.tipo,

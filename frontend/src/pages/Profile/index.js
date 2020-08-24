@@ -23,7 +23,7 @@ export default function Profile() {
         }).then(response => {
             setRecipes(response.data);
         })
-    }, [ name ]);
+    },[]);
 
     async function handleDeleteRecipe(id) {
         try {
@@ -57,23 +57,25 @@ export default function Profile() {
                 { recipes.map(recipe => (
                     <li key={ recipe.id }>
                         <strong>RECEITA:</strong>
-                        <p><Link to='${ recipe.id }'>{ recipe.receita }</Link></p>
+                        <p><Link to= {`/recipe/${recipe.id}`} >{ recipe.receita }</Link></p>
 
                         <strong>DESCRIÇÃO:</strong>
-                        <p>{ recipe.descricao }</p>
+                        { recipe.descricao.split('\\n').map(desc => (
+                                <p>&nbsp;&nbsp;{ desc }</p> )) }
 
                         <strong>TIPO:</strong>
                         <p>{ recipe.tipo }</p>
 
                         <strong>INGREDIENTES:</strong>
                         { recipe.ingredientes.map(ingredient => (
-                            <p>&nbsp;&nbsp;<b>{ ingredient.nome }&nbsp;:</b>&nbsp;{ ingredient.quantidade }</p>
+                            <p>&nbsp;&nbsp;<b>{ ingredient.nome }&nbsp;</b>{ ingredient.quantidade  ? `: ${ ingredient.quantidade }` : <b>a gosto</b> }</p>
                         ))}
 
                         <strong>CATEGORIAS:</strong>
-                        { recipe.categorias.map(categoria => (
-                            <p>&nbsp;&nbsp;{ categoria }</p>
-                        ))}
+                        { recipe.categorias.length >= 1 ?
+                                    recipe.categorias.map(categoria => (
+                                                <p>&nbsp;&nbsp;{ categoria }</p>
+                                    )) : <p>&nbsp;&nbsp;Sem categoria</p> }
 
                         <button onClick={() => handleDeleteRecipe(recipe.id)} type="button">
                             <FiTrash2 size={20} color="#a8a8b3" />
