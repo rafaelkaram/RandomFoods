@@ -2,8 +2,7 @@ const connection = require('../database/connection');
 
 module.exports = {
     async index(request, response) {
-        const ingredients = await connection('ingrediente').select('*').orderBy('id');
-
+        const ingredients = await connection('ingrediente').select('*').orderBy('nome');
         return response.json(ingredients);
     },
     
@@ -17,7 +16,7 @@ module.exports = {
         if (!ingrediente) {
             return response.status(400).json({ error: 'Ingrediente não encontrado!'});
         }
-
+        
         return response.json(ingrediente);
     },
 
@@ -116,5 +115,29 @@ module.exports = {
         await connection('ingrediente').where('id', id).delete();
 
         return response.status(204).send();
+    },
+
+    async ingredientType( request,response ){
+        const ingredientType = await connection('tipo_ingrediente')
+        .select('*');
+
+        const json = [];
+
+        for( var key in ingredientType ){
+            const type = ingredientType[key];
+            const ingredient = await connection('ingrediente')
+            .where('id_tipo_ingrediente', '=' , type.id)
+            .select('*')
+            .orderBy('nome');
+
+            json.push({
+                tipo: type.nome,
+                image_url: 'http://localhost:3333/ingredient-types/',
+                ingredientes : ingredient
+            });
+        }
+
+        return response.json(json);
     }
+
 }

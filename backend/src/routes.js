@@ -64,5 +64,6 @@ routes.get('/ingrediente/:id', IngredienteController.search);
 routes.post('/ingrediente', IngredienteController.createIngredient);
 routes.post('/ingredientes', IngredienteController.create);
 routes.delete('/ingrediente/:id', IngredienteController.delete);
+routes.get('/ingredientetype', IngredienteController.ingredientType);
 
 module.exports = routes;
