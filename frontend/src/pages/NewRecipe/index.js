@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiTrash2 } from 'react-icons/fi';
 import {RadioButton,RadioGroup,ReversedRadioButton} from 'react-radio-buttons';
 import './styles.css';
+import fixString from '../../assets/functions/utils'
 
 import logoImg from '../../assets/random_foods.png';
 import api from '../../services/api';
 
 
 export default function NewRecipe() {
-    const [ ingredient, setIngredient ] = useState([]);
+    const [ ingredientsCart, setIngredientsCart ] = useState([]);
     const [ ingredientTypes, setIngredientTypes] = useState([]);
+    const [ selectedItems, setSelectedItems ] = useState([]);
+    
+
+
 
     useEffect(() => {
         // api.get('ingrediente')
@@ -23,21 +28,44 @@ export default function NewRecipe() {
             })
     }, []);
 
+    function handleSelectItem(id, name){
+        const alredySelected = selectedItems.findIndex(item => item === id);
 
+        if(alredySelected >= 0){
+            const filteredItems = selectedItems.filter(item => item !== id);
+            const filteredNames = ingredientsCart.filter(item => item.id !== id);
+
+            setSelectedItems(filteredItems);
+            setIngredientsCart(filteredNames);
+        }else{
+            setSelectedItems([...selectedItems, id]);
+            setIngredientsCart([...ingredientsCart, {id, name}]);
+        }
+    }
 
     return (
         <div className="new-recipe-container">
             <div className="content">
+                <div className="ingredients-cart">
+                        <h3>Ingredientes</h3>
+                    {ingredientsCart.map(ingrediente =>{
+                        return(
+                            <div
+                                    key={ingrediente.id}
+                                    value={ingrediente.id}
+                                 >
+                                     {ingrediente.name}
+                                <div onClick={() => handleSelectItem( ingrediente.id, ingrediente.name )}>
+                                    <FiTrash2></FiTrash2>
+                                </div>
+                            </div> 
+                        )})}       
+                </div>
                 <section>
                     <img src={logoImg} alt="Random Foods" className="random-foods" />
 
                     <h1>Cadastrar nova receita</h1>
                     <p>De um titulo, liste os ingredientes e faça o passo-a-passo para ajudar quem está querendo cozinhar.</p>
-
-                    <Link to='/' className="back-link">
-                        <FiArrowLeft size={16} color="#E02041"/>
-                        Voltar para Home
-                    </Link>
                 </section>
                 <form>
                     <input className="input-text" placeholder="Nome da Receita" />
@@ -51,27 +79,38 @@ export default function NewRecipe() {
                     </RadioGroup>
                     <textarea placeholder="Descrição"/>
                     <input className="input-text" placeholder="Tipo"/> */}
-
                     {ingredientTypes.map(ingredientTypes =>{
                         return(
-                            <div className="ingredients-grid">
-                                 <h5 key={ingredientTypes.tipo}>{ingredientTypes.tipo}</h5>
-                                 <img src={ingredientTypes.image_url + `massas-colored.svg`} alt={ingredientTypes.tipo}></img>
-                                 <div>
-                                    {ingredientTypes.ingredientes.map(ingredinete =>{
-                                        return(
-                                          <div
-                                             key={ingredinete.id}
-                                             value={ingredinete.id}>
-                                             {ingredinete.nome}
-                                          </div>  
-                                    )})}   
-                            </div>     
-                            </div>     
+                            <div>
+                                <br/>
+                                <div className="ingredients-grid">
+                                    <h3 key={ingredientTypes.tipo}>{ingredientTypes.tipo}</h3>
+                                    <img
+                                        src={ingredientTypes.image_url + fixString(ingredientTypes.tipo) + `-colored.svg`}
+                                        alt={ingredientTypes.tipo}></img>
+                                    <div>
+                                        {ingredientTypes.ingredientes.map(ingrediente =>{
+                                            return(
+                                            <div
+                                                onClick={() => handleSelectItem( ingrediente.id, ingrediente.nome )}
+                                                className={selectedItems.includes(ingrediente.id) ? 'selected' : ''}
+                                                key={ingrediente.id}
+                                                value={ingrediente.id}
+                                            >
+                                                {ingrediente.nome}
+                                            </div>  
+                                        )})}   
+                                </div>     
+                                </div>  
+                            </div>    
                         )
-                    })}                  
+                    })}                 
                 </form>
                 <button className="button" type="submit">Cadastrar</button> 
+                <Link to='/' className="back-link">
+                        <FiArrowLeft size={16} color="#E02041"/>
+                        Voltar para Home
+                    </Link>
             </div>
         </div>
     );
