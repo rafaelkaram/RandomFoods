@@ -88,27 +88,23 @@ export default function Recipe({ match }) {
             return(<p>Vamos comentar galera!</p>);
         } else {
             return (
-                <div>
+                <div className="content2">
                     { teste.map(comment => (
-                        <div>
-                            <div className="content2">
-                                <section>
-                                    <div>
-                                        <div className="display-group">
-                                            <div className="main">
-                                                <p><strong>Comentário de:</strong> { comment.usuario }</p>
-                                            </div>
-                                            <div className="second">
-                                                <p><strong>NOTA:</strong> { comment.avaliacao }</p>
-                                            </div>
-                                        </div>
-                                            <p><strong>Data:</strong> { comment.data }</p>
-                                            <p>{ comment.valor }</p>
+                        <section>
+                            <div>
+                                <div className="display-group">
+                                    <div className="main">
+                                        <p><strong>Comentário de:</strong> { comment.usuario }</p>
                                     </div>
-                                <ShowSubComment sub={comment.id}/>
-                                </section>
+                                    <div className="second">
+                                        <p><strong>NOTA:</strong> { comment.avaliacao }</p>
+                                    </div>
+                                </div>
+                                    <p><strong>Data:</strong> { comment.data }</p>
+                                    <p>{ comment.valor }</p>
                             </div>
-                        </div>
+                        <ShowSubComment sub={comment.id}/>
+                        </section>
                     ))}
                 </div>
             );
