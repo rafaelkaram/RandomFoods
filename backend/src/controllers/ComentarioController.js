@@ -25,8 +25,8 @@ module.exports = {
                   .on('comentario.id_usuario', 'avaliacao.id_usuario')
                   .on('comentario.id_receita', 'avaliacao.id_receita');
               })
-            // .whereNull('comentario.id_pai);
-            .where('comentario.id_pai', 0)
+             .whereNull('comentario.id_pai')
+            //.where('comentario.id_pai', 0)
             .andWhere('comentario.id_receita', id)
             .select([
                 'usuario.nome as usuario',
