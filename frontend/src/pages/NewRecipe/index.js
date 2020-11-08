@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiArrowLeft, FiTrash2 } from 'react-icons/fi';
-import {RadioButton,RadioGroup,ReversedRadioButton} from 'react-radio-buttons';
 import './styles.css';
 import fixString from '../../assets/functions/utils'
 

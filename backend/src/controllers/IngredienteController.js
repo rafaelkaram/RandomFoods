@@ -5,8 +5,8 @@ module.exports = {
         const ingredients = await connection('ingrediente').select('*').orderBy('nome');
         return response.json(ingredients);
     },
-    
-    async search(request, response) {          
+
+    async search(request, response) {
         const { id } = request.params;
         const ingrediente = await connection('ingrediente')
             .where('id', id)
@@ -16,8 +16,17 @@ module.exports = {
         if (!ingrediente) {
             return response.status(400).json({ error: 'Ingrediente não encontrado!'});
         }
-        
+
         return response.json(ingrediente);
+    },
+
+    async fetch(nome) {
+        const ingrediente = await connection('ingrediente')
+            .whereRaw('LOWER("nome") = ?', nome.toLowerCase())
+            .select('*')
+            .first();
+
+        return ingrediente;
     },
 
     async createIngredient(request, response) {
@@ -26,7 +35,7 @@ module.exports = {
         var { nome, id_tipo_unidade, sem_medida, derivado_leite, gluten,id_tipo_ingrediente } = ingrediente;
 
         console.log(sem_medida);
-        
+
         if (!sem_medida) {
             sem_medida = false;
         }
@@ -58,7 +67,7 @@ module.exports = {
         return response.json(id);
 
     },
-    
+
     async create(request, response) {
         const ids = [];
         for (var key in request.body) {

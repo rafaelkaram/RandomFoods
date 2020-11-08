@@ -12,7 +12,7 @@ module.exports = {
         const list = [];
         for (const key in unidades) {
             const unidade = unidades[key];
-            
+
             if (!unidade.id_ingrediente) {
                 list.push({ value: unidade.id, label: unidade.nome + " (" + unidade.sigla + ")" });
             } else {
@@ -21,6 +21,48 @@ module.exports = {
         }
 
         return response.json(list);
+    },
+
+    async fetch(nome, ingrediente) {
+        const { id_tipo_unidade } = ingrediente;
+
+        if (id_tipo_unidade === 2 ) {
+
+            let unidade = await connection('unidade')
+            .whereRaw('LOWER("sigla") = ?', nome.toLowerCase())
+            .andWhere('id_ingrediente', ingrediente.id)
+            .select('*')
+            .first();
+
+            if (unidade) {
+                return unidade;
+            }
+
+            unidade = await connection('unidade')
+            .whereRaw('LOWER("sigla") = ? or LOWER("nome") = ?', [nome.toLowerCase(), nome.toLowerCase()])
+            .andWhere('id_tipo_unidade', id_tipo_unidade)
+            .select('*')
+            .first();
+
+            if (unidade) {
+                return unidade;
+            }
+
+            throw Error('Unidade não encontrada');
+
+        } else {
+
+            const unidade = await connection('unidade')
+            .whereRaw('(LOWER("sigla") = ? or LOWER("nome") = ?) and id_tipo_unidade != ?', [nome.toLowerCase() , nome.toLowerCase(), 2])
+            .select('*')
+            .first();
+
+            if (unidade) {
+                return unidade;
+            }
+
+            throw Error('Unidade não encontrada');
+        }
     },
 
     async search(request, response) {
@@ -42,7 +84,7 @@ module.exports = {
         for (var key in request.body) {
             const unidade = request.body[key];
 
-            const { nome, sigla, id_tipo_unidade, id_ingrediente, taxa_conversao } = unidade;            
+            const { nome, sigla, id_tipo_unidade, id_ingrediente, taxa_conversao } = unidade;
 
             const [ id ] = await connection('unidade')
                 .returning('id')

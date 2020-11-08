@@ -15,7 +15,7 @@ module.exports = {
             .where('email', email)
             .select('*')
             .first();
-            
+
         const hash = crypto.createHmac('sha256', senha)
             .update(factor)
             .digest('hex');
@@ -48,7 +48,7 @@ module.exports = {
                     senha : hash,
                     ativo,
                 });
-            
+
             ids.push(id);
 
             console.log('Usuario inserido\nId: ' + id);
@@ -83,6 +83,19 @@ module.exports = {
         console.log('E-mail: ' + email + '\n');
 
         return response.json(id);
+    },
+
+    async findByEmail(email) {
+        try {
+            const user = await connection('usuario')
+                .where('email', email)
+                .select('*')
+                .first();
+
+            return user;
+        } catch (error) {
+            return null;
+        }
     },
 
     async delete(request, response) {

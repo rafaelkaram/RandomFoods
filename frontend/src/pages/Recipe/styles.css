@@ -20,7 +20,7 @@
     align-items: top;
 }
 
-.recipe-container .content2 {
+.recipe-container div .content2 {
     width: 100%;
     margin-bottom: 12px;
     padding: 24px;
@@ -54,30 +54,30 @@
     width: 50%;
 }
 
-.recipe-container .content2 section {
+.recipe-container div .content2 section {
     width: 100%;
 }
 
-.recipe-container .content2 section h1 {
+.recipe-container div .content2 section h1 {
     margin: 64px 0 32px;
     font-size: 32px;
 }
 
-.recipe-container .content2 section p {
+.recipe-container div .content2 section p {
     font-size: 16px;
     color: #737380;
     line-height: 28px;
 }
 
-.recipe-container .content2 .display-group {
+.recipe-container div .content2 .display-group {
     display: flex;
 }
 
-.recipe-container .content2 .display-group .main {
+.recipe-container div .content2 .display-group .main {
     width: 75%;
 }
 
-.recipe-container .content2 .display-group .second {
+.recipe-container div .content2 .display-group .second {
     width: 25%;
 }
 
