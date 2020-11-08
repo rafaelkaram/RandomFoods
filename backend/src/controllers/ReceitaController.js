@@ -64,8 +64,65 @@ module.exports = {
         return response.json(resp);
     },
 
+    async createImport(request) {
+        const { nome, descricao, tipo, ingredientes, categorias, user } = request;
+
+        const trx = await connection.transaction();
+
+        const [ id ] = await trx('receita')
+            .returning('id')
+            .insert({
+                nome,
+                descricao,
+                tipo,
+                ativa : true,
+                id_usuario : user
+            });
+
+        const idsIngrediente = [];
+
+        for (var key in ingredientes) {
+            const ingrediente = ingredientes[key];
+
+            const [ idIngredienteReceita ] = await trx('receita_ingrediente')
+                .returning('id')
+                .insert({
+                    id_ingrediente: ingrediente.id,
+                    id_receita: id,
+                    id_unidade: ingrediente.id_unidade,
+                    quantidade: ingrediente.quantidade ? ingrediente.quantidade : null
+                });
+
+            if (!idIngredienteReceita) {
+
+            }
+
+            idsIngrediente.push(idIngredienteReceita);
+        }
+
+        const idsCategoria = [];
+
+        for (var key in categorias) {
+            const categoria = categorias[key];
+
+            const [ idCategoria ] = await trx('receita_categoria')
+                .returning('id')
+                .insert({
+                    id_categoria: categoria,
+                    id_receita: id
+                });
+
+            idsCategoria.push(idCategoria);
+        }
+
+        await trx.commit();
+
+        return { id, ingredientes: idsIngrediente, categorias: idsCategoria };
+    },
+
     async create(request, response) {
         const { nome, descricao, tipo, ingredientes, categorias } = request.body;
+
         const user = request.headers.authorization;
 
         if ( !user ) {
@@ -154,7 +211,7 @@ module.exports = {
         return response.status(204).send();
     },
 
-    findReceita: async function (receita) { 
+    findReceita: async function (receita) {
         const listaIngredientes = await connection('receita_ingrediente')
             .innerJoin('ingrediente', 'receita_ingrediente.id_ingrediente', '=', 'ingrediente.id')
             .leftJoin('unidade', 'receita_ingrediente.id_unidade', '=', 'unidade.id')
@@ -195,7 +252,7 @@ module.exports = {
                 }
             }
         }
-            
+
         const categorias = [];
 
         const listaCategoria = await connection('receita_categoria')
@@ -208,7 +265,7 @@ module.exports = {
 
             categorias.push(categoria.nome);
         }
-            
+
         return {
             id: receita.id,
             receita: receita.nome,

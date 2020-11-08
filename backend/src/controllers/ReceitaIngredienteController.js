@@ -1,6 +1,16 @@
 const connection = require('../database/connection');
 
 module.exports = {
+    async list (request, response) {
+        const { id } = request.params;
+
+        const receitaIngredientes =  await connection('receita_ingrediente')
+            .where('id_receita', id)
+            .select('*');
+
+        response.json(receitaIngredientes);
+    },
+
     async convert(request, response) {
         const { id_origem, id_destino, valor } = request.body;
 
@@ -11,7 +21,7 @@ module.exports = {
         }
 
         const { unidade_origem, unidade_destino } = await module.exports.findUnits(id_origem, id_destino);
-        
+
 
         if (!unidade_origem || !unidade_destino) {
             return response.status(400).json({ error: 'Unidade não encontrada!'});
@@ -33,7 +43,7 @@ module.exports = {
         return response.json({ unidadeAnterior, unidadeAtual, valorAnterior, valorConvertido });
     },
 
-    findUnits: async function (id_origem, id_destino) { 
+    findUnits: async function (id_origem, id_destino) {
         const unidade_origem =  await connection('unidade')
             .where('id', id_origem)
             .select('*')

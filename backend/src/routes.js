@@ -14,6 +14,7 @@ const ConversorController = require('./controllers/ConversorController');
 const ReceitaIngredienteController = require('./controllers/ReceitaIngredienteController');
 const ReceitaCategoriaController = require('./controllers/ReceitaCategoriaController');
 
+const ExcelReaderController = require('./controllers/ExcelReaderController');
 
 const routes = express.Router();
 
@@ -65,5 +66,9 @@ routes.post('/ingrediente', IngredienteController.createIngredient);
 routes.post('/ingredientes', IngredienteController.create);
 routes.delete('/ingrediente/:id', IngredienteController.delete);
 routes.get('/ingredientetype', IngredienteController.ingredientType);
+
+//routes.get('/excel', ExcelReaderController.read);
+routes.get('/recing/:id', ReceitaIngredienteController.list);
+routes.post('/excel', ExcelReaderController.import);
 
 module.exports = routes;
