@@ -68,16 +68,6 @@ export default function NewRecipe() {
                 </section>
                 <form>
                     <input className="input-text" placeholder="Nome da Receita" />
-                    {/* <RadioGroup  horizontal>
-                    <RadioButton value="salgado">
-                        Salgado
-                    </RadioButton>
-                    <RadioButton value="doce">
-                        Doce
-                    </RadioButton>
-                    </RadioGroup>
-                    <textarea placeholder="Descrição"/>
-                    <input className="input-text" placeholder="Tipo"/> */}
                     {ingredientTypes.map(ingredientTypes =>{
                         return(
                             <div>

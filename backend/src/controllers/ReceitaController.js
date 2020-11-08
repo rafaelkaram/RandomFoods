@@ -233,7 +233,10 @@ module.exports = {
                 ingredientes.push({ nome: ingrediente.ingrediente });
             } else {
                 if (!ingrediente.tipo_unidade || !ingrediente.temIngrediente) {
-                    ingredientes.push({ nome: ingrediente.ingrediente, quantidade: `${ingrediente.quantidade} ${ingrediente.sigla}`});
+                    ingredientes.push({
+                        nome: ingrediente.ingrediente,
+                        quantidade: `${ingrediente.quantidade} ${ingrediente.sigla}`
+                    });
                 } else {
                     const unSI = await connection('unidade')
                         .where('id_tipo_unidade', ingrediente.tipo_unidade)
@@ -245,7 +248,10 @@ module.exports = {
                         const valor = (ingrediente.quantidade * (ingrediente.taxa)) / un.taxa_conversao;
 
                         if (valor > 1 && valor < 1000) {
-                            ingredientes.push({ nome: ingrediente.ingrediente, quantidade: `${ingrediente.quantidade} ${ingrediente.sigla} ou ${valor}${un.sigla}`});
+                            ingredientes.push({
+                                nome: ingrediente.ingrediente,
+                                quantidade: `${ingrediente.quantidade} ${ingrediente.sigla} ou ${valor}${un.sigla}`
+                            });
                             break;
                         }
                     }
