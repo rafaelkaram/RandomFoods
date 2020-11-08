@@ -88,9 +88,8 @@ export default function Recipe({ match }) {
             return(<p>Vamos comentar galera!</p>);
         } else {
             return (
-                <div>
-                { teste.map(comment => (
-                    <div className="content2">
+                <div className="content2">
+                    { teste.map(comment => (
                         <section>
                             <div>
                                 <div className="display-group">
@@ -106,8 +105,7 @@ export default function Recipe({ match }) {
                             </div>
                         <ShowSubComment sub={comment.id}/>
                         </section>
-                    </div>
-                ))}
+                    ))}
                 </div>
             );
         }
@@ -127,7 +125,7 @@ export default function Recipe({ match }) {
         }
         return (<p></p>);
     }
-    
+
     return (
         <div className="recipe-container">
             <div className="content">
@@ -142,7 +140,7 @@ export default function Recipe({ match }) {
                         Voltar para Home
                     </Link>
                 </section>
-            </div>    
+            </div>
             <ShowComments teste={ comments }/>
         </div>
     );
