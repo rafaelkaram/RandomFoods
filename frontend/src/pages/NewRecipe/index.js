@@ -29,13 +29,14 @@ export default function NewRecipe() {
 
     function handleSelectItem(id, name){
         const alredySelected = selectedItems.findIndex(item => item === id);
-
         if(alredySelected >= 0){
             const filteredItems = selectedItems.filter(item => item !== id);
             const filteredNames = ingredientsCart.filter(item => item.id !== id);
 
             setSelectedItems(filteredItems);
+            
             setIngredientsCart(filteredNames);
+            
         }else{
             setSelectedItems([...selectedItems, id]);
             setIngredientsCart([...ingredientsCart, {id, name}]);
@@ -70,10 +71,10 @@ export default function NewRecipe() {
                     <input className="input-text" placeholder="Nome da Receita" />
                     {ingredientTypes.map(ingredientTypes =>{
                         return(
-                            <div>
+                            <div key={ingredientTypes.tipo}>
                                 <br/>
                                 <div className="ingredients-grid">
-                                    <h3 key={ingredientTypes.tipo}>{ingredientTypes.tipo}</h3>
+                                    <h3>{ingredientTypes.tipo}</h3>
                                     <img
                                         src={ingredientTypes.image_url + fixString(ingredientTypes.tipo) + `-colored.svg`}
                                         alt={ingredientTypes.tipo}></img>
