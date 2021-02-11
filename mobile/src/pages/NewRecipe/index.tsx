@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {View, Text, TouchableOpacity, ScrollView} from 'react-native'
+import {View, Text, TouchableOpacity, ScrollView,Button} from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 // import { FiArrowLeft, FiTrash2 } from 'react-icons/fi';
 // import fixString from '../../assets/functions/utils'
 
@@ -31,6 +32,8 @@ interface IngredientsCart {
 
 
 export default function NewRecipe() {
+    const navigation = useNavigation();
+
     const [ ingredientsCart, setIngredientsCart ] = useState<IngredientsCart[]>([]);
     const [ ingredientTypes, setIngredientTypes] = useState<IngredientType[]>([]);
     const [ selectedItems, setSelectedItems ] = useState<number[]>([]);
@@ -48,6 +51,11 @@ export default function NewRecipe() {
                 setIngredientTypes(response.data);
             })
     }, []);
+
+
+    function handleNavigateToRecipe(){
+        navigation.navigate('Recipe');
+    }
 
     function handleSelectItem(id:number, name:string){
         const alredySelected = selectedItems.findIndex(item => item === id);
@@ -69,6 +77,9 @@ export default function NewRecipe() {
 
     return (
         <View>
+            <Button 
+                title="Abrir Receitas"
+                onPress={ handleNavigateToRecipe }/>
             <View>
                 <View>
                         <Text>Ingredientes</Text>
