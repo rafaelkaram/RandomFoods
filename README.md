@@ -22,6 +22,10 @@ TCC dos tiltados
 ### Install package
   - `npm install`
 
+## MOBILE
+### Install package
+  - `npm install`
+
 # Iniciando o projeto
 
 Para iniciar o projeto basta executar o comando `npm start` dentro da pasta que deseja iniciar o servidor (backend ou frontend).
