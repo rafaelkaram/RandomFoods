@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {View, Text, TouchableOpacity, ScrollView,Button} from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, Button } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 // import { FiArrowLeft, FiTrash2 } from 'react-icons/fi';
 // import fixString from '../../assets/functions/utils'
@@ -9,22 +9,22 @@ import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 
 
-interface IngredientType  {
+interface IngredientType {
     tipo: string,
     image_url: string,
-    ingredientes:[{
+    ingredientes: [{
         id: number,
         nome: string,
         id_tipo_unidade: number,
         id_tipo_ingrediente: number,
         sem_medida: boolean,
-        derivado_leite : boolean,
+        derivado_leite: boolean,
         glutem: boolean
     }]
 }
 
 interface IngredientsCart {
-    ingredient:{
+    ingredient: {
         id: number,
         name: string
     }
@@ -34,10 +34,10 @@ interface IngredientsCart {
 export default function NewRecipe() {
     const navigation = useNavigation();
 
-    const [ ingredientsCart, setIngredientsCart ] = useState<IngredientsCart[]>([]);
-    const [ ingredientTypes, setIngredientTypes] = useState<IngredientType[]>([]);
-    const [ selectedItems, setSelectedItems ] = useState<number[]>([]);
-    
+    const [ingredientsCart, setIngredientsCart] = useState<IngredientsCart[]>([]);
+    const [ingredientTypes, setIngredientTypes] = useState<IngredientType[]>([]);
+    const [selectedItems, setSelectedItems] = useState<number[]>([]);
+
 
 
 
@@ -53,23 +53,23 @@ export default function NewRecipe() {
     }, []);
 
 
-    function handleNavigateToRecipe(){
+    function handleNavigateToRecipe() {
         navigation.navigate('Recipe');
     }
 
-    function handleSelectItem(id:number, name:string){
+    function handleSelectItem(id: number, name: string) {
         const alredySelected = selectedItems.findIndex(item => item === id);
 
-        if(alredySelected >= 0){
+        if (alredySelected >= 0) {
             const filteredItems = selectedItems.filter(item => item !== id);
             const filteredNames = ingredientsCart.filter(item => item.ingredient.id !== id);
 
             setSelectedItems(filteredItems);
             setIngredientsCart(filteredNames);
-        }else{
+        } else {
             setSelectedItems([...selectedItems, id]);
 
-            const ingredient = {ingredient:{id:id,name:name}}
+            const ingredient = { ingredient: { id: id, name: name } }
 
             setIngredientsCart([...ingredientsCart, ingredient]);
         }
@@ -77,21 +77,22 @@ export default function NewRecipe() {
 
     return (
         <View>
-            <Button 
+            <Button
                 title="Abrir Receitas"
-                onPress={ handleNavigateToRecipe }/>
+                onPress={handleNavigateToRecipe} />
             <View>
                 <View>
-                        <Text>Ingredientes</Text>
-                    {ingredientsCart.map(ingrediente =>{
-                        return(
+                    <Text>Ingredientes</Text>
+                    {ingredientsCart.map(ingrediente => {
+                        return (
                             <View key={ingrediente.ingredient.id}>
-                                     <Text>{ingrediente.ingredient.name}</Text>
-                                <TouchableOpacity onPress={() => handleSelectItem( ingrediente.ingredient.id, ingrediente.ingredient.name )}>
+                                <Text>{ingrediente.ingredient.name}</Text>
+                                <TouchableOpacity onPress={() => handleSelectItem(ingrediente.ingredient.id, ingrediente.ingredient.name)}>
                                     <Text>Lixo</Text>
                                 </TouchableOpacity>
-                            </View> 
-                        )})}       
+                            </View>
+                        )
+                    })}
                 </View>
                 {/* <section>
                     <img src={logoImg} alt="Random Foods" className="random-foods" />
@@ -101,8 +102,8 @@ export default function NewRecipe() {
                 </section> */}
                 <ScrollView>
                     <Text>Nome da Receita</Text>
-                    {ingredientTypes.map(ingredientTypes =>{
-                        return(
+                    {ingredientTypes.map(ingredientTypes => {
+                        return (
                             <View key={ingredientTypes.tipo}>
                                 <View>
                                     <Text>{ingredientTypes.tipo}</Text>
@@ -110,20 +111,21 @@ export default function NewRecipe() {
                                         src={ingredientTypes.image_url + fixString(ingredientTypes.tipo) + `-colored.svg`}
                                         alt={ingredientTypes.tipo}></img> */}
                                     <View>
-                                        {ingredientTypes.ingredientes.map(ingrediente =>{
-                                            return(
-                                            <TouchableOpacity
-                                                onPress={() => handleSelectItem( ingrediente.id, ingrediente.nome )}                                                
-                                                key={ingrediente.id}
-                                            >
-                                                <Text>{ingrediente.nome}</Text>
-                                            </TouchableOpacity>  
-                                        )})}   
-                                </View>     
-                                </View>  
-                            </View>    
+                                        {ingredientTypes.ingredientes.map(ingrediente => {
+                                            return (
+                                                <TouchableOpacity
+                                                    onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}
+                                                    key={ingrediente.id}
+                                                >
+                                                    <Text>{ingrediente.nome}</Text>
+                                                </TouchableOpacity>
+                                            )
+                                        })}
+                                    </View>
+                                </View>
+                            </View>
                         )
-                    })}                 
+                    })}
                 </ScrollView>
                 {/* <button className="button" type="submit">Cadastrar</button>  */}
             </View>

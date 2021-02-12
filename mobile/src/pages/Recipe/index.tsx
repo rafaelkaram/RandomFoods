@@ -40,26 +40,29 @@ const Recipe = () => {
 
     return (
         <>
-            <ScrollView>
+            <ScrollView style={styles.body}>
                 <Text style={styles.title}>Minhas receitas</Text>
                 <View style={styles.columns}>
-                {recipes.map(item => {
-                    return (
-                        <View style={styles.itemList} key={item.id}>
-                            <TouchableOpacity 
-                                onPress={() => handleNavigateToRecipeSelected(item.id)}>
-                                <Text style={styles.itemListImage}>Imagem</Text>
-                                <Text style={styles.itemListTitle}>{item.receita}</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )
-                })}
+                    {recipes.map(item => {
+                        return (
+                            <View style={styles.itemList} key={item.id}>
+                                <TouchableOpacity
+                                    onPress={() => handleNavigateToRecipeSelected(item.id)}>
+                                    <Text style={styles.itemListImage}>Imagem</Text>
+                                    <Text style={styles.itemListTitle}>{item.receita}</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                    })}
                 </View>
             </ScrollView>
         </>
     )
 }
 const styles = StyleSheet.create({
+    body: {
+        backgroundColor:'#F0F0F5'
+    },
     title: {
         backgroundColor: '#e02041',
         color: 'white',
@@ -74,17 +77,17 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    columns:{
-       flexDirection:'row',
-       flexWrap:'wrap',
-       justifyContent:'space-evenly'
+    columns: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-evenly'
     },
     itemList: {
-        backgroundColor: 'lightgrey',
+        backgroundColor: 'white',
         margin: 15,
         padding: 10,
         width: itemWidth,
-        
+
         flexDirection: 'column',
         borderRadius: 20
     },
