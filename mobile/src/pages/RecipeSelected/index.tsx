@@ -21,6 +21,7 @@ interface Recipe {
     data_cadastro: Date,
     ativa: boolean,
     ingredientes: [{
+        id: number,
         nome: string,
         quantidade: number,
     }],
@@ -62,7 +63,7 @@ function RecipeSelected({ route } : {route: any}) {
                         <Text style={{ fontFamily: 'Ubuntu_700Bold' }}>INGREDIENTES:</Text>
                         {recipe?.ingredientes.map(ingredient => {
                             return (
-                                <View style={styles.ingredient}>
+                                <View style={styles.ingredient} key={ingredient.id}> 
                                     <Entypo name="dot-single" size={15} color="black" />
                                     <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{ingredient.nome}</Text>
                                     <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{ingredient.quantidade ? `: ${ingredient.quantidade.toString().replace('.00', '')}` : ' a gosto'}</Text>
@@ -72,8 +73,8 @@ function RecipeSelected({ route } : {route: any}) {
                     </View>
 
                     <View style={styles.itemListDescribe}>
-                        <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{recipe?.descricao.split('\\n').map(desc => (
-                            <Text>{'\n'}{desc}</Text>))}</Text>
+                        <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{recipe?.descricao.split('\\n').map((desc, index) => (
+                            <Text key={index}>{'\n'}{desc}</Text>))}</Text>
                     </View>
 
                 </View>

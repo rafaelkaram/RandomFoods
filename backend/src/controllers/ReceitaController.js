@@ -217,6 +217,7 @@ module.exports = {
             .leftJoin('unidade', 'receita_ingrediente.id_unidade', '=', 'unidade.id')
             .where('receita_ingrediente.id_receita', receita.id)
             .select('receita_ingrediente.quantidade as quantidade',
+                'ingrediente.id as ingrediente_id',
                 'ingrediente.nome as ingrediente',
                 'ingrediente.id_tipo_unidade as tipo_unidade',
                 'unidade.nome as unidade',
@@ -230,10 +231,11 @@ module.exports = {
             const ingrediente = listaIngredientes[key];
 
             if (!ingrediente.quantidade || ingrediente.quantidade === 0 || !ingrediente.unidade) {
-                ingredientes.push({ nome: ingrediente.ingrediente });
+                ingredientes.push({ id: ingrediente.ingrediente_id, nome: ingrediente.ingrediente });
             } else {
                 if (!ingrediente.tipo_unidade || !ingrediente.temIngrediente) {
                     ingredientes.push({
+                        id: ingrediente.ingrediente_id,
                         nome: ingrediente.ingrediente,
                         quantidade: `${ingrediente.quantidade} ${ingrediente.sigla}`
                     });
@@ -249,6 +251,7 @@ module.exports = {
 
                         if (valor > 1 && valor < 1000) {
                             ingredientes.push({
+                                id: ingrediente.ingrediente_id,
                                 nome: ingrediente.ingrediente,
                                 quantidade: `${ingrediente.quantidade} ${ingrediente.sigla} ou ${valor}${un.sigla}`
                             });
