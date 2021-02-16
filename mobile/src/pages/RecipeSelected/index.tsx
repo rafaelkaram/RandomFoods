@@ -29,8 +29,7 @@ interface Recipe {
 
 
 
-function RecipeSelected({ route }) {
-
+function RecipeSelected({ route } : {route: any}) {
 
     const idRecipe = route.params.id;
     const [recipe, setRecipe] = useState<Recipe>();
@@ -46,39 +45,40 @@ function RecipeSelected({ route }) {
 
     return (
         <>
-            <View style={styles.container}>
-                <View style={styles.itemListTitle}>
-                    <Text style={{ fontFamily: 'Ubuntu_700Bold', fontSize: 20, color: 'white' }}>{recipe?.receita}</Text>
-                </View>
-                <View style={styles.note}>
-                    <Text style={{ fontFamily: 'Ubuntu_700Bold' }}>NOTA:</Text>
-                    <Text style={{ fontFamily: 'Ubuntu_700Bold', marginLeft: 3 }}>{recipe?.nota}</Text>
-                </View>
-                <View style={styles.type}>
-                <Text style={{ fontFamily: 'Ubuntu_700Bold' }}>Tipo:</Text>
-                <Text style={{ fontFamily: 'Ubuntu_700Bold' ,marginLeft: 3}}>{recipe?.tipo}</Text>
-                </View>
-                <View style={styles.ingredientList}>
-                    <Text style={{ fontFamily: 'Ubuntu_700Bold' }}>INGREDIENTES:</Text>
-                    {recipe?.ingredientes.map(ingredient => {
-                        return (
-                            <View style={styles.ingredient}>
-                                <Entypo name="dot-single" size={15} color="black" />
-                                <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{ingredient.nome}</Text>
-                                <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{ingredient.quantidade ? `: ${ingredient.quantidade.replace('.00', '')}` : ' a gosto'}</Text>
-                            </View>
-                        )
-                    })}
+            <ScrollView>
+                <View style={styles.container}>
+                    <View style={styles.itemListTitle}>
+                        <Text style={{ fontFamily: 'Ubuntu_700Bold', fontSize: 20, color: 'white' }}>{recipe?.receita}</Text>
+                    </View>
+                    <View style={styles.note}>
+                        <Text style={{ fontFamily: 'Ubuntu_700Bold' }}>NOTA:</Text>
+                        <Text style={{ fontFamily: 'Ubuntu_700Bold', marginLeft: 3 }}>{recipe?.nota}</Text>
+                    </View>
+                    <View style={styles.type}>
+                        <Text style={{ fontFamily: 'Ubuntu_700Bold' }}>Tipo:</Text>
+                        <Text style={{ fontFamily: 'Ubuntu_700Bold', marginLeft: 3 }}>{recipe?.tipo}</Text>
+                    </View>
+                    <View style={styles.ingredientList}>
+                        <Text style={{ fontFamily: 'Ubuntu_700Bold' }}>INGREDIENTES:</Text>
+                        {recipe?.ingredientes.map(ingredient => {
+                            return (
+                                <View style={styles.ingredient}>
+                                    <Entypo name="dot-single" size={15} color="black" />
+                                    <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{ingredient.nome}</Text>
+                                    <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{ingredient.quantidade ? `: ${ingredient.quantidade.toString().replace('.00', '')}` : ' a gosto'}</Text>
+                                </View>
+                            )
+                        })}
+                    </View>
+
+                    <View style={styles.itemListDescribe}>
+                        <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{recipe?.descricao.split('\\n').map(desc => (
+                            <Text>{'\n'}{desc}</Text>))}</Text>
+                    </View>
+
                 </View>
 
-                <View style={styles.itemListDescribe}>
-                    <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{recipe?.descricao.split('\\n').map(desc => (
-                        <Text>{'\n'}{desc}</Text>))}</Text>
-                </View>
-
-            </View>
-
-
+            </ScrollView>
         </>
     );
 }
