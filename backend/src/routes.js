@@ -53,10 +53,14 @@ routes.post('/tipo-ingrediente', TipoIngredienteController.create);
 routes.delete('/tipo-ingrediente/:id', TipoIngredienteController.delete);
 
 routes.get('/user', UsuarioController.index);
+routes.get('/recipesType/:id',UsuarioController.recipeType);
+routes.get('/recipesCategory/:id',UsuarioController.recipeCategory);
+routes.get('/topVotedRecipe/:id',UsuarioController.topVotedRecipe);
 routes.post('/session', UsuarioController.validate);
 routes.post('/users', UsuarioController.create);
 routes.post('/user', UsuarioController.createUnique);
 routes.delete('/user/:id', UsuarioController.delete);
+
 
 routes.get('/categorias', CategoriaController.index);
 
