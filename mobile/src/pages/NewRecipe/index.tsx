@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Button } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 // import { FiArrowLeft, FiTrash2 } from 'react-icons/fi';
 // import fixString from '../../assets/functions/utils'
 
@@ -76,7 +77,7 @@ export default function NewRecipe() {
     }
 
     return (
-        <View>
+        <SafeAreaView>
             <Button
                 title="Abrir Receitas"
                 onPress={handleNavigateToRecipe} />
@@ -129,6 +130,6 @@ export default function NewRecipe() {
                 </ScrollView>
                 {/* <button className="button" type="submit">Cadastrar</button>  */}
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
