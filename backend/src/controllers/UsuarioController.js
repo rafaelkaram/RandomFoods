@@ -1,5 +1,6 @@
 const connection = require('../database/connection');
 const crypto = require('crypto');
+const { request } = require('http');
 const factor = 'TADS';
 
 module.exports = {
@@ -114,5 +115,47 @@ module.exports = {
         await connection('usuario').where('id', id).delete();
 
         return response.status(204).send();
+    },
+
+    async recipeType(request, response){
+        
+        const { id } = request.params
+
+        const recipes = await connection('receita')
+        .where('id_usuario',id)
+        .select('tipo')
+        .count('*')
+        .groupBy('tipo') 
+
+        return response.json(recipes)
+
+    },
+
+    async recipeCategory(resquest, response){
+
+        const { id } = resquest.params
+
+        const recipes = await connection('receita')
+        .leftJoin('receita_categoria','receita.id', '=', 'receita_categoria.id_receita')
+        .leftJoin('categoria', 'receita_categoria.id_categoria', '=', 'categoria.id')
+        .where('receita.id_usuario',id)
+        .select('categoria.nome as nome_categoria')
+        .count('*')
+        .groupBy('categoria.nome')
+
+        return response.json(recipes)
+    },
+
+    async topVotedRecipe(request, response){
+
+        const { id } = request.params
+
+        const recipes = await connection('receita')
+        .where('id_usuario',id)
+        .andWhere('nota','>', '0')
+        .select('id','nome','nota','num_notas')
+
+        return response.json(recipes)
     }
+
 }
