@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native'
-// import { FiArrowLeft, FiTrash2 } from 'react-icons/fi';
-// import fixString from '../../assets/functions/utils'
-
-// import logoImg from '../../assets/random_foods.png';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import api from '../../services/api';
 
@@ -68,7 +65,7 @@ export default function NewRecipe() {
     }
 
     return (
-        <View>
+        <SafeAreaView>
             <View>
                 <View>
                         <Text>Ingredientes</Text>
@@ -116,6 +113,6 @@ export default function NewRecipe() {
                 </ScrollView>
                 {/* <button className="button" type="submit">Cadastrar</button>  */}
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
