@@ -1,27 +1,28 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Oswald_400Regular, Oswald_300Light } from '@expo-google-fonts/oswald';
-import { Ubuntu_700Bold, Ubuntu_400Regular, useFonts } from '@expo-google-fonts/ubuntu';
-import AppLoading from 'expo-app-loading';
+import AppLoading from 'expo-app-loading'
+import { Ubuntu_700Bold, Ubuntu_500Medium_Italic, Ubuntu_400Regular} from '@expo-google-fonts/ubuntu'
+import { Oswald_300Light, useFonts} from '@expo-google-fonts/oswald'
+
 
 import Routes from './src/routes'
 
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
-    Oswald_400Regular,
+  const [fontsLoad] = useFonts({
     Ubuntu_700Bold,
     Oswald_300Light,
-    Ubuntu_400Regular,
+    Ubuntu_500Medium_Italic,
+    Ubuntu_400Regular
   });
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
+  if(!fontsLoad){
+    return <AppLoading/>
   }
   return (
     <>
-      <Routes />
+        <Routes/>
     </>
   );
 }
