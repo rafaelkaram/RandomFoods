@@ -6,18 +6,32 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { AntDesign } from '@expo/vector-icons'; 
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Home from './pages/Home'
 import NewRecipe from './pages/NewRecipe'
 import UserDashboard from './pages/UserDashboard'
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Recipe from './pages/Recipe'
+import RecipeSelected from './pages/RecipeSelected'
+
+import App from '../App'
 
 const AppStack = createStackNavigator()
 
 const Tab = createBottomTabNavigator();
 
 const Drawer = createDrawerNavigator()
+
+
+const RecipeStack = () =>{
+    return(
+        <AppStack.Navigator>
+            <AppStack.Screen name="NewRecipe" component={NewRecipe}/>
+            <AppStack.Screen name="Recipe" component={Recipe}/>
+            <AppStack.Screen name="RecipeSelected" component={RecipeSelected}/>
+        </AppStack.Navigator>
+    )
+}
 
 
 const UserAccount = () => {
@@ -61,7 +75,7 @@ const Routes = () => {
                         ),
                     }}
                     name="NewRecipe"
-                    component={NewRecipe} />
+                    component={RecipeStack} />
                 <Tab.Screen
                     options={{
                         tabBarLabel: 'User',
