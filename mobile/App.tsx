@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import AppLoading from 'expo-app-loading'
-import { Ubuntu_700Bold, Ubuntu_500Medium_Italic} from '@expo-google-fonts/ubuntu'
+import { Ubuntu_700Bold, Ubuntu_500Medium_Italic, Ubuntu_400Regular} from '@expo-google-fonts/ubuntu'
 import { Oswald_300Light, useFonts} from '@expo-google-fonts/oswald'
 
 
@@ -13,7 +13,8 @@ export default function App() {
   const [fontsLoad] = useFonts({
     Ubuntu_700Bold,
     Oswald_300Light,
-    Ubuntu_500Medium_Italic
+    Ubuntu_500Medium_Italic,
+    Ubuntu_400Regular
   });
 
   if(!fontsLoad){
