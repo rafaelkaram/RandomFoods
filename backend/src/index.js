@@ -16,4 +16,6 @@ app.use(routes);
 app.use('/ingredient-types',
 express.static(path.resolve(__dirname, '..','..','frontend','src','assets','ingredients-types-images'))); 
 
+app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')))
+
 app.listen(3333);
