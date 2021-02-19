@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Text, View, ScrollView, StyleSheet, Dimensions, FlatList, TouchableOpacity } from 'react-native'
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import moment from 'moment';
+import "moment/min/locales";
 
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api'
@@ -9,6 +11,8 @@ import api from '../../services/api'
 const { width } = Dimensions.get('window')
 const numberGrid = 3;
 const itemWidth = width / numberGrid;
+moment.locale('pt-br');
+
 
 interface Recipe {
     id: number,
@@ -29,12 +33,12 @@ interface Recipe {
 }
 
 interface Comment {
-    filter(arg0: ({ obj }: { obj: any; }) => boolean):Comment,
+    filter(arg0: ({ obj }: { obj: any; }) => boolean): Comment,
     usuario: string,
     id: number,
-    id_usuario:number,
-    id_receita:number,
-    id_pai:number,
+    id_usuario: number,
+    id_receita: number,
+    id_pai: number,
     valor: string,
     data: Date,
     avaliacao: number,
@@ -45,8 +49,8 @@ function RecipeSelected({ route }: { route: any }) {
 
     const idRecipe = route.params.id;
     const [recipe, setRecipe] = useState<Recipe>();
-    const [ comments, setComments ] = useState<Comment[]>([]);
-    const [ subComments, setSubComments ] = useState<Comment[]>([]);
+    const [comments, setComments] = useState<Comment[]>([]);
+    const [subComments, setSubComments] = useState<Comment[]>([]);
 
 
 
@@ -69,21 +73,27 @@ function RecipeSelected({ route }: { route: any }) {
         if (!comentarios) {
             return (<Text>Vamos comentar galera!</Text>);
         } else {
+            
             return (
-                <View style={styles.content2}>
-                    { comentarios.map((comment: { usuario: React.ReactNode; avaliacao: React.ReactNode; data: React.ReactNode; valor: React.ReactNode; id: any; }) => (
+                
+                <View style={styles.comments} >
+                    { comentarios.map((comment: { usuario: string; avaliacao: number; data: Date; valor: string; id: number; }) => (
                         <View>
-                            <View>
-                                <View style={styles.displaygroup}>
-                                    <View style={styles.main}>
-                                        <Text>Comentário de: {comment.usuario}</Text>
-                                    </View>
-                                    <View style={styles.second}>
+                            <View style={styles.singleComment}>
+                                <View>
+                                    <View style={styles.commentTitle}>
+                                        <View style={styles.commentUserDate}>
+                                            <Text style={styles.commentUser}>{comment.usuario}</Text>
+                                            <Text style={styles.commentDate}> - {moment(comment.data).startOf('day').fromNow()}</Text>
+                                        </View>
                                         <Text>NOTA: {comment.avaliacao}</Text>
                                     </View>
                                 </View>
-                                <Text>Data: {comment.data}</Text>
-                                <Text>{comment.valor}</Text>
+
+                                <Text  style={{ fontFamily: 'Ubuntu_400Regular' }}>{comment.valor}</Text>
+                                <View style={styles.commentHour}>
+                                    <Text>{moment(comment.data).format('HH:mm')}</Text>
+                                </View>
                             </View>
                             <ShowSubComment sub={comment.id} />
                         </View>
@@ -140,7 +150,7 @@ function RecipeSelected({ route }: { route: any }) {
                         <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{recipe?.descricao.split('\\n').map((desc, index) => (
                             <Text key={index}>{'\n'}{desc}</Text>))}</Text>
                     </View>
-                    <ShowComments comentarios={ comments }/>
+                    <ShowComments comentarios={comments} />
 
                 </View>
 
@@ -208,21 +218,44 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
 
     },
-    content2: {
+    comments: {
+        margin: 10,
+        padding: 5,
+        
+    },
+    singleComment: {
+        backgroundColor: 'white',
+        padding: 10,
+        borderRadius: 10,
+    },
+    commentTitle: {
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        fontFamily: 'Ubuntu_400Regular' 
+    },
+    commentUserDate:{
+        flexDirection:'row',
+    },
+    commentUser: {
+        
+        fontFamily: 'Ubuntu_700Bold' 
 
     },
-    displaygroup: {
-
+    commentDate:{
+        color:'#999999',
+        fontFamily: 'Ubuntu_400Regular' 
     },
-    main: {
-
-    },
-    second: {
+    commentHour:{
+        paddingTop:10,
+        alignItems:'flex-end',
 
     },
     identacao: {
+        marginTop: 10,
+        backgroundColor:'red',
 
     },
+
 
 
 
