@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, ScrollView, StyleSheet, Dimensions, FlatList, TouchableOpacity } from 'react-native'
+import { Text, View, ScrollView, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api'
+
 
 const { width } = Dimensions.get('window')
 const numberGrid = 3;
@@ -25,17 +26,28 @@ const Recipe = () => {
 
     const navigation = useNavigation();
     const [recipes, setRecipes] = useState<Recipe[]>([])
+    const [load, setLoad] = useState(false)
 
     useEffect(() => {
         api.get('receita').then(response => {
             setRecipes(response.data)
-            console.log(response.data);
-
+            setLoad(true)
         })
+       
     }, [])
 
     function handleNavigateToRecipeSelected(id: number) {
         navigation.navigate('RecipeSelected', { id: id });
+    }
+
+    if (!load) {
+        return (
+            <View style={{flex:1,justifyContent: 'center', alignItems:'center'}}>
+                <Image
+                    source={require('../../assets/giphy.gif')}
+                    style={{width: 200, height: 200, }}
+                />
+            </View>)
     }
 
     return (
@@ -61,7 +73,7 @@ const Recipe = () => {
 }
 const styles = StyleSheet.create({
     body: {
-        backgroundColor:'#F0F0F5'
+        backgroundColor: '#F0F0F5'
     },
     title: {
         backgroundColor: '#e02041',
