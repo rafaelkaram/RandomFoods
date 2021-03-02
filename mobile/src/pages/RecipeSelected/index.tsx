@@ -40,7 +40,6 @@ function RecipeSelected({ route } : {route: any}) {
     useEffect(() => {
         api.get(`receita/${idRecipe}`).then(response => {
             setRecipe(response.data);
-            console.log(response.data);
         });
     }, []);
 
