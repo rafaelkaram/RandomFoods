@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import "moment/min/locales";
 
+import RegularText from './RegularText'
 import SubComment from './SubComment';
 
 const Comment = ({ comentarios }: { comentarios: any }) => {
@@ -20,7 +21,7 @@ const Comment = ({ comentarios }: { comentarios: any }) => {
                     </View>
                 </View>
 
-                <Text  style={{ fontFamily: 'Ubuntu_400Regular' }}>{comentarios.valor}</Text>
+                <RegularText>{comentarios.valor}</RegularText>
                 <View style={styles.commentHour}>
                     <Text>{moment(comentarios.data).format('HH:mm')}</Text>
                 </View>

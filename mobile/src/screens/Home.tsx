@@ -1,22 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Text, View, ScrollView } from 'react-native'
-import api from '../../services/api'
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-interface Ingredient {
-    id: number,
-    nome: string,
-    id_tipo_unidade: number,
-    id_tipo_ingrediente: number,
-    sem_medida: boolean,
-    derivado_leite: boolean,
-    glutem: boolean
-}
-
+import { IIngredient } from '../constants/interfaces';
+import api from '../services/api'
 
 const Home = () => {
 
-    const [ingredients, setIngredients] = useState<Ingredient[]>([])
+    const [ingredients, setIngredients] = useState<IIngredient[]>([])
 
     useEffect(() => {
         api.get('ingrediente').then(response => {

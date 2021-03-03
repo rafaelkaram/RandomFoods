@@ -1,12 +1,18 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import { IComment } from '../constants/interfaces';
 import Comment from './Comment';
 
-const SubComment = ({ id, props }: { id: number, props: any }) => {
+interface SubCommentProps {
+  id: number,
+  comments: IComment[]
+}
+
+const SubComment = (props : SubCommentProps) => {
   return (
-    <View style={styles.subCommentContainer}>
-      <Comment comentarios={props.childComments} />
+    <View style={ styles.subCommentContainer }>
+      <Comment comentarios={ props.comments } />
     </View>
   )
 }
@@ -14,7 +20,7 @@ const SubComment = ({ id, props }: { id: number, props: any }) => {
 const styles = StyleSheet.create({
   subCommentContainer: {
       marginTop: 10,
-      backgroundColor:'red',
+      backgroundColor:'green',
   },
 });
 

@@ -7,36 +7,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 // import logoImg from '../../assets/random_foods.png';
 
-import api from '../../services/api';
-
-
-interface IngredientType {
-    tipo: string,
-    image_url: string,
-    ingredientes: [{
-        id: number,
-        nome: string,
-        id_tipo_unidade: number,
-        id_tipo_ingrediente: number,
-        sem_medida: boolean,
-        derivado_leite: boolean,
-        glutem: boolean
-    }]
-}
-
-interface IngredientsCart {
-    ingredient: {
-        id: number,
-        name: string
-    }
-}
-
+import { IIngredientType, IIngredientCart } from '../constants/interfaces';
+import api from '../services/api';
 
 export default function NewRecipe() {
     const navigation = useNavigation();
 
-    const [ingredientsCart, setIngredientsCart] = useState<IngredientsCart[]>([]);
-    const [ingredientTypes, setIngredientTypes] = useState<IngredientType[]>([]);
+    const [ingredientsCart, setIngredientsCart] = useState<IIngredientCart[]>([]);
+    const [ingredientTypes, setIngredientTypes] = useState<IIngredientType[]>([]);
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
 
@@ -55,7 +33,7 @@ export default function NewRecipe() {
 
 
     function handleNavigateToRecipe() {
-        navigation.navigate('Recipe');
+        navigation.navigate('Receita');
     }
 
     function handleSelectItem(id: number, name: string) {

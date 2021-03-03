@@ -1,33 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image } from 'react-native'
-import { VictoryPie, VictoryLegend } from 'victory-native'
-import api from '../../services/api'
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image } from 'react-native';
+import { VictoryPie, VictoryLegend } from 'victory-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DataTable } from 'react-native-paper';
 
-interface RecipeType {
-    tipo: string,
-    count: number,
-}
+import api from '../services/api'
+import { IRecipeType, ICategory, IVote } from '../constants/interfaces';
+import Colors from '../constants/colors';
 
-interface RecipeCategory {
-    nome_categoria: string,
-    count: number,
-}
-
-interface TopVotedRecipe {
-    id: number,
-    nome: string,
-    nota: string,
-    num_notas: number
-}
 
 
 const UserDashboard = () => {
 
-    const [recipeType, setRecipeType] = useState<RecipeType[]>([])
-    const [recipeCategory, setRecipeCategory] = useState<RecipeCategory[]>([])
-    const [topVotedRecipe, setTopVotedRecipe] = useState<TopVotedRecipe[]>([])
+    const [recipeType, setRecipeType] = useState<IRecipeType[]>([])
+    const [recipeCategory, setRecipeCategory] = useState<ICategory[]>([])
+    const [topVotedRecipe, setTopVotedRecipe] = useState<IVote[]>([])
 
     const id = 1
 
@@ -90,7 +77,7 @@ const UserDashboard = () => {
             <ScrollView>
                 <Image
                     style={{ width: 212, height: 66, margin: 15 }}
-                    source={require('../../assets/dashboard.png')} />
+                    source={require('../assets/dashboard.png')} />
                 <View style={styles.totalRecipes}>
                     <Text style={styles.totalRecipesTitle}>Receitas Cadastradas:</Text>
                     <Text style={styles.totalRecipesText}>{totalRecipes}</Text>
@@ -174,7 +161,7 @@ const styles = StyleSheet.create({
 
     main: {
         flex: 1,
-        backgroundColor: "#F0F0F5"
+        backgroundColor: Colors.background
     },
 
     titleContainer: {
