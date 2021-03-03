@@ -55,7 +55,7 @@ const CreateRecipe = () => {
 
 
     async function uploadImageAsync(uri: any) {
-        let apiUrl = 'http://192.168.1.102/uploads/receita';
+        let apiUrl = 'http://192.168.1.102/uploads/receita'; // Corrigir, não pode ser fixo esse IP, buscar do services/api
         let uriParts = uri.split('.');
         let fileType = uriParts[uriParts.length - 1];
 
