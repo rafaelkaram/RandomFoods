@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Text, View, ScrollView, StyleSheet, Dimensions, FlatList, TouchableOpacity } from 'react-native'
+import { Rating, AirbnbRating } from 'react-native-elements';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import Category from '../../components/Category';
 import moment from 'moment';
 import "moment/min/locales";
 
@@ -51,6 +53,7 @@ function RecipeSelected({ route }: { route: any }) {
     const [recipe, setRecipe] = useState<Recipe>();
     const [comments, setComments] = useState<Comment[]>([]);
     const [subComments, setSubComments] = useState<Comment[]>([]);
+    //const { rating:number } = recipe.nota;
 
 
 
@@ -73,9 +76,9 @@ function RecipeSelected({ route }: { route: any }) {
         if (!comentarios) {
             return (<Text>Vamos comentar galera!</Text>);
         } else {
-            
+
             return (
-                
+
                 <View style={styles.comments} >
                     { comentarios.map((comment: { usuario: string; avaliacao: number; data: Date; valor: string; id: number; }) => (
                         <View>
@@ -86,11 +89,12 @@ function RecipeSelected({ route }: { route: any }) {
                                             <Text style={styles.commentUser}>{comment.usuario}</Text>
                                             <Text style={styles.commentDate}> - {moment(comment.data).startOf('day').fromNow()}</Text>
                                         </View>
-                                        <Text>NOTA: {comment.avaliacao}</Text>
+                                        <Rating imageSize={10} readonly startingValue={comment?.avaliacao} />
+
                                     </View>
                                 </View>
 
-                                <Text  style={{ fontFamily: 'Ubuntu_400Regular' }}>{comment.valor}</Text>
+                                <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{comment.valor}</Text>
                                 <View style={styles.commentHour}>
                                     <Text>{moment(comment.data).format('HH:mm')}</Text>
                                 </View>
@@ -119,19 +123,26 @@ function RecipeSelected({ route }: { route: any }) {
     }
 
     return (
+
         <>
             <ScrollView>
                 <View style={styles.container}>
                     <View style={styles.itemListTitle}>
                         <Text style={{ fontFamily: 'Ubuntu_700Bold', fontSize: 20, color: 'white' }}>{recipe?.receita}</Text>
+
                     </View>
                     <View style={styles.note}>
                         <Text style={{ fontFamily: 'Ubuntu_700Bold' }}>NOTA:</Text>
-                        <Text style={{ fontFamily: 'Ubuntu_700Bold', marginLeft: 3 }}>{recipe?.nota}</Text>
+                        <Rating imageSize={20} readonly startingValue={recipe?.nota} />
                     </View>
-                    <View style={styles.type}>
-                        <Text style={{ fontFamily: 'Ubuntu_700Bold' }}>Tipo:</Text>
-                        <Text style={{ fontFamily: 'Ubuntu_700Bold', marginLeft: 3 }}>{recipe?.tipo}</Text>
+                
+                    <View style={styles.category}>
+                        {recipe?.categorias.map(category => {
+                            return (
+                                    <Category key={category} nome={category} />
+                            )
+                        })}
+
                     </View>
                     <View style={styles.ingredientList}>
                         <Text style={{ fontFamily: 'Ubuntu_700Bold' }}>INGREDIENTES:</Text>
@@ -170,6 +181,9 @@ const styles = StyleSheet.create({
         margin: 3,
         padding: 10,
     },
+    rating: {
+        backgroundColor: '#e02041',
+    },
     container: {
         flex: 1,
         backgroundColor: '#F0F0F5'
@@ -184,6 +198,11 @@ const styles = StyleSheet.create({
         padding: 3,
         margin: 10,
     },
+    category: {
+        flexDirection:'row',
+        flexWrap: 'wrap',
+    },
+    
     ingredientList: {
         margin: 10,
         padding: 5,
@@ -221,7 +240,7 @@ const styles = StyleSheet.create({
     comments: {
         margin: 10,
         padding: 5,
-        
+
     },
     singleComment: {
         backgroundColor: 'white',
@@ -231,28 +250,28 @@ const styles = StyleSheet.create({
     commentTitle: {
         justifyContent: 'space-between',
         flexDirection: 'row',
-        fontFamily: 'Ubuntu_400Regular' 
+        fontFamily: 'Ubuntu_400Regular'
     },
-    commentUserDate:{
-        flexDirection:'row',
+    commentUserDate: {
+        flexDirection: 'row',
     },
     commentUser: {
-        
-        fontFamily: 'Ubuntu_700Bold' 
+
+        fontFamily: 'Ubuntu_700Bold'
 
     },
-    commentDate:{
-        color:'#999999',
-        fontFamily: 'Ubuntu_400Regular' 
+    commentDate: {
+        color: '#999999',
+        fontFamily: 'Ubuntu_400Regular'
     },
-    commentHour:{
-        paddingTop:10,
-        alignItems:'flex-end',
+    commentHour: {
+        paddingTop: 10,
+        alignItems: 'flex-end',
 
     },
     identacao: {
         marginTop: 10,
-        backgroundColor:'red',
+        //backgroundColor:'red',
 
     },
 

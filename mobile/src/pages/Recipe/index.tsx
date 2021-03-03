@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Text, View, ScrollView, StyleSheet, Dimensions, FlatList, TouchableOpacity } from 'react-native'
+import { Rating, AirbnbRating } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api'
 
@@ -50,6 +51,7 @@ const Recipe = () => {
                                     onPress={() => handleNavigateToRecipeSelected(item.id)}>
                                     <Text style={styles.itemListImage}>Imagem</Text>
                                     <Text style={styles.itemListTitle}>{item.receita}</Text>
+                                    <Rating imageSize={20} readonly startingValue={item?.nota} />
                                 </TouchableOpacity>
                             </View>
                         )
