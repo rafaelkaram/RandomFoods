@@ -1,4 +1,4 @@
-interface Comment {
+interface IComment {
   filter(arg0: ({ obj }: { obj: any; }) => boolean): Comment,
   usuario: string,
   id: number,
@@ -10,7 +10,7 @@ interface Comment {
   avaliacao: number,
 }
 
-interface Recipe {
+interface IRecipe {
   id: number,
   id_usuario: number,
   receita: string,
@@ -29,6 +29,6 @@ interface Recipe {
 }
 
 export {
-  Comment,
-  Recipe
+  IComment,
+  IRecipe
 }
