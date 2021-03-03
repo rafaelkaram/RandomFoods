@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Button } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, Button, Image, StyleSheet, Dimensions } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// import { FiArrowLeft, FiTrash2 } from 'react-icons/fi';
-// import fixString from '../../assets/functions/utils'
+import BoldText from '../components/BoldText'
+import RegularText from '../components/RegularText'
+import fixString from '../assets/functions/utils'
 
 // import logoImg from '../../assets/random_foods.png';
-
-import api from '../../services/api';
+import { IIngredientType, IIngredientCart } from '../constants/interfaces';
+import api from '../services/api';
+import { block } from 'react-native-reanimated';
 
 
 interface IngredientType {
@@ -31,14 +33,13 @@ interface IngredientsCart {
     }
 }
 
-
-export default function NewRecipe() {
+const NewRecipe = () => {
     const navigation = useNavigation();
 
-    const [ingredientsCart, setIngredientsCart] = useState<IngredientsCart[]>([]);
-    const [ingredientTypes, setIngredientTypes] = useState<IngredientType[]>([]);
+    const [ingredientsCart, setIngredientsCart] = useState<IIngredientCart[]>([]);
+    const [ingredientTypes, setIngredientTypes] = useState<IIngredientType[]>([]);
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
-
+    const [load, setLoad] = useState(false)
 
 
 
@@ -50,12 +51,13 @@ export default function NewRecipe() {
         api.get('ingredientetype')
             .then(response => {
                 setIngredientTypes(response.data);
+                setLoad(true)
             })
     }, []);
 
 
     function handleNavigateToRecipe() {
-        navigation.navigate('Recipe');
+        navigation.navigate('Receita');
     }
 
     function handleSelectItem(id: number, name: string) {
@@ -76,13 +78,24 @@ export default function NewRecipe() {
         }
     }
 
+
+    if (!load) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Image
+                    source={require('../assets/giphy.gif')}
+                    style={{ width: 200, height: 200, }}
+                />
+            </View>)
+    }
+
     return (
         <SafeAreaView>
             <Button
                 title="Abrir Receitas"
                 onPress={handleNavigateToRecipe} />
             <View>
-                <View>
+                {/* <View>
                     <Text>Ingredientes</Text>
                     {ingredientsCart.map(ingrediente => {
                         return (
@@ -94,9 +107,9 @@ export default function NewRecipe() {
                             </View>
                         )
                     })}
-                </View>
+                </View> */}
                 {/* <section>
-                    <img src={logoImg} alt="Random Foods" className="random-foods" />
+                    <Image src={logoImg} alt="Random Foods" className="random-foods" />
 
                     <h1>Cadastrar nova receita</h1>
                     <p>De um titulo, liste os ingredientes e faça o passo-a-passo para ajudar quem está querendo cozinhar.</p>
@@ -104,21 +117,27 @@ export default function NewRecipe() {
                 <ScrollView>
                     <Text>Nome da Receita</Text>
                     {ingredientTypes.map(ingredientTypes => {
+                        const image_url = ingredientTypes.image_url.replace('localhost', '192.168.100.5') + fixString(ingredientTypes.tipo) + `-colored.png`
+
                         return (
-                            <View key={ingredientTypes.tipo}>
+                            <View key={ingredientTypes.tipo} style={styles.mainContainer}>
                                 <View>
-                                    <Text>{ingredientTypes.tipo}</Text>
-                                    {/* <img
-                                        src={ingredientTypes.image_url + fixString(ingredientTypes.tipo) + `-colored.svg`}
-                                        alt={ingredientTypes.tipo}></img> */}
-                                    <View>
+                                    <View style={styles.ingredientTypeNameImageContainer}>
+                                        <BoldText style={styles.ingredientTypeName}>{ingredientTypes.tipo}</BoldText>
+                                        <Image style={styles.ingredientTypeIcon}
+                                            source={{
+                                                uri: image_url
+                                            }} />
+                                    </View>
+                                    <View style={styles.ingredietContainer}>
                                         {ingredientTypes.ingredientes.map(ingrediente => {
                                             return (
                                                 <TouchableOpacity
+                                                    style={selectedItems.includes(ingrediente.id) ? styles.ingredientSelected : styles.ingredient}
                                                     onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}
                                                     key={ingrediente.id}
                                                 >
-                                                    <Text>{ingrediente.nome}</Text>
+                                                    <RegularText style={selectedItems.includes(ingrediente.id) ? styles.ingredientNameSelected : styles.ingredientName}>{ingrediente.nome}</RegularText>
                                                 </TouchableOpacity>
                                             )
                                         })}
@@ -133,3 +152,70 @@ export default function NewRecipe() {
         </SafeAreaView>
     );
 }
+
+
+const Height = Dimensions.get("window").height * 0.5;
+const Width = Dimensions.get("window").width;
+
+const styles = StyleSheet.create({
+
+    mainContainer: {
+        margin: 10,
+        padding: 10,
+        backgroundColor: 'white',
+        borderRadius: 20,
+    },
+
+    ingredientTypeNameImageContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+
+    ingredientTypeName: {
+        fontSize: 18,
+        paddingLeft: 8,
+        paddingTop: 20
+    },
+
+    ingredientTypeIcon: {
+        margin: 10,
+        width: 50,
+        height: 50
+    },
+
+    ingredietContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'flex-start',
+        padding: 5
+    },
+
+    ingredient: {
+        backgroundColor: '#EAEAEA',
+        borderRadius: 8,
+        height: 40,
+        padding: 5,
+        margin: 5,
+        justifyContent: 'center'
+    },
+
+    ingredientSelected: {
+        backgroundColor: '#e02041',
+        borderRadius: 8,
+        height: 40,
+        padding: 5,
+        margin: 5,
+        justifyContent: 'center'
+    },
+
+    ingredientName: {
+        color: 'black'
+    },
+
+    ingredientNameSelected: {
+        color: 'white'
+    }
+
+})
+
+export default NewRecipe

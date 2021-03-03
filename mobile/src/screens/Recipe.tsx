@@ -1,31 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, ScrollView, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native'
+import { Text, View, ScrollView, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native'
+import { Rating } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
-import api from '../../services/api'
 
+import { IRecipe } from '../constants/interfaces';
+import Colors from '../constants/colors';
+import api from '../services/api'
 
 const { width } = Dimensions.get('window')
 const numberGrid = 3;
 const itemWidth = width / numberGrid;
 
-interface Recipe {
-    id: number,
-    id_usuario: number,
-    receita: string,
-    descricao: string,
-    nota: number,
-    num_notas: number,
-    tipo: string,
-    data_cadastro: Date,
-    ativa: boolean
-}
-
-
-
 const Recipe = () => {
 
     const navigation = useNavigation();
-    const [recipes, setRecipes] = useState<Recipe[]>([])
+    const [recipes, setRecipes] = useState<IRecipe[]>([])
     const [load, setLoad] = useState(false)
 
     useEffect(() => {
@@ -33,19 +22,19 @@ const Recipe = () => {
             setRecipes(response.data)
             setLoad(true)
         })
-       
+
     }, [])
 
     function handleNavigateToRecipeSelected(id: number) {
-        navigation.navigate('RecipeSelected', { id: id });
+        navigation.navigate('Receita Selecionada', { id: id });
     }
 
     if (!load) {
         return (
-            <View style={{flex:1,justifyContent: 'center', alignItems:'center'}}>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Image
-                    source={require('../../assets/giphy.gif')}
-                    style={{width: 200, height: 200, }}
+                    source={require('../assets/giphy.gif')}
+                    style={{ width: 200, height: 200, }}
                 />
             </View>)
     }
@@ -62,6 +51,7 @@ const Recipe = () => {
                                     onPress={() => handleNavigateToRecipeSelected(item.id)}>
                                     <Text style={styles.itemListImage}>Imagem</Text>
                                     <Text style={styles.itemListTitle}>{item.receita}</Text>
+                                    <Rating imageSize={20} readonly startingValue={Number(item?.nota)} />
                                 </TouchableOpacity>
                             </View>
                         )
@@ -73,7 +63,7 @@ const Recipe = () => {
 }
 const styles = StyleSheet.create({
     body: {
-        backgroundColor: '#F0F0F5'
+        backgroundColor: Colors.background
     },
     title: {
         backgroundColor: '#e02041',
