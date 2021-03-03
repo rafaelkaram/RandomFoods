@@ -9,7 +9,7 @@ module.exports = {
 
         const resp = [];
 
-        for ( var key in receitas ) {
+        for (var key in receitas) {
             const obj = receitas[key];
 
             const receita = await module.exports.findReceita(obj);
@@ -29,7 +29,7 @@ module.exports = {
             .select('receita.*', 'usuario.nome as usuario')
             .first();
 
-        if ( !obj ) {
+        if (!obj) {
             return response.status(401).json({ error: 'Recipe not found.' });
         }
 
@@ -41,7 +41,7 @@ module.exports = {
     async fetch(request, response) {
         const user = request.headers.authorization;
 
-        if ( !user ) {
+        if (!user) {
             return response.status(401).json({ error: 'Operation not permitted.' });
         }
 
@@ -53,7 +53,7 @@ module.exports = {
 
         const resp = [];
 
-        for ( var key in receitas ) {
+        for (var key in receitas) {
             const obj = receitas[key];
 
             const receita = await module.exports.findReceita(obj);
@@ -69,14 +69,14 @@ module.exports = {
 
         const trx = await connection.transaction();
 
-        const [ id ] = await trx('receita')
+        const [id] = await trx('receita')
             .returning('id')
             .insert({
                 nome,
                 descricao,
                 tipo,
-                ativa : true,
-                id_usuario : user
+                ativa: true,
+                id_usuario: user
             });
 
         const idsIngrediente = [];
@@ -84,7 +84,7 @@ module.exports = {
         for (var key in ingredientes) {
             const ingrediente = ingredientes[key];
 
-            const [ idIngredienteReceita ] = await trx('receita_ingrediente')
+            const [idIngredienteReceita] = await trx('receita_ingrediente')
                 .returning('id')
                 .insert({
                     id_ingrediente: ingrediente.id,
@@ -105,7 +105,7 @@ module.exports = {
         for (var key in categorias) {
             const categoria = categorias[key];
 
-            const [ idCategoria ] = await trx('receita_categoria')
+            const [idCategoria] = await trx('receita_categoria')
                 .returning('id')
                 .insert({
                     id_categoria: categoria,
@@ -125,20 +125,20 @@ module.exports = {
 
         const user = request.headers.authorization;
 
-        if ( !user ) {
+        if (!user) {
             return response.status(401).json({ error: 'Operation not permitted.' });
         }
 
         const trx = await connection.transaction();
 
-        const [ id ] = await trx('receita')
+        const [id] = await trx('receita')
             .returning('id')
             .insert({
                 nome,
                 descricao,
                 tipo,
-                ativa : true,
-                id_usuario : user
+                ativa: true,
+                id_usuario: user
             });
 
         const idsIngrediente = [];
@@ -146,7 +146,7 @@ module.exports = {
         for (var key in ingredientes) {
             const ingrediente = ingredientes[key];
 
-            const [ idIngredienteReceita ] = await trx('receita_ingrediente')
+            const [idIngredienteReceita] = await trx('receita_ingrediente')
                 .returning('id')
                 .insert({
                     id_ingrediente: ingrediente.id,
@@ -167,7 +167,7 @@ module.exports = {
         for (var key in categorias) {
             const categoria = categorias[key];
 
-            const [ idCategoria ] = await trx('receita_categoria')
+            const [idCategoria] = await trx('receita_categoria')
                 .returning('id')
                 .insert({
                     id_categoria: categoria,
@@ -196,7 +196,7 @@ module.exports = {
             .select('id_usuario')
             .first();
 
-        if ( !user || user_id != owner.id_usuario) {
+        if (!user || user_id != owner.id_usuario) {
             return response.status(401).json({ error: 'Operation not permitted.' });
         }
 
@@ -209,6 +209,57 @@ module.exports = {
         await trx.commit();
 
         return response.status(204).send();
+    },
+
+    async searchByIngredient(request, response) {
+        const ids = []
+
+        for (var key in request.body) {
+            ids.push(request.body[key])
+        }
+
+        /*const idsR = await connection('receita_ingrediente')
+            .whereIn('id_ingrediente', ids)
+            .select('id_receita');*/
+
+        const idsReceita = await connection.raw(`
+        SELECT
+            id_receita 
+        FROM
+            receita_ingrediente
+        WHERE
+            id_ingrediente IN (${ids})
+        GROUP BY
+            id_receita 
+        HAVING count(*) = ${ids.length}`);
+
+        /*const receitas = await connection('receita')
+            .innerJoin('receita_ingrediente', 'receita_ingrediente.id_receita', '=', 'receita.id')
+            .innerJoin('ingrediente', 'receita_ingrediente.id_ingrediente', '=', 'ingrediente.id')
+            .whereIn('ingrediente.id', idsReceita)
+            .select('receita.*');*/
+
+        
+        const ids2 = []
+        for (var key in idsReceita.rows) {
+            ids2.push(idsReceita.rows[key].id_receita)
+        }
+
+        const receitas = await connection('receita')
+            .whereIn('id', ids2)
+            .select('*')
+
+        const resp = [];
+
+        for (var key in receitas) {
+            const obj = receitas[key];
+
+            const receita = await module.exports.findReceita(obj);
+
+            resp.push(receita);
+        }
+
+        return response.json(resp);
     },
 
     findReceita: async function (receita) {
@@ -227,7 +278,7 @@ module.exports = {
 
         const ingredientes = [];
 
-        for(var key in listaIngredientes) {
+        for (var key in listaIngredientes) {
             const ingrediente = listaIngredientes[key];
 
             if (!ingrediente.quantidade || ingrediente.quantidade === 0 || !ingrediente.unidade) {
