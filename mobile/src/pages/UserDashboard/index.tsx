@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image} from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image } from 'react-native'
 import { VictoryPie, VictoryLegend } from 'victory-native'
 import api from '../../services/api'
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -87,80 +87,80 @@ const UserDashboard = () => {
 
     return (
         <SafeAreaView style={styles.main}>
-                <ScrollView>
-                        <Image 
-                            style={{width:212,height:66,margin:15}}
-                            source={require('../../assets/dashboard.png')}/>
-                    <View style={styles.totalRecipes}>
-                        <Text style={styles.totalRecipesTitle}>Receitas Cadastradas:</Text>
-                        <Text style={styles.totalRecipesText}>{totalRecipes}</Text>
+            <ScrollView>
+                <Image
+                    style={{ width: 212, height: 66, margin: 15 }}
+                    source={require('../../assets/dashboard.png')} />
+                <View style={styles.totalRecipes}>
+                    <Text style={styles.totalRecipesTitle}>Receitas Cadastradas:</Text>
+                    <Text style={styles.totalRecipesText}>{totalRecipes}</Text>
+                </View>
+                <View style={styles.pieContainer}>
+                    <View style={styles.typePie}>
+                        <Text style={styles.chartsTitle}>{`Receitas\npor Tipo`}</Text>
+                        <VictoryPie
+                            height={((chartHeight / 2) - 50)}
+                            width={(chartWidth / 2)}
+                            colorScale={["orange", "#e02041"]}
+                            labels={({ datum }) => `${datum.y}`}
+                            data={pieTypeData}
+                            innerRadius={30}
+                            style={{ labels: { fontSize: 15 } }}
+                        />
+                        <VictoryLegend x={140}
+                            gutter={20}
+                            colorScale={["orange", "#e02041"]}
+                            data={pieTypeLegend}
+                            style={{ labels: { fontSize: 15 } }}
+                        />
                     </View>
-                    <View style={styles.pieContainer}>
-                        <View style={styles.typePie}>
-                            <Text style={styles.chartsTitle}>{`Receitas\npor Tipo`}</Text>
-                            <VictoryPie
-                                height={((chartHeight / 2) - 50)}
-                                width={(chartWidth / 2)}
-                                colorScale={["orange", "#e02041"]}
-                                labels={({ datum }) => `${datum.y}`}
-                                data={pieTypeData}
-                                innerRadius={30}
-                                style={{ labels: { fontSize: 15 } }}
-                            />
-                            <VictoryLegend x={140}
-                                gutter={20}
-                                colorScale={["orange", "#e02041"]}
-                                data={pieTypeLegend}
-                                style={{ labels: { fontSize: 15 } }}
-                            />
-                        </View>
 
-                        <View style={styles.categoryPie}>
-                            <Text style={styles.chartsTitle}>{`Receitas\npor Categoria`}</Text>
+                    <View style={styles.categoryPie}>
+                        <Text style={styles.chartsTitle}>{`Receitas\npor Categoria`}</Text>
 
-                            <VictoryPie
-                                height={((chartHeight / 2) - 50)}
-                                width={(chartWidth / 2)}
-                                colorScale={["#10a377", "#62e399","#3f9665","#29e379","#99ffc5"]}
-                                labels={({ datum }) => `${datum.y}`}
-                                data={pieCategoryData}
-                                innerRadius={30}
-                                style={{ labels: { fontSize: 15 } }}
-                            />
-                            <ScrollView>
+                        <VictoryPie
+                            height={((chartHeight / 2) - 50)}
+                            width={(chartWidth / 2)}
+                            colorScale={["#10a377", "#62e399", "#3f9665", "#29e379", "#99ffc5"]}
+                            labels={({ datum }) => `${datum.y}`}
+                            data={pieCategoryData}
+                            innerRadius={30}
+                            style={{ labels: { fontSize: 15 } }}
+                        />
+                        <ScrollView>
                             <VictoryLegend x={10}
-                                colorScale={["#10a377", "#62e399","#3f9665","#29e379","#99ffc5"]}
+                                colorScale={["#10a377", "#62e399", "#3f9665", "#29e379", "#99ffc5"]}
                                 data={pieCategoryLegend}
                                 style={{ labels: { fontSize: 15 } }}
                             />
-                            </ScrollView>
-                        </View>
+                        </ScrollView>
                     </View>
-                    <View>
-                    {}
-                        <Text style={styles.tableTitle}>Top receitas mais votadas</Text>                 
-                            <View style={styles.topVotedTable}>
-                                <DataTable>
-                                    <DataTable.Header>
-                                        <DataTable.Title style={{flexBasis: 30}} >Receita</DataTable.Title>
-                                        <DataTable.Title numeric>Nota</DataTable.Title>
-                                        <DataTable.Title style={{flexBasis: 10}} numeric>Nº de Notas</DataTable.Title>
-                                    </DataTable.Header>
-                                    {topVotedRecipe.map(item =>{
-                                        return(
-                                            <TouchableOpacity key={item.id}>
-                                                <DataTable.Row >
-                                                    <DataTable.Cell style={{flexBasis: 30}}>{item.nome}</DataTable.Cell>
-                                                    <DataTable.Cell numeric>{item.nota}</DataTable.Cell>
-                                                    <DataTable.Cell numeric>{item.num_notas}</DataTable.Cell>
-                                                </DataTable.Row>
-                                            </TouchableOpacity>
-                                        )
-                                    })}
-                                </DataTable>
-                            </View> 
+                </View>
+                <View>
+                    { }
+                    <Text style={styles.tableTitle}>Top receitas mais votadas</Text>
+                    <View style={styles.topVotedTable}>
+                        <DataTable>
+                            <DataTable.Header>
+                                <DataTable.Title style={{ flexBasis: 30 }} >Receita</DataTable.Title>
+                                <DataTable.Title numeric>Nota</DataTable.Title>
+                                <DataTable.Title style={{ flexBasis: 10 }} numeric>Nº de Notas</DataTable.Title>
+                            </DataTable.Header>
+                            {topVotedRecipe.map(item => {
+                                return (
+                                    <TouchableOpacity key={item.id}>
+                                        <DataTable.Row >
+                                            <DataTable.Cell style={{ flexBasis: 30 }}>{item.nome}</DataTable.Cell>
+                                            <DataTable.Cell numeric>{item.nota}</DataTable.Cell>
+                                            <DataTable.Cell numeric>{item.num_notas}</DataTable.Cell>
+                                        </DataTable.Row>
+                                    </TouchableOpacity>
+                                )
+                            })}
+                        </DataTable>
                     </View>
-                </ScrollView>
+                </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }
@@ -172,12 +172,12 @@ const chartWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
 
-    main:{
+    main: {
         flex: 1,
         backgroundColor: "#F0F0F5"
     },
 
-    titleContainer:{
+    titleContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         margin: 15,
@@ -191,10 +191,10 @@ const styles = StyleSheet.create({
         fontSize: 24,
         textShadowColor: 'black',
         textShadowRadius: 1,
-        textShadowOffset: { 
+        textShadowOffset: {
             width: 1,
             height: 1
-          }, 
+        },
     },
 
     totalRecipes: {
@@ -222,13 +222,13 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
         fontFamily: 'Ubuntu_500Medium_Italic',
         color: "#f87062",
-        alignSelf: 'baseline',
+        alignSelf: 'flex-start',
         textShadowColor: 'black',
         textShadowRadius: 0.5,
-        textShadowOffset: { 
+        textShadowOffset: {
             width: 0.5,
             height: 0.5
-          },
+        },
     },
 
     pieContainer: {
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     },
 
     typePie: {
-        maxWidth: ((chartWidth / 2)-20),
+        maxWidth: ((chartWidth / 2) - 20),
         maxHeight: (chartHeight - 120),
         alignItems: 'center',
         backgroundColor: 'white',
@@ -254,16 +254,16 @@ const styles = StyleSheet.create({
         borderRadius: 15
     },
 
-    tableTitle:{
+    tableTitle: {
         textAlign: 'center',
-        fontFamily:"Ubuntu_500Medium_Italic",
+        fontFamily: "Ubuntu_500Medium_Italic",
         color: "#f87062",
         textShadowColor: 'black',
         textShadowRadius: 0.5,
-        textShadowOffset: { 
+        textShadowOffset: {
             width: 0.5,
             height: 0.5
-          },
+        },
     },
 
     topVotedTable: {
