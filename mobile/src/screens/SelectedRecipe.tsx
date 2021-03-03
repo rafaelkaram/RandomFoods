@@ -3,21 +3,22 @@ import { Text, View, ScrollView, StyleSheet, Dimensions, FlatList, TouchableOpac
 import { Rating, AirbnbRating } from 'react-native-elements';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import Category from '../../components/Category';
 import moment from 'moment';
 import "moment/min/locales";
 
-import { IComment, IRecipe } from '../../constants/interfaces';
-import RegularText from '../../components/RegularText';
-import BoldText from '../../components/BoldText';
-import api from '../../services/api'
+import { IComment, IRecipe } from '../constants/interfaces';
+import Colors from '../constants/colors';
+import RegularText from '../components/RegularText';
+import Category from '../components/Category';
+import BoldText from '../components/BoldText';
+import api from '../services/api'
 
 const { height, width } = Dimensions.get('window')
 const numberGrid = 3;
 const itemWidth = width / numberGrid;
 moment.locale('pt-br');
 
-function RecipeSelected({ route }: { route: any }) {
+function SelectedRecipe({ route }: { route: any }) {
 
     const idRecipe = route.params.id;
     const [recipe, setRecipe] = useState<IRecipe>();
@@ -47,7 +48,7 @@ function RecipeSelected({ route }: { route: any }) {
 
                 <View style={styles.comments} >
                     { comentarios.map((comment: { usuario: string; avaliacao: number; data: Date; valor: string; id: number; }) => (
-                        <View>
+                        <View key={ comment.id }>
                             <View style={styles.singleComment}>
                                 <View>
                                     <View style={styles.commentTitle}>
@@ -94,7 +95,7 @@ function RecipeSelected({ route }: { route: any }) {
             <ScrollView>
                 <View style={styles.container}>
                     <View style={styles.itemListTitle}>
-                        <BoldText style={{ fontSize: 20, color: 'white' }}>{recipe?.receita}</BoldText>
+                        <BoldText style={ styles.titleText }>{recipe?.receita}</BoldText>
 
                     </View>
                     <View style={styles.note}>
@@ -135,23 +136,28 @@ function RecipeSelected({ route }: { route: any }) {
         </>
     );
 }
+
 const styles = StyleSheet.create({
     itemListTitle: {
-        backgroundColor: '#e02041',
-
-        textAlign: 'center',
+        backgroundColor: Colors.dimmedBackground,
 
         margin: 3,
         padding: 10,
     },
 
+    titleText: {
+        fontSize: 20,
+        color: 'white',
+        textAlign: 'center'
+    },
+
     rating: {
-        backgroundColor: '#e02041',
+        backgroundColor: Colors.dimmedBackground,
     },
 
     container: {
         flex: 1,
-        backgroundColor: '#F0F0F5'
+        backgroundColor: Colors.background
     },
 
     note: {
@@ -243,4 +249,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default RecipeSelected;
+export default SelectedRecipe;
