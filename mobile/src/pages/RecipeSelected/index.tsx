@@ -7,45 +7,13 @@ import Category from '../../components/Category';
 import moment from 'moment';
 import "moment/min/locales";
 
-import { useNavigation } from '@react-navigation/native';
+import { Comment, Recipe } from '../../constants/inerfaces';
 import api from '../../services/api'
 
 const { width } = Dimensions.get('window')
 const numberGrid = 3;
 const itemWidth = width / numberGrid;
 moment.locale('pt-br');
-
-
-interface Recipe {
-    id: number,
-    id_usuario: number,
-    receita: string,
-    descricao: string,
-    nota: number,
-    num_notas: number,
-    tipo: string,
-    data_cadastro: Date,
-    ativa: boolean,
-    ingredientes: [{
-        id: number,
-        nome: string,
-        quantidade: number,
-    }],
-    categorias: [string],
-}
-
-interface Comment {
-    filter(arg0: ({ obj }: { obj: any; }) => boolean): Comment,
-    usuario: string,
-    id: number,
-    id_usuario: number,
-    id_receita: number,
-    id_pai: number,
-    valor: string,
-    data: Date,
-    avaliacao: number,
-}
-
 
 function RecipeSelected({ route }: { route: any }) {
 
@@ -134,7 +102,7 @@ function RecipeSelected({ route }: { route: any }) {
                         <Text style={{ fontFamily: 'Ubuntu_700Bold' }}>NOTA:</Text>
                         <Rating imageSize={20} readonly startingValue={recipe?.nota} />
                     </View>
-                
+
                     <View style={styles.category}>
                         {recipe?.categorias.map(category => {
                             return (
@@ -201,7 +169,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         flexWrap: 'wrap',
     },
-    
+
     ingredientList: {
         margin: 10,
         padding: 5,
