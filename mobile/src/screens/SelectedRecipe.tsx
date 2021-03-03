@@ -48,7 +48,7 @@ function SelectedRecipe({ route }: { route: any }) {
 
                 <View style={styles.comments} >
                     { comentarios.map((comment: { usuario: string; avaliacao: number; data: Date; valor: string; id: number; }) => (
-                        <View key={ comment.id }>
+                        <View key={comment.id}>
                             <View style={styles.singleComment}>
                                 <View>
                                     <View style={styles.commentTitle}>
@@ -140,7 +140,6 @@ function SelectedRecipe({ route }: { route: any }) {
 const styles = StyleSheet.create({
     itemListTitle: {
         backgroundColor: Colors.dimmedBackground,
-
         margin: 3,
         padding: 10,
     },

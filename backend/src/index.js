@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(routes);
 
 app.use('/ingredient-types',
-express.static(path.resolve(__dirname, '..','..','frontend','src','assets','ingredients-types-images'))); 
+express.static(path.resolve(__dirname, '..','..','mobile','src','assets','ingredients-types-images'))); 
 
 app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')))
 
