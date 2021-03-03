@@ -45,7 +45,11 @@ interface IIngredientType {
   }]
 }
 
+<<<<<<< HEAD
 interface IIngredientCart {
+=======
+interface IngredientCart {
+>>>>>>> 5af5c3feb5134f234dcf1e64e858a536c756ea08
   ingredient: {
       id: number,
       name: string
