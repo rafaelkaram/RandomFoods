@@ -4,15 +4,15 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { AntDesign } from '@expo/vector-icons'; 
+import { AntDesign } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import Home from './pages/Home'
-import NewRecipe from './pages/NewRecipe'
-import UserDashboard from './pages/UserDashboard'
-import Recipe from './pages/Recipe'
-import RecipeSelected from './pages/RecipeSelected'
+import Home from './screens/Home'
+import NewRecipe from './screens/NewRecipe'
+import Dashboard from './screens/Dashboard'
+import Recipe from './screens/Recipe'
+import SelectedRecipe from './screens/SelectedRecipe'
 
 import App from '../App'
 
@@ -26,9 +26,9 @@ const Drawer = createDrawerNavigator()
 const RecipeStack = () =>{
     return(
         <AppStack.Navigator>
-            <AppStack.Screen name="NewRecipe" component={NewRecipe}/>
-            <AppStack.Screen name="Recipe" component={Recipe}/>
-            <AppStack.Screen name="RecipeSelected" component={RecipeSelected}/>
+            <AppStack.Screen name="Nova Receita" component={NewRecipe}/>
+            <AppStack.Screen name="Receita" component={Recipe}/>
+            <AppStack.Screen name="Receita Selecionada" component={SelectedRecipe}/>
         </AppStack.Navigator>
     )
 }
@@ -46,7 +46,7 @@ const UserDrawer = () => {
     return (
         <Drawer.Navigator drawerPosition='right'>
             <Drawer.Screen name='Account' component={UserAccount} />
-            <Drawer.Screen name='Dashboard' component={UserDashboard} />
+            <Drawer.Screen name='Dashboard' component={Dashboard} />
         </Drawer.Navigator>
     )
 }
