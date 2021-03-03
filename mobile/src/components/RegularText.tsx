@@ -1,10 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 
 const RegularText = (props : any) => {
   return (
-    <Text style={{ ...styles.fontText, ...props.styles }}>
+    <Text style={{ ...styles.fontText, ...props.style }}>
       { props.children }
     </Text>
   )

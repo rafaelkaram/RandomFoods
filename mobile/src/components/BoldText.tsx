@@ -3,7 +3,7 @@ import { StyleSheet, Text } from 'react-native';
 
 const BoldText = (props : any) => {
   return (
-    <Text style={{ ...styles.fontText, ...props.styles }}>
+    <Text style={{ ...styles.fontText, ...props.style }}>
       { props.children }
     </Text>
   )
