@@ -1,59 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import { Text, View, ScrollView, StyleSheet, Dimensions, FlatList, TouchableOpacity } from 'react-native'
+import { Rating, AirbnbRating } from 'react-native-elements';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 import "moment/min/locales";
 
-import { useNavigation } from '@react-navigation/native';
-import api from '../../services/api'
+import { IComment, IRecipe } from '../constants/interfaces';
+import Colors from '../constants/colors';
+import RegularText from '../components/RegularText';
+import Category from '../components/Category';
+import BoldText from '../components/BoldText';
+import api from '../services/api'
 
-const { width } = Dimensions.get('window')
+const { height, width } = Dimensions.get('window')
 const numberGrid = 3;
 const itemWidth = width / numberGrid;
 moment.locale('pt-br');
 
-
-interface Recipe {
-    id: number,
-    id_usuario: number,
-    receita: string,
-    descricao: string,
-    nota: number,
-    num_notas: number,
-    tipo: string,
-    data_cadastro: Date,
-    ativa: boolean,
-    ingredientes: [{
-        id: number,
-        nome: string,
-        quantidade: number,
-    }],
-    categorias: [string],
-}
-
-interface Comment {
-    filter(arg0: ({ obj }: { obj: any; }) => boolean): Comment,
-    usuario: string,
-    id: number,
-    id_usuario: number,
-    id_receita: number,
-    id_pai: number,
-    valor: string,
-    data: Date,
-    avaliacao: number,
-}
-
-
-function RecipeSelected({ route }: { route: any }) {
+function SelectedRecipe({ route }: { route: any }) {
 
     const idRecipe = route.params.id;
-    const [recipe, setRecipe] = useState<Recipe>();
-    const [comments, setComments] = useState<Comment[]>([]);
-    const [subComments, setSubComments] = useState<Comment[]>([]);
-
-
-
+    const [recipe, setRecipe] = useState<IRecipe>();
+    const [comments, setComments] = useState<IComment[]>([]);
+    const [subComments, setSubComments] = useState<IComment[]>([]);
+    //const { rating:number } = recipe.nota;
 
     useEffect(() => {
         api.get(`receita/${idRecipe}`).then(response => {
@@ -72,24 +43,25 @@ function RecipeSelected({ route }: { route: any }) {
         if (!comentarios) {
             return (<Text>Vamos comentar galera!</Text>);
         } else {
-            
+
             return (
-                
+
                 <View style={styles.comments} >
                     { comentarios.map((comment: { usuario: string; avaliacao: number; data: Date; valor: string; id: number; }) => (
-                        <View>
+                        <View key={comment.id}>
                             <View style={styles.singleComment}>
                                 <View>
                                     <View style={styles.commentTitle}>
                                         <View style={styles.commentUserDate}>
-                                            <Text style={styles.commentUser}>{comment.usuario}</Text>
-                                            <Text style={styles.commentDate}> - {moment(comment.data).startOf('day').fromNow()}</Text>
+                                            <BoldText>{comment.usuario}</BoldText>
+                                            <RegularText style={styles.commentDate}> - {moment(comment.data).startOf('day').fromNow()}</RegularText>
                                         </View>
-                                        <Text>NOTA: {comment.avaliacao}</Text>
+                                        <Rating imageSize={10} readonly startingValue={comment?.avaliacao} />
+
                                     </View>
                                 </View>
 
-                                <Text  style={{ fontFamily: 'Ubuntu_400Regular' }}>{comment.valor}</Text>
+                                <RegularText>{comment.valor}</RegularText>
                                 <View style={styles.commentHour}>
                                     <Text>{moment(comment.data).format('HH:mm')}</Text>
                                 </View>
@@ -118,36 +90,43 @@ function RecipeSelected({ route }: { route: any }) {
     }
 
     return (
+
         <>
             <ScrollView>
                 <View style={styles.container}>
                     <View style={styles.itemListTitle}>
-                        <Text style={{ fontFamily: 'Ubuntu_700Bold', fontSize: 20, color: 'white' }}>{recipe?.receita}</Text>
+                        <BoldText style={ styles.titleText }>{recipe?.receita}</BoldText>
+
                     </View>
                     <View style={styles.note}>
-                        <Text style={{ fontFamily: 'Ubuntu_700Bold' }}>NOTA:</Text>
-                        <Text style={{ fontFamily: 'Ubuntu_700Bold', marginLeft: 3 }}>{recipe?.nota}</Text>
+                        <BoldText>NOTA:</BoldText>
+                        <Rating imageSize={20} readonly startingValue={recipe?.nota} />
                     </View>
-                    <View style={styles.type}>
-                        <Text style={{ fontFamily: 'Ubuntu_700Bold' }}>Tipo:</Text>
-                        <Text style={{ fontFamily: 'Ubuntu_700Bold', marginLeft: 3 }}>{recipe?.tipo}</Text>
+
+                    <View style={styles.category}>
+                        {recipe?.categorias.map(category => {
+                            return (
+                                    <Category key={category} nome={category} />
+                            )
+                        })}
+
                     </View>
                     <View style={styles.ingredientList}>
-                        <Text style={{ fontFamily: 'Ubuntu_700Bold' }}>INGREDIENTES:</Text>
+                        <BoldText>INGREDIENTES:</BoldText>
                         {recipe?.ingredientes.map(ingredient => {
                             return (
                                 <View style={styles.ingredient} key={ingredient.id}>
                                     <Entypo name="dot-single" size={15} color="black" />
-                                    <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{ingredient.nome}</Text>
-                                    <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{ingredient.quantidade ? `: ${ingredient.quantidade.toString().replace('.00', '')}` : ' a gosto'}</Text>
+                                    <RegularText>{ingredient.nome}</RegularText>
+                                    <RegularText>{ingredient.quantidade ? `: ${ingredient.quantidade.toString().replace('.00', '')}` : ' a gosto'}</RegularText>
                                 </View>
                             )
                         })}
                     </View>
 
                     <View style={styles.itemListDescribe}>
-                        <Text style={{ fontFamily: 'Ubuntu_400Regular' }}>{recipe?.descricao.split('\\n').map((desc, index) => (
-                            <Text key={index}>{'\n'}{desc}</Text>))}</Text>
+                        <RegularText>{recipe?.descricao.split('\\n').map((desc, index) => (
+                            <Text key={index}>{'\n'}{desc}</Text>))}</RegularText>
                     </View>
                     <ShowComments comentarios={comments} />
 
@@ -157,41 +136,57 @@ function RecipeSelected({ route }: { route: any }) {
         </>
     );
 }
+
 const styles = StyleSheet.create({
-
     itemListTitle: {
-        backgroundColor: '#e02041',
-
-        fontSize: 20,
-        textAlign: 'center',
-        fontFamily: 'Ubuntu_700Bold',
-
+        backgroundColor: Colors.dimmedBackground,
         margin: 3,
         padding: 10,
     },
+
+    titleText: {
+        fontSize: 20,
+        color: 'white',
+        textAlign: 'center'
+    },
+
+    rating: {
+        backgroundColor: Colors.dimmedBackground,
+    },
+
     container: {
         flex: 1,
-        backgroundColor: '#F0F0F5'
+        backgroundColor: Colors.background
     },
+
     note: {
         flexDirection: 'row',
         padding: 3,
         margin: 10,
     },
+
     type: {
         flexDirection: 'row',
         padding: 3,
         margin: 10,
     },
+
+    category: {
+        flexDirection:'row',
+        flexWrap: 'wrap',
+    },
+
     ingredientList: {
         margin: 10,
         padding: 5,
         backgroundColor: 'white',
     },
+
     ingredient: {
         flexDirection: 'row',
         padding: 3,
     },
+
     itemList: {
         backgroundColor: 'lightgrey',
         margin: 15,
@@ -201,6 +196,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         borderRadius: 20
     },
+
     itemListImage: {
         borderWidth: 1,
         height: itemWidth - 40,
@@ -215,49 +211,41 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         padding: 5,
         backgroundColor: 'white',
-
     },
+
     comments: {
         margin: 10,
         padding: 5,
-        
     },
+
     singleComment: {
         backgroundColor: 'white',
         padding: 10,
         borderRadius: 10,
     },
+
     commentTitle: {
         justifyContent: 'space-between',
         flexDirection: 'row',
-        fontFamily: 'Ubuntu_400Regular' 
     },
-    commentUserDate:{
-        flexDirection:'row',
-    },
-    commentUser: {
-        
-        fontFamily: 'Ubuntu_700Bold' 
 
+    commentUserDate: {
+        flexDirection: 'row',
     },
-    commentDate:{
-        color:'#999999',
-        fontFamily: 'Ubuntu_400Regular' 
-    },
-    commentHour:{
-        paddingTop:10,
-        alignItems:'flex-end',
 
+    commentDate: {
+        color: '#999'
     },
+
+    commentHour: {
+        paddingTop: 10,
+        alignItems: 'flex-end',
+    },
+
     identacao: {
         marginTop: 10,
-        backgroundColor:'red',
-
+        //backgroundColor:'red',
     },
-
-
-
-
 });
 
-export default RecipeSelected;
+export default SelectedRecipe;
