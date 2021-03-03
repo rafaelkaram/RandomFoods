@@ -1,16 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Button } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, Button, Image, StyleSheet, Dimensions } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// import { FiArrowLeft, FiTrash2 } from 'react-icons/fi';
-// import fixString from '../../assets/functions/utils'
+import BoldText from '../components/BoldText'
+import RegularText from '../components/RegularText'
+import fixString from '../assets/functions/utils'
 
 // import logoImg from '../../assets/random_foods.png';
-
 import { IIngredientType, IIngredientCart } from '../constants/interfaces';
 import api from '../services/api';
+import { block } from 'react-native-reanimated';
 
-export default function NewRecipe() {
+
+interface IngredientType {
+    tipo: string,
+    image_url: string,
+    ingredientes: [{
+        id: number,
+        nome: string,
+        id_tipo_unidade: number,
+        id_tipo_ingrediente: number,
+        sem_medida: boolean,
+        derivado_leite: boolean,
+        glutem: boolean
+    }]
+}
+
+interface IngredientsCart {
+    ingredient: {
+        id: number,
+        name: string
+    }
+}
+
+const NewRecipe = () => {
     const navigation = useNavigation();
 
     const [ingredientsCart, setIngredientsCart] = useState<IIngredientCart[]>([]);
@@ -56,11 +79,11 @@ export default function NewRecipe() {
 
     return (
         <SafeAreaView>
-            <Button
+            {/* <Button
                 title="Abrir Receitas"
-                onPress={handleNavigateToRecipe} />
+                onPress={handleNavigateToRecipe} /> */}
             <View>
-                <View>
+                {/* <View>
                     <Text>Ingredientes</Text>
                     {ingredientsCart.map(ingrediente => {
                         return (
@@ -72,9 +95,9 @@ export default function NewRecipe() {
                             </View>
                         )
                     })}
-                </View>
+                </View> */}
                 {/* <section>
-                    <img src={logoImg} alt="Random Foods" className="random-foods" />
+                    <Image src={logoImg} alt="Random Foods" className="random-foods" />
 
                     <h1>Cadastrar nova receita</h1>
                     <p>De um titulo, liste os ingredientes e faça o passo-a-passo para ajudar quem está querendo cozinhar.</p>
@@ -82,21 +105,27 @@ export default function NewRecipe() {
                 <ScrollView>
                     <Text>Nome da Receita</Text>
                     {ingredientTypes.map(ingredientTypes => {
+                        const image_url = ingredientTypes.image_url.replace('localhost', '192.168.100.5') + fixString(ingredientTypes.tipo) + `-colored.png`
+
                         return (
-                            <View key={ingredientTypes.tipo}>
+                            <View key={ingredientTypes.tipo} style={styles.mainContainer}>
                                 <View>
-                                    <Text>{ingredientTypes.tipo}</Text>
-                                    {/* <img
-                                        src={ingredientTypes.image_url + fixString(ingredientTypes.tipo) + `-colored.svg`}
-                                        alt={ingredientTypes.tipo}></img> */}
-                                    <View>
+                                    <View style={styles.ingredientTypeNameImageContainer}>
+                                        <BoldText style={styles.ingredientTypeName}>{ingredientTypes.tipo}</BoldText>
+                                        <Image style={styles.ingredientTypeIcon}
+                                            source={{
+                                                uri: image_url
+                                            }} />
+                                    </View>
+                                    <View style={styles.ingredietContainer}>
                                         {ingredientTypes.ingredientes.map(ingrediente => {
                                             return (
                                                 <TouchableOpacity
+                                                    style={selectedItems.includes(ingrediente.id) ? styles.ingredientSelected : styles.ingredient}
                                                     onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}
                                                     key={ingrediente.id}
                                                 >
-                                                    <Text>{ingrediente.nome}</Text>
+                                                    <RegularText style={selectedItems.includes(ingrediente.id) ? styles.ingredientNameSelected : styles.ingredientName}>{ingrediente.nome}</RegularText>
                                                 </TouchableOpacity>
                                             )
                                         })}
@@ -111,3 +140,70 @@ export default function NewRecipe() {
         </SafeAreaView>
     );
 }
+
+
+const Height = Dimensions.get("window").height * 0.5;
+const Width = Dimensions.get("window").width;
+
+const styles = StyleSheet.create({
+
+    mainContainer: {
+        margin: 10,
+        padding: 10,
+        backgroundColor: 'white',
+        borderRadius: 20,
+    },
+
+    ingredientTypeNameImageContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+
+    ingredientTypeName: {
+        fontSize: 18,
+        paddingLeft: 8,
+        paddingTop: 20
+    },
+
+    ingredientTypeIcon: {
+        margin: 10,
+        width: 50,
+        height: 50
+    },
+
+    ingredietContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'flex-start',
+        padding: 5
+    },
+
+    ingredient: {
+        backgroundColor: '#EAEAEA',
+        borderRadius: 8,
+        height: 40,
+        padding: 5,
+        margin: 5,
+        justifyContent: 'center'
+    },
+
+    ingredientSelected: {
+        backgroundColor: '#e02041',
+        borderRadius: 8,
+        height: 40,
+        padding: 5,
+        margin: 5,
+        justifyContent: 'center'
+    },
+
+    ingredientName: {
+        color: 'black'
+    },
+
+    ingredientNameSelected: {
+        color: 'white'
+    }
+
+})
+
+export default NewRecipe
