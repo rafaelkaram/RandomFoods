@@ -39,7 +39,7 @@ const NewRecipe = () => {
     const [ingredientsCart, setIngredientsCart] = useState<IIngredientCart[]>([]);
     const [ingredientTypes, setIngredientTypes] = useState<IIngredientType[]>([]);
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
-
+    const [load, setLoad] = useState(false)
 
 
 
@@ -51,6 +51,7 @@ const NewRecipe = () => {
         api.get('ingredientetype')
             .then(response => {
                 setIngredientTypes(response.data);
+                setLoad(true)
             })
     }, []);
 
@@ -77,11 +78,22 @@ const NewRecipe = () => {
         }
     }
 
+
+    if (!load) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Image
+                    source={require('../assets/giphy.gif')}
+                    style={{ width: 200, height: 200, }}
+                />
+            </View>)
+    }
+
     return (
         <SafeAreaView>
-            {/* <Button
+            <Button
                 title="Abrir Receitas"
-                onPress={handleNavigateToRecipe} /> */}
+                onPress={handleNavigateToRecipe} />
             <View>
                 {/* <View>
                     <Text>Ingredientes</Text>
