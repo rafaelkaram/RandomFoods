@@ -51,7 +51,7 @@ const Recipe = () => {
                                     onPress={() => handleNavigateToRecipeSelected(item.id)}>
                                     <Text style={styles.itemListImage}>Imagem</Text>
                                     <Text style={styles.itemListTitle}>{item.receita}</Text>
-                                    <Rating imageSize={20} readonly startingValue={item?.nota} />
+                                    <Rating imageSize={20} readonly startingValue={Number(item?.nota)} />
                                 </TouchableOpacity>
                             </View>
                         )
