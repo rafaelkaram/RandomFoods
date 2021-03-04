@@ -25,7 +25,7 @@ const Drawer = createDrawerNavigator()
 
 const RecipeStack = () =>{
     return(
-        <AppStack.Navigator>
+        <AppStack.Navigator headerMode={'none'}>
             <AppStack.Screen name="Nova Receita" component={NewRecipe}/>
             <AppStack.Screen name="Receita" component={Recipe}/>
             <AppStack.Screen name="Receita Selecionada" component={SelectedRecipe}/>
