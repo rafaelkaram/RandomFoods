@@ -13,6 +13,7 @@ import NewRecipe from './screens/NewRecipe'
 import Dashboard from './screens/Dashboard'
 import Recipe from './screens/Recipe'
 import SelectedRecipe from './screens/SelectedRecipe'
+import Login from './screens/Login'
 
 import App from '../App'
 
@@ -34,18 +35,18 @@ const RecipeStack = () =>{
 }
 
 
-const UserAccount = () => {
+/*const UserAccount = () => {
     return (
         <SafeAreaView style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
             <Text>UserAccount</Text>
         </SafeAreaView>
     )
-}
+}*/
 
 const UserDrawer = () => {
     return (
         <Drawer.Navigator drawerPosition='right'>
-            <Drawer.Screen name='Account' component={UserAccount} />
+            <Drawer.Screen name='Login' component={Login} />
             <Drawer.Screen name='Dashboard' component={Dashboard} />
         </Drawer.Navigator>
     )
