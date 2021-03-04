@@ -3,6 +3,7 @@ import { Text, View, ScrollView, StyleSheet, Dimensions, FlatList, TouchableOpac
 import { Rating, AirbnbRating } from 'react-native-elements';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { DataTable } from 'react-native-paper';
 import moment from 'moment';
 import "moment/min/locales";
 
@@ -32,7 +33,7 @@ function SelectedRecipe({ route }: { route: any }) {
         });
         api.get(`comentar/${idRecipe}`)
             .then(response => {
-                console.log(response.data);
+                //console.log(response.data);
                 setComments(response.data.comentarios);
                 setSubComments(response.data.filhos);
             });
@@ -78,7 +79,7 @@ function SelectedRecipe({ route }: { route: any }) {
         if (subComments) {
             const childComments = subComments.filter(obj => obj.id_pai === sub);
             if (childComments) {
-                console.log(childComments);
+                //console.log(childComments);
                 return (
                     <View style={styles.identacao}>
                         <ShowComments comentarios={childComments} />
@@ -113,6 +114,7 @@ function SelectedRecipe({ route }: { route: any }) {
                     </View>
                     <View style={styles.ingredientList}>
                         <BoldText>INGREDIENTES:</BoldText>
+                        
                         {recipe?.ingredientes.map(ingredient => {
                             return (
                                 <View style={styles.ingredient} key={ingredient.id}>
