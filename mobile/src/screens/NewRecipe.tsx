@@ -115,9 +115,8 @@ const NewRecipe = () => {
                     <p>De um titulo, liste os ingredientes e faça o passo-a-passo para ajudar quem está querendo cozinhar.</p>
                 </section> */}
                 <ScrollView>
-                    <Text>Nome da Receita</Text>
                     {ingredientTypes.map(ingredientTypes => {
-                        const image_url = ingredientTypes.image_url.replace('localhost', '192.168.100.5') + fixString(ingredientTypes.tipo) + `-colored.png`
+                        const image_url = ingredientTypes.image_url.replace('localhost', '192.168.100.4') + fixString(ingredientTypes.tipo) + `-colored.png`
 
                         return (
                             <View key={ingredientTypes.tipo} style={styles.mainContainer}>
