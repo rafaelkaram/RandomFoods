@@ -78,6 +78,7 @@ const NewRecipe = () => {
 
             setIngredientsCart([...ingredientsCart, ingredient]);
         }
+
     }
 
 
@@ -93,6 +94,7 @@ const NewRecipe = () => {
 
     return (
         <SafeAreaView>
+<<<<<<< HEAD
             <View style={styles.newRecipeImageBasketContainer}>
                 <Image
                     style={styles.newRecipeImage}
@@ -177,6 +179,58 @@ const NewRecipe = () => {
                                             </TouchableOpacity>
                                         )
                                     })}
+=======
+            <Button
+                title="Abrir Receitas"
+                onPress={handleNavigateToRecipe} />
+            <View>
+                {/* <View>
+                    <Text>Ingredientes</Text>
+                    {ingredientsCart.map(ingrediente => {
+                        return (
+                            <View key={ingrediente.ingredient.id}>
+                                <Text>{ingrediente.ingredient.name}</Text>
+                                <TouchableOpacity onPress={() => handleSelectItem(ingrediente.ingredient.id, ingrediente.ingredient.name)}>
+                                    <Text>Lixo</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                    })}
+                </View> */}
+                {/* <section>
+                    <Image src={logoImg} alt="Random Foods" className="random-foods" />
+
+                    <h1>Cadastrar nova receita</h1>
+                    <p>De um titulo, liste os ingredientes e faça o passo-a-passo para ajudar quem está querendo cozinhar.</p>
+                </section> */}
+                <ScrollView>
+                    {ingredientTypes.map(ingredientTypes => {
+                        const image_url = ingredientTypes.image_url.replace('localhost', '192.168.100.4') + fixString(ingredientTypes.tipo) + `-colored.png`
+
+                        return (
+                            <View key={ingredientTypes.tipo} style={styles.mainContainer}>
+                                <View>
+                                    <View style={styles.ingredientTypeNameImageContainer}>
+                                        <BoldText style={styles.ingredientTypeName}>{ingredientTypes.tipo}</BoldText>
+                                        <Image style={styles.ingredientTypeIcon}
+                                            source={{
+                                                uri: image_url
+                                            }} />
+                                    </View>
+                                    <View style={styles.ingredietContainer}>
+                                        {ingredientTypes.ingredientes.map(ingrediente => {
+                                            return (
+                                                <TouchableOpacity
+                                                    style={selectedItems.includes(ingrediente.id) ? styles.ingredientSelected : styles.ingredient}
+                                                    onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}
+                                                    key={ingrediente.id}
+                                                >
+                                                    <RegularText style={selectedItems.includes(ingrediente.id) ? styles.ingredientNameSelected : styles.ingredientName}>{ingrediente.nome}</RegularText>
+                                                </TouchableOpacity>
+                                            )
+                                        })}
+                                    </View>
+>>>>>>> cccd9a6b6e34b829d30e1d712a68ab747d94dc4f
                                 </View>
                             </View>
                         </View>
