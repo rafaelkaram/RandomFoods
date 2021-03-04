@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Text, ScrollView, TouchableOpacity, View, StyleSheet, ImageBackgroundComponent } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { Link, useHistory } from 'react-router-dom';
 import { Input } from "react-native-elements";
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -9,13 +11,36 @@ import Colors from '../constants/colors';
 
 
 const Login = () => {
-
+    const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+
+    //const history = useHistory();
+
 
     useEffect(() => {
 
     }, [])
+
+    async function handleLogin(e:any) {
+       /* e.preventDefault();
+
+        try {
+            const response = await api.post('session',  { email, senha });
+
+            localStorage.setItem('userId', response.data.id);
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userName', response.data.nome);
+            console.log(localStorage.userId)
+
+            navigation.navigate('Profile');
+
+            //history.push('/profile');
+        } catch (error) {
+            alert(error.response.data.error);
+        }
+*/
+    }
 
     return (
         <SafeAreaView>
@@ -50,7 +75,7 @@ const Login = () => {
                     />
                     <View style={styles.buttons}>
                         <View style={styles.singleButt}>
-                        <TouchableOpacity >
+                        <TouchableOpacity  onPress={() => handleLogin}>
                             <Text style={{color:'white'}}>
                                 Entrar
                             </Text>
