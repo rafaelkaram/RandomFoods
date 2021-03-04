@@ -76,6 +76,16 @@ interface IVote {
   num_notas: number
 }
 
+interface IUser {
+  id: number,
+  nome: string,
+  email: string,
+  data_cadastro: Date,
+  data_ultimo_acesso: Date,
+  data_ultima_acao: Date,
+  ativo: boolean
+}
+
 export {
   IRecipe,
   IRecipeType,
@@ -84,5 +94,6 @@ export {
   IIngredientCart,
   ICategory,
   IComment,
-  IVote
+  IVote,
+  IUser
 }

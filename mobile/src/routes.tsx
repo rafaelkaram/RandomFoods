@@ -14,6 +14,7 @@ import Dashboard from './screens/Dashboard'
 import Recipe from './screens/Recipe'
 import SelectedRecipe from './screens/SelectedRecipe'
 import Login from './screens/Login'
+import Profile from './screens/Profile'
 
 import App from '../App'
 import SearchRecipe from './screens/SearchRecipe'
@@ -59,6 +60,7 @@ const UserDrawer = () => {
     return (
         <Drawer.Navigator drawerPosition='right'>
             <Drawer.Screen name='Login' component={Login} />
+            <Drawer.Screen name='Profile' component={Profile} />
             <Drawer.Screen name='Dashboard' component={Dashboard} />
         </Drawer.Navigator>
     )
