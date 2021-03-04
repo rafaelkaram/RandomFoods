@@ -5,35 +5,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import BoldText from '../components/BoldText'
 import RegularText from '../components/RegularText'
 import fixString from '../assets/functions/utils'
-
-// import logoImg from '../../assets/random_foods.png';
 import { IIngredientType, IIngredientCart } from '../constants/interfaces';
 import api from '../services/api';
-import { block } from 'react-native-reanimated';
 
-
-interface IngredientType {
-    tipo: string,
-    image_url: string,
-    ingredientes: [{
-        id: number,
-        nome: string,
-        id_tipo_unidade: number,
-        id_tipo_ingrediente: number,
-        sem_medida: boolean,
-        derivado_leite: boolean,
-        glutem: boolean
-    }]
-}
-
-interface IngredientsCart {
-    ingredient: {
-        id: number,
-        name: string
-    }
-}
-
-const NewRecipe = () => {
+const SearchRecipe = () => {
     const navigation = useNavigation();
 
     const [ingredientsCart, setIngredientsCart] = useState<IIngredientCart[]>([]);
@@ -44,10 +19,6 @@ const NewRecipe = () => {
 
 
     useEffect(() => {
-        // api.get('ingrediente')
-        //     .then(response => {
-        //         setIngredient(response.data);
-        //     });
         api.get('ingredientetype')
             .then(response => {
                 setIngredientTypes(response.data);
@@ -57,7 +28,7 @@ const NewRecipe = () => {
 
 
     function handleNavigateToRecipe() {
-        navigation.navigate('Receita');
+        navigation.navigate('Receita', {ingredientes: selectedItems});
     }
 
     function handleSelectItem(id: number, name: string) {
@@ -76,7 +47,6 @@ const NewRecipe = () => {
 
             setIngredientsCart([...ingredientsCart, ingredient]);
         }
-
     }
 
 
@@ -93,31 +63,13 @@ const NewRecipe = () => {
     return (
         <SafeAreaView>
             <Button
-                title="Abrir Receitas"
+                title="Pesquisar Receitas"
                 onPress={handleNavigateToRecipe} />
             <View>
-                {/* <View>
-                    <Text>Ingredientes</Text>
-                    {ingredientsCart.map(ingrediente => {
-                        return (
-                            <View key={ingrediente.ingredient.id}>
-                                <Text>{ingrediente.ingredient.name}</Text>
-                                <TouchableOpacity onPress={() => handleSelectItem(ingrediente.ingredient.id, ingrediente.ingredient.name)}>
-                                    <Text>Lixo</Text>
-                                </TouchableOpacity>
-                            </View>
-                        )
-                    })}
-                </View> */}
-                {/* <section>
-                    <Image src={logoImg} alt="Random Foods" className="random-foods" />
-
-                    <h1>Cadastrar nova receita</h1>
-                    <p>De um titulo, liste os ingredientes e faça o passo-a-passo para ajudar quem está querendo cozinhar.</p>
-                </section> */}
                 <ScrollView>
+                    <Text>Nome da Receita</Text>
                     {ingredientTypes.map(ingredientTypes => {
-                        const image_url = ingredientTypes.image_url.replace('localhost', '192.168.100.4') + fixString(ingredientTypes.tipo) + `-colored.png`
+                        const image_url = ingredientTypes.image_url.replace('localhost', '192.168.1.102') + fixString(ingredientTypes.tipo) + `-colored.png`
 
                         return (
                             <View key={ingredientTypes.tipo} style={styles.mainContainer}>
@@ -147,7 +99,6 @@ const NewRecipe = () => {
                         )
                     })}
                 </ScrollView>
-                {/* <button className="button" type="submit">Cadastrar</button>  */}
             </View>
         </SafeAreaView>
     );
@@ -218,4 +169,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default NewRecipe
+export default SearchRecipe;

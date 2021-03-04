@@ -39,7 +39,7 @@ routes.get('/receitas', ReceitaController.fetch);
 routes.get('/receita/:id', ReceitaController.search);
 routes.post('/receita', ReceitaController.create);
 routes.delete('/receita/:id', ReceitaController.delete);
-routes.get('/receitasByIngredient', ReceitaController.searchByIngredient);
+routes.post('/receitasByIngredient', ReceitaController.searchByIngredient);
 
 
 routes.get('/tipo-unidade', TipoUnidadeController.index);
