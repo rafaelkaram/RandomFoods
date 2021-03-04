@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image
 import { VictoryPie, VictoryLegend } from 'victory-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DataTable } from 'react-native-paper';
+import ItalicText from '../components/ItalicText'
 
 import api from '../services/api'
 import { IRecipeType, ICategory, IVote } from '../constants/interfaces';
@@ -84,7 +85,7 @@ const UserDashboard = () => {
                 </View>
                 <View style={styles.pieContainer}>
                     <View style={styles.typePie}>
-                        <Text style={styles.chartsTitle}>{`Receitas\npor Tipo`}</Text>
+                        <ItalicText style={styles.chartsTitle}>{`Receitas\npor Tipo`}</ItalicText>
                         <VictoryPie
                             height={((chartHeight / 2) - 50)}
                             width={(chartWidth / 2)}
@@ -103,7 +104,7 @@ const UserDashboard = () => {
                     </View>
 
                     <View style={styles.categoryPie}>
-                        <Text style={styles.chartsTitle}>{`Receitas\npor Categoria`}</Text>
+                        <ItalicText style={styles.chartsTitle}>{`Receitas\npor Categoria`}</ItalicText>
 
                         <VictoryPie
                             height={((chartHeight / 2) - 50)}
@@ -243,14 +244,6 @@ const styles = StyleSheet.create({
 
     tableTitle: {
         textAlign: 'center',
-        fontFamily: "Ubuntu_500Medium_Italic",
-        color: "#f87062",
-        textShadowColor: 'black',
-        textShadowRadius: 0.5,
-        textShadowOffset: {
-            width: 0.5,
-            height: 0.5
-        },
     },
 
     topVotedTable: {
