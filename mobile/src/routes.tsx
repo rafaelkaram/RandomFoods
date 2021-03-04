@@ -16,6 +16,7 @@ import SelectedRecipe from './screens/SelectedRecipe'
 import Login from './screens/Login'
 
 import App from '../App'
+import SearchRecipe from './screens/SearchRecipe'
 
 const AppStack = createStackNavigator()
 
@@ -24,12 +25,23 @@ const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator()
 
 
-const RecipeStack = () =>{
-    return(
+const RecipeStack = () => {
+    return (
         <AppStack.Navigator>
-            <AppStack.Screen name="Nova Receita" component={NewRecipe}/>
-            <AppStack.Screen name="Receita" component={Recipe}/>
-            <AppStack.Screen name="Receita Selecionada" component={SelectedRecipe}/>
+            <AppStack.Screen name="Nova Receita" component={NewRecipe} />
+            <AppStack.Screen name="Receita" component={Recipe} />
+            <AppStack.Screen name="Receita Selecionada" component={SelectedRecipe} />
+        </AppStack.Navigator>
+    )
+}
+
+const HomeStack = () => {
+    return (
+        <AppStack.Navigator>
+            <AppStack.Screen name="Home" component={Home} />
+            <AppStack.Screen name="Pesquisar Receitas" component={SearchRecipe} />
+            <AppStack.Screen name="Receita" component={Recipe} />
+            <AppStack.Screen name="Receita Selecionada" component={SelectedRecipe} />
         </AppStack.Navigator>
     )
 }
@@ -37,7 +49,7 @@ const RecipeStack = () =>{
 
 /*const UserAccount = () => {
     return (
-        <SafeAreaView style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+        <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text>UserAccount</Text>
         </SafeAreaView>
     )
@@ -63,8 +75,8 @@ const Routes = () => {
                             <MaterialCommunityIcons name="home" color={color} size={size} />
                         ),
                     }}
-                    name="Home"
-                    component={Home} />
+                    name="HomeStack"
+                    component={HomeStack} />
 
                 <Tab.Screen
                     options={{

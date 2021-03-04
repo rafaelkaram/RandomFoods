@@ -11,17 +11,28 @@ const { width } = Dimensions.get('window')
 const numberGrid = 3;
 const itemWidth = width / numberGrid;
 
-const Recipe = () => {
+const Recipe = ({ route }: { route: any }) => {
 
     const navigation = useNavigation();
     const [recipes, setRecipes] = useState<IRecipe[]>([])
     const [load, setLoad] = useState(false)
 
     useEffect(() => {
-        api.get('receita').then(response => {
-            setRecipes(response.data)
-            setLoad(true)
-        })
+        if (route.params) {
+            const json = route.params.ingredientes
+            api.post('receitasByIngredient', {
+                data: json
+            }
+            ).then(response => {
+                setRecipes(response.data)
+                setLoad(true)
+            })
+        } else {
+            api.get('receita').then(response => {
+                setRecipes(response.data)
+                setLoad(true)
+            })
+        }
 
     }, [])
 
