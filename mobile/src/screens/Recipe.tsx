@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Text, View, ScrollView, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native'
 import { Rating } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
-
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { IRecipe } from '../constants/interfaces';
 import Colors from '../constants/colors';
 import api from '../services/api'
@@ -52,7 +52,7 @@ const Recipe = ({ route }: { route: any }) => {
     }
 
     return (
-        <>
+        <SafeAreaView>
             <ScrollView style={styles.body}>
                 <Text style={styles.title}>Minhas receitas</Text>
                 <View style={styles.columns}>
@@ -70,7 +70,7 @@ const Recipe = ({ route }: { route: any }) => {
                     })}
                 </View>
             </ScrollView>
-        </>
+        </SafeAreaView>
     )
 }
 const styles = StyleSheet.create({

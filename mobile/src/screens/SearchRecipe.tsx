@@ -31,7 +31,9 @@ const SearchRecipe = () => {
 
 
     function handleNavigateToRecipe() {
-        navigation.navigate('Receita', { ingredientes: selectedItems });
+
+        if(ingredientsCart.length > 0)
+            navigation.navigate('Receita', { ingredientes: selectedItems })
     }
 
     function handleSelectItem(id: number, name: string) {
@@ -293,7 +295,7 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 80,
         position: 'absolute',
-        top: 640,
+        top: 650,
         right: 20,
         backgroundColor: '#e02041',
         justifyContent: 'center',

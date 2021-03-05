@@ -4,15 +4,16 @@ import { Rating, AirbnbRating } from 'react-native-elements';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
-import moment from 'moment';
-import "moment/min/locales";
-
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { IComment, IRecipe } from '../constants/interfaces';
 import Colors from '../constants/colors';
 import RegularText from '../components/RegularText';
 import Category from '../components/Category';
 import BoldText from '../components/BoldText';
 import api from '../services/api'
+import moment from 'moment';
+import "moment/min/locales";
+
 
 const { height, width } = Dimensions.get('window')
 const numberGrid = 3;
@@ -46,7 +47,6 @@ function SelectedRecipe({ route }: { route: any }) {
         } else {
 
             return (
-
                 <View style={styles.comments} >
                     { comentarios.map((comment: { usuario: string; avaliacao: number; data: Date; valor: string; id: number; }) => (
                         <View key={comment.id}>
@@ -92,7 +92,7 @@ function SelectedRecipe({ route }: { route: any }) {
 
     return (
 
-        <>
+        <SafeAreaView>
             <ScrollView>
                 <View style={styles.container}>
                     <View style={styles.itemListTitle}>
@@ -101,7 +101,7 @@ function SelectedRecipe({ route }: { route: any }) {
                     </View>
                     <View style={styles.note}>
                         <BoldText>NOTA:</BoldText>
-                        <Rating imageSize={20} readonly startingValue={recipe?.nota} />
+                        <Rating imageSize={20} readonly startingValue={Number(recipe?.nota)} />
                     </View>
 
                     <View style={styles.category}>
@@ -135,7 +135,7 @@ function SelectedRecipe({ route }: { route: any }) {
                 </View>
 
             </ScrollView>
-        </>
+        </SafeAreaView>
     );
 }
 
