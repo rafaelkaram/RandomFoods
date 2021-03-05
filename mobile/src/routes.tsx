@@ -38,7 +38,7 @@ const RecipeStack = () => {
 
 const HomeStack = () => {
     return (
-        <AppStack.Navigator>
+        <AppStack.Navigator headerMode={'none'}>
             <AppStack.Screen name="Home" component={Home} />
             <AppStack.Screen name="Pesquisar Receitas" component={SearchRecipe} />
             <AppStack.Screen name="Receita" component={Recipe} />

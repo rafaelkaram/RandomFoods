@@ -57,7 +57,7 @@ function SelectedRecipe({ route }: { route: any }) {
                                             <BoldText>{comment.usuario}</BoldText>
                                             <RegularText style={styles.commentDate}> - {moment(comment.data).startOf('day').fromNow()}</RegularText>
                                         </View>
-                                        <Rating imageSize={10} readonly startingValue={comment?.avaliacao} />
+                                        <Rating imageSize={10} readonly startingValue={Number(comment?.avaliacao)} />
 
                                     </View>
                                 </View>

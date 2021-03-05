@@ -212,11 +212,7 @@ module.exports = {
     },
 
     async searchByIngredient(request, response) {
-        const ids = []
-
-        for (var key in request.body) {
-            ids.push(request.body[key])
-        }
+        const {ingredientes} = request.body
 
         /*const idsR = await connection('receita_ingrediente')
             .whereIn('id_ingrediente', ids)
@@ -228,11 +224,12 @@ module.exports = {
         FROM
             receita_ingrediente
         WHERE
-            id_ingrediente IN (${ids})
+            id_ingrediente IN (${ingredientes})
         GROUP BY
             id_receita 
-        HAVING count(*) = ${ids.length}`);
+        HAVING count(*) = ${ingredientes.length}`);
 
+        //pode ser util no futuro
         /*const receitas = await connection('receita')
             .innerJoin('receita_ingrediente', 'receita_ingrediente.id_receita', '=', 'receita.id')
             .innerJoin('ingrediente', 'receita_ingrediente.id_ingrediente', '=', 'ingrediente.id')
@@ -240,13 +237,13 @@ module.exports = {
             .select('receita.*');*/
 
         
-        const ids2 = []
+        const ids = []
         for (var key in idsReceita.rows) {
-            ids2.push(idsReceita.rows[key].id_receita)
+            ids.push(idsReceita.rows[key].id_receita)
         }
 
         const receitas = await connection('receita')
-            .whereIn('id', ids2)
+            .whereIn('id', ids)
             .select('*')
 
         const resp = [];
