@@ -39,7 +39,7 @@ const Profile = () => {
             })
         });
        
-    }, [])
+    }, [user])
 
     const pieTypeData = recipeType.map((item) => {
         return (
