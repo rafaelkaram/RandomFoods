@@ -19,9 +19,10 @@ const Recipe = ({ route }: { route: any }) => {
 
     useEffect(() => {
         if (route.params) {
-            const json = route.params.ingredientes
+            const {ingredientes} = route.params
+            
             api.post('receitasByIngredient', {
-                data: json
+               ingredientes
             }
             ).then(response => {
                 setRecipes(response.data)
@@ -33,7 +34,7 @@ const Recipe = ({ route }: { route: any }) => {
                 setLoad(true)
             })
         }
-
+        
     }, [])
 
     function handleNavigateToRecipeSelected(id: number) {

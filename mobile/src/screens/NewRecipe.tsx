@@ -151,7 +151,7 @@ const NewRecipe = () => {
                     </View>
                 </BlurView>
             </Modal>
-            <ScrollView>
+            <ScrollView style={{marginBottom: 110}}>
                 {ingredientTypes.map(ingredientTypes => {
                     const image_url = ingredientTypes.image_url.replace('localhost', '192.168.100.5') + fixString(ingredientTypes.tipo) + `-colored.png`
 
