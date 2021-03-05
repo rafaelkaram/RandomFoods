@@ -23,8 +23,7 @@ const Profile = () => {
         api.get(`user`).then(response => {
             setUser(response.data[0]);
             //console.log(user)
-        });
-        api.get(`recipesType/${user?.id}`)
+            api.get(`recipesType/${user?.id}`)
             .then(response => {
                 setRecipeType(response.data)
 
@@ -38,6 +37,8 @@ const Profile = () => {
             .then(response => {
                 setTopVotedRecipe(response.data)
             })
+        });
+       
     }, [])
 
     const pieTypeData = recipeType.map((item) => {
