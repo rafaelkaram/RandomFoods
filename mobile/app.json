@@ -27,6 +27,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "facebookScheme": "fb145070974156880",
+    "facebookAppId": "145070974156880",
+    "facebookDisplayName": "Random Foods"
   }
 }
