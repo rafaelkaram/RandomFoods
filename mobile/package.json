@@ -12,8 +12,8 @@
     "yarnServerProd": "yarn prod --prefix ../server",
     "dev": "concurrently \"npm run start\" \"npm run server\"",
     "prod": "concurrently \"npm run start\" \"npm run serverProd\"",
-    "yarnDev": "concurrently \"yarn start\" \"yarn yarnServer\"",
-    "yarnProd": "concurrently \"yarn start\" \"yarn yarnServerProd\""
+    "yDev": "concurrently \"yarn start\" \"yarn yarnServer\"",
+    "yProd": "concurrently \"yarn start\" \"yarn yarnServerProd\""
   },
   "dependencies": {
     "@expo-google-fonts/oswald": "^0.1.0",
