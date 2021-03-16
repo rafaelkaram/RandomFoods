@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Button, Image, StyleSheet, Dimensions, Modal, Alert, Pressable } from 'react-native'
+import { Input } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
@@ -13,28 +14,6 @@ import { IIngredientType, IIngredientCart } from '../constants/interfaces';
 import api from '../services/api';
 import { block } from 'react-native-reanimated';
 
-
-interface IngredientType {
-    tipo: string,
-    image_url: string,
-    ingredientes: [{
-        id: number,
-        nome: string,
-        id_tipo_unidade: number,
-        id_tipo_ingrediente: number,
-        sem_medida: boolean,
-        derivado_leite: boolean,
-        glutem: boolean
-    }]
-}
-
-interface IngredientsCart {
-    ingredient: {
-        id: number,
-        name: string
-    }
-}
-
 const NewRecipe = () => {
     const navigation = useNavigation();
 
@@ -43,6 +22,7 @@ const NewRecipe = () => {
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
     const [load, setLoad] = useState(false)
     const [modalVisible, setModalVisible] = useState(false);
+    const [nomeIngrediente, setnomeIngrediente] = useState('');
 
 
     useEffect(() => {
@@ -151,10 +131,18 @@ const NewRecipe = () => {
                     </View>
                 </BlurView>
             </Modal>
+            <Input
+                    placeholder="Pesquise por algum ingrediente"
+                    onChangeText={(value) => setnomeIngrediente(value)}
+                    value={nomeIngrediente}
+                    inputContainerStyle={{ borderBottomWidth: 0 }}
+                />
             <ScrollView style={{marginBottom: 110}}>
                 {ingredientTypes.map(ingredientTypes => {
-                    const image_url = ingredientTypes.image_url.replace('localhost', '192.168.100.5') + fixString(ingredientTypes.tipo) + `-colored.png`
-
+                    const image_url = ingredientTypes.image_url.replace('localhost', '192.168.1.102') + fixString(ingredientTypes.tipo) + `-colored.png`
+                    if (ingredientTypes.ingredientes.filter(ingrediente => ingrediente.nome.toLowerCase().match(nomeIngrediente.toLowerCase())).length === 0){
+                        return;
+                    }
                     return (
                         <View key={ingredientTypes.tipo} style={styles.mainContainer}>
                             <View>
@@ -166,7 +154,7 @@ const NewRecipe = () => {
                                         }} />
                                 </View>
                                 <View style={styles.ingredietContainer}>
-                                    {ingredientTypes.ingredientes.map(ingrediente => {
+                                    {ingredientTypes.ingredientes.filter(ingrediente => ingrediente.nome.toLowerCase().match(nomeIngrediente.toLowerCase())).map(ingrediente => {
                                         return (
                                             <TouchableOpacity
                                                 style={selectedItems.includes(ingrediente.id) ? styles.ingredientSelected : styles.ingredient}

@@ -5,7 +5,15 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "server": "npm run dev --prefix ../server",
+    "serverProd": "npm run prod --prefix ../server",
+    "yarnServer": "yarn dev --prefix ../server",
+    "yarnServerProd": "yarn prod --prefix ../server",
+    "dev": "concurrently \"npm run start\" \"npm run server\"",
+    "prod": "concurrently \"npm run start\" \"npm run serverProd\"",
+    "yarnDev": "concurrently \"yarn start\" \"yarn yarnServer\"",
+    "yarnProd": "concurrently \"yarn start\" \"yarn yarnServerProd\""
   },
   "dependencies": {
     "@expo-google-fonts/oswald": "^0.1.0",
@@ -20,6 +28,8 @@
     "date-fns": "^2.17.0",
     "expo": "~40.0.0",
     "expo-app-loading": "^1.0.1",
+    "expo-blur": "~8.2.2",
+    "expo-facebook": "^10.0.0",
     "expo-font": "~8.4.0",
     "expo-image-picker": "~9.2.0",
     "expo-permissions": "~10.0.0",
@@ -30,6 +40,7 @@
     "react-icons": "^4.1.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
     "react-native-elements": "^3.2.0",
+    "react-native-fbsdk": "^3.0.0",
     "react-native-gesture-handler": "~1.8.0",
     "react-native-paper": "^4.7.1",
     "react-native-reanimated": "~1.13.0",
@@ -37,8 +48,7 @@
     "react-native-screens": "~2.15.2",
     "react-native-svg": "12.1.0",
     "react-native-web": "~0.13.12",
-    "victory-native": "^35.3.1",
-    "expo-blur": "~8.2.2"
+    "victory-native": "^35.3.1"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
@@ -46,6 +56,7 @@
     "@types/react-dom": "~16.9.8",
     "@types/react-native": "^0.63.40",
     "@types/react-router-dom": "^5.1.7",
+    "concurrently": "^6.0.0",
     "typescript": "~4.0.0"
   },
   "private": true
