@@ -27,18 +27,19 @@ function SelectedRecipe({ route }: { route: any }) {
     const [comments, setComments] = useState<IComment[]>([]);
     const [subComments, setSubComments] = useState<IComment[]>([]);
     const [nota, setNota] = useState<number>()
-    const [names,setNames] = useState([]);
+    const [initials,setInitials] = useState("");
 
     useEffect(() => {
         api.get(`receita/${idRecipe}`).then(response => {
             setRecipe(response.data);
             setNota(recipe?.nota)
-            // const names1= recipe?.usuario.split(" ")
-            // setNames(names1.slice());
-            // const tam  = names.length
-            // const firstName :string = names[0]
-            // const lastName :string = names[tam] 
-            //console.log(firstName)
+            
+            const names= response.data?.usuario.split(" ")
+           
+            const tam  = names.length - 1
+            const firstName :string = names[0]
+            const lastName :string = names[tam] 
+            setInitials(firstName[0]+lastName[0]);
            
         });
         api.get(`comentar/${idRecipe}`)
@@ -113,7 +114,7 @@ function SelectedRecipe({ route }: { route: any }) {
                         <Avatar
                             size="small"
                             rounded
-                            title="AK"
+                            title={initials}
                             activeOpacity={0.7}
                             containerStyle={{ backgroundColor: 'lightgrey' }}
                         />
