@@ -10,6 +10,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    extra: {
+      ...process.env,
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
