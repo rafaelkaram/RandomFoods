@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Text, View, ScrollView, StyleSheet, Dimensions, FlatList, TouchableOpacity } from 'react-native'
-import { Rating, AirbnbRating } from 'react-native-elements';
+import { Rating, Avatar } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -27,11 +27,20 @@ function SelectedRecipe({ route }: { route: any }) {
     const [comments, setComments] = useState<IComment[]>([]);
     const [subComments, setSubComments] = useState<IComment[]>([]);
     const [nota, setNota] = useState<number>()
+    const [initials,setInitials] = useState("");
 
     useEffect(() => {
         api.get(`receita/${idRecipe}`).then(response => {
             setRecipe(response.data);
             setNota(recipe?.nota)
+            
+            const names= response.data?.usuario.split(" ")
+           
+            const tam  = names.length - 1
+            const firstName :string = names[0]
+            const lastName :string = names[tam] 
+            setInitials(firstName[0]+lastName[0]);
+           
         });
         api.get(`comentar/${idRecipe}`)
             .then(response => {
@@ -98,8 +107,18 @@ function SelectedRecipe({ route }: { route: any }) {
             <ScrollView>
                 <View style={styles.container}>
                     <View style={styles.itemListTitle}>
-                        <BoldText style={ styles.titleText }>{recipe?.receita}</BoldText>
+                        <BoldText style={styles.titleText}>{recipe?.receita}</BoldText>
 
+                    </View>
+                    <View style={styles.autor}>
+                        <Avatar
+                            size="small"
+                            rounded
+                            title={initials}
+                            activeOpacity={0.7}
+                            containerStyle={{ backgroundColor: 'lightgrey' }}
+                        />
+                        <Text style={styles.autorName}>{recipe?.usuario}</Text>
                     </View>
                     <View style={styles.note}>
                         <BoldText>NOTA:</BoldText>
@@ -109,14 +128,14 @@ function SelectedRecipe({ route }: { route: any }) {
                     <View style={styles.category}>
                         {recipe?.categorias.map(category => {
                             return (
-                                    <Category key={category} nome={category} />
+                                <Category key={category} nome={category} />
                             )
                         })}
 
                     </View>
                     <View style={styles.ingredientList}>
                         <BoldText>INGREDIENTES:</BoldText>
-                        
+
                         {recipe?.ingredientes.map(ingredient => {
                             return (
                                 <View style={styles.ingredient} key={ingredient.id}>
@@ -153,7 +172,16 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center'
     },
-
+    autor: {
+        margin: 10,
+        padding:10,
+        backgroundColor: 'white',
+        flexDirection:'row',
+        alignItems:'center',
+    },
+    autorName:{
+        marginLeft:15,
+    },
     rating: {
         backgroundColor: Colors.dimmedBackground,
     },
@@ -176,7 +204,7 @@ const styles = StyleSheet.create({
     },
 
     category: {
-        flexDirection:'row',
+        flexDirection: 'row',
         flexWrap: 'wrap',
     },
 

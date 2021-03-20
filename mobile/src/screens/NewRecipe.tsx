@@ -140,7 +140,7 @@ const NewRecipe = () => {
             <ScrollView style={{marginBottom: 110}}>
                 {ingredientTypes.map(ingredientTypes => {
                     const image_url = ingredientTypes.image_url.replace('localhost', '192.168.1.102') + fixString(ingredientTypes.tipo) + `-colored.png`
-                    if (ingredientTypes.ingredientes.filter(ingrediente => ingrediente.nome.toLowerCase().match(nomeIngrediente.toLowerCase())).length === 0){
+                    if (ingredientTypes.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase())).length === 0){
                         return;
                     }
                     return (
@@ -154,7 +154,7 @@ const NewRecipe = () => {
                                         }} />
                                 </View>
                                 <View style={styles.ingredietContainer}>
-                                    {ingredientTypes.ingredientes.filter(ingrediente => ingrediente.nome.toLowerCase().match(nomeIngrediente.toLowerCase())).map(ingrediente => {
+                                    {ingredientTypes.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase())).map(ingrediente => {
                                         return (
                                             <TouchableOpacity
                                                 style={selectedItems.includes(ingrediente.id) ? styles.ingredientSelected : styles.ingredient}

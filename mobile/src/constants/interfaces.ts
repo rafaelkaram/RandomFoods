@@ -1,6 +1,7 @@
 interface IRecipe {
   id: number,
   id_usuario: number,
+  usuario: string,
   receita: string,
   descricao: string,
   nota: number,
