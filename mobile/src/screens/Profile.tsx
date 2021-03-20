@@ -17,12 +17,19 @@ const Profile = () => {
     const [recipeType, setRecipeType] = useState<IRecipeType[]>([])
     const [recipeCategory, setRecipeCategory] = useState<ICategory[]>([])
     const [topVotedRecipe, setTopVotedRecipe] = useState<IVote[]>([])
+    const [initials,setInitials] = useState("");
 
 
     useEffect(() => {
         api.get(`user`).then(response => {
             setUser(response.data[0]);
-            //console.log(user)
+
+            const names= response.data[0]?.nome.split(" ")
+            const tam  = names.length - 1
+            const firstName :string = names[0]
+            const lastName :string = names[tam] 
+            setInitials(firstName[0]+lastName[0]);
+
             api.get(`recipesType/${user?.id}`)
             .then(response => {
                 setRecipeType(response.data)
@@ -84,7 +91,7 @@ const Profile = () => {
                     <Avatar
                         size="large"
                         rounded
-                        title="AK"
+                        title={initials}
                         activeOpacity={0.7}
                         containerStyle={{ backgroundColor: 'lightgrey' }}
                     />
