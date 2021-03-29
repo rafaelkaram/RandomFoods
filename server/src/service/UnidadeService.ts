@@ -119,7 +119,6 @@ class UnidadeService {
                 await repository.save(unidade);
             }
 
-
             return true;
         } catch (e) {
             console.error(e);
