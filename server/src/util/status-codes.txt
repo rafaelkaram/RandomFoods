@@ -1,0 +1,12 @@
+200 OK - Indica que a requisição foi atendida.
+201 Created - Indica que a requisição foi atendida e a(s) entrada(s) no BD foi(foram) criada(s) com sucesso.
+202 Accepted - Indica que a requisição foi recebida, porém ainda está sendo processada.
+203 Não usa.
+204 No Content - Indica que a requisição foi atendida e não precisa enviar uma resposta.
+
+400 Bad Request - A requisição foi recebida porém o servidor não a entendeu (falta de dados, ou dados incorretos).
+401 Unauthorized - A requisição foi recebida porém sem uma identificação apropriada (ausência de usuário no header).
+403 Forbidden - A requisição foi recebida porém a identificação passada não tem permissão de acesso.
+404 Não usa.
+405 Method Not Allowed - A requisição foi recebida porém o método está desabilitado.
+406 Not Acceptable - A requisição foi recebida porém o servidor não recebeu todos os headers necessários.
