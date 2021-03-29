@@ -1,0 +1,399 @@
+[
+    {
+      "nome": "Litro",
+      "sigla": "L",
+      "taxaConversao": 1,
+      "tipo": "VOLUME"
+    },
+    {
+      "nome": "Mililitro",
+      "sigla": "Ml",
+      "taxaConversao": 0.001,
+      "tipo": "VOLUME"
+    },
+    {
+      "nome": "Grama",
+      "sigla": "g",
+      "taxaConversao": 1,
+      "tipo": "PESO"
+    },
+    {
+      "nome": "Miligrama",
+      "sigla": "Mg",
+      "taxaConversao": 0.001,
+      "tipo": "PESO"
+    },
+    {
+      "nome": "Quilograma",
+      "sigla": "Kg",
+      "taxaConversao": 1000,
+      "tipo": "PESO"
+    },
+    {
+      "nome": "Unidade",
+      "sigla": "U",
+      "taxaConversao": 1,
+      "tipo": 3
+    },
+    {
+      "nome": "Xicara (Farinha de Trigo)",
+      "sigla": "Xicara",
+      "taxaConversao": 120,
+      "tipo": "PESO",
+      "idIngrediente": 5
+    },
+    {
+      "nome": "Colher de Sopa (Farinha de Trigo)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 7.5,
+      "tipo": "PESO",
+      "idIngrediente": 5
+    },
+    {
+      "nome": "Colher de Chá (Farinha de Trigo)",
+      "sigla": "Colher de Cha",
+      "taxaConversao": 2.5,
+      "tipo": "PESO",
+      "idIngrediente": 5
+    },
+    {
+      "nome": "Xicara (Farinha de Mandioca)",
+      "sigla": "Xicara",
+      "taxaConversao": 150,
+      "tipo": "PESO",
+      "idIngrediente": 9
+    },
+    {
+      "nome": "Colher de Sopa (Farinha de Mandioca)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 9,
+      "tipo": "PESO",
+      "idIngrediente": 9
+    },
+    {
+      "nome": "Colher de Chá (Farinha de Mandioca)",
+      "sigla": "Colher de Cha",
+      "taxaConversao": 3,
+      "tipo": "PESO",
+      "idIngrediente": 9
+    },
+    {
+      "nome": "Xicara (Farinha de Rosca)",
+      "sigla": "Xicara",
+      "taxaConversao": 80,
+      "tipo": "PESO",
+      "idIngrediente": 10
+    },
+    {
+      "nome": "Colher de Sopa (Farinha de Rosca)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 5,
+      "tipo": "PESO",
+      "idIngrediente": 10
+    },
+    {
+      "nome": "Colher de Chá (Farinha de Rosca)",
+      "sigla": "Colher de Cha",
+      "taxaConversao": 1.5,
+      "tipo": "PESO",
+      "idIngrediente": 10
+    },
+    {
+      "nome": "Xicara (Fubá)",
+      "sigla": "Xicara",
+      "taxaConversao": 120,
+      "tipo": "PESO",
+      "idIngrediente": 11
+    },
+    {
+      "nome": "Colher de Sopa (Fubá)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 7.5,
+      "tipo": "PESO",
+      "idIngrediente": 11
+    },
+    {
+      "nome": "Colher de Chá (Fubá)",
+      "sigla": "Colher de Cha",
+      "taxaConversao": 2.5,
+      "tipo": "PESO",
+      "idIngrediente": 11
+    },
+    {
+      "nome": "Xicara (Amido Milho)",
+      "sigla": "Xicara",
+      "taxaConversao": 150,
+      "tipo": "PESO",
+      "idIngrediente": 6
+    },
+    {
+      "nome": "Colher de Sopa (Amido Milho)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 9,
+      "tipo": "PESO",
+      "idIngrediente": 6
+    },
+    {
+      "nome": "Colher de Chá (Amido Milho)",
+      "sigla": "Colher de Cha",
+      "taxaConversao": 3,
+      "tipo": "PESO",
+      "idIngrediente": 6
+    },
+    {
+      "nome": "Xicara (Sal)",
+      "sigla": "Xicara",
+      "taxaConversao": 300,
+      "tipo": "PESO",
+      "idIngrediente": 7
+    },
+    {
+      "nome": "Colher de Sopa (Sal)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 13,
+      "tipo": "PESO",
+      "idIngrediente": 7
+    },
+    {
+      "nome": "Colher de Chá (Sal)",
+      "sigla": "Colher de Cha",
+      "taxaConversao": 5,
+      "tipo": "PESO",
+      "idIngrediente": 7
+    },
+    {
+      "nome": "Xicara (Açucar)",
+      "sigla": "Xicara",
+      "taxaConversao": 160,
+      "tipo": "PESO",
+      "idIngrediente": 8
+    },
+    {
+      "nome": "Colher de Sopa (Açucar)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 10,
+      "tipo": "PESO",
+      "idIngrediente": 8
+    },
+    {
+      "nome": "Colher de Chá (Açucar)",
+      "sigla": "Colher de Cha",
+      "taxaConversao": 3.5,
+      "tipo": "PESO",
+      "idIngrediente": 8
+    },
+    {
+      "nome": "Xicara (Achocolatado)",
+      "sigla": "Xicara",
+      "taxaConversao": 90,
+      "tipo": "PESO",
+      "idIngrediente": 12
+    },
+    {
+      "nome": "Colher de Sopa (Achocolatado)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 6,
+      "tipo": "PESO",
+      "idIngrediente": 12
+    },
+    {
+      "nome": "Colher de Chá (Achocolatado)",
+      "sigla": "Colher de Cha",
+      "taxaConversao": 2,
+      "tipo": "PESO",
+      "idIngrediente": 12
+    },
+    {
+      "nome": "Xicara (Arroz)",
+      "sigla": "Xicara",
+      "taxaConversao": 200,
+      "tipo": "PESO",
+      "idIngrediente": 13
+    },
+    {
+      "nome": "Colher de Sopa (Arroz)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 15,
+      "tipo": "PESO",
+      "idIngrediente": 13
+    },
+    {
+      "nome": "Xicara (Feijão)",
+      "sigla": "Xicara",
+      "taxaConversao": 202,
+      "tipo": "PESO",
+      "idIngrediente": 14
+    },
+    {
+      "nome": "Colher de Sopa (Feijão)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 12.6,
+      "tipo": "PESO",
+      "idIngrediente": 14
+    },
+    {
+      "nome": "Xicara (Mel)",
+      "sigla": "Xicara",
+      "taxaConversao": 340,
+      "tipo": "PESO",
+      "idIngrediente": 15
+    },
+    {
+      "nome": "Colher de Sopa (Mel)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 20,
+      "tipo": "PESO",
+      "idIngrediente": 15
+    },
+    {
+      "nome": "Colher de Chá (Mel)",
+      "sigla": "Colher de Cha",
+      "taxaConversao": 8,
+      "tipo": "PESO",
+      "idIngrediente": 15
+    },
+    {
+      "nome": "Xicara (Aveia)",
+      "sigla": "Xicara",
+      "taxaConversao": 80,
+      "tipo": "PESO",
+      "idIngrediente": 16
+    },
+    {
+      "nome": "Colher de Sopa (Aveia)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 5,
+      "tipo": "PESO",
+      "idIngrediente": 16
+    },
+    {
+      "nome": "Colher de Chá (Aveia)",
+      "sigla": "Colher de Cha",
+      "taxaConversao": 1.5,
+      "tipo": "PESO",
+      "idIngrediente": 16
+    },
+    {
+      "nome": "Xicara (Polvilho)",
+      "sigla": "Xicara",
+      "taxaConversao": 150,
+      "tipo": "PESO",
+      "idIngrediente": 17
+    },
+    {
+      "nome": "Colher de Sopa (Polvilho)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 9,
+      "tipo": "PESO",
+      "idIngrediente": 17
+    },
+    {
+      "nome": "Colher de Chá (Polvilho)",
+      "sigla": "Colher de Cha",
+      "taxaConversao": 3,
+      "tipo": "PESO",
+      "idIngrediente": 17
+    },
+    {
+      "nome": "Xicara (Coco Ralado)",
+      "sigla": "Xicara",
+      "taxaConversao": 80,
+      "tipo": "PESO",
+      "idIngrediente": 18
+    },
+    {
+      "nome": "Colher de Sopa (Coco Ralado)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 5,
+      "tipo": "PESO",
+      "idIngrediente": 18
+    },
+    {
+      "nome": "Colher de Chá (Coco Ralado)",
+      "sigla": "Colher de Cha",
+      "taxaConversao": 1.5,
+      "tipo": "PESO",
+      "idIngrediente": 18
+    },
+    {
+      "nome": "Colher de Sopa (Fermento em Pó)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 10,
+      "tipo": "PESO",
+      "idIngrediente": 19
+    },
+    {
+      "nome": "Colher de Chá (Fermento em Pó)",
+      "sigla": "Colher de Cha",
+      "taxaConversao": 2,
+      "tipo": "PESO",
+      "idIngrediente": 19
+    },
+    {
+      "nome": "Xicara (Leite Condensado)",
+      "sigla": "Xicara",
+      "taxaConversao": 306,
+      "tipo": "PESO",
+      "idIngrediente": 21
+    },
+    {
+      "nome": "Colher de Sopa (Leite Condensado)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 19,
+      "tipo": "PESO",
+      "idIngrediente": 21
+    },
+    {
+      "nome": "Xicara (Chocolate Granulado)",
+      "sigla": "Xicara",
+      "taxaConversao": 100,
+      "tipo": "PESO",
+      "idIngrediente": 22
+    },
+    {
+      "nome": "Xicara (Margarina)",
+      "sigla": "Xicara",
+      "taxaConversao": 200,
+      "tipo": "PESO",
+      "idIngrediente": 24
+    },
+    {
+      "nome": "Colher de Sopa (Margarina)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 40,
+      "tipo": "PESO",
+      "idIngrediente": 24
+    },
+    {
+      "nome": "Xicara (Manteiga)",
+      "sigla": "Xicara",
+      "taxaConversao": 200,
+      "tipo": "PESO",
+      "idIngrediente": 3
+    },
+    {
+      "nome": "Colher de Sopa (Manteiga)",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 40,
+      "tipo": "PESO",
+      "idIngrediente": 3
+    },
+    {
+      "nome": "Xicara",
+      "sigla": "Xicara",
+      "taxaConversao": 0.240,
+      "tipo": "VOLUME"
+    },
+    {
+      "nome": "Colher de Sopa",
+      "sigla": "Colher de Sopa",
+      "taxaConversao": 0.015,
+      "tipo": "VOLUME"
+    },
+    {
+      "nome": "Colher de Chá",
+      "sigla": "Colher de Cha",
+      "taxaConversao": 0.005,
+      "tipo": "VOLUME"
+    }
+  ]

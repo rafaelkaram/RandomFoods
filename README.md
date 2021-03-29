@@ -14,6 +14,7 @@
   - Incluir a variável `HML_DB` com os nome do banco de homologação.
   - Incluir a variável `DEV_DB` com os nome do banco de desenvolvimento.
   - Incluir a variável `LOCAL_IP` com o número de IP local.
+  - Incluir a variável `PORT` com o número da porta a se usar (Padrão é 3333).
 ### Inciar Servidor
   - `npm run dev` ou `yarn dev` (Inicia em modo de desenvolvimento).
   - `npm run prod` ou `yarn prod` (Inicia em modo de produção).
@@ -30,7 +31,3 @@
 ### Iniciar Servidor + Mobile
   - `npm run dev` ou `yarn yDev` (Inicia servidor e mobile em modo de desenvolvimento).
   - `npm run prod` ou `yarn yProd` (Inicia servidor e mobile em modo de produção).
-
-
-
-;
