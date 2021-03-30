@@ -30,7 +30,7 @@ const NewRecipe = () => {
         //     .then(response => {
         //         setIngredient(response.data);
         //     });
-        api.get('ingredientetype')
+        api.get('/busca/tipo-ingrediente')
             .then(response => {
                 setIngredientTypes(response.data);
                 setLoad(true)
@@ -73,7 +73,7 @@ const NewRecipe = () => {
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{flex:1}}>
             <View style={styles.newRecipeImageBasketContainer}>
                 <Image
                     style={styles.newRecipeImage}
@@ -132,15 +132,14 @@ const NewRecipe = () => {
                 </BlurView>
             </Modal>
             <Input
-                    placeholder="Pesquise por algum ingrediente"
-                    onChangeText={(value) => setnomeIngrediente(value)}
-                    value={nomeIngrediente}
-                    inputContainerStyle={{ borderBottomWidth: 0 }}
-                />
-            <ScrollView style={{marginBottom: 110}}>
+                placeholder="Pesquise por algum ingrediente"
+                onChangeText={(value) => setnomeIngrediente(value)}
+                value={nomeIngrediente}
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+            />
+            <ScrollView>
                 {ingredientTypes.map(ingredientTypes => {
-                    const image_url = ingredientTypes.image_url.replace('localhost', '192.168.1.102') + fixString(ingredientTypes.tipo) + `-colored.png`
-                    if (ingredientTypes.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase())).length === 0){
+                    if (ingredientTypes.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase())).length === 0) {
                         return;
                     }
                     return (
@@ -150,7 +149,7 @@ const NewRecipe = () => {
                                     <BoldText style={styles.ingredientTypeName}>{ingredientTypes.tipo}</BoldText>
                                     <Image style={styles.ingredientTypeIcon}
                                         source={{
-                                            uri: image_url
+                                            uri: ingredientTypes.url
                                         }} />
                                 </View>
                                 <View style={styles.ingredietContainer}>
@@ -189,7 +188,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
 
-    newRecipeImageBasketContainer:{
+    newRecipeImageBasketContainer: {
         flexDirection: 'row'
     },
 
