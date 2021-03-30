@@ -67,7 +67,7 @@ const SearchRecipe = () => {
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.searchRecipeImageBasketContainer}>
                 <Image
                     style={styles.searchRecipeImage}
@@ -133,7 +133,7 @@ const SearchRecipe = () => {
                     inputContainerStyle={{ borderBottomWidth: 0 }}
                 />
             </View>
-            <ScrollView style={{ marginBottom: 110 }}>
+            <ScrollView>
                 {ingredientTypes.map(ingredientTypes => {
                     if (ingredientTypes.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase())).length === 0){
                         return;
