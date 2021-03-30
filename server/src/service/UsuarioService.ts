@@ -95,7 +95,7 @@ class UsuarioService {
     }
 
     // Métodos internos
-    async fetch(id: number): Promise<Usuario> {
+    async find(id: number): Promise<Usuario> {
         const repository = getCustomRepository(UsuarioRepository);
         const usuario = await repository.findOne({ id });
 
