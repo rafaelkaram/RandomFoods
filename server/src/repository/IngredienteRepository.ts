@@ -15,4 +15,17 @@ export class IngredienteRepository extends Repository<Ingrediente> {
 
     return ingredientes;
   }
+
+  async findByIds(ids: number[]): Promise<Ingrediente[]> {
+    return this.findByIdsOrdered(ids,'nome', true);
+  }
+
+  async findByIdsOrdered(ids: number[], order: string, ascending: boolean): Promise<Ingrediente[]> {
+    const ingredientes: Ingrediente[] = await this.createQueryBuilder('ingrediente')
+      .whereInIds(ids)
+      .orderBy(order, ascending ? 'ASC' : 'DESC')
+      .getMany();
+
+    return ingredientes;
+  }
 }

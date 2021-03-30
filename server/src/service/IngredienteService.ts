@@ -116,6 +116,18 @@ class IngredienteService {
 
         return ingrediente;
     }
+
+    async findByIds(ids: number[]): Promise<Ingrediente[]> {
+        const repository = getCustomRepository(IngredienteRepository);
+
+        const ingredientes = await repository.findByIds(ids);
+
+        if (!ingredientes) {
+            throw 'Nenhum ingrediente encontrado.';
+        }
+
+        return ingredientes;
+    }
 }
 
 export default IngredienteService;
