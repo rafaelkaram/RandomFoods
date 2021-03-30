@@ -13,7 +13,7 @@ const Home = () => {
     const [ingredients, setIngredients] = useState<IIngredient[]>([])
 
     useEffect(() => {
-        api.get('ingrediente').then(response => {
+        api.get('busca/ingredientes').then(response => {
             setIngredients(response.data)
         })
     }, [])

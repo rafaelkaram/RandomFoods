@@ -23,7 +23,7 @@ const SearchRecipe = () => {
     const [nomeIngrediente, setnomeIngrediente] = useState('');
 
     useEffect(() => {
-        api.get('ingredientetype')
+        api.get('/busca/tipo-ingrediente')
             .then(response => {
                 setIngredientTypes(response.data);
                 setLoad(true)
@@ -135,7 +135,6 @@ const SearchRecipe = () => {
             </View>
             <ScrollView style={{ marginBottom: 110 }}>
                 {ingredientTypes.map(ingredientTypes => {
-                    const image_url = ingredientTypes.image_url.replace('localhost', '192.168.1.102') + fixString(ingredientTypes.tipo) + `-colored.png`
                     if (ingredientTypes.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase())).length === 0){
                         return;
                     }
@@ -146,7 +145,7 @@ const SearchRecipe = () => {
                                     <BoldText style={styles.ingredientTypeName}>{ingredientTypes.tipo}</BoldText>
                                     <Image style={styles.ingredientTypeIcon}
                                         source={{
-                                            uri: image_url
+                                            uri: ingredientTypes.url
                                         }} />
                                 </View>
                                 <View style={styles.ingredietContainer}>
