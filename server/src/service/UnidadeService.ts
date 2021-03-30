@@ -49,9 +49,7 @@ class UnidadeService {
     }
 
     async create(request: Request, response: Response) {
-        const repository = getCustomRepository(UnidadeRepository);
-
-        const unidade = await this.save(request.body);
+        await this.save(request.body);
 
         return response.status(201).json({ message: 'Unidade cadastrada com sucesso.' });
     }
@@ -126,6 +124,9 @@ class UnidadeService {
 
         const { nome, sigla, taxaConversao, tipo, idIngrediente } = dado;
 
+        console.log(dado);
+
+
         let unidade = null;
 
         try {
@@ -141,7 +142,6 @@ class UnidadeService {
                     ingrediente
                 });
 
-                await repository.save(unidade);
             } else {
 
                 unidade = repository.create({
@@ -151,8 +151,9 @@ class UnidadeService {
                     tipo
                 });
 
-                await repository.save(unidade);
             }
+
+            await repository.save(unidade);
 
             return true;
         } catch (e) {
