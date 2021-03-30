@@ -30,6 +30,20 @@ class ComentarioService {
         return response.status(200).json(comentario);
     }
 
+    async findByReceita(request: Request, response: Response) {
+        const repository = getCustomRepository(ComentarioRepository);
+
+        const { idReceita } = request.params;
+
+        const comentarios = await repository.findByReceita(parseInt(idReceita));
+
+        if (!comentarios) {
+            return response.status(400).json({ error: 'Comentarios não encontrado!' });
+        }
+
+        return response.status(200).json(comentarios);
+    }
+
     async create(request: Request, response: Response) {
         const repository = getCustomRepository(ComentarioRepository);
         const { valor, idPai, idReceita, idUsuario } = request.body;
@@ -38,8 +52,8 @@ class ComentarioService {
             const usuarioService = new UsuarioService();
             const receitaService = new ReceitaService();
 
-            const usuario = await usuarioService.fetch(parseInt(idUsuario));
-            const receita = await receitaService.fetch(parseInt(idReceita));
+            const usuario = await usuarioService.find(parseInt(idUsuario));
+            const receita = await receitaService.find(parseInt(idReceita));
             const comentarioPai = await repository.findOne({ id: idPai });
 
             const comentario = repository.create({

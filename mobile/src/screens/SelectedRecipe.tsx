@@ -30,7 +30,8 @@ function SelectedRecipe({ route }: { route: any }) {
     const [initials,setInitials] = useState("");
 
     useEffect(() => {
-        api.get(`receita/${idRecipe}`).then(response => {
+
+        api.get(`busca/receita/${idRecipe}`).then(response => {
             setRecipe(response.data);
             setNota(recipe?.nota)
             
@@ -42,12 +43,30 @@ function SelectedRecipe({ route }: { route: any }) {
             setInitials(firstName[0]+lastName[0]);
            
         });
-        api.get(`comentar/${idRecipe}`)
+        api.get(`busca/comentario/${idRecipe}`)
             .then(response => {
                 //console.log(response.data);
                 setComments(response.data.comentarios);
                 setSubComments(response.data.filhos);
             });
+        // api.get(`receita/${idRecipe}`).then(response => {
+        //     setRecipe(response.data);
+        //     setNota(recipe?.nota)
+            
+        //     const names= response.data?.usuario.split(" ")
+           
+        //     const tam  = names.length - 1
+        //     const firstName :string = names[0]
+        //     const lastName :string = names[tam] 
+        //     setInitials(firstName[0]+lastName[0]);
+           
+        // });
+        // api.get(`comentar/${idRecipe}`)
+        //     .then(response => {
+        //         //console.log(response.data);
+        //         setComments(response.data.comentarios);
+        //         setSubComments(response.data.filhos);
+        //     });
     }, []);
 
     function ShowComments({ comentarios }: { comentarios: any }) {
