@@ -16,11 +16,12 @@ export class ComentarioRepository extends Repository<Comentario> {
     return comentarios;
   }
 
-  async findByReceita(id: number): Promise<Comentario> {
-    const comentario: Comentario = await this.createQueryBuilder('c')
+  async findByReceita(id: number): Promise<Comentario[]> {
+    const comentarios: Comentario[] = await this.createQueryBuilder('c')
       .where('c.receita.id = :id', { id })
-      .getOne();
+      .orderBy('c.data', 'ASC')
+      .getMany();
 
-    return comentario;
+    return comentarios;
   }
 }
