@@ -35,13 +35,13 @@ class ComentarioService {
 
         const { idReceita } = request.params;
 
-        const comentario = await repository.findByReceita(parseInt(idReceita));
+        const comentarios = await repository.findByReceita(parseInt(idReceita));
 
-        if (!comentario) {
-            return response.status(400).json({ error: 'Comentario não encontrado!' });
+        if (!comentarios) {
+            return response.status(400).json({ error: 'Comentarios não encontrado!' });
         }
 
-        return response.status(200).json(comentario);
+        return response.status(200).json(comentarios);
     }
 
     async create(request: Request, response: Response) {
