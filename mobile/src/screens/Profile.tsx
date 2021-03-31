@@ -21,7 +21,7 @@ const Profile = () => {
 
 
     useEffect(() => {
-        api.get(`user`).then(response => {
+        api.get(`busca/usuario`).then(response => {
             setUser(response.data[0]);
 
             const names= response.data[0]?.nome.split(" ")
@@ -30,20 +30,44 @@ const Profile = () => {
             const lastName :string = names[tam] 
             setInitials(firstName[0]+lastName[0]);
 
-            api.get(`recipesType/${user?.id}`)
+            api.get(`/dashboard/tipos-receita/${user?.id}`)
             .then(response => {
                 setRecipeType(response.data)
 
             })
-        api.get(`recipesCategory/${user?.id}`)
+        api.get(`/dashboard/categorias/${user?.id}`)
             .then(response => {
                 setRecipeCategory(response.data)
             })
 
-        api.get(`topVotedRecipe/${user?.id}`)
+        api.get(`/dashboard/avaliacoes/${user?.id}`)
             .then(response => {
                 setTopVotedRecipe(response.data)
             })
+        // });
+        // api.get(`user`).then(response => {
+        //     setUser(response.data[0]);
+
+        //     const names= response.data[0]?.nome.split(" ")
+        //     const tam  = names.length - 1
+        //     const firstName :string = names[0]
+        //     const lastName :string = names[tam] 
+        //     setInitials(firstName[0]+lastName[0]);
+
+        //     api.get(`recipesType/${user?.id}`)
+        //     .then(response => {
+        //         setRecipeType(response.data)
+
+        //     })
+        // api.get(`recipesCategory/${user?.id}`)
+        //     .then(response => {
+        //         setRecipeCategory(response.data)
+        //     })
+
+        // api.get(`topVotedRecipe/${user?.id}`)
+        //     .then(response => {
+        //         setTopVotedRecipe(response.data)
+        //     })
         });
        
     }, [user])

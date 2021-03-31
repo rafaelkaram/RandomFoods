@@ -14,7 +14,7 @@ import unidadeView from '../view/UnidadeView';
 
 class UnidadeService {
     // Métodos das rotas
-    async index (request: Request, response: Response) {
+    async index(request: Request, response: Response) {
         const repository = getCustomRepository(UnidadeRepository);
 
         const unidades = await repository.findAll();
@@ -28,7 +28,7 @@ class UnidadeService {
         const unidades = await repository.findWithIngrediente();
 
         if (!unidades) {
-            return response.status(400).json({ error: 'Unidade não encontrada!'});
+            return response.status(400).json({ error: 'Unidade não encontrada!' });
         }
 
         return response.status(200).json(unidadeView.renderMany(unidades));
@@ -42,7 +42,7 @@ class UnidadeService {
         const unidade = await repository.findOne(id);
 
         if (!unidade) {
-            return response.status(400).json({ error: 'Unidade não encontrada!'});
+            return response.status(400).json({ error: 'Unidade não encontrada!' });
         }
 
         return response.status(200).json(unidade);
@@ -60,12 +60,47 @@ class UnidadeService {
 
         let count = 0;
         dados.map(async (dado: any) => {
-            const success: boolean = await this.save(dado);
 
-            if (success) count++;
+            const repository = getCustomRepository(UnidadeRepository);
+
+            const { nome, sigla, taxaConversao, tipo, idIngrediente } = dado;
+
+            let unidade = null;
+
+            try {
+                if (idIngrediente) {
+                    const ingredienteService = new IngredienteService();
+                    const ingrediente = await ingredienteService.findById(idIngrediente);
+
+                    unidade = repository.create({
+                        nome,
+                        sigla,
+                        taxaConversao,
+                        tipo,
+                        ingrediente
+                    });
+
+                    await repository.save(unidade);
+                    count++
+                } else {
+
+                    unidade = repository.create({
+                        nome,
+                        sigla,
+                        taxaConversao,
+                        tipo
+                    });
+
+                    await repository.save(unidade);
+                    count++
+                }
+            } catch (e) {
+                console.error(e);
+            }
+
         });
 
-        return response.status(201).json({ message: `${ count } unidades cadastradas com sucesso.` });
+        return response.status(201).json({ message: `${count} unidades cadastradas com sucesso.` });
     }
 
     async remove(request: Request, response: Response) {
@@ -78,13 +113,13 @@ class UnidadeService {
             return response.status(401).json({ error: 'Operação não permitida.' });
         }
 
-        await repository.remove([ <Unidade> unidade ]);
+        await repository.remove([<Unidade>unidade]);
 
         return response.status(204).send();
     }
 
     // Métodos internos
-    async save(dado: any) {
+    async save(dado: any): Promise<boolean> {
         const repository = getCustomRepository(UnidadeRepository);
 
         const { nome, sigla, taxaConversao, tipo, idIngrediente } = dado;
@@ -130,16 +165,16 @@ class UnidadeService {
 
     async find(nome: string, ingrediente: Ingrediente): Promise<Unidade> {
         const repository = getCustomRepository(UnidadeRepository);
-        const { id, tipoUnidade  } = ingrediente;
+        const { id, tipoUnidade } = ingrediente;
 
         if (tipoUnidade === TipoUnidade[TipoUnidade.PESO]) {
             try {
                 return await repository.findByIngrediente(nome, id);
             } catch (err) {
-                return repository.findBySigla(nome, [ TipoUnidade[TipoUnidade.PESO] ]);
+                return repository.findBySigla(nome, [TipoUnidade[TipoUnidade.PESO]]);
             }
         } else {
-            return await repository.findBySigla(nome, [ TipoUnidade[TipoUnidade.VOLUME], TipoUnidade[TipoUnidade.UNIDADE] ]);
+            return await repository.findBySigla(nome, [TipoUnidade[TipoUnidade.VOLUME], TipoUnidade[TipoUnidade.UNIDADE]]);
         }
     }
 
