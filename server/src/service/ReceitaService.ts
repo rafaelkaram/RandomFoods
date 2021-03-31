@@ -13,18 +13,32 @@ import { Receita } from '../entity/Receita';
 import { ReceitaIngrediente } from '../entity/ReceitaIngrediente';
 
 class ReceitaService {
-
+    // Métodos das rotas
     async index(request: Request, response: Response) {
         const repository = getCustomRepository(ReceitaRepository);
 
         const receitas = await repository.find({
-            relations: [ 'usuario' ],
+            relations: [ 'usuario', 'ingredientesReceita', 'categorias', 'midias' ],
             order: {
                 dataCadastro: 'ASC'
             }
         });
 
         return response.status(200).json(receitas);
+    }
+
+    async fetch(request: Request, response: Response) {
+        const repository = getCustomRepository(ReceitaRepository);
+
+        const { id } = request.params;
+
+        const receita = await repository.findOne({ id: parseInt(id) });
+
+        if (!receita) {
+            throw 'Receita não encontrada';
+        }
+
+        return receita;
     }
 
     async create(request: Request, response: Response) {
@@ -87,11 +101,11 @@ class ReceitaService {
     async findByUser(request: Request, response: Response) {
         const repository = getCustomRepository(ReceitaRepository);
 
-        const { idUsuario } = request.body;
+        const { idUsuario } = request.params;
 
         try {
             const usuarioService = new UsuarioService();
-            const usuario = await usuarioService.fetch(idUsuario);
+            const usuario = await usuarioService.fetch(parseInt(idUsuario));
 
             const receitas = await repository.findOne({ usuario });
 
@@ -101,58 +115,6 @@ class ReceitaService {
             console.error(e);
             return response.status(400).json({ error: e });
         }
-    }
-
-    async findPerfectMatch(request: Request, response: Response) {
-        const repository = getCustomRepository(ReceitaRepository);
-
-        //const { ingredientes } = request.params.query;
-
-        //const receitas =
-
-        /*const idsR = await connection('receita_ingrediente')
-            .whereIn('id_ingrediente', ids)
-            .select('id_receita');*/
-
-       /* const idsReceita = await connection.raw(`
-        SELECT
-            id_receita
-        FROM
-            receita_ingrediente
-        WHERE
-            id_ingrediente IN (${ingredientes})
-        GROUP BY
-            id_receita
-        HAVING count(*) = ${ingredientes.length}`); */
-
-        //pode ser util no futuro
-        /*const receitas = await connection('receita')
-            .innerJoin('receita_ingrediente', 'receita_ingrediente.id_receita', '=', 'receita.id')
-            .innerJoin('ingrediente', 'receita_ingrediente.id_ingrediente', '=', 'ingrediente.id')
-            .whereIn('ingrediente.id', idsReceita)
-            .select('receita.*');*/
-        /*
-
-        const ids = []
-        for (var key in idsReceita.rows) {
-            ids.push(idsReceita.rows[key].id_receita)
-        }
-
-        const receitas = await connection('receita')
-            .whereIn('id', ids)
-            .select('*')
-
-        const resp = [];
-
-        for (var key in receitas) {
-            const obj = receitas[key];
-
-            const receita = await module.exports.findReceita(obj);
-
-            resp.push(receita);
-        }
-
-        return response.json(resp);*/
     }
 
     async countTypeByUserId(request: Request, response: Response) {
@@ -167,7 +129,7 @@ class ReceitaService {
     }
 
     // Métodos internos
-    async fetch(id: number): Promise<Receita> {
+    async find(id: number): Promise<Receita> {
         const repository = getCustomRepository(ReceitaRepository);
 
         const receita = await repository.findOne({ id });
@@ -177,6 +139,18 @@ class ReceitaService {
         }
 
         return receita;
+    }
+
+    async findByIds(ids: number[]): Promise<Receita[]> {
+        const repository = getCustomRepository(ReceitaRepository);
+
+        const receitas = await repository.findByIds(ids);
+
+        if (!receitas) {
+            throw 'Nenhuma receita encontrada';
+        }
+
+        return receitas;
     }
 }
 

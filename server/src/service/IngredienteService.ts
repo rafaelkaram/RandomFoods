@@ -120,7 +120,7 @@ class IngredienteService {
     async findByIds(ids: number[]): Promise<Ingrediente[]> {
         const repository = getCustomRepository(IngredienteRepository);
 
-        const ingredientes = await repository.findByIds(ids);
+        const ingredientes = await repository.findByIdsOrdered(ids,'nome', true);
 
         if (!ingredientes) {
             throw 'Nenhum ingrediente encontrado.';
