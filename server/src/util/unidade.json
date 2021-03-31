@@ -33,7 +33,7 @@
       "nome": "Unidade",
       "sigla": "U",
       "taxaConversao": 1,
-      "tipo": 3
+      "tipo": "UNIDADE"
     },
     {
       "nome": "Xicara (Farinha de Trigo)",

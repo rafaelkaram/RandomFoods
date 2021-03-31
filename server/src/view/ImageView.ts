@@ -10,8 +10,8 @@ export default {
 
       return {
         tipo,
-        url: `${ SERVER_URL }/uploads/ingredient-types/${ tipoStr.toLowerCase() }-colored.png`,
-        alt_url: `${ SERVER_URL }/uploads/ingredient-types/${ tipoStr.toLowerCase() }.png`,
+        url: `http://192.168.100.5:3333/uploads/ingredient-types/${ tipoStr.toLowerCase() }-colored.png`,
+        alt_url: `http://192.168.100.5:3333/uploads/ingredient-types/${ tipoStr.toLowerCase() }.png`,
         ingredientes: ingredientes
       };
     }

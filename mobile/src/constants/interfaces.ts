@@ -10,9 +10,9 @@ interface IRecipe {
   data_cadastro: Date,
   ativa: boolean,
   ingredientes: [{
-      id: number,
-      nome: string,
-      quantidade: number,
+    id: number,
+    nome: string,
+    quantidade: number,
   }],
   categorias: [string],
 }
@@ -34,22 +34,23 @@ interface IIngredient {
 
 interface IIngredientType {
   tipo: string,
-  image_url: string,
+  url: string,
+  alt_url: string,
   ingredientes: [{
-      id: number,
-      nome: string,
-      id_tipo_unidade: number,
-      id_tipo_ingrediente: number,
-      sem_medida: boolean,
-      derivado_leite: boolean,
-      glutem: boolean
+    id: number,
+    nome: string,
+    semMedida: boolean,
+    derivadoLeite: boolean,
+    gluten: boolean,
+    tipoIngrediente: string,
+    tipoUnidade: string
   }]
 }
 
 interface IIngredientCart {
   ingredient: {
-      id: number,
-      name: string
+    id: number,
+    name: string
   }
 }
 
