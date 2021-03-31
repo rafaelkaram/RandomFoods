@@ -11,25 +11,23 @@ import ReceitaService from './ReceitaService';
 
 class ReceitaIngredienteService {
     // Métodos das rotas
-    async findPerfectMatch(request: Request, response: Response) {
+    async findPerfectMatch(ids: number[]): Promise<number[]> {
         const repository = getCustomRepository(ReceitaIngredienteRepository);
 
-        const { ids } = request.query;
+        const idsReceita = await repository.findByAllIngredients(ids);
 
-        try {
-            const receitaService = new ReceitaService();
-
-            const idsReceita = await repository.findByAllIngredients(ids);
-            const receitas = await receitaService.findByIds(idsReceita);
-
-            return response.status(200).json(receitas);
-        } catch (e) {
-            console.error(e);
-            response.status(400).json({ error: e });
+        if(!idsReceita) {
+            throw 'Nenhuma receita encontrada.';
         }
+
+        return idsReceita;
     }
 
     // Métodos internos
+    async fetch() {
+
+    }
+
     async insertByRecipe(item: ReceitaIngrediente): Promise<ReceitaIngrediente> {
         const repository = getCustomRepository(ReceitaIngredienteRepository);
 
