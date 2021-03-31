@@ -1,4 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
+
 import { Receita } from '../entity/Receita';
 
 @EntityRepository(Receita)

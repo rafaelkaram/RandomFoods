@@ -21,8 +21,8 @@ export class IngredienteRepository extends Repository<Ingrediente> {
   }
 
   async findByIdsOrdered(ids: number[], order: string, ascending: boolean): Promise<Ingrediente[]> {
-    const ingredientes: Ingrediente[] = await this.createQueryBuilder('ingrediente')
-      .whereInIds(ids)
+    const ingredientes: Ingrediente[] = await this.createQueryBuilder('i')
+      .where('i.id IN (:...ids)', { ids })
       .orderBy(order, ascending ? 'ASC' : 'DESC')
       .getMany();
 

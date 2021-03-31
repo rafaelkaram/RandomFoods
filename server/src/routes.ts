@@ -42,7 +42,7 @@ routes.post('/cadastro/usuarios', usuarioService.createBulk);
 // Rotas de busca (buscar todos)
 // Utilizar parametros através de query ou endereço
 routes.get('/busca/ingredientes', ingredienteService.index);
-routes.get('/busca/tipo-ingrediente', ingredienteService.typeIndex);             // Usa - Pronto
+routes.get('/busca/tipo-ingrediente', ingredienteService.typeIndex);
 routes.get('/busca/receita', receitaService.index);
 routes.get('/busca/unidade', unidadeService.index);
 routes.get('/busca/unidade-ingrediente', unidadeService.list);
@@ -50,7 +50,7 @@ routes.get('/busca/usuario', usuarioService.index);
 
 // Rotas de busca (buscar único)
 // Utilizar parametros através de query ou endereço
-routes.get('/busca/comentario/:id', comentarioService.fetch);                    // Usa - Pronto
+routes.get('/busca/comentario/:id', comentarioService.fetch);
 routes.get('/busca/ingrediente/:id', ingredienteService.fetch);
 routes.get('/busca/receita/:id', receitaService.fetch);
 routes.get('/busca/unidade/:id', unidadeService.fetch);
@@ -58,14 +58,14 @@ routes.get('/busca/unidade/:id', unidadeService.fetch);
 // Rotas de busca (busca personalizada)
 // Utilizar parametros através de query ou endereço
 routes.get('/busca/comentario/:idReceita', comentarioService.findByReceita);
-routes.get('/busca/receita/:idUsuario', receitaService.findByUser);             // Usa - Pronto
-routes.get('/busca/receita/ingrediente', receitaIngredienteService.findPerfectMatch);      // Usa
+routes.get('/busca/receita/:idUsuario', receitaService.findByUser);
+routes.get('/busca/receita-ingrediente', receitaIngredienteService.findPerfectMatch);      // Usa
 
 // Rotas Dashboard
 // Utilizar parametros através de query ou endereço
-routes.get('/dashboard/avaliacoes/:id', avaliacaoService.findVoted);             // Usa - Pronto
-routes.get('/dashboard/categorias/:id', categoriaService.countCategoryByUserId); // Usa - Pronto
-routes.get('/dashboard/tipos-receita/:id', receitaService.countTypeByUserId);    // Usa - Pronto
+routes.get('/dashboard/avaliacoes/:id', avaliacaoService.findVoted);
+routes.get('/dashboard/categorias/:id', categoriaService.countCategoryByUserId);
+routes.get('/dashboard/tipos-receita/:id', receitaService.countTypeByUserId);
 
 
 // Rotas de remoção
