@@ -8,7 +8,6 @@ import CategoriaService from './service/CategoriaService';
 import ComentarioService from './service/ComentarioService';
 import FileImportService from './service/FileImportService';
 import IngredienteService from './service/IngredienteService';
-import ReceitaIngredienteService from './service/ReceitaIngredienteService';
 import ReceitaService from './service/ReceitaService';
 import UnidadeService from './service/UnidadeService';
 import UsuarioService from './service/UsuarioService';
@@ -18,14 +17,12 @@ const categoriaService = new CategoriaService();
 const comentarioService = new ComentarioService();
 const fileImportService = new FileImportService();
 const ingredienteService = new IngredienteService();
-const receitaIngredienteService = new ReceitaIngredienteService();
 const receitaService = new ReceitaService();
 const unidadeService = new UnidadeService();
 const usuarioService = new UsuarioService();
 
 const routes = Router();
 const upload = multer(uploadConfig);
-
 
 // Rotas de cadastro
 // Utilizar parametros através do body da requisição
@@ -59,7 +56,7 @@ routes.get('/busca/unidade/:id', unidadeService.fetch);
 // Utilizar parametros através de query ou endereço
 routes.get('/busca/comentario/:idReceita', comentarioService.findByReceita);
 routes.get('/busca/receita/:idUsuario', receitaService.findByUser);
-routes.get('/busca/receita-ingrediente', receitaIngredienteService.findPerfectMatch);      // Usa
+routes.get('/busca/combinacao-perfeita', receitaService.findPerfectMatch);
 
 // Rotas Dashboard
 // Utilizar parametros através de query ou endereço

@@ -58,7 +58,7 @@ class ReceitaService {
             const ingredienteService = new IngredienteService();
             const receitaIngredienteService = new ReceitaIngredienteService();
 
-            const usuario = await usuarioService.fetch(parseInt(user));
+            const usuario = await usuarioService.find(parseInt(user));
 
             const receita = repository.create({
                 nome,
@@ -114,6 +114,26 @@ class ReceitaService {
         } catch (e) {
             console.error(e);
             return response.status(400).json({ error: e });
+        }
+    }
+
+    async findPerfectMatch(request: Request, response: Response) {
+        const repository = getCustomRepository(ReceitaRepository);
+
+        const { ids } = request.query;
+
+        try {
+            const receitaIngredienteService = new ReceitaIngredienteService();
+
+            const idsReceita = await receitaIngredienteService.findPerfectMatch(ids);
+
+            const receitas = await repository.findByIds(idsReceita);
+
+            return response.status(200).json(receitas);
+
+        } catch (e) {
+            console.error(e);
+            response.status(400).json({ error: e });
         }
     }
 
