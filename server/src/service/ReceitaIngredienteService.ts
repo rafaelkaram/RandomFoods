@@ -7,10 +7,10 @@ import IngredienteService from './IngredienteService';
 
 import { Ingrediente } from '../entity/Ingrediente';
 import { ReceitaIngrediente } from '../entity/ReceitaIngrediente';
-import ReceitaService from './ReceitaService';
+//import { ReceitaIngredienteDTO } from '../dto/ReceitaIngredienteDTO';
 
 class ReceitaIngredienteService {
-    // Métodos das rotas
+    // Métodos internos
     async findPerfectMatch(ids: number[]): Promise<number[]> {
         const repository = getCustomRepository(ReceitaIngredienteRepository);
 
@@ -23,9 +23,17 @@ class ReceitaIngredienteService {
         return idsReceita;
     }
 
-    // Métodos internos
-    async fetch() {
+    async findReceita(receita: Receita) {
+        const repository = getCustomRepository(ReceitaIngredienteRepository);
 
+        const ingredientes = await repository.find({
+            relations: [ 'ingrediente', 'unidade' ],
+            where: {
+                receita,
+            },
+        });
+
+        return ingredientes;
     }
 
     async insertByRecipe(item: ReceitaIngrediente): Promise<ReceitaIngrediente> {

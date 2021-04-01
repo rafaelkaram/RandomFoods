@@ -38,8 +38,8 @@ class AvaliacaoService {
             const usuarioService = new UsuarioService();
             const receitaService = new ReceitaService();
 
-            const usuario = await usuarioService.fetch(parseInt(idUsuario));
-            const receita = await receitaService.fetch(parseInt(idReceita));
+            const usuario = await usuarioService.find(parseInt(idUsuario));
+            const receita = await receitaService.find(parseInt(idReceita));
 
             const avaliacao = repository.create({
                 receita,
@@ -72,6 +72,15 @@ class AvaliacaoService {
         await repository.remove([ <Avaliacao> avaliacao ]);
 
         return response.status(204).send();
+    }
+
+    // Métodos internos
+    async countVotes(id: number): Promise<{ nota: number, qtdeNotas: number}> {
+        const repository = getCustomRepository(AvaliacaoRepository);
+
+        const avaliacao = await repository.findByReceitaId(id);
+
+        return avaliacao;
     }
 }
 

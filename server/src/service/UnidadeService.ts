@@ -162,7 +162,6 @@ class UnidadeService {
         }
     }
 
-
     async find(nome: string, ingrediente: Ingrediente): Promise<Unidade> {
         const repository = getCustomRepository(UnidadeRepository);
         const { id, tipoUnidade } = ingrediente;
@@ -188,6 +187,22 @@ class UnidadeService {
         }
 
         return unidade;
+    }
+
+    async findSI(tipoUnidade: TipoUnidade): Promise<Unidade[]> {
+        const repository = getCustomRepository(UnidadeRepository);
+
+        const unidades = await repository.find({
+            where: {
+                'tipo': tipoUnidade,
+                'ingrediente': null
+            }
+        });
+
+        console.log(unidades);
+
+
+        return unidades;
     }
 }
 
