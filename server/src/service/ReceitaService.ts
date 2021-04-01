@@ -3,14 +3,18 @@ import { getCustomRepository } from 'typeorm';
 
 import { ReceitaRepository } from '../repository/ReceitaRepository';
 
-import UnidadeService from './UnidadeService';
-import UsuarioService from './UsuarioService';
+import AvaliacaoService from './AvaliacaoService';
 import CategoriaService from './CategoriaService';
 import IngredienteService from './IngredienteService';
+import MidiaService from './MidiaService';
 import ReceitaIngredienteService from './ReceitaIngredienteService';
+import UnidadeService from './UnidadeService';
+import UsuarioService from './UsuarioService';
 
 import { Receita } from '../entity/Receita';
 import { ReceitaIngrediente } from '../entity/ReceitaIngrediente';
+
+import receitaView from '../view/ReceitaView';
 
 class ReceitaService {
     // Métodos das rotas
@@ -32,13 +36,37 @@ class ReceitaService {
 
         const { id } = request.params;
 
-        const receita = await repository.findOne({ id: parseInt(id) });
+        try {
+            const receitaIngredienteService = new ReceitaIngredienteService();
+            const avaliacaoService = new AvaliacaoService();
+            const midiaService = new MidiaService();
 
-        if (!receita) {
-            throw 'Receita não encontrada';
+            const receita = await repository.findOne({
+                relations: [ 'usuario', 'categorias', 'midias' ],
+                where : {
+                    id: parseInt(id)
+                }
+                });
+
+            if (!receita) {
+                return response.status(400).json({ error: 'Receita não encontrada.' });
+            }
+            const ingredientes = await receitaIngredienteService.findReceita(receita);
+
+            if (!ingredientes) {
+                return response.status(400).json({ error: 'Nenhum ingrediente para a receita.' });
+            }
+
+            const avaliacao = await avaliacaoService.countVotes(parseInt(id));
+            const midias = await midiaService.findByReceita(parseInt(id));
+
+            return response.status(200).json(receitaView.render(receita, ingredientes, midias, avaliacao));
+
+        } catch (e) {
+            console.error(e);
+
+            return response.status(400).json({ error: e });
         }
-
-        return receita;
     }
 
     async create(request: Request, response: Response) {
@@ -105,7 +133,7 @@ class ReceitaService {
 
         try {
             const usuarioService = new UsuarioService();
-            const usuario = await usuarioService.fetch(parseInt(idUsuario));
+            const usuario = await usuarioService.find(parseInt(idUsuario));
 
             const receitas = await repository.findOne({ usuario });
 

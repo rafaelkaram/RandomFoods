@@ -34,10 +34,20 @@ export class AvaliacaoRepository extends Repository<Avaliacao> {
       .addSelect('r.nome', 'nome')
       .addSelect('AVG(a.nota)', 'nota')
       .addSelect('COUNT(a.*)', 'qtdeNotas')
-      .where('r.usuario.id = :id', { id: id })
+      .where('r.usuario.id = :id', { id })
       .groupBy('r.id')
       .addGroupBy('r.nome')
       .getRawMany();
+
+    return avaliacoes;
+  }
+
+  async findByReceitaId(id: number): Promise<{ nota: number, qtdeNotas: number }> {
+    const avaliacoes = await this.createQueryBuilder('a')
+      .select('AVG(a.nota)', 'nota')
+      .addSelect('COUNT(a.*)', 'qtdeNotas')
+      .where('a.receita.id = :id', { id })
+      .getRawOne();
 
     return avaliacoes;
   }

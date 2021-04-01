@@ -55,7 +55,7 @@ routes.get('/busca/unidade/:id', unidadeService.fetch);
 // Rotas de busca (busca personalizada)
 // Utilizar parametros através de query ou endereço
 routes.get('/busca/comentario/:idReceita', comentarioService.findByReceita);
-routes.get('/busca/receita/:idUsuario', receitaService.findByUser);
+routes.get('/busca/receita-usuario/:idUsuario', receitaService.findByUser);
 routes.get('/busca/combinacao-perfeita', receitaService.findPerfectMatch);
 
 // Rotas Dashboard
