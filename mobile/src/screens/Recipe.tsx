@@ -21,7 +21,7 @@ const Recipe = ({ route }: { route: any }) => {
         if (route.params) {
             const {ingredientes} = route.params
             
-            api.post('receitasByIngredient', {
+            api.post('/busca/combinacao-perfeita', {
                ingredientes
             }
             ).then(response => {
@@ -29,7 +29,7 @@ const Recipe = ({ route }: { route: any }) => {
                 setLoad(true)
             })
         } else {
-            api.get('receita').then(response => {
+            api.get('buscar/receita').then(response => {
                 setRecipes(response.data)
                 setLoad(true)
             })
