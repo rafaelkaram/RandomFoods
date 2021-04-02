@@ -1,8 +1,5 @@
 import { Brackets, EntityRepository, Repository } from 'typeorm';
 
-import IngredienteService from '../service/IngredienteService';
-
-import { Ingrediente } from '../entity/Ingrediente';
 import { TipoUnidade } from '../entity/TipoUnidade';
 import { Unidade } from '../entity/Unidade';
 
@@ -28,13 +25,11 @@ export class UnidadeRepository extends Repository<Unidade> {
   }
 
   async findBySigla(nome: string, tiposUnidade: TipoUnidade[]): Promise<Unidade> {
-    console.log(tiposUnidade);
-
     const unidade: Unidade = await this.createQueryBuilder('u')
       .where('u.tipo IN (:...tiposUnidade)', { tiposUnidade })
       .andWhere(new Brackets(qb => {
-        qb.where('LOWER(u.sigla) = LOWER(:sigla)', { sigla: nome } )
-          .orWhere('LOWER(u.nome) = LOWER(:nome)', { nome })
+        qb.where('LOWER(u.sigla) = :sigla', { sigla: nome.toLowerCase() } )
+          .orWhere('LOWER(u.nome) = :nome', { nome: nome.toLowerCase() })
       }))
       .getOneOrFail();
 
@@ -43,18 +38,10 @@ export class UnidadeRepository extends Repository<Unidade> {
 
   async findByIngrediente(nome: string, id: number): Promise<Unidade> {
     const unidade: Unidade = await this.createQueryBuilder('u')
-      .where('LOWER(u.sigla) = LOWER(:nome)', { nome })
+      .where('LOWER(u.sigla) = :nome', { nome: nome.toLowerCase() })
       .andWhere('u.ingrediente = :ingrediente', { ingrediente: id })
       .getOneOrFail();
 
     return unidade;
   }
-
-  async getIngrediente(id: number): Promise<Ingrediente> {
-    const ingredienteService = new IngredienteService();
-    const ingrediente = await ingredienteService.findById(id);
-
-    return ingrediente;
-  }
-
 }

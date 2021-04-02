@@ -128,6 +128,18 @@ class IngredienteService {
 
         return ingredientes;
     }
+
+    async findByName(nome: string): Promise<Ingrediente> {
+        const repository = getCustomRepository(IngredienteRepository);
+
+        const ingredientes = await repository.findByNome(nome);
+
+        if (!ingredientes) {
+            throw Error('Ingrediente não encontrado.');
+        }
+
+        return ingredientes;
+    }
 }
 
 export default IngredienteService;

@@ -1,6 +1,10 @@
-import e, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
+import fs from 'fs';
+import path from 'path';
 import crypto from 'crypto';
+
+import Util from '../util/Util';
 
 import { UsuarioRepository } from '../repository/UsuarioRepository';
 
@@ -34,7 +38,39 @@ class UsuarioService {
             }
         }
 
-        return response.status(400).json({ error: 'Usuario ou senha inválidos!'});
+        return response.status(400).json({ error: 'Usuario ou senha inválidos!' });
+    }
+
+    async uploadImage(request: Request, response: Response) {
+        const repository = getCustomRepository(UsuarioRepository);
+
+        const userId: string | undefined = request.headers.authorization;
+
+        const arquivo = request.file as Express.Multer.File;
+
+        const nomeArquivo = arquivo.filename;
+        const isExtensao = Util.isExtensao(nomeArquivo, [ 'jpg', 'jpeg', 'png' ]);
+
+        if (!isExtensao || !userId) {
+            console.log(`Removendo arquivo ${ nomeArquivo }.\nImportação não concluída.`);
+            fs.unlink(path.join(Util.getPath('usuario')), (err) => {
+                if (err) throw err;
+            });
+
+            return response.status(400).json({ error: 'Dados incorretos!' });
+        }
+
+        const usuario = await repository.findOne({ id: parseInt(userId) });
+
+        if (usuario) {
+//            usuario.path = nomeArquivo;
+
+//            await repository.save(usuario);
+
+            return response.status(201).json({ message: 'Imagem de perfil salva com sucesso!' });
+        }
+
+        return response.status(400).json({ error: 'Usuario não econtrado!' });
     }
 
     async create(request: Request, response: Response) {
@@ -102,6 +138,19 @@ class UsuarioService {
         if (!usuario) {
             throw 'Usuário não encontrado';
         }
+
+        return usuario;
+    }
+
+    async findByLoginOrEmail(data?: string): Promise<Usuario> {
+        const repository = getCustomRepository(UsuarioRepository);
+
+        let usuario = null;
+        if (data)
+            usuario = await repository.findByLoginOrEmail(data);
+
+        if (!usuario)
+            usuario = await repository.findOne({ id: 1 });
 
         return usuario;
     }

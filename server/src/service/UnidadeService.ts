@@ -199,9 +199,6 @@ class UnidadeService {
             }
         });
 
-        console.log(unidades);
-
-
         return unidades;
     }
 }

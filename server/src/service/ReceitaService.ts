@@ -11,7 +11,7 @@ import ReceitaIngredienteService from './ReceitaIngredienteService';
 import UnidadeService from './UnidadeService';
 import UsuarioService from './UsuarioService';
 
-import { Receita } from '../entity/Receita';
+import { Receita, Tipo } from '../entity/Receita';
 import { ReceitaIngrediente } from '../entity/ReceitaIngrediente';
 
 import receitaView from '../view/ReceitaView';
@@ -97,13 +97,11 @@ class ReceitaService {
 
             await repository.save(receita);
 
-            const ingredienteList = [];
-
             for (var key in ingredientes) {
-                const { quantidade, id_unidade, id_ingrediente } = ingredientes[key];
+                const { quantidade, idUnidade, idIngrediente } = ingredientes[key];
 
-                const unidade = await unidadeService.findById(id_unidade);
-                const ingrediente = await ingredienteService.findById(id_ingrediente);
+                const unidade = await unidadeService.findById(idUnidade);
+                const ingrediente = await ingredienteService.findById(idIngrediente);
 
                 const receitaIngrediente = new ReceitaIngrediente();
                 receitaIngrediente.unidade     = unidade;
@@ -111,9 +109,7 @@ class ReceitaService {
                 receitaIngrediente.ingrediente = ingrediente;
                 receitaIngrediente.receita = receita;
 
-                const result = await receitaIngredienteService.insertByRecipe(receitaIngrediente)
-
-                ingredienteList.push(result);
+                await receitaIngredienteService.insertByRecipe(receitaIngrediente)
             }
 
             await categoriaService.insertByRecipe(categorias, receita);
@@ -199,6 +195,29 @@ class ReceitaService {
         }
 
         return receitas;
+    }
+
+    async insert(nome: string, descricao: string, tipo: Tipo, usuarioStr?: string): Promise<Receita> {
+        const repository = getCustomRepository(ReceitaRepository);
+
+        try {
+            const usuarioService = new UsuarioService();
+
+            const usuario = await usuarioService.findByLoginOrEmail(usuarioStr);
+
+            const receita = repository.create({
+                nome,
+                descricao,
+                tipo,
+                usuario
+            });
+
+            await repository.save(receita);
+
+            return receita;
+        } catch (err) {
+            throw err;
+        }
     }
 }
 

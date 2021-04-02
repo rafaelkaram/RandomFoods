@@ -5,7 +5,7 @@ export default {
   render(midia: Midia) {
     return {
       id: midia.id,
-      url: `http://192.168.100.5:3333/uploads/${ midia.path }`
+      url: `http://192.168.100.5:3333/uploads/receita/${ midia.path }`
     };
   },
 

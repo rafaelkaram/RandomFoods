@@ -1,13 +1,16 @@
 import { Router } from 'express';
 import multer from 'multer';
 
-import uploadConfig from './config/upload';
+import uploadFilesConfig from './config/uploadFiles';
+import uploadMidiaConfig from './config/uploadMidia';
+import uploadProfilePicConfig from './config/uploadProfilePic';
 
 import AvaliacaoService from './service/AvaliacaoService';
 import CategoriaService from './service/CategoriaService';
 import ComentarioService from './service/ComentarioService';
 import FileImportService from './service/FileImportService';
 import IngredienteService from './service/IngredienteService';
+import MidiaService from './service/MidiaService';
 import ReceitaService from './service/ReceitaService';
 import UnidadeService from './service/UnidadeService';
 import UsuarioService from './service/UsuarioService';
@@ -17,19 +20,24 @@ const categoriaService = new CategoriaService();
 const comentarioService = new ComentarioService();
 const fileImportService = new FileImportService();
 const ingredienteService = new IngredienteService();
+const midiaService = new MidiaService();
 const receitaService = new ReceitaService();
 const unidadeService = new UnidadeService();
 const usuarioService = new UsuarioService();
 
 const routes = Router();
-const upload = multer(uploadConfig);
+const uploadFiles = multer(uploadFilesConfig);
+const uploadMidia = multer(uploadMidiaConfig);
+const uploadProfilePic = multer(uploadProfilePicConfig);
 
 // Rotas de cadastro
 // Utilizar parametros através do body da requisição
 routes.post('/cadastro/avaliacao', avaliacaoService.create);
 routes.post('/cadastro/comentario', comentarioService.create);
+routes.post('/cadastro/imagem-perfil', uploadProfilePic.single('image'), usuarioService.uploadImage);
 routes.post('/cadastro/ingrediente', ingredienteService.create);
 routes.post('/cadastro/ingredientes', ingredienteService.createBulk);
+routes.post('/cadastro/midia', uploadMidia.array('midias'), midiaService.create);
 routes.post('/cadastro/receita', receitaService.create);
 routes.post('/cadastro/unidade', unidadeService.create);
 routes.post('/cadastro/unidades', unidadeService.createBulk);
@@ -73,5 +81,6 @@ routes.delete('/remove/usuario/:id', usuarioService.remove);
 
 // Demais rotas
 routes.post('/autenticar', usuarioService.validate); // ??? Manter?
+routes.post('/importacao/receita', uploadFiles.array('files'), fileImportService.create);
 
 export default routes;
