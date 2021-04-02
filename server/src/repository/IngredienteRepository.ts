@@ -28,4 +28,12 @@ export class IngredienteRepository extends Repository<Ingrediente> {
 
     return ingredientes;
   }
+
+  async findByNome(nome: string): Promise<Ingrediente> {
+    const ingrediente: Ingrediente = await this.createQueryBuilder('i')
+      .where('LOWER(i.nome) = :nome', { nome: nome.toLowerCase() })
+      .getOne();
+
+    return ingrediente;
+  }
 }

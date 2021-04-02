@@ -1,5 +1,5 @@
 export enum TipoUnidade {
-  VOLUME,
-  PESO,
-  UNIDADE
+  VOLUME = 'VOLUME',
+  PESO = 'PESO',
+  UNIDADE = 'UNIDADE'
 }

@@ -2,8 +2,8 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGenerat
 import { Receita } from './Receita';
 
 export enum Tipo {
-  FOTO,
-  VIDEO
+  FOTO = 'FOTO',
+  VIDEO = 'VIDEO'
 }
 
 @Entity('midia')
