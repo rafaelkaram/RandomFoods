@@ -165,6 +165,12 @@ class FileImportService {
             message: `${ arquivos.length - invalidos } arquivos importados com sucesso. ${ invalidos } possuiam formato inválido e não foram importados.`
         });
     }
+
+    async getIp(request: Request, response: Response) {
+        const localIP = Util.getLocalIP();
+
+        return response.status(200).json({ message: `Seu IP local é: ${ localIP }` });
+    }
 }
 
 export default FileImportService;

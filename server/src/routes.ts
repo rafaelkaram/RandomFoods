@@ -82,5 +82,6 @@ routes.delete('/remove/usuario/:id', usuarioService.remove);
 // Demais rotas
 routes.post('/autenticar', usuarioService.validate); // ??? Manter?
 routes.post('/importacao/receita', uploadFiles.array('files'), fileImportService.create);
+routes.get('/find-ip', fileImportService.getIp);
 
 export default routes;
