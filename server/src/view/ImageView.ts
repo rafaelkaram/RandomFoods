@@ -1,6 +1,5 @@
-import SERVER_URL from '../config/constants';
-
 import { Ingrediente, TipoIngrediente } from "../entity/Ingrediente";
+import Util from '../util/Util';
 
 export default {
   render(ingredientes: Ingrediente[]) {
@@ -10,8 +9,8 @@ export default {
 
       return {
         tipo,
-        url: `http://192.168.100.5:3333/uploads/ingredient-types/${ tipoStr.toLowerCase() }-colored.png`,
-        alt_url: `http://192.168.100.5:3333/uploads/ingredient-types/${ tipoStr.toLowerCase() }.png`,
+        url: `http://${ Util.getLocalIP() }:${ process.env.PORT }/uploads/ingredient-types/${ tipoStr.toLowerCase() }-colored.png`,
+        alt_url: `http://${ Util.getLocalIP() }:${ process.env.PORT }/uploads/ingredient-types/${ tipoStr.toLowerCase() }.png`,
         ingredientes: ingredientes
       };
     }
