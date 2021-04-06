@@ -6,7 +6,7 @@ export default {
   render(midia: Midia) {
     return {
       id: midia.id,
-      url: `http://${ Util.getLocalIP() }:${ process.env.PORT }/uploads/receita/${ midia.path }`
+      url: `http://${ Util.getLocalIP() }:${ process.env.PORT }/uploads/midia/receita/${ midia.path }`
     };
   },
 
