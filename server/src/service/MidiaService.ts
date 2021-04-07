@@ -62,7 +62,7 @@ class MidiaService {
             }
 
             const midia: Midia = repository.create({
-                path: path.join(folder, nomeArquivo),
+                path: `${folder}/${nomeArquivo}`,
                 tipo: isFoto ? Tipo.FOTO : Tipo.VIDEO,
                 receita
             });

@@ -59,6 +59,7 @@ routes.get('/busca/comentario/:id', comentarioService.fetch);
 routes.get('/busca/ingrediente/:id', ingredienteService.fetch);
 routes.get('/busca/receita/:id', receitaService.fetch);
 routes.get('/busca/unidade/:id', unidadeService.fetch);
+routes.get('/busca/usuario/:id', usuarioService.fetch);
 
 // Rotas de busca (busca personalizada)
 // Utilizar parametros através de query ou endereço
