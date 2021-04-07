@@ -50,8 +50,16 @@ interface IIngredientType {
 interface IIngredientCart {
   ingredient: {
     id: number,
-    name: string
+    name: string,
+    tipoUnidade: string,
   }
+}
+interface IUnidade{
+  id: number,
+  nome: string,
+  sigla: string,
+  taxaConversao: string,
+  tipo: string,
 }
 
 interface ICategory {
@@ -94,6 +102,7 @@ export {
   IIngredient,
   IIngredientType,
   IIngredientCart,
+  IUnidade,
   ICategory,
   IComment,
   IVote,
