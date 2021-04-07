@@ -1,20 +1,27 @@
 interface IRecipe {
   id: number,
-  id_usuario: number,
-  usuario: string,
   receita: string,
   descricao: string,
   nota: number,
-  num_notas: number,
+  qtdeNotas: number,
   tipo: string,
-  data_cadastro: Date,
-  ativa: boolean,
+  dataCadastro: Date,
   ingredientes: [{
     id: number,
     nome: string,
-    quantidade: number,
+    qtde: number,
   }],
-  categorias: [string],
+  usuario: {
+    id: number,
+    nome: string,
+    nomeUsuario: string,
+    path: string,
+  },
+  midias: [string],
+  categorias: [{
+    id: number,
+    nome: string,
+  }]
 }
 
 interface IRecipeType {
@@ -61,14 +68,16 @@ interface ICategory {
 
 interface IComment {
   filter(arg0: ({ obj }: { obj: any; }) => boolean): Comment,
-  usuario: string,
   id: number,
-  id_usuario: number,
-  id_receita: number,
-  id_pai: number,
+  comentarioPai: number,
   valor: string,
   data: Date,
-  avaliacao: number,
+  usuario:{
+    id: number,
+    nome: string,
+    path: string,
+    nomeUsuario: string,
+  }
 }
 
 interface IVote {
