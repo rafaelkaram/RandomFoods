@@ -1,44 +1,85 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import api from '../services/api';
-import { IIngredientCart, IUnidade } from '../constants/interfaces';
+import { IIngredient } from '../constants/interfaces';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-const IngredientMeasure = (props: any) => {
+const IngredientMeasure = (props: { ingrediente: IIngredient, index: number }) => {
 
-  const ingrediente = props.ingrediente
-  const volume = [{ label: "Mililitros", value: 2 }, { label: "Litros", value: 1 }]
-  const peso = [{ label: "Gramas", value: 3 }, { label: "Quilogramas", value: 5 }]
+  const [ semMedida, setSemMedida ] = useState(true);
 
-  if (ingrediente.tipoUnidade == "UNIDADE") {
-    return (
-      <View
-        key={ingrediente.id}
-        style={styles.item}>
-        <Text style={{ lineHeight: 30 }}>{ingrediente.name}</Text>
+  const ingrediente: IIngredient = props.ingrediente;
+  const unidades = ingrediente.unidades;
 
-      </View>
-    );
+  if ( ingrediente.tipoUnidade === 'UNIDADE' ) {
+    unidades.push({
+      id: 5,
+      nome: 'Unidade',
+      sigla: 'U',
+      taxaConversao: '1.000',
+      tipo: 'UNIDADE',
+    });
+  } else if ( ingrediente.tipoUnidade === 'VOLUME' ) {
+    unidades.push({
+      id: 1,
+      nome: 'Litro',
+      sigla: 'L',
+      taxaConversao: '1.000',
+      tipo: 'VOLUME',
+    });
+    unidades.push({
+      id: 2,
+      nome: 'Mililitro',
+      sigla: 'Ml',
+      taxaConversao: '0.001',
+      tipo: 'VOLUME',
+    });
   } else {
-    return (
-
-      <View
-        key={ingrediente.id}
-        style={{...styles.item,zIndex: 999-props.index}}>
-        <Text style={{ lineHeight: 30 }}>{ingrediente.name}</Text>
-
-        <DropDownPicker
-          items={ingrediente.tipoUnidade == "VOLUME" ? volume : peso}
-          containerStyle={styles.comboBox}
-          onChangeItem={item => console.log(item.label, item.value)}
-
-        />
-
-
-      </View>
-    )
-
+    unidades.push({
+      id: 3,
+      nome: 'Miligrama',
+      sigla: 'Mg',
+      taxaConversao: '0.001',
+      tipo: 'PESO',
+    });
+    unidades.push({
+      id: 4,
+      nome: 'Grama',
+      sigla: 'g',
+      taxaConversao: '1.000',
+      tipo: 'PESO',
+    });
+    unidades.push({
+      id: 6,
+      nome: 'Quilograma',
+      sigla: 'Kg',
+      taxaConversao: '1000.000',
+      tipo: 'PESO',
+    });
   }
+
+  const comboBox = unidades.map(unidade => {
+    return { label: unidade.sigla, value: unidade.id }
+  });
+
+  return (
+
+    <View
+      key={ingrediente.id}
+      style={ styles.item }
+    >
+      <Text style={{ lineHeight: 30 }}>{ ingrediente.nome }</Text>
+      { !(ingrediente.tipoUnidade === 'UNIDADE' || semMedida ) && (
+        <View style={{ zIndex: 999 - props.index }}>
+          <DropDownPicker
+            items={ comboBox }
+            containerStyle={styles.comboBox}
+            onChangeItem={ item => console.log(item.label, item.value) }
+          />
+        </View>
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -50,11 +91,11 @@ const styles = StyleSheet.create({
     padding: 15,
 
   },
+
   comboBox: {
     marginLeft: 20,
     width: 200,
     height: 40,
-    
   }
 });
 

@@ -29,6 +29,16 @@ export class IngredienteRepository extends Repository<Ingrediente> {
     return ingredientes;
   }
 
+  async findByIdsWithUnidades(ids: number[], order: string, ascending: boolean): Promise<Ingrediente[]> {
+    const ingredientes: Ingrediente[] = await this.createQueryBuilder('i')
+      .leftJoinAndSelect('i.unidades', 'unidade')
+      .where('i.id IN (:...ids)', { ids })
+      .orderBy(order, ascending ? 'ASC' : 'DESC')
+      .getMany();
+
+    return ingredientes;
+  }
+
   async findByNome(nome: string): Promise<Ingrediente> {
     const ingrediente: Ingrediente = await this.createQueryBuilder('i')
       .where('LOWER(i.nome) = :nome', { nome: nome.toLowerCase() })

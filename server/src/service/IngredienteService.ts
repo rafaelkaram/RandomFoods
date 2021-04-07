@@ -74,7 +74,29 @@ class IngredienteService {
         return response.status(201).json({ message: `${ingredientes.length} ingredientes cadastrados com sucesso.` });
     }
 
-    async typeIndex(request: Request, response: Response){
+    async searchByIds(request: Request, response: Response) {
+        const repository = getCustomRepository(IngredienteRepository);
+
+        const { ids } = request.query;
+        if (!ids) {
+            throw 'Nenhum ingrediente encontrado.';
+        }
+
+        const idsIngredientes = ids.map((id: string) => {
+            return parseInt(id);
+        });
+        console.log(idsIngredientes);
+
+        const ingredientes = await repository.findByIdsWithUnidades(idsIngredientes,'i.nome', true);
+
+        if (!ingredientes) {
+            throw 'Nenhum ingrediente encontrado.';
+        }
+
+        return response.status(200).json(ingredientes);
+    }
+
+    async typeIndex(request: Request, response: Response) {
         const repository = getCustomRepository(IngredienteRepository);
 
         const tiposIngrediente = Object.keys(TipoIngrediente);

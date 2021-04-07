@@ -40,25 +40,28 @@ const NewRecipe = () => {
 
 
     function handleNavigateToMeasures() {
+        const idIngredientes = ingredientsCart.map(ingrediente => {
+            return ingrediente.id;
+        })
         if (ingredientsCart.length > 0 && nomeReceita)
-            navigation.navigate('Medidas', { ingredientes: ingredientsCart })
+            navigation.navigate('Medidas', idIngredientes);
     }
 
-    function handleSelectItem(id: number, name: string, tipoUnidade:string) {
+    function handleSelectItem(id: number, nome: string) {
         const alredySelected = selectedItems.findIndex(item => item === id);
 
-        if (alredySelected >= 0 ) {
+        if (alredySelected >= 0) {
             const filteredItems = selectedItems.filter(item => item !== id);
-            const filteredNames = ingredientsCart.filter(item => item.ingredient.id !== id);
+            const filteredNames = ingredientsCart.filter(item => item.id !== id);
 
             setSelectedItems(filteredItems);
             setIngredientsCart(filteredNames);
         } else {
             setSelectedItems([...selectedItems, id]);
 
-            const ingredient = { ingredient: { id: id, name: name,tipoUnidade:tipoUnidade } }
+            const ingrediente = { id: id, nome: nome };
 
-            setIngredientsCart([...ingredientsCart, ingredient]);
+            setIngredientsCart([...ingredientsCart, ingrediente]);
         }
     }
 
@@ -96,9 +99,7 @@ const NewRecipe = () => {
                 animationType="none"
                 transparent={true}
                 visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(!modalVisible);
-                }}
+                onRequestClose={() => { setModalVisible(!modalVisible); }}
             >
                 <BlurView intensity={200} style={[StyleSheet.absoluteFill, styles.nonBlurredContent]}>
                     <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center' }}>
@@ -109,32 +110,29 @@ const NewRecipe = () => {
                             <BoldText style={{ alignSelf: 'center', color: 'white' }}>X</BoldText>
                         </TouchableOpacity>
                         <View style={styles.modalContainer}>
-
                             <BoldText style={{ marginBottom: 10 }}>Ingredientes Selecionados</BoldText>
-
                             <ScrollView>
                                 {ingredientsCart.map(ingrediente => {
                                     return (
                                         <View
                                             style={styles.modalList}
-                                            key={ingrediente.ingredient.id}>
-                                            <Text style={{ lineHeight: 30 }}>{ingrediente.ingredient.name}</Text>
+                                            key={ingrediente.id}>
+                                            <Text style={{ lineHeight: 30 }}>{ingrediente.nome}</Text>
                                             <TouchableOpacity
-                                                onPress={() => handleSelectItem(ingrediente.ingredient.id, ingrediente.ingredient.name, ingrediente.ingredient.tipoUnidade)}>
+                                                onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}>
                                                 <Feather name="trash-2" size={24} color="black" />
                                             </TouchableOpacity>
                                         </View>
                                     )
                                 })}
                             </ScrollView>
-
                         </View>
                     </View>
                 </BlurView>
             </Modal>
             <View style={styles.recipeName}>
                 <BoldText style={styles.recipeNameText}>Nome da receita</BoldText>
-                <Input
+            <Input
                     placeholder="Insira o nome da receita"
                     onChangeText={(value) => setnomeReceita(value)}
                     value={nomeReceita}
@@ -167,7 +165,7 @@ const NewRecipe = () => {
                                         return (
                                             <TouchableOpacity
                                                 style={selectedItems.includes(ingrediente.id) ? styles.ingredientSelected : styles.ingredient}
-                                                onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome,ingrediente.tipoUnidade)}
+                                                onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}
                                                 key={ingrediente.id}
                                             >
 
@@ -312,19 +310,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+
     recipeName: {
         margin: 10,
         padding: 10,
         backgroundColor: 'white',
         borderRadius: 20,
         height:120,
-        
+
     },
+
     recipeNameText: {
         fontSize: 15,
         paddingLeft: 8,
         paddingTop: 10
     },
+
     arrow: {
         width: 60,
         height: 60,
@@ -335,7 +336,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#e02041',
         justifyContent: 'center',
     },
- 
+
 })
 
 export default NewRecipe

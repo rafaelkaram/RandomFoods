@@ -32,11 +32,12 @@ interface IRecipeType {
 interface IIngredient {
   id: number,
   nome: string,
-  id_tipo_unidade: number,
-  id_tipo_ingrediente: number,
-  sem_medida: boolean,
-  derivado_leite: boolean,
-  glutem: boolean
+  tipoUnidade: string,
+  //id_tipo_ingrediente: number,
+  semMedida: boolean,
+  //derivadoLeite: boolean,
+  //glutem: boolean,
+  unidades: IUnidade[]
 }
 
 interface IIngredientType {
@@ -55,11 +56,8 @@ interface IIngredientType {
 }
 
 interface IIngredientCart {
-  ingredient: {
-    id: number,
-    name: string,
-    tipoUnidade: string,
-  }
+  id: number,
+  nome: string,
 }
 interface IUnidade{
   id: number,

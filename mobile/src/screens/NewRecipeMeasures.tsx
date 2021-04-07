@@ -1,49 +1,51 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Button, Image, StyleSheet, Dimensions, Modal } from 'react-native'
-import { Input } from 'react-native-elements'
+import { Text, ScrollView, StyleSheet, Dimensions, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import DropDownPicker from 'react-native-dropdown-picker';
-import { BlurView } from 'expo-blur';
-import BoldText from '../components/BoldText'
-import RegularText from '../components/RegularText'
-import ItalicText from '../components/ItalicText'
-import fixString from '../assets/functions/utils'
-import { IIngredientType, IIngredientCart, IIngredient, IUnidade } from '../constants/interfaces';
-import { Feather, AntDesign } from '@expo/vector-icons';
+import { IIngredient } from '../constants/interfaces';
 import api from '../services/api';
 import IngredientMeasure from '../components/IngredientMeasure';
+import { setAutoLogAppEventsEnabledAsync } from 'expo-facebook';
 
 const NewRecipeMeasures = ({ route }: { route: any }) => {
     const navigation = useNavigation();
 
-    const [ingredientsCart, setIngredientsCart] = useState<IIngredientCart[]>([]);
-    const [unidades, setUnidades] = useState<IUnidade[]>([]);
+    const [ingredientsCart, setIngredientsCart] = useState<IIngredient[]>([]);
+    const [load, setLoad] = useState(false);
 
     useEffect(() => {
         if (route.params) {
-            console.log(route.params)
-            const { ingredientes } = route.params
-            setIngredientsCart(ingredientes)
+            console.log(route.params);
+            const { idIngredientes } = route.params;
+            const params = { ids: idIngredientes };
+            api.get('/busca/ingrediente', { params })
+                .then(response => {
+                    console.log(response.data);
+                    setIngredientsCart(response.data);
+                    setLoad(true);
+            });
+        } else {
+            navigation.navigate('Home');
         }
-        api.get('/busca/unidade')
-            .then(response => {
-                setUnidades(response.data);
-            })
-    }, [])
+    }, []);
 
-
+    if (!load) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Image
+                    source={require('../assets/giphy.gif')}
+                    style={{ width: 200, height: 200, }}
+                />
+            </View>)
+    }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <Text>Medidas</Text>
             <ScrollView>
-                {ingredientsCart.map((ingrediente,index) => {
-                    return (
-                        <IngredientMeasure ingrediente={ingrediente.ingredient} key={ingrediente.ingredient.id} index={index} />
-                    )
-                }
-                )}
+                { ingredientsCart.map((ingrediente, index) => {
+                    return <IngredientMeasure ingrediente={ ingrediente } key={ ingrediente.id } index={ index } />
+                })}
             </ScrollView>
         </SafeAreaView>
     );
