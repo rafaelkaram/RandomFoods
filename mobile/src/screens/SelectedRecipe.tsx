@@ -25,41 +25,39 @@ function SelectedRecipe({ route }: { route: any }) {
     const idRecipe = route.params.id;
     const [recipe, setRecipe] = useState<IRecipe>();
     const [comments, setComments] = useState<IComment[]>([]);
-    const [subComments, setSubComments] = useState<IComment[]>([]);
     const [nota, setNota] = useState<number>()
-    const [initials,setInitials] = useState("");
+    const [initials, setInitials] = useState("");
 
     useEffect(() => {
 
-        api.get(`busca/receita/${idRecipe}`).then(response => {
+        api.get(`/busca/receita/${idRecipe}`).then(response => {
             setRecipe(response.data);
+
             setNota(recipe?.nota)
-            
-            const names= response.data?.usuario.split(" ")
-           
-            const tam  = names.length - 1
-            const firstName :string = names[0]
-            const lastName :string = names[tam] 
-            setInitials(firstName[0]+lastName[0]);
-           
+
+            const names = response.data?.usuario.nome.split(" ")
+
+            const tam = names.length - 1
+            const firstName: string = names[0]
+            const lastName: string = names[tam]
+            setInitials(firstName[0] + lastName[0]);
+
         });
-        api.get(`busca/comentario/${idRecipe}`)
+        api.get(`busca/comentario-receita/${idRecipe}`)
             .then(response => {
-                //console.log(response.data);
-                setComments(response.data.comentarios);
-                setSubComments(response.data.filhos);
+                setComments(response.data);
             });
         // api.get(`receita/${idRecipe}`).then(response => {
         //     setRecipe(response.data);
         //     setNota(recipe?.nota)
-            
+
         //     const names= response.data?.usuario.split(" ")
-           
+
         //     const tam  = names.length - 1
         //     const firstName :string = names[0]
         //     const lastName :string = names[tam] 
         //     setInitials(firstName[0]+lastName[0]);
-           
+
         // });
         // api.get(`comentar/${idRecipe}`)
         //     .then(response => {
@@ -69,53 +67,52 @@ function SelectedRecipe({ route }: { route: any }) {
         //     });
     }, []);
 
-    function ShowComments({ comentarios }: { comentarios: any }) {
+    function ShowComments({ comentarios }: { comentarios: any[] }) {
 
         if (!comentarios) {
             return (<Text>Vamos comentar galera!</Text>);
         } else {
-
             return (
 
                 <View style={styles.comments} >
-                    { comentarios.map((comment: { usuario: string; avaliacao: number; data: Date; valor: string; id: number; }) => (
-                        <View key={comment.id}>
-                            <View style={styles.singleComment}>
-                                <View>
-                                    <View style={styles.commentTitle}>
-                                        <View style={styles.commentUserDate}>
-                                            <BoldText>{comment.usuario}</BoldText>
-                                            <RegularText style={styles.commentDate}> - {moment(comment.data).startOf('day').fromNow()}</RegularText>
-                                        </View>
-                                        <Rating imageSize={10} readonly startingValue={Number(comment?.avaliacao)} />
+                    { comentarios.map(comment => {
+                        return (
+                            <View key={comment.id}>
+                                <View style={styles.singleComment}>
+                                    <View>
+                                        <View style={styles.commentTitle}>
+                                            <View style={styles.commentUserDate}>
+                                                <BoldText>{comment.usuario.nome}</BoldText>
+                                                <RegularText style={styles.commentDate}> - {moment(comment.data).startOf('day').fromNow()}</RegularText>
+                                            </View>
+                                            {/* <Rating imageSize={10} readonly startingValue={Number(comment?.avaliacao)} /> */}
 
+                                        </View>
+                                    </View>
+
+                                    <RegularText>{comment.valor}</RegularText>
+                                    <View style={styles.commentHour}>
+                                        <Text>{moment(comment.data).format('HH:mm')}</Text>
                                     </View>
                                 </View>
-
-                                <RegularText>{comment.valor}</RegularText>
-                                <View style={styles.commentHour}>
-                                    <Text>{moment(comment.data).format('HH:mm')}</Text>
-                                </View>
+                                <ShowSubComment sub={comment.id} />
                             </View>
-                            <ShowSubComment sub={comment.id} />
-                        </View>
-                    ))}
+                        )
+                    })}
                 </View>
             );
         }
     }
 
     function ShowSubComment({ sub }: { sub: any }) {
-        if (subComments) {
-            const childComments = subComments.filter(obj => obj.id_pai === sub);
-            if (childComments) {
-                //console.log(childComments);
-                return (
-                    <View style={styles.identacao}>
-                        <ShowComments comentarios={childComments} />
-                    </View>
-                );
-            }
+        const childComments = comments.filter(obj => obj.comentarioPai === sub);
+        if (childComments) {
+            return (
+                <View style={styles.identacao}>
+                    <ShowComments comentarios={childComments} />
+                </View>
+            );
+
         }
         return (<Text></Text>);
     }
@@ -137,7 +134,7 @@ function SelectedRecipe({ route }: { route: any }) {
                             activeOpacity={0.7}
                             containerStyle={{ backgroundColor: 'lightgrey' }}
                         />
-                        <Text style={styles.autorName}>{recipe?.usuario}</Text>
+                        <Text style={styles.autorName}>{recipe?.usuario.nome}</Text>
                     </View>
                     <View style={styles.note}>
                         <BoldText>NOTA:</BoldText>
@@ -147,7 +144,7 @@ function SelectedRecipe({ route }: { route: any }) {
                     <View style={styles.category}>
                         {recipe?.categorias.map(category => {
                             return (
-                                <Category key={category} nome={category} />
+                                <Category key={category.id} nome={category.nome} />
                             )
                         })}
 
@@ -160,7 +157,7 @@ function SelectedRecipe({ route }: { route: any }) {
                                 <View style={styles.ingredient} key={ingredient.id}>
                                     <Entypo name="dot-single" size={15} color="black" />
                                     <RegularText>{ingredient.nome}</RegularText>
-                                    <RegularText>{ingredient.quantidade ? `: ${ingredient.quantidade.toString().replace('.00', '')}` : ' a gosto'}</RegularText>
+                                    <RegularText>{ingredient.qtde ? `: ${ingredient.qtde.toString().replace('.00', '')}` : ' a gosto'}</RegularText>
                                 </View>
                             )
                         })}
@@ -170,7 +167,7 @@ function SelectedRecipe({ route }: { route: any }) {
                         <RegularText>{recipe?.descricao.split('\\n').map((desc, index) => (
                             <Text key={index}>{'\n'}{desc}</Text>))}</RegularText>
                     </View>
-                    <ShowComments comentarios={comments} />
+                    <ShowComments comentarios={comments.filter(comentario => (comentario.comentarioPai === null))} />
 
                 </View>
 
@@ -193,13 +190,13 @@ const styles = StyleSheet.create({
     },
     autor: {
         margin: 10,
-        padding:10,
+        padding: 10,
         backgroundColor: 'white',
-        flexDirection:'row',
-        alignItems:'center',
+        flexDirection: 'row',
+        alignItems: 'center',
     },
-    autorName:{
-        marginLeft:15,
+    autorName: {
+        marginLeft: 15,
     },
     rating: {
         backgroundColor: Colors.dimmedBackground,
