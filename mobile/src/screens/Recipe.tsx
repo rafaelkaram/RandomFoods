@@ -20,16 +20,15 @@ const Recipe = ({ route }: { route: any }) => {
     useEffect(() => {
         if (route.params) {
             const {ingredientes} = route.params
+            const params = {ids: ingredientes}
             
-            api.post('/busca/combinacao-perfeita', {
-               ingredientes
-            }
+            api.get('/busca/combinacao-perfeita', {params}
             ).then(response => {
                 setRecipes(response.data)
                 setLoad(true)
             })
         } else {
-            api.get('buscar/receita').then(response => {
+            api.get('busca/receita').then(response => {
                 setRecipes(response.data)
                 setLoad(true)
             })
@@ -62,8 +61,8 @@ const Recipe = ({ route }: { route: any }) => {
                                 <TouchableOpacity
                                     onPress={() => handleNavigateToRecipeSelected(item.id)}>
                                     <Text style={styles.itemListImage}>Imagem</Text>
-                                    <Text style={styles.itemListTitle}>{item.receita}</Text>
-                                    <Rating imageSize={20} readonly startingValue={Number(item?.nota)} />
+                                    {/* <Text style={styles.itemListTitle}>{item.receita}</Text> */}
+                                    {/* <Rating imageSize={20} readonly startingValue={Number(item?.nota)} /> */}
                                 </TouchableOpacity>
                             </View>
                         )

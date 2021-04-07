@@ -1,4 +1,5 @@
 import { Usuario } from "../entity/Usuario";
+import Util from '../util/Util';
 
 export default {
   render(usuario: Usuario) {
@@ -6,14 +7,13 @@ export default {
       return {
         id: usuario.id,
         nome: usuario.nome,
-        path: '',
         nomeUsuario: '@'
       };
     } else if (usuario) {
       return {
         id: usuario.id,
         nome: usuario.nome,
-        path: '',
+        path: `http://${ Util.getLocalIP() }:${ process.env.PORT }/uploads/midia/usuario/${Util.encryptMidia(usuario.id.toString())}.png`,
         nomeUsuario: '@'
       };
     }
