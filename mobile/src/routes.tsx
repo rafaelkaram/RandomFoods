@@ -10,6 +10,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Home from './screens/Home'
 import NewRecipe from './screens/NewRecipe'
+import NewRecipeMeasures from './screens/NewRecipeMeasures'
 import Dashboard from './screens/Dashboard'
 import Recipe from './screens/Recipe'
 import SelectedRecipe from './screens/SelectedRecipe'
@@ -30,6 +31,7 @@ const RecipeStack = () => {
     return (
         <AppStack.Navigator headerMode={'none'}>
             <AppStack.Screen name="Nova Receita" component={NewRecipe} />
+            <AppStack.Screen name="Medidas" component={NewRecipeMeasures} />
             <AppStack.Screen name="Receita" component={Recipe} />
             <AppStack.Screen name="Receita Selecionada" component={SelectedRecipe} />
         </AppStack.Navigator>

@@ -8,7 +8,7 @@ import BoldText from '../components/BoldText'
 import RegularText from '../components/RegularText'
 import ItalicText from '../components/ItalicText'
 import fixString from '../assets/functions/utils'
-import { Feather } from '@expo/vector-icons';
+import { Feather, AntDesign } from '@expo/vector-icons';
 // import logoImg from '../../assets/random_foods.png';
 import { IIngredientType, IIngredientCart } from '../constants/interfaces';
 import api from '../services/api';
@@ -23,6 +23,7 @@ const NewRecipe = () => {
     const [load, setLoad] = useState(false)
     const [modalVisible, setModalVisible] = useState(false);
     const [nomeIngrediente, setnomeIngrediente] = useState('');
+    const [nomeReceita, setnomeReceita] = useState('');
 
 
     useEffect(() => {
@@ -38,14 +39,15 @@ const NewRecipe = () => {
     }, []);
 
 
-    function handleNavigateToRecipe() {
-        navigation.navigate('Receita');
+    function handleNavigateToMeasures() {
+        if (ingredientsCart.length > 0 && nomeReceita)
+            navigation.navigate('Medidas', { ingredientes: ingredientsCart })
     }
 
-    function handleSelectItem(id: number, name: string) {
+    function handleSelectItem(id: number, name: string, tipoUnidade:string) {
         const alredySelected = selectedItems.findIndex(item => item === id);
 
-        if (alredySelected >= 0) {
+        if (alredySelected >= 0 ) {
             const filteredItems = selectedItems.filter(item => item !== id);
             const filteredNames = ingredientsCart.filter(item => item.ingredient.id !== id);
 
@@ -54,13 +56,11 @@ const NewRecipe = () => {
         } else {
             setSelectedItems([...selectedItems, id]);
 
-            const ingredient = { ingredient: { id: id, name: name } }
+            const ingredient = { ingredient: { id: id, name: name,tipoUnidade:tipoUnidade } }
 
             setIngredientsCart([...ingredientsCart, ingredient]);
         }
-
     }
-
 
     if (!load) {
         return (
@@ -73,7 +73,7 @@ const NewRecipe = () => {
     }
 
     return (
-        <SafeAreaView style={{flex:1}}>
+        <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.newRecipeImageBasketContainer}>
                 <Image
                     style={styles.newRecipeImage}
@@ -111,6 +111,7 @@ const NewRecipe = () => {
                         <View style={styles.modalContainer}>
 
                             <BoldText style={{ marginBottom: 10 }}>Ingredientes Selecionados</BoldText>
+
                             <ScrollView>
                                 {ingredientsCart.map(ingrediente => {
                                     return (
@@ -119,7 +120,7 @@ const NewRecipe = () => {
                                             key={ingrediente.ingredient.id}>
                                             <Text style={{ lineHeight: 30 }}>{ingrediente.ingredient.name}</Text>
                                             <TouchableOpacity
-                                                onPress={() => handleSelectItem(ingrediente.ingredient.id, ingrediente.ingredient.name)}>
+                                                onPress={() => handleSelectItem(ingrediente.ingredient.id, ingrediente.ingredient.name, ingrediente.ingredient.tipoUnidade)}>
                                                 <Feather name="trash-2" size={24} color="black" />
                                             </TouchableOpacity>
                                         </View>
@@ -131,6 +132,15 @@ const NewRecipe = () => {
                     </View>
                 </BlurView>
             </Modal>
+            <View style={styles.recipeName}>
+                <BoldText style={styles.recipeNameText}>Nome da receita</BoldText>
+                <Input
+                    placeholder="Insira o nome da receita"
+                    onChangeText={(value) => setnomeReceita(value)}
+                    value={nomeReceita}
+                    inputContainerStyle={{ borderBottomWidth: 0, marginTop:10 }}
+                />
+            </View>
             <Input
                 placeholder="Pesquise por algum ingrediente"
                 onChangeText={(value) => setnomeIngrediente(value)}
@@ -157,7 +167,7 @@ const NewRecipe = () => {
                                         return (
                                             <TouchableOpacity
                                                 style={selectedItems.includes(ingrediente.id) ? styles.ingredientSelected : styles.ingredient}
-                                                onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}
+                                                onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome,ingrediente.tipoUnidade)}
                                                 key={ingrediente.id}
                                             >
 
@@ -171,6 +181,12 @@ const NewRecipe = () => {
                     )
                 })}
             </ScrollView>
+            <TouchableOpacity
+                style={styles.arrow}
+                onPress={handleNavigateToMeasures}
+            >
+                <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
+            </TouchableOpacity>
         </SafeAreaView>
     );
 }
@@ -296,7 +312,30 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
+    recipeName: {
+        margin: 10,
+        padding: 10,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        height:120,
+        
+    },
+    recipeNameText: {
+        fontSize: 15,
+        paddingLeft: 8,
+        paddingTop: 10
+    },
+    arrow: {
+        width: 60,
+        height: 60,
+        borderRadius: 80,
+        position: 'absolute',
+        top: (Height - 100),
+        right: 20,
+        backgroundColor: '#e02041',
+        justifyContent: 'center',
+    },
+ 
 })
 
 export default NewRecipe
