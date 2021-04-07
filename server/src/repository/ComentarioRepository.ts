@@ -15,9 +15,11 @@ export class ComentarioRepository extends Repository<Comentario> {
 
     return comentarios;
   }
-
+  
   async findByReceita(id: number): Promise<Comentario[]> {
     const comentarios: Comentario[] = await this.createQueryBuilder('c')
+      .innerJoinAndSelect('c.usuario', 'usuario')
+      .leftJoinAndSelect('c.comentarioPai', 'comentarioPai')
       .where('c.receita.id = :id', { id })
       .orderBy('c.data', 'ASC')
       .getMany();
