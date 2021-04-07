@@ -37,7 +37,7 @@ const SearchRecipe = () => {
             navigation.navigate('Receita', { ingredientes: selectedItems })
     }
 
-    function handleSelectItem(id: number, name: string) {
+    function handleSelectItem(id: number, name: string, tipoUnidade:string) {
         const alredySelected = selectedItems.findIndex(item => item === id);
 
         if (alredySelected >= 0) {
@@ -49,7 +49,7 @@ const SearchRecipe = () => {
         } else {
             setSelectedItems([...selectedItems, id]);
 
-            const ingredient = { ingredient: { id: id, name: name } }
+            const ingredient = { ingredient: { id: id, name: name, tipoUnidade:tipoUnidade } }
 
             setIngredientsCart([...ingredientsCart, ingredient]);
         }
@@ -113,7 +113,7 @@ const SearchRecipe = () => {
                                             key={ingrediente.ingredient.id}>
                                             <Text style={{ lineHeight: 30 }}>{ingrediente.ingredient.name}</Text>
                                             <TouchableOpacity
-                                                onPress={() => handleSelectItem(ingrediente.ingredient.id, ingrediente.ingredient.name)}>
+                                                onPress={() => handleSelectItem(ingrediente.ingredient.id, ingrediente.ingredient.name, ingrediente.ingredient.tipoUnidade)}>
                                                 <Feather name="trash-2" size={24} color="black" />
                                             </TouchableOpacity>
                                         </View>
@@ -153,7 +153,7 @@ const SearchRecipe = () => {
                                         return (
                                             <TouchableOpacity
                                                 style={selectedItems.includes(ingrediente.id) ? styles.ingredientSelected : styles.ingredient}
-                                                onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}
+                                                onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome,ingrediente.tipoUnidade)}
                                                 key={ingrediente.id}
                                             >
 

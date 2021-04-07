@@ -22,6 +22,21 @@ class UsuarioService {
         return response.status(200).json(usuarios);
     }
 
+    async fetch(request: Request, response: Response) {
+        const repository = getCustomRepository(UsuarioRepository);
+
+        const { id } = request.params;
+
+        const usuario = await repository.findOne(id);
+
+        if (!usuario) {
+            return response.status(400).json({ error: 'Usuário não encontrado!'});
+        }
+
+        return response.status(200).json(usuario);
+    }
+
+
     async validate(request: Request, response: Response) {
         const repository = getCustomRepository(UsuarioRepository);
         const { email, senha } = request.body;
@@ -53,7 +68,8 @@ class UsuarioService {
 
         if (!isExtensao || !userId) {
             console.log(`Removendo arquivo ${ nomeArquivo }.\nImportação não concluída.`);
-            fs.unlink(path.join(Util.getPath('usuario')), (err) => {
+            console.log(path.join(Util.getPath('usuario'))); 
+            fs.unlink(path.join(Util.getPath('usuario'),nomeArquivo), (err) => {
                 if (err) throw err;
             });
 
