@@ -6,9 +6,11 @@ import { ComentarioRepository } from '../repository/ComentarioRepository';
 import ReceitaService from './ReceitaService';
 import UsuarioService from './UsuarioService';
 
+import comentarioView from '../view/ComentarioView';
+
 class ComentarioService {
     // Métodos das rotas
-    async index (request: Request, response: Response) {
+    async index (request: Request, response: Response) { 
         const repository = getCustomRepository(ComentarioRepository);
 
         const comentarios = await repository.findAll();
@@ -20,7 +22,7 @@ class ComentarioService {
         const repository = getCustomRepository(ComentarioRepository);
 
         const { id } = request.params;
-
+        
         const comentario = await repository.findOne(id);
 
         if (!comentario) {
@@ -41,7 +43,7 @@ class ComentarioService {
             return response.status(400).json({ error: 'Comentarios não encontrado!' });
         }
 
-        return response.status(200).json(comentarios);
+        return response.status(200).json(comentarioView.renderMany(comentarios));
     }
 
     async create(request: Request, response: Response) {
