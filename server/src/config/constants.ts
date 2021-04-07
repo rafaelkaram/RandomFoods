@@ -1,5 +1,5 @@
-import 'reflect-metadata';
+import Util from '../util/Util';
 
 export default {
-  SERVER_URL: `http://${ process.env.LOCAL_IP }:${ process.env.PORT?.toString() }`
+  SERVER_URL: `http://${ Util.getLocalIP() }:3333`
 }
