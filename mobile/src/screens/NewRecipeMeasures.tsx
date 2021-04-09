@@ -23,7 +23,7 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                     console.log(response.data);
                     setIngredientsCart(response.data);
                     setLoad(true);
-            });
+                });
         } else {
             navigation.navigate('Home');
         }
@@ -43,9 +43,15 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
         <SafeAreaView style={{ flex: 1 }}>
             <Text>Medidas</Text>
             <ScrollView>
-                { ingredientsCart.map((ingrediente, index) => {
-                    return <IngredientMeasure ingrediente={ ingrediente } key={ ingrediente.id } index={ index } />
+                {ingredientsCart.map((ingrediente, index) => {
+                    return (
+                        <View key={ingrediente.id} >
+                            <IngredientMeasure ingrediente={ingrediente} index={index} />
+                        </View>
+                    )
                 })}
+                <Text>teste</Text>
+                <Text>teste</Text>
             </ScrollView>
         </SafeAreaView>
     );
