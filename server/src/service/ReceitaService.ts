@@ -15,6 +15,7 @@ import { Receita, Tipo } from '../entity/Receita';
 import { ReceitaIngrediente } from '../entity/ReceitaIngrediente';
 
 import receitaView from '../view/ReceitaView';
+import ReceitaFiltroView from '../view/ReceitaFiltroView';
 
 class ReceitaService {
     // Métodos das rotas
@@ -145,15 +146,26 @@ class ReceitaService {
         const repository = getCustomRepository(ReceitaRepository);
 
         const { ids } = request.query;
-
+        
         try {
             const receitaIngredienteService = new ReceitaIngredienteService();
-
+            
             const idsReceita = await receitaIngredienteService.findPerfectMatch(ids);
+        
+            const ids2 = idsReceita.map(item => {return item.id});
+            
+            const receitas = await repository.findByFiltro(ids2);
 
-            const receitas = await repository.findByIds(idsReceita);
-
-            return response.status(200).json(receitas);
+            const novasReceitas = []
+            const avaliacaoService = new AvaliacaoService();
+            for (let key in receitas){
+                const receita = receitas[key];
+                const avaliacao = await avaliacaoService.countVotes(receita.id);
+                const filter = ReceitaFiltroView.render(receita, avaliacao);
+                novasReceitas.push(filter);
+            }
+            
+            return response.status(200).json(novasReceitas);
 
         } catch (e) {
             console.error(e);

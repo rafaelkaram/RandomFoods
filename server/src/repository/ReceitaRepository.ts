@@ -15,4 +15,13 @@ export class ReceitaRepository extends Repository<Receita> {
 
     return tipoReceita;
   }
+
+  async findByFiltro(ids: number[]): Promise<Receita[]>{
+    const receitas = await this.createQueryBuilder('r')
+      .leftJoinAndSelect('r.midias', 'midias')
+      .where('r.id in (:...ids)', { ids })
+      .getMany();
+
+    return receitas;
+  }
 }

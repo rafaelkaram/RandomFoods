@@ -17,7 +17,10 @@ interface IRecipe {
     nomeUsuario: string,
     path: string,
   },
-  midias: [string],
+  midias:[{
+    id: number,
+    url: string
+  }],
   categorias: [{
     id: number,
     nome: string,
