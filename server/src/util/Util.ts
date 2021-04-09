@@ -1,3 +1,4 @@
+import { response, Response } from 'express';
 import path from 'path';
 import os from 'os';
 
@@ -60,6 +61,21 @@ export default {
 
   encryptMidia(valor?: string): string {
     return Buffer.from(valor ? valor : 'error').toString('hex');
+  },
+
+  systrace(status: number, message: any): Response {
+    console.log(message);
+
+    if (status === 201)
+      return response.status(status).json({ message });
+
+    return response.status(status).json(message);
+  },
+
+  syserror(status: number, message: any): Response {
+    console.error(message);
+
+    return response.status(status).json({ error: message });
   }
 
 }
