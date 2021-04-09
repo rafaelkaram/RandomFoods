@@ -44,7 +44,7 @@ const NewRecipe = () => {
             return ingrediente.id;
         })
         if (ingredientsCart.length > 0 && nomeReceita)
-            navigation.navigate('Medidas', idIngredientes);
+            navigation.navigate('Medidas', { idIngredientes });
     }
 
     function handleSelectItem(id: number, nome: string) {
