@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, ScrollView, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native'
-import { Rating } from 'react-native-elements';
+import { Text, View, ScrollView, StyleSheet, Dimensions, TouchableOpacity, Image, TabBarIOSItem } from 'react-native'
+import { Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IRecipe } from '../constants/interfaces';
@@ -21,7 +21,7 @@ const Recipe = ({ route }: { route: any }) => {
         if (route.params) {
             const {ingredientes} = route.params
             const params = {ids: ingredientes}
-            
+
             api.get('/busca/combinacao-perfeita', {params}
             ).then(response => {
                 setRecipes(response.data)
@@ -33,7 +33,7 @@ const Recipe = ({ route }: { route: any }) => {
                 setLoad(true)
             })
         }
-        
+
     }, [])
 
     function handleNavigateToRecipeSelected(id: number) {
@@ -58,8 +58,24 @@ const Recipe = ({ route }: { route: any }) => {
                     {recipes.map(item => {
                         return (
                             <View style={styles.itemList} key={item.id}>
-                                <TouchableOpacity
-                                    onPress={() => handleNavigateToRecipeSelected(item.id)}>
+                                <TouchableOpacity onPress={() => handleNavigateToRecipeSelected(item.id)} >
+
+                                    { item.midias ? (
+                                        <Avatar
+                                            size="large"
+                                            rounded
+                                            source={{ uri: item.midias[0] }}
+                                            activeOpacity={0.7}
+                                            containerStyle={{ backgroundColor: 'lightgrey' }}
+                                        />
+                                        ) : (
+                                        <Avatar
+                                            size="large"
+                                            rounded
+                                            title={initials}
+                                            activeOpacity={0.7}
+                                            containerStyle={{ backgroundColor: 'lightgrey' }}
+                                        /> )}
                                     <Text style={styles.itemListImage}>Imagem</Text>
                                     {/* <Text style={styles.itemListTitle}>{item.receita}</Text> */}
                                     {/* <Rating imageSize={20} readonly startingValue={Number(item?.nota)} /> */}

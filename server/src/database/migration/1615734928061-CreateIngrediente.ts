@@ -22,16 +22,20 @@ export class CreateIngrediente1615734928061 implements MigrationInterface {
                     name: 'tipo_ingrediente',
                     type: 'enum',
                     enum: [
+                        'ADOCANTE',
+                        'BEBIDA',
                         'CARNE',
                         'CONFEITARIA',
                         'GRAO',
                         'FRUTA',
+                        'FRUTO_DO_MAR',
                         'LATICINIO',
                         'LEGUME',
                         'MASSA',
                         'MOLHO',
                         'OLEO',
                         'OUTROS',
+                        'SEMENTE',
                         'TEMPERO',
                         'VEGETAL'
                     ]

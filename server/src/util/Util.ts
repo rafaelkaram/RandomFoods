@@ -63,19 +63,36 @@ export default {
     return Buffer.from(valor ? valor : 'error').toString('hex');
   },
 
-  systrace(status: number, message: any): Response {
-    console.log(message);
+  systrace (status: number, response: Response, value?: any): Response {
+    if (!value) {
+      if (status === 204) {
+        return response.status(status).send();
+      }
 
-    if (status === 201)
-      return response.status(status).json({ message });
+      throw Error('Status requer atributo de retorno.');
+    }
 
-    return response.status(status).json(message);
+    console.log(value);
+
+    if (status === 200) {
+      return response.status(status).json(value);
+    }
+
+    return response.status(status).json({ message: value });
   },
 
-  syserror(status: number, message: any): Response {
-    console.error(message);
+  syserror (status: number, response: Response, value?: any): Response {
+    if (!value) {
+      if (status === 401 || status === 403 || status === 405) {
+        return response.status(status).send();
+      }
 
-    return response.status(status).json({ error: message });
+      throw Error('Status requer atributo de retorno.');
+    }
+
+    console.log(value);
+
+    return response.status(status).json({ error: value });
   }
 
 }
