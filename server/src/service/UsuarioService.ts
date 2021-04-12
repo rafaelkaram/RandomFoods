@@ -68,7 +68,7 @@ class UsuarioService {
 
         if (!isExtensao || !userId) {
             console.log(`Removendo arquivo ${ nomeArquivo }.\nImportação não concluída.`);
-            console.log(path.join(Util.getPath('usuario'))); 
+            console.log(path.join(Util.getPath('usuario')));
             fs.unlink(path.join(Util.getPath('usuario'),nomeArquivo), (err) => {
                 if (err) throw err;
             });
@@ -86,7 +86,7 @@ class UsuarioService {
             return response.status(201).json({ message: 'Imagem de perfil salva com sucesso!' });
         }
 
-        return response.status(400).json({ error: 'Usuario não econtrado!' });
+        return Util.syserror(400, 'Usuario não econtrado!');
     }
 
     async create(request: Request, response: Response) {
@@ -105,7 +105,7 @@ class UsuarioService {
 
         await repository.save(usuario);
 
-        return response.status(201).json({ message: 'Usuário criado com sucesso.' });
+        return Util.systrace(201, 'Usuário criado com sucesso.');
     }
 
     async createBulk(request: Request, response: Response) {
