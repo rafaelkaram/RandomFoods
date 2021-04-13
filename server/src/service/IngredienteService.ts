@@ -77,7 +77,7 @@ class IngredienteService {
     async searchByIds(request: Request, response: Response) {
         const repository = getCustomRepository(IngredienteRepository);
 
-        const { ids } = request.query;
+        const { ids } = request.query as { ids: string[] };
         if (!ids) {
             throw 'Nenhum ingrediente encontrado.';
         }
@@ -87,7 +87,16 @@ class IngredienteService {
         });
         console.log(idsIngredientes);
 
-        const ingredientes = await repository.findByIdsWithUnidades(idsIngredientes,'i.nome', true);
+        const ingredientesObj = await repository.findByIdsWithUnidades(idsIngredientes,'i.nome', true);
+
+        const ingredientes = ingredientesObj.map(ingrediente => {
+            const urlObj = imageView.render(ingrediente.tipoIngrediente);
+            return {
+                ...ingrediente,
+                url: urlObj.url,
+                alt_url: urlObj.url
+            }
+        });
 
         if (!ingredientes) {
             throw 'Nenhum ingrediente encontrado.';
@@ -106,7 +115,7 @@ class IngredienteService {
             const tipoIngrediente = tiposIngrediente[key];
             const ingredientes = await repository.find({ where: { tipoIngrediente }, order: { nome: 'ASC' } });
 
-            result.push(imageView.render(ingredientes));
+            result.push(imageView.renderMany(ingredientes));
         }
 
         return response.status(200).json(result);
