@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Text, ScrollView, StyleSheet, Dimensions, View, Image } from 'react-native';
+import { Text, ScrollView, StyleSheet, Dimensions, View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IIngredient } from '../constants/interfaces';
 import api from '../services/api';
 import IngredientMeasure from '../components/IngredientMeasure';
 import { setAutoLogAppEventsEnabledAsync } from 'expo-facebook';
+import { Feather, AntDesign } from '@expo/vector-icons';
 
 const NewRecipeMeasures = ({ route }: { route: any }) => {
     const navigation = useNavigation();
 
     const [ingredientsCart, setIngredientsCart] = useState<IIngredient[]>([]);
     const [load, setLoad] = useState(false);
+    const Height = Dimensions.get("window").height;
+    const Width = Dimensions.get("window").width;
 
     useEffect(() => {
         if (route.params) {
@@ -39,31 +42,104 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
             </View>)
     }
 
+    function handleNavigateToMeasures() {
+        // const idIngredientes = ingredientsCart.map(ingrediente => {
+        //     return ingrediente.id;
+        // })
+        // if (ingredientsCart.length > 0 && nomeReceita)
+        //     navigation.navigate('Medidas', { idIngredientes });
+    }
+
+    
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <Text>Medidas</Text>
             <ScrollView>
                 {ingredientsCart.map((ingrediente, index) => {
+                     if (ingrediente.tipoUnidade === 'UNIDADE') {
+                        ingrediente.unidades.push({
+                          id: 5,
+                          nome: 'Unidade',
+                          sigla: 'U',
+                          taxaConversao: '1.000',
+                          tipo: 'UNIDADE',
+                        });
+                      } else if (ingrediente.tipoUnidade === 'VOLUME') {
+                        ingrediente.unidades.push({
+                          id: 1,
+                          nome: 'Litro',
+                          sigla: 'L',
+                          taxaConversao: '1.000',
+                          tipo: 'VOLUME',
+                        });
+                        ingrediente.unidades.push({
+                          id: 2,
+                          nome: 'Mililitro',
+                          sigla: 'Ml',
+                          taxaConversao: '0.001',
+                          tipo: 'VOLUME',
+                        });
+                      } else {
+                        ingrediente.unidades.push({
+                          id: 3,
+                          nome: 'Miligrama',
+                          sigla: 'Mg',
+                          taxaConversao: '0.001',
+                          tipo: 'PESO',
+                        });
+                        ingrediente.unidades.push({
+                          id: 4,
+                          nome: 'Grama',
+                          sigla: 'g',
+                          taxaConversao: '1.000',
+                          tipo: 'PESO',
+                        });
+                        ingrediente.unidades.push({
+                          id: 6,
+                          nome: 'Quilograma',
+                          sigla: 'Kg',
+                          taxaConversao: '1000.000',
+                          tipo: 'PESO',
+                        });
+                      }
                     return (
                         <View key={ingrediente.id} >
                             <IngredientMeasure ingrediente={ingrediente} index={index} />
                         </View>
                     )
                 })}
-                <Text>teste</Text>
-                <Text>teste</Text>
+            
+                
             </ScrollView>
+            <TouchableOpacity
+                    style={styles.arrow}
+                    onPress={handleNavigateToMeasures}
+                >
+                    <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
+                </TouchableOpacity>
         </SafeAreaView>
     );
 }
-
-
-const Height = Dimensions.get("window").height;
+const Height = Dimensions.get("window").height
 const Width = Dimensions.get("window").width;
+
+
 
 
 const styles = StyleSheet.create({
 
+   
+    arrow: {
+        width: 60,
+        height: 60,
+        borderRadius: 80,
+        position: 'absolute',
+        top: (Height - 100),
+        right: 20,
+        backgroundColor: '#e02041',
+        justifyContent: 'center',
+    },
 
 
 })
