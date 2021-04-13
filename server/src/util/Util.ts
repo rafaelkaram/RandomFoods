@@ -69,7 +69,7 @@ export default {
         return response.status(status).send();
       }
 
-      throw Error('Status requer atributo de retorno.');
+      throw Error('Status requires response.');
     }
 
     console.log(value);
@@ -87,10 +87,10 @@ export default {
         return response.status(status).send();
       }
 
-      throw Error('Status requer atributo de retorno.');
+      throw Error('Status requires response.');
     }
 
-    console.log(value);
+    console.error(value);
 
     return response.status(status).json({ error: value });
   }
