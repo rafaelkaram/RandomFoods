@@ -14,18 +14,21 @@ const itemWidth = width / numberGrid;
 const Recipe = ({ route }: { route: any }) => {
 
     const navigation = useNavigation();
+    const [perfectRecipes, setPerfectRecipes] = useState<IRecipe[]>([])
+    const [partialRecipes, setPartialRecipes] = useState<IRecipe[]>([])
     const [recipes, setRecipes] = useState<IRecipe[]>([])
     const [load, setLoad] = useState(false)
 
     useEffect(() => {
         if (route.params) {
-            const {ingredientes} = route.params
-            const params = {ids: ingredientes}
-            
-            api.get('/busca/combinacao-perfeita', {params}
+            const { ingredientes } = route.params
+            const params = { ids: ingredientes }
+
+            api.get('/busca/combinacoes', { params }
             ).then(response => {
-                setRecipes(response.data)
-                
+                setPerfectRecipes(response.data.matchesPerfeitos)
+                setPartialRecipes(response.data.matchesParciais)
+
                 setLoad(true)
             })
         } else {
@@ -34,7 +37,7 @@ const Recipe = ({ route }: { route: any }) => {
                 setLoad(true)
             })
         }
-        
+
     }, [])
 
     function handleNavigateToRecipeSelected(id: number) {
@@ -51,36 +54,95 @@ const Recipe = ({ route }: { route: any }) => {
             </View>)
     }
 
-    return (
-        <SafeAreaView>
-            <ScrollView style={styles.body}>
-                <Text style={styles.title}>Minhas receitas</Text>
-                <View style={styles.columns}>
-                    {recipes.map(item => {
-                        return (
-                            <View style={styles.itemList} key={item.id}>
-                                <TouchableOpacity
-                                    onPress={() => handleNavigateToRecipeSelected(item.id)}>
-                                    { item.midias.length > 0 ? (
-                                        <Avatar
-                                            size="large"
-                                            source={{ uri: item.midias[0].url }}
-                                            activeOpacity={0.7}
-                                            containerStyle={styles.itemListImage}
-                                        />
+    if (route.params) {
+        return (
+            <SafeAreaView>
+                <ScrollView style={styles.body}>
+                    <Text style={styles.title}>Receitas Perfeitas para suas escolhas</Text>
+                    <View style={styles.columns}>
+                        {perfectRecipes.map(item => {
+                            return (
+                                <View style={styles.itemList} key={item.id}>
+                                    <TouchableOpacity
+                                        onPress={() => handleNavigateToRecipeSelected(item.id)}>
+                                        {item.midias.length > 0 ? (
+                                            <Avatar
+                                                size="large"
+                                                source={{ uri: item.midias[0].url }}
+                                                activeOpacity={0.7}
+                                                containerStyle={styles.itemListImage}
+                                            />
                                         ) : (
-                                        <Text style={styles.itemListImage}>Imagem</Text>)
-                                    }
-                                    <Text style={styles.itemListTitle}>{item.receita}</Text>
-                                    <Rating imageSize={20} readonly startingValue={Number(item?.nota)} />
-                                </TouchableOpacity>
-                            </View>
-                        )
-                    })}
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-    )
+                                            <Text style={styles.itemListImage}>Imagem</Text>)
+                                        }
+                                        <Text style={styles.itemListTitle}>{item.receita}</Text>
+                                        <Rating imageSize={20} readonly startingValue={Number(item?.nota)} />
+                                    </TouchableOpacity>
+                                </View>
+                            )
+                        })}
+                    </View>
+                    <Text style={styles.title}>Outras Receitas que podem te interessar</Text>
+                    <View style={styles.columns}>
+                        {partialRecipes.map(item => {
+                            return (
+                                <View style={styles.itemList} key={item.id}>
+                                    <TouchableOpacity
+                                        onPress={() => handleNavigateToRecipeSelected(item.id)}>
+                                        {item.midias.length > 0 ? (
+                                            <Avatar
+                                                size="large"
+                                                source={{ uri: item.midias[0].url }}
+                                                activeOpacity={0.7}
+                                                containerStyle={styles.itemListImage}
+                                            />
+                                        ) : (
+                                            <Text style={styles.itemListImage}>Imagem</Text>)
+                                        }
+                                        <Text style={styles.itemListTitle}>{item.receita}</Text>
+                                        <Rating imageSize={20} readonly startingValue={Number(item?.nota)} />
+                                    </TouchableOpacity>
+                                </View>
+                            )
+                        })}
+
+
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        )
+    }
+    else
+        return (
+            <SafeAreaView>
+                <ScrollView style={styles.body}>
+                    <Text style={styles.title}>Minhas receitas</Text>
+                    <View style={styles.columns}>
+                        {recipes.map(item => {
+                            return (
+                                <View style={styles.itemList} key={item.id}>
+                                    <TouchableOpacity
+                                        onPress={() => handleNavigateToRecipeSelected(item.id)}>
+                                        {item.midias.length > 0 ? (
+                                            <Avatar
+                                                size="large"
+                                                source={{ uri: item.midias[0].url }}
+                                                activeOpacity={0.7}
+                                                containerStyle={styles.itemListImage}
+                                            />
+                                        ) : (
+                                            <Text style={styles.itemListImage}>Imagem</Text>)
+                                        }
+                                        <Text style={styles.itemListTitle}>{item.receita}</Text>
+                                        <Rating imageSize={20} readonly startingValue={Number(item?.nota)} />
+                                    </TouchableOpacity>
+                                </View>
+                            )
+                        })}
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        )
 }
 const styles = StyleSheet.create({
     body: {

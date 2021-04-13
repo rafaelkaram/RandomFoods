@@ -63,7 +63,7 @@ export default {
     return Buffer.from(valor ? valor : 'error').toString('hex');
   },
 
-  systrace(status: number, message: any): Response {
+  systrace(status: number, response: Response, message?: any): Response {
     console.log(message);
 
     if (status === 201)
@@ -72,7 +72,7 @@ export default {
     return response.status(status).json(message);
   },
 
-  syserror(status: number, message: any): Response {
+  syserror(status: number, response: Response, message?: any): Response {
     console.error(message);
 
     return response.status(status).json({ error: message });

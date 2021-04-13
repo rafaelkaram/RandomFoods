@@ -17,6 +17,8 @@ import { ReceitaIngrediente } from '../entity/ReceitaIngrediente';
 import receitaView from '../view/ReceitaView';
 import ReceitaFiltroView from '../view/ReceitaFiltroView';
 
+import Util from '../util/Util';
+
 class ReceitaService {
     // Métodos das rotas
     async index(request: Request, response: Response) {
@@ -142,7 +144,7 @@ class ReceitaService {
         }
     }
 
-    async findPerfectMatch(request: Request, response: Response) {
+    async findMatches(request: Request, response: Response) {
         const repository = getCustomRepository(ReceitaRepository);
 
         const { ids } = request.query;
@@ -150,26 +152,44 @@ class ReceitaService {
         try {
             const receitaIngredienteService = new ReceitaIngredienteService();
             
-            const idsReceita = await receitaIngredienteService.findPerfectMatch(ids);
+            const idsMatchesPerfeitos = await receitaIngredienteService.findPerfectMatch(ids);
         
-            const ids2 = idsReceita.map(item => {return item.id});
+            const idsMPf = idsMatchesPerfeitos.map(item => {return item.id});
             
-            const receitas = await repository.findByFiltro(ids2);
+            const receitasMatchesPerfeitos = await repository.findByFiltro(idsMPf);
 
-            const novasReceitas = []
+            const matchesPerfeitos = []
             const avaliacaoService = new AvaliacaoService();
-            for (let key in receitas){
-                const receita = receitas[key];
+            for (let key in receitasMatchesPerfeitos){
+                const receita = receitasMatchesPerfeitos[key];
                 const avaliacao = await avaliacaoService.countVotes(receita.id);
                 const filter = ReceitaFiltroView.render(receita, avaliacao);
-                novasReceitas.push(filter);
+                matchesPerfeitos.push(filter);
             }
+
+            const idsReceitaMatchesParciais = await receitaIngredienteService.findPartialMatch(ids);
+        
+            const idsMPa = idsReceitaMatchesParciais.map(item => {return item.id});
             
-            return response.status(200).json(novasReceitas);
+            const receitasMatchesParciais = await repository.findByFiltro(idsMPa)
+
+            const matchesParciais = []
+            for (let key in receitasMatchesParciais){
+                const receita = receitasMatchesParciais[key];
+                const avaliacao = await avaliacaoService.countVotes(receita.id);
+                const filter = ReceitaFiltroView.render(receita, avaliacao);
+                matchesParciais.push(filter);
+            }
+
+            const matches = {
+                matchesPerfeitos: matchesPerfeitos,
+                matchesParciais: matchesParciais
+            };
+
+            return Util.systrace(200, response, matches);
 
         } catch (e) {
-            console.error(e);
-            response.status(400).json({ error: e });
+            Util.syserror(400, response, e);
         }
     }
 
