@@ -49,7 +49,7 @@ const SearchRecipe = () => {
         } else {
             setSelectedItems([...selectedItems, id]);
 
-            const ingrediente = { id: id, nome: nome };
+            const ingrediente = { id: id, nome: nome};
 
             setIngredientsCart([...ingredientsCart, ingrediente]);
         }

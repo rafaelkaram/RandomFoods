@@ -40,7 +40,8 @@ interface IIngredient {
   semMedida: boolean,
   //derivadoLeite: boolean,
   //glutem: boolean,
-  unidades: IUnidade[]
+  unidades: IUnidade[],
+  url: string,
 }
 
 interface IIngredientType {

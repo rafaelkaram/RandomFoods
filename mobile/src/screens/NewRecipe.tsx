@@ -47,7 +47,7 @@ const NewRecipe = () => {
             navigation.navigate('Medidas', { idIngredientes });
     }
 
-    function handleSelectItem(id: number, nome: string) {
+    function handleSelectItem(id: number, nome: string ) {
         const alredySelected = selectedItems.findIndex(item => item === id);
 
         if (alredySelected >= 0) {

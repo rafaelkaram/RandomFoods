@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import api from '../services/api';
 import { Input } from 'react-native-elements'
 import { IIngredient } from '../constants/interfaces';
-import DropDownPicker from 'react-native-dropdown-picker';
+import CheckBox from '@react-native-community/checkbox';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Picker } from '@react-native-picker/picker';
+import BoldText from '../components/BoldText'
 
 const IngredientMeasure = (props: { ingrediente: IIngredient, index: number }) => {
 
   const [semMedida, setSemMedida] = useState(true);
+  const [check, setCheck] = useState(false);
   const [quantidade, setQuantidade] = useState("");
   const [medida, setMedida] = useState("");
 
@@ -17,7 +19,7 @@ const IngredientMeasure = (props: { ingrediente: IIngredient, index: number }) =
   const ingrediente: IIngredient = props.ingrediente;
   const unidades = ingrediente.unidades;
 
- 
+
 
   const comboBox = unidades.map(unidade => {
     return { label: unidade.sigla, value: unidade.id }
@@ -31,8 +33,17 @@ const IngredientMeasure = (props: { ingrediente: IIngredient, index: number }) =
       style={styles.item}
     >
       <View style={styles.comp}>
-        <Text style={{ lineHeight: 30 }}>{ingrediente.nome}</Text>
+        <BoldText style={{ lineHeight: 30 }}>{ingrediente.nome}</BoldText>
+        <Image style={styles.ingredientTypeIcon}
+          source={{
+            uri: ingrediente.url
+          }} />
         <View style={styles.campos}>
+          <CheckBox
+            disabled={false}
+            value={check}
+            onValueChange={(newValue) => setCheck(newValue)}
+          />
 
           {!(ingrediente.tipoUnidade === 'UNIDADE' || ingrediente.semMedida) && (
             <View style={{ zIndex: 999 - props.index }}>
@@ -45,6 +56,7 @@ const IngredientMeasure = (props: { ingrediente: IIngredient, index: number }) =
               <Picker
                 selectedValue={medida}
                 style={styles.comboBox}
+                mode='dropdown'
                 onValueChange={(itemValue) =>
                   setMedida(itemValue)
                 }>
@@ -98,15 +110,15 @@ const styles = StyleSheet.create({
   },
   input: {
     width: 40,
-    marginTop: 20,
+    //marginTop: 20,
     marginLeft: 10,
     marginRight: 15,
   },
   comp: {
     flexDirection: "column",
     justifyContent: 'space-evenly',
-    alignContent: "center",
-    alignItems: 'center',
+    //alignContent: "center",
+    //alignItems: 'center',
     padding: 10,
     //borderWidth:1,
     width: 360,
@@ -119,9 +131,15 @@ const styles = StyleSheet.create({
 
   comboBox: {
     marginLeft: 20,
-    width: 200,
+    width: 180,
     height: 40,
-  }
+    borderWidth: 1
+  },
+  ingredientTypeIcon: {
+    margin: 10,
+    width: 30,
+    height: 30
+  },
 });
 
 export default IngredientMeasure;
