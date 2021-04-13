@@ -37,21 +37,21 @@ const SearchRecipe = () => {
             navigation.navigate('Receita', { ingredientes: selectedItems })
     }
 
-    function handleSelectItem(id: number, name: string, tipoUnidade:string) {
+    function handleSelectItem(id: number, nome: string) {
         const alredySelected = selectedItems.findIndex(item => item === id);
 
         if (alredySelected >= 0) {
             const filteredItems = selectedItems.filter(item => item !== id);
-            const filteredNames = ingredientsCart.filter(item => item.ingredient.id !== id);
+            const filteredNames = ingredientsCart.filter(item => item.id !== id);
 
             setSelectedItems(filteredItems);
             setIngredientsCart(filteredNames);
         } else {
             setSelectedItems([...selectedItems, id]);
 
-            const ingredient = { ingredient: { id: id, name: name, tipoUnidade:tipoUnidade } }
+            const ingrediente = { id: id, nome: nome };
 
-            setIngredientsCart([...ingredientsCart, ingredient]);
+            setIngredientsCart([...ingredientsCart, ingrediente]);
         }
     }
 
@@ -110,10 +110,10 @@ const SearchRecipe = () => {
                                     return (
                                         <View
                                             style={styles.modalList}
-                                            key={ingrediente.ingredient.id}>
-                                            <Text style={{ lineHeight: 30 }}>{ingrediente.ingredient.name}</Text>
+                                            key={ingrediente.id}>
+                                            <Text style={{ lineHeight: 30 }}>{ingrediente.nome}</Text>
                                             <TouchableOpacity
-                                                onPress={() => handleSelectItem(ingrediente.ingredient.id, ingrediente.ingredient.name, ingrediente.ingredient.tipoUnidade)}>
+                                                onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}>
                                                 <Feather name="trash-2" size={24} color="black" />
                                             </TouchableOpacity>
                                         </View>
@@ -153,7 +153,7 @@ const SearchRecipe = () => {
                                         return (
                                             <TouchableOpacity
                                                 style={selectedItems.includes(ingrediente.id) ? styles.ingredientSelected : styles.ingredient}
-                                                onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome,ingrediente.tipoUnidade)}
+                                                onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}
                                                 key={ingrediente.id}
                                             >
 
