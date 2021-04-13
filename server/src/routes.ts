@@ -64,7 +64,7 @@ routes.get('/busca/usuario/:id', usuarioService.fetch);
 // Rotas de busca (busca personalizada)
 // Utilizar parametros através de query ou endereço
 routes.get('/busca/comentario-receita/:idReceita', comentarioService.findByReceita);
-routes.get('/busca/combinacao-perfeita', receitaService.findPerfectMatch);
+routes.get('/busca/combinacoes', receitaService.findMatches);
 routes.get('/busca/ingrediente', ingredienteService.searchByIds);
 routes.get('/busca/receita-usuario/:idUsuario', receitaService.findByUser);
 
