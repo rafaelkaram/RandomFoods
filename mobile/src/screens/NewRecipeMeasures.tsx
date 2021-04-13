@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, ScrollView, StyleSheet, Dimensions, View, Image, TouchableOpacity } from 'react-native';
+import { Text, ScrollView, StyleSheet, Dimensions, View, Image, TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IIngredient } from '../constants/interfaces';
@@ -7,6 +7,7 @@ import api from '../services/api';
 import IngredientMeasure from '../components/IngredientMeasure';
 import { setAutoLogAppEventsEnabledAsync } from 'expo-facebook';
 import { Feather, AntDesign } from '@expo/vector-icons';
+import ItalicText from '../components/ItalicText'
 
 const NewRecipeMeasures = ({ route }: { route: any }) => {
     const navigation = useNavigation();
@@ -50,74 +51,76 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
         //     navigation.navigate('Medidas', { idIngredientes });
     }
 
-    
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <Text>Medidas</Text>
+            <Image
+                style={styles.newRecipeImage}
+                source={require('../assets/nova-receita.png')}
+            />
+            <ItalicText style={styles.subTitle}>Selecione as quantidades</ItalicText>
             <ScrollView>
                 {ingredientsCart.map((ingrediente, index) => {
-                     if (ingrediente.tipoUnidade === 'UNIDADE') {
+                    if (ingrediente.tipoUnidade === 'UNIDADE') {
                         ingrediente.unidades.push({
-                          id: 5,
-                          nome: 'Unidade',
-                          sigla: 'U',
-                          taxaConversao: '1.000',
-                          tipo: 'UNIDADE',
+                            id: 5,
+                            nome: 'Unidade',
+                            sigla: 'U',
+                            taxaConversao: '1.000',
+                            tipo: 'UNIDADE',
                         });
-                      } else if (ingrediente.tipoUnidade === 'VOLUME') {
+                    } else if (ingrediente.tipoUnidade === 'VOLUME') {
                         ingrediente.unidades.push({
-                          id: 1,
-                          nome: 'Litro',
-                          sigla: 'L',
-                          taxaConversao: '1.000',
-                          tipo: 'VOLUME',
-                        });
-                        ingrediente.unidades.push({
-                          id: 2,
-                          nome: 'Mililitro',
-                          sigla: 'Ml',
-                          taxaConversao: '0.001',
-                          tipo: 'VOLUME',
-                        });
-                      } else {
-                        ingrediente.unidades.push({
-                          id: 3,
-                          nome: 'Miligrama',
-                          sigla: 'Mg',
-                          taxaConversao: '0.001',
-                          tipo: 'PESO',
+                            id: 1,
+                            nome: 'Litro',
+                            sigla: 'L',
+                            taxaConversao: '1.000',
+                            tipo: 'VOLUME',
                         });
                         ingrediente.unidades.push({
-                          id: 4,
-                          nome: 'Grama',
-                          sigla: 'g',
-                          taxaConversao: '1.000',
-                          tipo: 'PESO',
+                            id: 2,
+                            nome: 'Mililitro',
+                            sigla: 'Ml',
+                            taxaConversao: '0.001',
+                            tipo: 'VOLUME',
+                        });
+                    } else {
+                        ingrediente.unidades.push({
+                            id: 3,
+                            nome: 'Miligrama',
+                            sigla: 'Mg',
+                            taxaConversao: '0.001',
+                            tipo: 'PESO',
                         });
                         ingrediente.unidades.push({
-                          id: 6,
-                          nome: 'Quilograma',
-                          sigla: 'Kg',
-                          taxaConversao: '1000.000',
-                          tipo: 'PESO',
+                            id: 4,
+                            nome: 'Grama',
+                            sigla: 'g',
+                            taxaConversao: '1.000',
+                            tipo: 'PESO',
                         });
-                      }
+                        ingrediente.unidades.push({
+                            id: 6,
+                            nome: 'Quilograma',
+                            sigla: 'Kg',
+                            taxaConversao: '1000.000',
+                            tipo: 'PESO',
+                        });
+                    }
                     return (
-                        <View key={ingrediente.id} >
-                            <IngredientMeasure ingrediente={ingrediente} index={index} />
-                        </View>
+                            <IngredientMeasure key={ingrediente.id} ingrediente={ingrediente} index={index} />
                     )
                 })}
-            
-                
+
+
             </ScrollView>
             <TouchableOpacity
-                    style={styles.arrow}
-                    onPress={handleNavigateToMeasures}
-                >
-                    <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
-                </TouchableOpacity>
+                style={styles.arrow}
+                onPress={handleNavigateToMeasures}
+            >
+                <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
+            </TouchableOpacity>
         </SafeAreaView>
     );
 }
@@ -129,7 +132,7 @@ const Width = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
 
-   
+
     arrow: {
         width: 60,
         height: 60,
@@ -140,7 +143,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#e02041',
         justifyContent: 'center',
     },
-
+    newRecipeImage: {
+        width: 320,
+        height: 70,
+        marginHorizontal: 10
+    },
+    subTitle: {
+        marginBottom: 10,
+        textAlign: 'center',
+    },
 
 })
 
