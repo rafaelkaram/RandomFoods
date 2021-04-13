@@ -2,10 +2,13 @@ node_modules/
 mobile/.expo/*
 mobile/npm-debug.*
 mobile/*.jks
-mobile/*.p8 
+mobile/*.p8
 mobile/*.p12
 mobile/*.key
 mobile/*.mobileprovision
 mobile/.orig.
-mobile/web-build/ 
+mobile/web-build/
 mobile/src/services/api.ts
+mobile/yarn-debug.log*
+mobile/yarn-error.log*
+mobile/yarn.lock
