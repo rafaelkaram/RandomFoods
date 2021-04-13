@@ -6,6 +6,7 @@ import { ReceitaIngredienteRepository } from '../repository/ReceitaIngredienteRe
 import IngredienteService from './IngredienteService';
 
 import { Ingrediente } from '../entity/Ingrediente';
+import { Receita } from '../entity/Receita';
 import { ReceitaIngrediente } from '../entity/ReceitaIngrediente';
 //import { ReceitaIngredienteDTO } from '../dto/ReceitaIngredienteDTO';
 
@@ -15,6 +16,18 @@ class ReceitaIngredienteService {
         const repository = getCustomRepository(ReceitaIngredienteRepository);
 
         const idsReceita = await repository.findByAllIngredients(ids);
+
+        if(!idsReceita) {
+            throw 'Nenhuma receita encontrada.';
+        }
+
+        return idsReceita;
+    }
+
+    async findPartialMatch(ids: number[]): Promise<number[]> {
+        const repository = getCustomRepository(ReceitaIngredienteRepository);
+
+        const idsReceita = await repository.findByPartialIngredients(ids);
 
         if(!idsReceita) {
             throw 'Nenhuma receita encontrada.';
