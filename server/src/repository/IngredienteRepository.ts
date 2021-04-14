@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Ingrediente } from '../entity/Ingrediente';
+import { Ingrediente, TipoIngrediente } from '../entity/Ingrediente';
 
 @EntityRepository(Ingrediente)
 export class IngredienteRepository extends Repository<Ingrediente> {
@@ -29,15 +29,28 @@ export class IngredienteRepository extends Repository<Ingrediente> {
     return ingredientes;
   }
 
-  async findByIdsWithUnidades(ids: number[], order: string, ascending: boolean): Promise<Ingrediente[]> {
+  // async findByIdsWithUnidades(ids: number[], order: string, ascending: boolean): Promise<Ingrediente[]> {
+  //   const ingredientes: Ingrediente[] = await this.createQueryBuilder('i')
+  //     .leftJoinAndSelect('i.unidades', 'unidade')
+  //     .where('i.id IN (:...ids)', { ids })
+  //     .orderBy(order, ascending ? 'ASC' : 'DESC')
+  //     .getMany();
+
+  //   return ingredientes;
+  // }
+
+  async findByIdsWithUnidades(ids: number[], tipo: string): Promise<Ingrediente[]> {
     const ingredientes: Ingrediente[] = await this.createQueryBuilder('i')
       .leftJoinAndSelect('i.unidades', 'unidade')
       .where('i.id IN (:...ids)', { ids })
-      .orderBy(order, ascending ? 'ASC' : 'DESC')
+      .andWhere('i.tipoIngrediente = :tipo', { tipo })
+      .orderBy('i.tipoIngrediente', 'ASC')
+      .addOrderBy('i.nome', 'ASC')
       .getMany();
 
     return ingredientes;
   }
+
 
   async findByNome(nome: string): Promise<Ingrediente> {
     const ingrediente: Ingrediente = await this.createQueryBuilder('i')

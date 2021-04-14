@@ -17,7 +17,7 @@ interface IRecipe {
     nomeUsuario: string,
     path: string,
   },
-  midias:[{
+  midias: [{
     id: number,
     url: string
   }],
@@ -32,20 +32,63 @@ interface IRecipeType {
   count: number,
 }
 
-interface IIngredient {
-  id: number,
-  nome: string,
-  tipoUnidade: string,
-  //id_tipo_ingrediente: number,
-  semMedida: boolean,
-  //derivadoLeite: boolean,
-  //glutem: boolean,
-  unidades: IUnidade[],
-  url: string,
+// interface IIngredient {
+//   id: number,
+//   nome: string,
+//   tipoUnidade: string,
+//   //id_tipo_ingrediente: number,
+//   semMedida: boolean,
+//   //derivadoLeite: boolean,
+//   //glutem: boolean,
+//   unidades: IUnidade[],
+//   url: string,
+// }
+
+interface IIngredienteTipo {
+  tipo: {
+    nome: string,
+    url: string,
+    alt_url: string,
+    ingredientes: [{
+      id: number,
+      nome: string,
+      semMedida: boolean,
+      derivadoLeite: boolean,
+      gluten: boolean,
+      tipoIngrediente: string
+      tipoUnidade: string,
+      unidades: [{
+        id: number,
+        nome: string,
+        sigla: string,
+        taxaConversao: string,
+        tipo: string
+      }]
+    }]
+  }
 }
 
+
+interface IIngrediente {
+    id: number,
+    nome: string,
+    semMedida: boolean,
+    derivadoLeite: boolean,
+    gluten: boolean,
+    tipoIngrediente: string
+    tipoUnidade: string,
+    unidades: [{
+      id: number,
+      nome: string,
+      sigla: string,
+      taxaConversao: string,
+      tipo: string
+    }]
+}
+
+
 interface IIngredientType {
-  tipo: string,
+  nome: string,
   url: string,
   alt_url: string,
   ingredientes: [{
@@ -63,7 +106,7 @@ interface IIngredientCart {
   id: number,
   nome: string,
 }
-interface IUnidade{
+interface IUnidade {
   id: number,
   nome: string,
   sigla: string,
@@ -82,7 +125,7 @@ interface IComment {
   comentarioPai: number,
   valor: string,
   data: Date,
-  usuario:{
+  usuario: {
     id: number,
     nome: string,
     path: string,
@@ -110,7 +153,8 @@ interface IUser {
 export {
   IRecipe,
   IRecipeType,
-  IIngredient,
+  IIngredienteTipo,
+  IIngrediente,
   IIngredientType,
   IIngredientCart,
   IUnidade,

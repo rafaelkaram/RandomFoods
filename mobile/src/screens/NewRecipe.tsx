@@ -151,10 +151,10 @@ const NewRecipe = () => {
                         return;
                     }
                     return (
-                        <View key={ingredientTypes.tipo} style={styles.mainContainer}>
+                        <View key={ingredientTypes.nome} style={styles.mainContainer}>
                             <View>
                                 <View style={styles.ingredientTypeNameImageContainer}>
-                                    <BoldText style={styles.ingredientTypeName}>{ingredientTypes.tipo}</BoldText>
+                                    <BoldText style={styles.ingredientTypeName}>{ingredientTypes.nome}</BoldText>
                                     <Image style={styles.ingredientTypeIcon}
                                         source={{
                                             uri: ingredientTypes.url
