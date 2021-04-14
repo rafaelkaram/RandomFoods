@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Text, ScrollView, StyleSheet, Dimensions, View, Image, TouchableOpacity} from 'react-native';
+import { Text, ScrollView, StyleSheet, Dimensions, View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { IIngredient } from '../constants/interfaces';
+import { IIngredienteTipo } from '../constants/interfaces';
 import api from '../services/api';
 import IngredientMeasure from '../components/IngredientMeasure';
 import { setAutoLogAppEventsEnabledAsync } from 'expo-facebook';
@@ -12,7 +12,7 @@ import ItalicText from '../components/ItalicText'
 const NewRecipeMeasures = ({ route }: { route: any }) => {
     const navigation = useNavigation();
 
-    const [ingredientsCart, setIngredientsCart] = useState<IIngredient[]>([]);
+    const [ingredientsCart, setIngredientsCart] = useState<IIngredienteTipo[]>([]);
     const [load, setLoad] = useState(false);
     const Height = Dimensions.get("window").height;
     const Width = Dimensions.get("window").width;
@@ -24,7 +24,6 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
             const params = { ids: idIngredientes };
             api.get('/busca/ingrediente', { params })
                 .then(response => {
-                    console.log(response.data);
                     setIngredientsCart(response.data);
                     setLoad(true);
                 });
@@ -61,66 +60,77 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
             />
             <ItalicText style={styles.subTitle}>Selecione as quantidades</ItalicText>
             <ScrollView>
-                {ingredientsCart.map((ingrediente, index) => {
-                    if (ingrediente.tipoUnidade === 'UNIDADE') {
-                        ingrediente.unidades.push({
-                            id: 5,
-                            nome: 'Unidade',
-                            sigla: 'U',
-                            taxaConversao: '1.000',
-                            tipo: 'UNIDADE',
-                        });
-                    } else if (ingrediente.tipoUnidade === 'VOLUME') {
-                        ingrediente.unidades.push({
-                            id: 1,
-                            nome: 'Litro',
-                            sigla: 'L',
-                            taxaConversao: '1.000',
-                            tipo: 'VOLUME',
-                        });
-                        ingrediente.unidades.push({
-                            id: 2,
-                            nome: 'Mililitro',
-                            sigla: 'Ml',
-                            taxaConversao: '0.001',
-                            tipo: 'VOLUME',
-                        });
-                    } else {
-                        ingrediente.unidades.push({
-                            id: 3,
-                            nome: 'Miligrama',
-                            sigla: 'Mg',
-                            taxaConversao: '0.001',
-                            tipo: 'PESO',
-                        });
-                        ingrediente.unidades.push({
-                            id: 4,
-                            nome: 'Grama',
-                            sigla: 'g',
-                            taxaConversao: '1.000',
-                            tipo: 'PESO',
-                        });
-                        ingrediente.unidades.push({
-                            id: 6,
-                            nome: 'Quilograma',
-                            sigla: 'Kg',
-                            taxaConversao: '1000.000',
-                            tipo: 'PESO',
-                        });
-                    }
+                {ingredientsCart.map((tipos, index) => {
+
                     return (
-                            <IngredientMeasure key={ingrediente.id} ingrediente={ingrediente} index={index} />
+                        <View key={tipos.tipo.nome}>
+                            <Text >{tipos.tipo.nome}</Text>
+
+                            {tipos.tipo.ingredientes.map(ingrediente => {
+                                if (ingrediente.tipoUnidade === 'UNIDADE') {
+                                    ingrediente.unidades.push({
+                                        id: 5,
+                                        nome: 'Unidade',
+                                        sigla: 'U',
+                                        taxaConversao: '1.000',
+                                        tipo: 'UNIDADE',
+                                    });
+                                } else if (ingrediente.tipoUnidade === 'VOLUME') {
+                                    ingrediente.unidades.push({
+                                        id: 1,
+                                        nome: 'Litro',
+                                        sigla: 'L',
+                                        taxaConversao: '1.000',
+                                        tipo: 'VOLUME',
+                                    });
+                                    ingrediente.unidades.push({
+                                        id: 2,
+                                        nome: 'Mililitro',
+                                        sigla: 'Ml',
+                                        taxaConversao: '0.001',
+                                        tipo: 'VOLUME',
+                                    });
+                                } else {
+                                    ingrediente.unidades.push({
+                                        id: 3,
+                                        nome: 'Miligrama',
+                                        sigla: 'Mg',
+                                        taxaConversao: '0.001',
+                                        tipo: 'PESO',
+                                    });
+                                    ingrediente.unidades.push({
+                                        id: 4,
+                                        nome: 'Grama',
+                                        sigla: 'g',
+                                        taxaConversao: '1.000',
+                                        tipo: 'PESO',
+                                    });
+                                    ingrediente.unidades.push({
+                                        id: 6,
+                                        nome: 'Quilograma',
+                                        sigla: 'Kg',
+                                        taxaConversao: '1000.000',
+                                        tipo: 'PESO',
+                                    });
+                                }
+                                return (
+                                    <IngredientMeasure key={ingrediente.id} ingrediente={ingrediente} index={index} />
+                                )
+                            })}
+                        </View>
                     )
+
+
                 })}
 
 
+                <TouchableOpacity
+                    style={styles.arrow}
+                    onPress={handleNavigateToMeasures}
+                >
+                    <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
+                </TouchableOpacity>
             </ScrollView>
-            <TouchableOpacity
-                style={styles.arrow}
-                onPress={handleNavigateToMeasures}
-            >
-                <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
-            </TouchableOpacity>
         </SafeAreaView>
     );
 }

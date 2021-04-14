@@ -4,22 +4,23 @@ import { TipoUnidade } from './TipoUnidade';
 import { Unidade } from './Unidade';
 
 export enum TipoIngrediente {
-  ADOCANTE = 'Adoçante',
-  BEBIDA = 'Bebida',
-  CARNE = 'Carne',
+  // BEBIDA = 'Bebidas',
+  CARNE = 'Carnes',
+  // CONDIMENTO = 'Condimentos', 
   CONFEITARIA = 'Confeitaria',
-  GRAO = 'Grão',
-  FRUTA = 'Fruta',
-  FRUTO_DO_MAR = 'Fruto do Mar',
-  LATICINIO = 'Lacticínio',
-  LEGUME = 'Legume',
-  MASSA = 'Massa',
-  MOLHO = 'Molho',
-  OLEO = 'Óleo',
+  GRAO = 'Grãos',
+  FRUTA = 'Frutas',
+  // FRUTO_DO_MAR = 'Frutos do Mar',
+  LATICINIO = 'Lacticínios',
+  LEGUME = 'Legumes',
+  MASSA = 'Massas',
+  MOLHO = 'Molhos',
+  // NOZ = 'Nozes',
+  OLEO = 'Óleos',
   OUTROS = 'Outros',
-  SEMENTE = 'Semente',
-  TEMPERO = 'Tempero',
-  VEGETAL = 'Vegetal'
+  // PEIXE = 'Peixes',
+  TEMPERO = 'Temperos',
+  VEGETAL = 'Vegetais'
 }
 
 @Entity('ingrediente')

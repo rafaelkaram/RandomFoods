@@ -15,7 +15,7 @@ export default {
       const tipo = TipoIngrediente[tipoStr];
 
       return {
-        tipo,
+        nome: tipo,
         url: `http://${ Util.getLocalIP() }:${ process.env.PORT }/uploads/ingredient-types/${ tipoStr.toLowerCase() }-colored.png`,
         alt_url: `http://${ Util.getLocalIP() }:${ process.env.PORT }/uploads/ingredient-types/${ tipoStr.toLowerCase() }.png`,
         ingredientes: ingredientes
