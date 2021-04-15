@@ -43,7 +43,7 @@ const NewRecipe = () => {
         const idIngredientes = ingredientsCart.map(ingrediente => {
             return ingrediente.id;
         })
-        if (ingredientsCart.length > 0 && nomeReceita)
+        if (ingredientsCart.length > 0)
             navigation.navigate('Medidas', { idIngredientes });
     }
 
@@ -130,7 +130,7 @@ const NewRecipe = () => {
                     </View>
                 </BlurView>
             </Modal>
-            <View style={styles.recipeName}>
+            {/* <View style={styles.recipeName}>
                 <BoldText style={styles.recipeNameText}>Nome da receita</BoldText>
             <Input
                     placeholder="Insira o nome da receita"
@@ -138,7 +138,7 @@ const NewRecipe = () => {
                     value={nomeReceita}
                     inputContainerStyle={{ borderBottomWidth: 0, marginTop:10 }}
                 />
-            </View>
+            </View> */}
             <Input
                 placeholder="Pesquise por algum ingrediente"
                 onChangeText={(value) => setnomeIngrediente(value)}

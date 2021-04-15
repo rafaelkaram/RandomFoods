@@ -25,7 +25,7 @@ class ReceitaService {
         const repository = getCustomRepository(ReceitaRepository);
 
         const receitas = await repository.find({
-            relations: [ 'usuario', 'ingredientesReceita', 'categorias', 'midias' ],
+            relations: ['usuario', 'ingredientesReceita', 'categorias', 'midias'],
             order: {
                 dataCadastro: 'ASC'
             }
@@ -45,11 +45,11 @@ class ReceitaService {
             const midiaService = new MidiaService();
 
             const receita = await repository.findOne({
-                relations: [ 'usuario', 'categorias', 'midias' ],
-                where : {
+                relations: ['usuario', 'categorias', 'midias'],
+                where: {
                     id: parseInt(id)
                 }
-                });
+            });
 
             if (!receita) {
                 return response.status(400).json({ error: 'Receita não encontrada.' });
@@ -107,8 +107,8 @@ class ReceitaService {
                 const ingrediente = await ingredienteService.findById(idIngrediente);
 
                 const receitaIngrediente = new ReceitaIngrediente();
-                receitaIngrediente.unidade     = unidade;
-                receitaIngrediente.quantidade  = quantidade;
+                receitaIngrediente.unidade = unidade;
+                receitaIngrediente.quantidade = quantidade;
                 receitaIngrediente.ingrediente = ingrediente;
                 receitaIngrediente.receita = receita;
 
@@ -148,19 +148,19 @@ class ReceitaService {
         const repository = getCustomRepository(ReceitaRepository);
 
         const { ids } = request.query;
-        
+
         try {
             const receitaIngredienteService = new ReceitaIngredienteService();
-            
+
             const idsMatchesPerfeitos = await receitaIngredienteService.findPerfectMatch(ids);
-        
-            const idsMPf = idsMatchesPerfeitos.map(item => {return item.id});
-            
+
+            const idsMPf = idsMatchesPerfeitos.map(item => { return item.id });
+
             const receitasMatchesPerfeitos = await repository.findByFiltro(idsMPf);
 
             const matchesPerfeitos = []
             const avaliacaoService = new AvaliacaoService();
-            for (let key in receitasMatchesPerfeitos){
+            for (let key in receitasMatchesPerfeitos) {
                 const receita = receitasMatchesPerfeitos[key];
                 const avaliacao = await avaliacaoService.countVotes(receita.id);
                 const filter = ReceitaFiltroView.render(receita, avaliacao);
@@ -168,13 +168,13 @@ class ReceitaService {
             }
 
             const idsReceitaMatchesParciais = await receitaIngredienteService.findPartialMatch(ids);
-        
-            const idsMPa = idsReceitaMatchesParciais.map(item => {return item.id});
-            
+
+            const idsMPa = idsReceitaMatchesParciais.map(item => { return item.id });
+
             const receitasMatchesParciais = await repository.findByFiltro(idsMPa)
 
             const matchesParciais = []
-            for (let key in receitasMatchesParciais){
+            for (let key in receitasMatchesParciais) {
                 const receita = receitasMatchesParciais[key];
                 const avaliacao = await avaliacaoService.countVotes(receita.id);
                 const filter = ReceitaFiltroView.render(receita, avaliacao);
@@ -204,6 +204,13 @@ class ReceitaService {
         return response.status(200).json(tipos);
     }
 
+    async findTypeRecipe(request: Request, response: Response) {
+
+        const tipos= Object.keys(Tipo);
+
+        return response.status(200).json(tipos);
+    }
+
     // Métodos internos
     async find(id: number): Promise<Receita> {
         const repository = getCustomRepository(ReceitaRepository);
@@ -228,6 +235,8 @@ class ReceitaService {
 
         return receitas;
     }
+
+
 
     async insert(nome: string, descricao: string, tipo: Tipo, usuarioStr?: string): Promise<Receita> {
         const repository = getCustomRepository(ReceitaRepository);
