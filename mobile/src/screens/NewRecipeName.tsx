@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Button, Image, StyleSheet, Dimensions, Platform } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, Button, Image, StyleSheet, Dimensions } from 'react-native'
 
 import { Input } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import api from '../services/api';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import BoldText from '../components/BoldText'
 import RegularText from '../components/RegularText'
 import ItalicText from '../components/ItalicText'
@@ -19,13 +18,11 @@ const NewRecipeName = () => {
     const [load, setLoad] = useState(false)
     const [nomeReceita, setNomeReceita] = useState('');
     const [tipoReceita, setTipoReceita] = useState('');
-    const [tempoPreparo, setTempoPreparo] = useState(new Date());
-    const [tempoPreparo2, setTempoPreparo2] = useState('00:00');
-    const [porcoes, setPorcoes] = useState('');
+    const [minutos, setMinutos] = useState(0);
+    const [tempoPreparo, setTempoPreparo] = useState('00:00');
+    const [porcoes, setPorcoes] = useState(0);
     const [tipos, setTipos] = useState([]);
-    const [date, setDate] = useState(new Date(1598051730000));
-    const [mode, setMode] = useState('date');
-    const [show, setShow] = useState(false);
+
 
     useEffect(() => {
         api.get('/busca/tipo-receita')
@@ -46,30 +43,12 @@ const NewRecipeName = () => {
             </View>)
     }
     function handleNavigateToIngredients() {
-
         if (nomeReceita)
             navigation.navigate('Nova Receita Ingredientes');
     }
 
 
-    const onChange = (event: any, selectedDate: any) => {
-        const currentDate = selectedDate || date;
-        setShow(Platform.OS === 'ios');
-        setTempoPreparo(currentDate);
 
-        let horas = tempoPreparo.getHours()
-        let minutos = tempoPreparo.getMinutes()
-        setTempoPreparo2(horas + ":" + minutos);
-    };
-
-    const showMode = (currentMode: string) => {
-        setShow(true);
-        setMode(currentMode);
-    };
-
-    const showTimepicker = () => {
-        showMode('time');
-    };
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -110,43 +89,63 @@ const NewRecipeName = () => {
                     </Picker>
                 </View>
 
-                <View style={styles.containerTime}>
-                    <BoldText style={styles.textContainer}>Tempo de preparo</BoldText>
-                    <Input
-                        placeholder="Tempo de preparo"
-                        onChangeText={(value) => setNomeReceita(value)}
-                        value={tempoPreparo2}
-                        inputContainerStyle={{ borderBottomWidth: 0, marginTop: 10 }}
-                    />
-                    <Button onPress={showTimepicker} title="Escolher o tempo" />
-                    {show && (
-                        <DateTimePicker
-                            testID="dateTimePicker"
-                            value={tempoPreparo}
-                            mode='time'
-                            is24Hour={false}
-                            display="clock"
-                            onChange={onChange}
-                        />
-                    )}
+                <View style={styles.container}>
+                    <BoldText style={styles.textContainer}>Tempo de preparo (Minutos)</BoldText>
+                    <View style={styles.dadosDisplay}>
+                        <TouchableOpacity
+                            onPress={() => setMinutos(minutos - 1)}>
+                            <AntDesign name="minuscircleo" size={24} color='black' />
+
+                        </TouchableOpacity>
+                        <View>
+                            <Input
+                                placeholder="Tempo de preparo"
+                                //onChangeText={(value) => setMinutos(value)}
+                                value={minutos.toString()}
+                                disabled= {true}
+                                style={{ textAlign: 'center' }}
+                                inputContainerStyle={{ borderWidth: 1, marginTop: 20, marginLeft: 10, marginRight: 10, width: 50, borderRadius: 10 }}
+                            />
+                        </View>
+                        <TouchableOpacity
+                            onPress={() => setMinutos(minutos + 1)}>
+                            <AntDesign name="pluscircleo" size={24} color='black' />
+                        </TouchableOpacity>
+                    </View>
+
                 </View>
                 <View style={styles.container}>
                     <BoldText style={styles.textContainer}>Quantidade de porções</BoldText>
-                    <Input
-                        placeholder="Quantidade de porções"
-                        onChangeText={(value) => setNomeReceita(value)}
-                        value={porcoes}
-                        inputContainerStyle={{ borderBottomWidth: 0, marginTop: 10 }}
-                    />
+                    <View style={styles.dadosDisplay}>
+                        <TouchableOpacity
+                            onPress={() => setPorcoes(porcoes - 1)}>
+                            <AntDesign name="minuscircleo" size={24} color='black' />
+
+                        </TouchableOpacity>
+                        <View>
+                            <Input
+                                placeholder="Quantidade de porções"
+                                onChangeText={(value) => setNomeReceita(value)}
+                                disabled= {true}
+                                value={porcoes.toString()}
+                                style={{ textAlign: 'center' }}
+                                inputContainerStyle={{ borderWidth: 1, marginTop: 20, marginLeft: 10, marginRight: 10, width: 50, borderRadius: 10 }}
+                            />
+                        </View>
+                        <TouchableOpacity
+                            onPress={() => setPorcoes(porcoes + 1)}>
+                            <AntDesign name="pluscircleo" size={24} color='black' />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                </ScrollView>
-                <TouchableOpacity
-                    style={styles.arrow}
-                    onPress={handleNavigateToIngredients}
-                >
-                    <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
-                </TouchableOpacity>
-           
+            </ScrollView>
+            <TouchableOpacity
+                style={styles.arrow}
+                onPress={handleNavigateToIngredients}
+            >
+                <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
+            </TouchableOpacity>
+
         </SafeAreaView>
     );
 }
@@ -202,13 +201,10 @@ const styles = StyleSheet.create({
         height: 150,
 
     },
-    containerTime: {
-        margin: 10,
-        padding: 10,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        height: 200,
 
+    dadosDisplay: {
+        flexDirection: "row",
+        alignItems: 'center',
     },
 
     textContainer: {
