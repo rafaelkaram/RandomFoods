@@ -25,7 +25,7 @@ class ReceitaService {
         const repository = getCustomRepository(ReceitaRepository);
 
         const receitas = await repository.find({
-            relations: [ 'usuario', 'ingredientesReceita', 'categorias', 'midias' ],
+            relations: ['usuario', 'ingredientesReceita', 'categorias', 'midias'],
             order: {
                 dataCadastro: 'ASC'
             }
@@ -45,11 +45,11 @@ class ReceitaService {
             const midiaService = new MidiaService();
 
             const receita = await repository.findOne({
-                relations: [ 'usuario', 'categorias', 'midias' ],
-                where : {
+                relations: ['usuario', 'categorias', 'midias'],
+                where: {
                     id: parseInt(id)
                 }
-                });
+            });
 
             if (!receita) {
                 return response.status(400).json({ error: 'Receita não encontrada.' });
@@ -107,8 +107,8 @@ class ReceitaService {
                 const ingrediente = await ingredienteService.findById(idIngrediente);
 
                 const receitaIngrediente = new ReceitaIngrediente();
-                receitaIngrediente.unidade     = unidade;
-                receitaIngrediente.quantidade  = quantidade;
+                receitaIngrediente.unidade = unidade;
+                receitaIngrediente.quantidade = quantidade;
                 receitaIngrediente.ingrediente = ingrediente;
                 receitaIngrediente.receita = receita;
 
@@ -148,39 +148,48 @@ class ReceitaService {
         const repository = getCustomRepository(ReceitaRepository);
 
         const { ids } = request.query;
-        
+
+        if (!ids) {
+            return Util.syserror(400, response, 'A requisição precisa de ingredientes');
+        }
+
+        const { derivadoLeite } = request.query;
+
+        const { gluten } = request.query;
+
         try {
             const receitaIngredienteService = new ReceitaIngredienteService();
-            
-            const idsMatchesPerfeitos = await receitaIngredienteService.findPerfectMatch(ids);
-        
-            const idsMPf = idsMatchesPerfeitos.map(item => {return item.id});
-            
-            const receitasMatchesPerfeitos = await repository.findByFiltro(idsMPf);
+
+            const idsMatchesPerfeitos = await receitaIngredienteService.findPerfectMatch(ids, derivadoLeite, gluten);
 
             const matchesPerfeitos = []
-            const avaliacaoService = new AvaliacaoService();
-            for (let key in receitasMatchesPerfeitos){
-                const receita = receitasMatchesPerfeitos[key];
-                const avaliacao = await avaliacaoService.countVotes(receita.id);
-                const filter = ReceitaFiltroView.render(receita, avaliacao);
-                matchesPerfeitos.push(filter);
-            }
 
-            const idsReceitaMatchesParciais = await receitaIngredienteService.findPartialMatch(ids);
-        
-            const idsMPa = idsReceitaMatchesParciais.map(item => {return item.id});
-            
-            const receitasMatchesParciais = await repository.findByFiltro(idsMPa)
+            const avaliacaoService = new AvaliacaoService();
+
+            if (idsMatchesPerfeitos.length > 0) {
+                const receitasMatchesPerfeitos = await repository.findByFiltro(idsMatchesPerfeitos);
+
+                for (let key in receitasMatchesPerfeitos) {
+                    const receita = receitasMatchesPerfeitos[key];
+                    const avaliacao = await avaliacaoService.countVotes(receita.id);
+                    const filter = ReceitaFiltroView.render(receita, avaliacao);
+                    matchesPerfeitos.push(filter);
+                }
+            }
+            const idsReceitaMatchesParciais = await receitaIngredienteService.findPartialMatch(ids, derivadoLeite, gluten);
 
             const matchesParciais = []
-            for (let key in receitasMatchesParciais){
-                const receita = receitasMatchesParciais[key];
-                const avaliacao = await avaliacaoService.countVotes(receita.id);
-                const filter = ReceitaFiltroView.render(receita, avaliacao);
-                matchesParciais.push(filter);
-            }
 
+            if (idsReceitaMatchesParciais.length > 0) {
+                const receitasMatchesParciais = await repository.findByFiltro(idsReceitaMatchesParciais)
+
+                for (let key in receitasMatchesParciais) {
+                    const receita = receitasMatchesParciais[key];
+                    const avaliacao = await avaliacaoService.countVotes(receita.id);
+                    const filter = ReceitaFiltroView.render(receita, avaliacao);
+                    matchesParciais.push(filter);
+                }
+            }
             const matches = {
                 matchesPerfeitos: matchesPerfeitos,
                 matchesParciais: matchesParciais
