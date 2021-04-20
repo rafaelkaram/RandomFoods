@@ -9,6 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Home from './screens/Home'
+import NewRecipeName from './screens/NewRecipeName'
 import NewRecipe from './screens/NewRecipe'
 import NewRecipeMeasures from './screens/NewRecipeMeasures'
 import Dashboard from './screens/Dashboard'
@@ -20,6 +21,7 @@ import Profile from './screens/Profile'
 import App from '../App'
 import SearchRecipe from './screens/SearchRecipe'
 
+
 const AppStack = createStackNavigator()
 
 const Tab = createBottomTabNavigator();
@@ -30,7 +32,8 @@ const Drawer = createDrawerNavigator()
 const RecipeStack = () => {
     return (
         <AppStack.Navigator headerMode={'none'}>
-            <AppStack.Screen name="Nova Receita" component={NewRecipe} />
+            <AppStack.Screen name="Nova Receita Nome" component={NewRecipeName} />
+            <AppStack.Screen name="Nova Receita Ingredientes" component={NewRecipe} />
             <AppStack.Screen name="Medidas" component={NewRecipeMeasures} />
             <AppStack.Screen name="Receita" component={Recipe} />
             <AppStack.Screen name="Receita Selecionada" component={SelectedRecipe} />

@@ -213,6 +213,13 @@ class ReceitaService {
         return response.status(200).json(tipos);
     }
 
+    async findTypeRecipe(request: Request, response: Response) {
+
+        const tipos= Object.keys(Tipo);
+
+        return response.status(200).json(tipos);
+    }
+
     // Métodos internos
     async find(id: number): Promise<Receita> {
         const repository = getCustomRepository(ReceitaRepository);
@@ -237,6 +244,8 @@ class ReceitaService {
 
         return receitas;
     }
+
+
 
     async insert(nome: string, descricao: string, tipo: Tipo, usuarioStr?: string): Promise<Receita> {
         const repository = getCustomRepository(ReceitaRepository);

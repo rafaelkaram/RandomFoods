@@ -49,6 +49,7 @@ routes.post('/cadastro/usuarios', usuarioService.createBulk);
 routes.get('/busca/ingredientes', ingredienteService.index);
 routes.get('/busca/tipo-ingrediente', ingredienteService.typeIndex);
 routes.get('/busca/receita', receitaService.index);
+routes.get('/busca/tipo-receita', receitaService.findTypeRecipe);
 routes.get('/busca/unidade', unidadeService.index);
 routes.get('/busca/unidade-ingrediente', unidadeService.list);
 routes.get('/busca/usuario', usuarioService.index);
