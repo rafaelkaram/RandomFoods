@@ -149,38 +149,47 @@ class ReceitaService {
 
         const { ids } = request.query;
 
+        if (!ids) {
+            return Util.syserror(400, response, 'A requisição precisa de ingredientes');
+        }
+
+        const { derivadoLeite } = request.query;
+
+        const { gluten } = request.query;
+
         try {
             const receitaIngredienteService = new ReceitaIngredienteService();
 
-            const idsMatchesPerfeitos = await receitaIngredienteService.findPerfectMatch(ids);
-
-            const idsMPf = idsMatchesPerfeitos.map(item => { return item.id });
-
-            const receitasMatchesPerfeitos = await repository.findByFiltro(idsMPf);
+            const idsMatchesPerfeitos = await receitaIngredienteService.findPerfectMatch(ids, derivadoLeite, gluten);
 
             const matchesPerfeitos = []
+
             const avaliacaoService = new AvaliacaoService();
-            for (let key in receitasMatchesPerfeitos) {
-                const receita = receitasMatchesPerfeitos[key];
-                const avaliacao = await avaliacaoService.countVotes(receita.id);
-                const filter = ReceitaFiltroView.render(receita, avaliacao);
-                matchesPerfeitos.push(filter);
+
+            if (idsMatchesPerfeitos.length > 0) {
+                const receitasMatchesPerfeitos = await repository.findByFiltro(idsMatchesPerfeitos);
+
+                for (let key in receitasMatchesPerfeitos) {
+                    const receita = receitasMatchesPerfeitos[key];
+                    const avaliacao = await avaliacaoService.countVotes(receita.id);
+                    const filter = ReceitaFiltroView.render(receita, avaliacao);
+                    matchesPerfeitos.push(filter);
+                }
             }
-
-            const idsReceitaMatchesParciais = await receitaIngredienteService.findPartialMatch(ids);
-
-            const idsMPa = idsReceitaMatchesParciais.map(item => { return item.id });
-
-            const receitasMatchesParciais = await repository.findByFiltro(idsMPa)
+            const idsReceitaMatchesParciais = await receitaIngredienteService.findPartialMatch(ids, derivadoLeite, gluten);
 
             const matchesParciais = []
-            for (let key in receitasMatchesParciais) {
-                const receita = receitasMatchesParciais[key];
-                const avaliacao = await avaliacaoService.countVotes(receita.id);
-                const filter = ReceitaFiltroView.render(receita, avaliacao);
-                matchesParciais.push(filter);
-            }
 
+            if (idsReceitaMatchesParciais.length > 0) {
+                const receitasMatchesParciais = await repository.findByFiltro(idsReceitaMatchesParciais)
+
+                for (let key in receitasMatchesParciais) {
+                    const receita = receitasMatchesParciais[key];
+                    const avaliacao = await avaliacaoService.countVotes(receita.id);
+                    const filter = ReceitaFiltroView.render(receita, avaliacao);
+                    matchesParciais.push(filter);
+                }
+            }
             const matches = {
                 matchesPerfeitos: matchesPerfeitos,
                 matchesParciais: matchesParciais
