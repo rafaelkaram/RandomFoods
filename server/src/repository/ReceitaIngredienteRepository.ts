@@ -5,7 +5,11 @@ import { ReceitaIngrediente } from '../entity/ReceitaIngrediente';
 @EntityRepository(ReceitaIngrediente)
 export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente> {
 
-  async findByAllIngredients(ids: number[], derivadoLeite: string, gluten: string): Promise<number[]> {
+  async findByAllIngredients(ids: number[], dl: string, gl: string): Promise<number[]> {
+
+    const derivadoLeite = (dl == 'false')
+    const gluten = (gl == 'false')
+
     const receitas: number[] = await this.createQueryBuilder('ri')
       .select('ri.receita.id', 'id')
       .where('ri.ingrediente IN ( :...ids )', { ids })
@@ -71,7 +75,11 @@ export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente>
 
 
 
-  async findByPartialIngredients(ids: number[], derivadoLeite: string, gluten: string): Promise<number[]> {
+  async findByPartialIngredients(ids: number[], dl: string, gl: string): Promise<number[]> {
+
+    const derivadoLeite = (dl == 'false')
+    const gluten = (gl == 'false')
+
     const receitas: number[] = await this.createQueryBuilder('ri')
       .select('ri.receita.id', 'id')
       .where('ri.ingrediente IN ( :...ids )', { ids })
