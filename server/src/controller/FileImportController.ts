@@ -28,7 +28,8 @@ class FileImportController {
         let invalidos: number = 0;
         let qtdeUsuarios: number = 0;
 
-        arquivos.map(async arquivo => {
+        for (let i in arquivos) {
+        const arquivo = arquivos[i];
             const nomeArquivo = arquivo.filename;
             const isExtensao = util.isExtensao(nomeArquivo, [ 'xlsx', 'xls', 'csv' ]);
 
@@ -45,8 +46,8 @@ class FileImportController {
 
                     const sheetUsuario = XLSX.utils.sheet_to_json(workbook.Sheets['Usuário']);
 
-                    for (let key in sheetUsuario) {
-                        const dados = sheetUsuario[key];
+                    for (let j in sheetUsuario) {
+                        const dados = sheetUsuario[j];
 
                         try {
                             const {
@@ -95,24 +96,24 @@ class FileImportController {
                                 usuario.email = Email;
                                 usuario.senha = hash;
 
-                                if (ativo) usuario.ativo = ativo;
-                                if (trocaLogin) usuario.trocaLogin = trocaLogin;
+                                if (ativo !== null) usuario.ativo = ativo;
+                                if (trocaLogin !== null) usuario.trocaLogin = trocaLogin;
                                 if (Perfil) usuario.perfil = Perfil;
-                                if (seguidor) usuario.notificarSeguidor = seguidor;
-                                if (avaliacao) usuario.notificarAvaliacao = avaliacao;
-                                if (comentario) usuario.notificarComentario = comentario;
-                                if (favorito) usuario.notificarFavorito = favorito;
-                                if (resposta) usuario.notificarResposta = resposta;
-                                if (marca) usuario.notificarMarca = marca;
+                                if (seguidor !== null) usuario.notificarSeguidor = seguidor;
+                                if (avaliacao !== null) usuario.notificarAvaliacao = avaliacao;
+                                if (comentario !== null) usuario.notificarComentario = comentario;
+                                if (favorito !== null) usuario.notificarFavorito = favorito;
+                                if (resposta !== null) usuario.notificarResposta = resposta;
+                                if (marca !== null) usuario.notificarMarca = marca;
 
                                 await usuario.save();
 
                                 qtdeUsuarios++;
+
                             } catch (err) {
                                 console.error(err);
                                 errosInsercao.push({ error: err })
                             }
-
                         }
 
                 } catch (err) {
@@ -120,11 +121,11 @@ class FileImportController {
                     erros.push({ arquivo: nomeArquivo, error: err });
                 }
             }
-        });
+        }
 
         return util.systrace(201, response, {
-            message: `${ arquivos.length - invalidos } arquivos importados com sucesso. ${ invalidos } possuiam formato inválido e não foram importados.`,
-            sucesso: `${ qtdeUsuarios } usuários importados com sucesso.`,
+            importacao: `${ arquivos.length - invalidos } arquivos importados com sucesso. ${ invalidos } possuiam formato inválido e não foram importados.`,
+            sucesso: `${ qtdeUsuarios } usuários cadastrados com sucesso.`,
             erro: errosInsercao
         });
     }
