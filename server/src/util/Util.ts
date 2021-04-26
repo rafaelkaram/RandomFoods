@@ -70,8 +70,10 @@ export default {
     return hash;
   },
 
-  getBoolean(value?: string): boolean | null {
+  getBoolean(value?: string | boolean): boolean | null {
     if (value && value !== '') {
+      if (value === true) return value;
+
       const text = value.toLowerCase();
       if (text === 'true' || text === 'verdadeiro' || text === 'yes' || text === 'sim') {
         return true;
@@ -79,6 +81,9 @@ export default {
 
       return false;
     }
+
+    if (value === false)
+      return false;
     return null;
   },
 

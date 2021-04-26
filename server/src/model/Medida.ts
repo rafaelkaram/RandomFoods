@@ -3,7 +3,7 @@ import { Unidade } from './Unidade';
 import { TipoUnidade } from './TipoUnidade';
 
 @Entity('medida')
-@Unique([ 'nome', 'tipo_unidade' ])
+@Unique([ 'nome', 'tipoUnidade' ])
 export class Medida extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

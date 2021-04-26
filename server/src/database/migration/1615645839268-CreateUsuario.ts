@@ -53,7 +53,7 @@ export class CreateUsuario1615645839268 implements MigrationInterface {
                     default: true
                 },
                 {
-                    name: 'trocaLogin',
+                    name: 'troca_login',
                     type: 'boolean',
                     default: false
                 },
