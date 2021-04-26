@@ -1,12 +1,11 @@
-import SERVER_URL from '../config/constants';
 import { Midia } from '../entity/Midia';
-import Util from '../util/Util';
+import util from '../util/util';
 
 export default {
   render(midia: Midia) {
     return {
       id: midia.id,
-      url: `http://${ Util.getLocalIP() }:${ process.env.PORT }/uploads/midia/receita/${ midia.path }`
+      url: `http://${ util.getLocalIP() }:${ process.env.PORT }/uploads/midia/receita/${ midia.path }`
     };
   },
 

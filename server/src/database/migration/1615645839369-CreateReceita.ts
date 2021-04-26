@@ -1,6 +1,6 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateReceita1615645891939 implements MigrationInterface {
+export class CreateReceita1615645839369 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(new Table({
@@ -9,7 +9,6 @@ export class CreateReceita1615645891939 implements MigrationInterface {
                 {
                     name: 'id',
                     type: 'integer',
-                    unsigned: true,
                     isPrimary: true,
                     isGenerated: true,
                     generationStrategy: 'increment'
@@ -17,6 +16,8 @@ export class CreateReceita1615645891939 implements MigrationInterface {
                 {
                     name: 'nome',
                     type: 'varchar',
+                    length: '64',
+                    isNullable: true,
                 },
                 {
                     name: 'descricao',
@@ -38,14 +39,14 @@ export class CreateReceita1615645891939 implements MigrationInterface {
                     default: true
                 },
                 {
-                    name: 'id_usuario',
+                    name: 'usuario_id',
                     type: 'integer',
                 }
             ],
             foreignKeys: [
                 {
                     name: 'receitaUsuario',
-                    columnNames: [ 'id_usuario' ],
+                    columnNames: [ 'usuario_id' ],
                     referencedTableName: 'usuario',
                     referencedColumnNames: [ 'id' ],
                     onUpdate: 'CASCADE',
@@ -55,7 +56,7 @@ export class CreateReceita1615645891939 implements MigrationInterface {
             uniques: [
                 {
                     name: 'nomeUsuario',
-                    columnNames: [ 'nome', 'id_usuario' ]
+                    columnNames: [ 'nome', 'usuario_id' ]
                 }
             ]
         }));

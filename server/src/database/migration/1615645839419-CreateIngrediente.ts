@@ -1,6 +1,6 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateIngrediente1615734928061 implements MigrationInterface {
+export class CreateIngrediente1615645839419 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(new Table({
@@ -9,7 +9,6 @@ export class CreateIngrediente1615734928061 implements MigrationInterface {
                 {
                     name: 'id',
                     type: 'integer',
-                    unsigned: true,
                     isPrimary: true,
                     isGenerated: true,
                     generationStrategy: 'increment'
@@ -43,6 +42,7 @@ export class CreateIngrediente1615734928061 implements MigrationInterface {
                 },
                 {
                     name: 'tipo_unidade',
+                    enumName: 'tipo_unidade_enum',
                     type: 'enum',
                     enum: [
                         'VOLUME',

@@ -1,18 +1,18 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Ingrediente } from './Ingrediente';
 import { Receita } from './Receita';
 import { Unidade } from './Unidade';
 
 @Entity('receita_ingrediente')
 @Unique([ 'receita', 'ingrediente' ])
-export class ReceitaIngrediente {
+export class ReceitaIngrediente extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   quantidade: number;
 
-  @ManyToOne(() => Unidade, unidade => unidade.ingredientesReceitas)
+  @ManyToOne(() => Unidade, unidade => unidade.ingredientesReceitas, { nullable: true })
   @JoinColumn({ name: 'unidade_id' })
   unidade: Unidade;
 

@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateCategoria1615734945614 implements MigrationInterface {
+export class CreateMedida1615734933551 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(new Table({
-            name: 'categoria',
+            name: 'medida',
             columns: [
                 {
                     name: 'id',
@@ -15,35 +15,35 @@ export class CreateCategoria1615734945614 implements MigrationInterface {
                 },
                 {
                     name: 'nome',
-                    type: 'enum',
-                    enum: [
-                        'DIET',
-                        'LIGHT',
-                        'FITNESS',
-                        'VEGANA',
-                        'VEGETARIANA'
-                    ]
+                    type: 'varchar',
+                    length: '15'
                 },
                 {
-                    name: 'receita_id',
+                    name: 'valor',
                     type: 'integer'
-                }
-            ],
-            foreignKeys: [
+                },
                 {
-                    name: 'categoriaReceita',
-                    columnNames: [ 'receita_id' ],
-                    referencedTableName: 'receita',
-                    referencedColumnNames: [ 'id' ],
-                    onUpdate: 'CASCADE',
-                    onDelete: 'CASCADE'
+                    name: 'tipo_unidade',
+                    enumName: 'tipo_unidade_enum',
+                    type: 'enum',
+                    enum: [
+                        'VOLUME',
+                        'PESO',
+                        'UNIDADE'
+                    ]
+                },
+            ],
+            uniques: [
+                {
+                    name: 'nomeTipoUnidade',
+                    columnNames: [ 'nome', 'tipo_unidade' ]
                 }
             ]
         }));
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('categoria');
+        await queryRunner.dropTable('medida');
     }
 
 }

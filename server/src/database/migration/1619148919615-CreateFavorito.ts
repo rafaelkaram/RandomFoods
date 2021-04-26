@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateAvaliacao1615645935563 implements MigrationInterface {
+export class CreateFavorito1619148919615 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(new Table({
-            name: 'avaliacao',
+            name: 'favorito',
             columns: [
                 {
                     name: 'id',
@@ -14,26 +14,17 @@ export class CreateAvaliacao1615645935563 implements MigrationInterface {
                     generationStrategy: 'increment'
                 },
                 {
-                    name: 'nota',
-                    type:  'integer'
-                },
-                {
-                    name: 'data',
-                    type: 'timestamp',
-                    default: 'now()'
-                },
-                {
                     name: 'usuario_id',
-                    type: 'integer'
+                    type: 'integer',
                 },
                 {
                     name: 'receita_id',
-                    type: 'integer'
-                }
+                    type: 'integer',
+                },
             ],
             foreignKeys: [
                 {
-                    name: 'avaliacaoUsuario',
+                    name: 'favoritoUsuario',
                     columnNames: [ 'usuario_id' ],
                     referencedTableName: 'usuario',
                     referencedColumnNames: [ 'id' ],
@@ -41,25 +32,25 @@ export class CreateAvaliacao1615645935563 implements MigrationInterface {
                     onDelete: 'CASCADE'
                 },
                 {
-                    name: 'avaliacaoReceita',
+                    name: 'favoritoReceita',
                     columnNames: [ 'receita_id' ],
                     referencedTableName: 'receita',
                     referencedColumnNames: [ 'id' ],
                     onUpdate: 'CASCADE',
                     onDelete: 'CASCADE'
-                }
+                },
             ],
             uniques: [
                 {
-                    name: 'avaUsuarioReceita',
+                    name: 'favUsuarioReceita',
                     columnNames: [ 'usuario_id', 'receita_id' ]
                 }
             ]
-        }));
+        }))
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('avaliacao');
+        await queryRunner.dropTable('favorito');
     }
 
 }
