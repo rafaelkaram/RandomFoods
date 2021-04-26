@@ -17,7 +17,7 @@ import { ReceitaIngrediente } from '../entity/ReceitaIngrediente';
 import receitaView from '../view/ReceitaView';
 import ReceitaFiltroView from '../view/ReceitaFiltroView';
 
-import Util from '../util/Util';
+import util from '../util/util';
 
 class ReceitaService {
     // Métodos das rotas
@@ -150,7 +150,7 @@ class ReceitaService {
         const { ids } = request.query;
 
         if (!ids) {
-            return Util.syserror(400, response, 'A requisição precisa de ingredientes');
+            return util.syserror(400, response, 'A requisição precisa de ingredientes');
         }
 
         const { derivadoLeite } = request.query;
@@ -195,10 +195,10 @@ class ReceitaService {
                 matchesParciais: matchesParciais
             };
 
-            return Util.systrace(200, response, matches);
+            return util.systrace(200, response, matches);
 
         } catch (e) {
-            Util.syserror(400, response, e);
+            util.syserror(400, response, e);
         }
     }
 

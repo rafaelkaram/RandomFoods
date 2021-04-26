@@ -1,5 +1,5 @@
 import { Usuario } from "../entity/Usuario";
-import Util from '../util/Util';
+import util from '../util/util';
 
 export default {
   render(usuario: Usuario) {
@@ -13,7 +13,7 @@ export default {
       return {
         id: usuario.id,
         nome: usuario.nome,
-        path: `http://${ Util.getLocalIP() }:${ process.env.PORT }/uploads/midia/usuario/${Util.encryptMidia(usuario.id.toString())}.png`,
+        path: `http://${ util.getLocalIP() }:${ process.env.PORT }/uploads/midia/usuario/${util.encryptMidia(usuario.id.toString())}.png`,
         nomeUsuario: '@'
       };
     }

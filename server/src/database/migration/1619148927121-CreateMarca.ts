@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateAvaliacao1615645935563 implements MigrationInterface {
+export class CreateMarca1619148927121 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(new Table({
-            name: 'avaliacao',
+            name: 'marca',
             columns: [
                 {
                     name: 'id',
@@ -14,26 +14,17 @@ export class CreateAvaliacao1615645935563 implements MigrationInterface {
                     generationStrategy: 'increment'
                 },
                 {
-                    name: 'nota',
-                    type:  'integer'
-                },
-                {
-                    name: 'data',
-                    type: 'timestamp',
-                    default: 'now()'
-                },
-                {
                     name: 'usuario_id',
-                    type: 'integer'
+                    type: 'integer',
                 },
                 {
-                    name: 'receita_id',
-                    type: 'integer'
-                }
+                    name: 'comentario_id',
+                    type: 'integer',
+                },
             ],
             foreignKeys: [
                 {
-                    name: 'avaliacaoUsuario',
+                    name: 'marcaUsuario',
                     columnNames: [ 'usuario_id' ],
                     referencedTableName: 'usuario',
                     referencedColumnNames: [ 'id' ],
@@ -41,25 +32,25 @@ export class CreateAvaliacao1615645935563 implements MigrationInterface {
                     onDelete: 'CASCADE'
                 },
                 {
-                    name: 'avaliacaoReceita',
-                    columnNames: [ 'receita_id' ],
-                    referencedTableName: 'receita',
+                    name: 'marcaComentario',
+                    columnNames: [ 'comentario_id' ],
+                    referencedTableName: 'comentario',
                     referencedColumnNames: [ 'id' ],
                     onUpdate: 'CASCADE',
                     onDelete: 'CASCADE'
-                }
+                },
             ],
             uniques: [
                 {
-                    name: 'avaUsuarioReceita',
-                    columnNames: [ 'usuario_id', 'receita_id' ]
+                    name: 'usuarioComentario',
+                    columnNames: [ 'usuario_id', 'comentario_id' ]
                 }
             ]
-        }));
+        }))
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('avaliacao');
+        await queryRunner.dropTable('marca');
     }
 
 }
