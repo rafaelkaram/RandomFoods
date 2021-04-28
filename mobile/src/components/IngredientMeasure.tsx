@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Dimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Input } from 'react-native-elements'
 import { IIngrediente } from '../constants/interfaces';
 import CheckBox from '@react-native-community/checkbox';
@@ -9,7 +8,7 @@ import { Picker } from '@react-native-picker/picker';
 import BoldText from '../components/BoldText'
 import RegularText from '../components/RegularText'
 
-const IngredientMeasure = (props: { ingrediente: IIngrediente, index: number }) => {
+const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente: any, index: number }) => {
 
   const [check, setCheck] = useState(false);
   const [quantidade, setQuantidade] = useState('');
@@ -17,6 +16,7 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, index: number }) 
 
 
   const ingrediente = props.ingrediente;
+  const removeIngrediente = props.removeIngrediente
   const unidades = ingrediente.unidades
 
   const rgx = /^[0-9]*[.,]?[0-9]*$/;
@@ -45,13 +45,12 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, index: number }) 
 
 
   return (
-
     <View
       key={ingrediente.id}
       style={styles.item}
     >
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <RegularText style={{ fontSize: 18 }}>{ingrediente.nome}</RegularText>
+        <BoldText style={{ fontSize: 16 }}>{ingrediente.nome}</BoldText>
         {ingrediente.semMedida === true ?
           <View style={styles.checkBox}>
             <RegularText style={{ fontSize: 12, marginTop: 5 }}>Sem medida?</RegularText>
@@ -63,7 +62,7 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, index: number }) 
             />
           </View>
           : null}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => removeIngrediente(ingrediente.id)}>
           <Feather name="trash-2" size={24} color="black" />
         </TouchableOpacity>
       </View>
@@ -114,7 +113,6 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, index: number }) 
       }
     </View >
 
-
   );
 }
 
@@ -152,7 +150,7 @@ const styles = StyleSheet.create({
   },
 
   campos: {
-    marginTop: 30,
+    marginTop: 15,
     flexDirection: "row",
     justifyContent: 'space-between',
     alignItems: 'center'
