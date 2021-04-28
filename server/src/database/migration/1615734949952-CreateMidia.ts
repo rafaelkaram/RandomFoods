@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateMidia1615734949952 implements MigrationInterface {
 
@@ -9,7 +9,6 @@ export class CreateMidia1615734949952 implements MigrationInterface {
                 {
                     name: 'id',
                     type: 'integer',
-                    unsigned: true,
                     isPrimary: true,
                     isGenerated: true,
                     generationStrategy: 'increment'
@@ -34,14 +33,14 @@ export class CreateMidia1615734949952 implements MigrationInterface {
                     default: true
                 },
                 {
-                    name: 'id_receita',
+                    name: 'receita_id',
                     type: 'integer'
                 }
             ],
             foreignKeys: [
                 {
                     name: 'midiaReceita',
-                    columnNames: [ 'id_receita' ],
+                    columnNames: [ 'receita_id' ],
                     referencedTableName: 'receita',
                     referencedColumnNames: [ 'id' ]
                 }

@@ -3,7 +3,7 @@ import { getCustomRepository } from 'typeorm';
 
 import fs from 'fs';
 import path from 'path';
-import Util from '../util/Util';
+import util from '../util/util';
 
 import { MidiaRepository } from '../repository/MidiaRepository';
 
@@ -33,7 +33,7 @@ class MidiaService {
                 const nomeArquivo: string = midia.filename;
 
                 console.log(`Removendo arquivo ${ nomeArquivo }.`);
-                const midiaPath: string = Util.getPath('midia', nomeArquivo);
+                const midiaPath: string = util.getPath('midia', nomeArquivo);
                 fs.unlink(path.join(midiaPath, nomeArquivo), (err) => {
                     if (err) throw err;
                 });
@@ -49,10 +49,10 @@ class MidiaService {
 
         midias.map(async data => {
             const nomeArquivo = data.filename;
-            const isFoto = Util.isExtensao(nomeArquivo, [ 'jpg', 'jpeg', 'png' ]);
-            const isVideo = Util.isExtensao(nomeArquivo, [ 'mp4', 'mkv', 'webp' ]);
-            const folder = Util.getFolderName(nomeArquivo);
-            const midiaPath = Util.getPath('midia', nomeArquivo)
+            const isFoto = util.isExtensao(nomeArquivo, [ 'jpg', 'jpeg', 'png' ]);
+            const isVideo = util.isExtensao(nomeArquivo, [ 'mp4', 'mkv', 'webp' ]);
+            const folder = util.getFolderName(nomeArquivo);
+            const midiaPath = util.getPath('midia', nomeArquivo)
 
             if (!(isFoto || isVideo)) {
                 console.log(`Removendo arquivos.\nImportação não concluída.`);

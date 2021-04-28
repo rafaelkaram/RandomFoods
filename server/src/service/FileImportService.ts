@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import XLSX from 'xlsx';
 
-import Util from '../util/Util';
+import util from '../util/util';
 
 import CategoriaService from './CategoriaService';
 import IngredienteService from './IngredienteService';
@@ -29,18 +29,18 @@ class FileImportService {
 
         arquivos.map(async arquivo => {
             const nomeArquivo = arquivo.filename;
-            const isExtensao = Util.isExtensao(nomeArquivo, [ 'xlsx', 'xls', 'csv' ]);
+            const isExtensao = util.isExtensao(nomeArquivo, [ 'xlsx', 'xls', 'csv' ]);
 
             if (!isExtensao) {
                 invalidos++;
                 console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
-                fs.unlink(path.join(Util.getPath('import'), nomeArquivo), (err) => {
+                fs.unlink(path.join(util.getPath('import'), nomeArquivo), (err) => {
                     if (err) throw err;
                 });
             } else {
                 try {
 
-                    const workbook = XLSX.readFile(path.join(Util.getPath('import'), nomeArquivo));
+                    const workbook = XLSX.readFile(path.join(util.getPath('import'), nomeArquivo));
 
                     const sheetReceita = XLSX.utils.sheet_to_json(workbook.Sheets['Receita']);
                     const sheetIngrediente = XLSX.utils.sheet_to_json(workbook.Sheets['Ingrediente']);
@@ -167,7 +167,7 @@ class FileImportService {
     }
 
     async getIp(request: Request, response: Response) {
-        const localIP = Util.getLocalIP();
+        const localIP = util.getLocalIP();
 
         return response.status(200).json({ message: `Seu IP local é: ${ localIP }` });
     }

@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateAvaliacao1615645935563 implements MigrationInterface {
 
@@ -9,7 +9,6 @@ export class CreateAvaliacao1615645935563 implements MigrationInterface {
                 {
                     name: 'id',
                     type: 'integer',
-                    unsigned: true,
                     isPrimary: true,
                     isGenerated: true,
                     generationStrategy: 'increment'
@@ -24,18 +23,18 @@ export class CreateAvaliacao1615645935563 implements MigrationInterface {
                     default: 'now()'
                 },
                 {
-                    name: 'id_usuario',
+                    name: 'usuario_id',
                     type: 'integer'
                 },
                 {
-                    name: 'id_receita',
+                    name: 'receita_id',
                     type: 'integer'
                 }
             ],
             foreignKeys: [
                 {
                     name: 'avaliacaoUsuario',
-                    columnNames: [ 'id_usuario' ],
+                    columnNames: [ 'usuario_id' ],
                     referencedTableName: 'usuario',
                     referencedColumnNames: [ 'id' ],
                     onUpdate: 'CASCADE',
@@ -43,7 +42,7 @@ export class CreateAvaliacao1615645935563 implements MigrationInterface {
                 },
                 {
                     name: 'avaliacaoReceita',
-                    columnNames: [ 'id_receita' ],
+                    columnNames: [ 'receita_id' ],
                     referencedTableName: 'receita',
                     referencedColumnNames: [ 'id' ],
                     onUpdate: 'CASCADE',
@@ -52,8 +51,8 @@ export class CreateAvaliacao1615645935563 implements MigrationInterface {
             ],
             uniques: [
                 {
-                    name: 'usuarioReceita',
-                    columnNames: [ 'id_usuario', 'id_receita' ]
+                    name: 'avaUsuarioReceita',
+                    columnNames: [ 'usuario_id', 'receita_id' ]
                 }
             ]
         }));

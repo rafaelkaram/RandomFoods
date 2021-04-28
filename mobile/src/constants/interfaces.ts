@@ -90,20 +90,21 @@ interface IIngrediente {
     
 }
 
+interface IIngrediente2 {
+  id: number,
+  nome: string,
+  semMedida: boolean,
+  derivadoLeite: boolean,
+  gluten: boolean,
+  tipoIngrediente: string,
+  tipoUnidade: string
+}
 
 interface IIngredientType {
   nome: string,
   url: string,
   alt_url: string,
-  ingredientes: [{
-    id: number,
-    nome: string,
-    semMedida: boolean,
-    derivadoLeite: boolean,
-    gluten: boolean,
-    tipoIngrediente: string,
-    tipoUnidade: string
-  }]
+  ingredientes: IIngrediente2[]
 }
 
 interface IIngredientCart {
@@ -159,6 +160,7 @@ export {
   IRecipeType,
   IIngredienteTipo,
   IIngrediente,
+  IIngrediente2,
   IIngredientType,
   IIngredientCart,
   IUnidade,

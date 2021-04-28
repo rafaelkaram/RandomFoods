@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateComentario1615645929990 implements MigrationInterface {
 
@@ -9,7 +9,6 @@ export class CreateComentario1615645929990 implements MigrationInterface {
                 {
                     name: 'id',
                     type: 'integer',
-                    unsigned: true,
                     isPrimary: true,
                     isGenerated: true,
                     generationStrategy: 'increment'
@@ -24,23 +23,23 @@ export class CreateComentario1615645929990 implements MigrationInterface {
                     default: 'now()'
                 },
                 {
-                    name: 'id_pai',
+                    name: 'pai_id',
                     type: 'integer',
                     isNullable: true
                 },
                 {
-                    name: 'id_usuario',
+                    name: 'usuario_id',
                     type: 'integer'
                 },
                 {
-                    name: 'id_receita',
+                    name: 'receita_id',
                     type: 'integer'
                 }
             ],
             foreignKeys: [
                 {
                     name: 'comentarioComentario',
-                    columnNames: [ 'id_pai' ],
+                    columnNames: [ 'pai_id' ],
                     referencedTableName: 'comentario',
                     referencedColumnNames: [ 'id' ],
                     onUpdate: 'CASCADE',
@@ -48,7 +47,7 @@ export class CreateComentario1615645929990 implements MigrationInterface {
                 },
                 {
                     name: 'comentarioUsuario',
-                    columnNames: [ 'id_usuario' ],
+                    columnNames: [ 'usuario_id' ],
                     referencedTableName: 'usuario',
                     referencedColumnNames: [ 'id' ],
                     onUpdate: 'CASCADE',
@@ -56,7 +55,7 @@ export class CreateComentario1615645929990 implements MigrationInterface {
                 },
                 {
                     name: 'comentarioReceita',
-                    columnNames: [ 'id_receita' ],
+                    columnNames: [ 'receita_id' ],
                     referencedTableName: 'receita',
                     referencedColumnNames: [ 'id' ],
                     onUpdate: 'CASCADE',
