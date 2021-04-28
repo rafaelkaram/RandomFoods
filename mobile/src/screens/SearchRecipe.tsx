@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Button, Image, StyleSheet, Dimensions, Modal } from 'react-native'
+import CheckBox from '@react-native-community/checkbox';
 import { Input } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,7 +9,7 @@ import BoldText from '../components/BoldText'
 import RegularText from '../components/RegularText'
 import ItalicText from '../components/ItalicText'
 import fixString from '../assets/functions/utils'
-import { IIngredientType, IIngredientCart, IIngredient } from '../constants/interfaces';
+import { IIngredientType, IIngredientCart, IIngrediente2 } from '../constants/interfaces';
 import { Feather, AntDesign } from '@expo/vector-icons';
 import api from '../services/api';
 
@@ -17,24 +18,32 @@ const SearchRecipe = () => {
 
     const [ingredientsCart, setIngredientsCart] = useState<IIngredientCart[]>([]);
     const [ingredientTypes, setIngredientTypes] = useState<IIngredientType[]>([]);
+    const [ingredientList, setIngredientList] = useState<IIngredientType[]>([]);
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
     const [load, setLoad] = useState(false)
     const [modalVisible, setModalVisible] = useState(false);
     const [nomeIngrediente, setnomeIngrediente] = useState('');
+    const [derivadoLeite, setDerivadoLeite] = useState(false);
+    const [gluten, setGluten] = useState(false);
 
     useEffect(() => {
         api.get('/busca/tipo-ingrediente')
             .then(response => {
                 setIngredientTypes(response.data);
+                setIngredientList(response.data);
                 setLoad(true)
             })
     }, []);
+
+    useEffect(() => {
+        filterIngredients()
+    }, [gluten, derivadoLeite, nomeIngrediente]);
 
 
     function handleNavigateToRecipe() {
 
         if (ingredientsCart.length > 0)
-            navigation.navigate('Receita', { ingredientes: selectedItems })
+            navigation.navigate('Receita', { ingredientes: selectedItems, derivadoLeite: derivadoLeite, gluten: gluten })
     }
 
     function handleSelectItem(id: number, nome: string) {
@@ -49,10 +58,64 @@ const SearchRecipe = () => {
         } else {
             setSelectedItems([...selectedItems, id]);
 
-            const ingrediente = { id: id, nome: nome};
+            const ingrediente = { id: id, nome: nome };
 
             setIngredientsCart([...ingredientsCart, ingrediente]);
         }
+    }
+
+    function filterIngredients() {
+        let list: IIngredientType[] = [];
+        if (nomeIngrediente !== '') {
+            ingredientTypes.map(ingredientTypes => {
+                const list1 = ingredientTypes.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase()));
+                const list2 = gluten ? list1.filter(ingrediente => ingrediente.gluten === !gluten) : list1
+                if (list2.length > 0) {
+                    const l2: IIngrediente2[] = ingredientTypes.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase()))
+                    const pqp: IIngredientType = {
+                        nome: ingredientTypes.nome,
+                        url: ingredientTypes.url,
+                        alt_url: ingredientTypes.alt_url,
+                        ingredientes: l2
+                    }
+                    list.push(pqp)
+                }
+            })
+        } else {
+            if (gluten || derivadoLeite) {
+                ingredientTypes.map(ingredientTypes => {
+                    const ingredientes: IIngrediente2[] = gluten ? ingredientTypes.ingredientes.filter(ingrediente => ingrediente.gluten === !gluten) : ingredientTypes.ingredientes
+                    if (ingredientes.length > 0) {
+                        const ingredientes2: IIngrediente2[] = derivadoLeite ? ingredientes.filter(ingrediente => ingrediente.derivadoLeite === !derivadoLeite) : ingredientes
+                        if (ingredientes2.length > 0) {
+                            const pqp: IIngredientType = {
+                                nome: ingredientTypes.nome,
+                                url: ingredientTypes.url,
+                                alt_url: ingredientTypes.alt_url,
+                                ingredientes: ingredientes2
+                            }
+                            list.push(pqp)
+                        }
+                    } else {
+                        const ingredientes: IIngrediente2[] = derivadoLeite ? ingredientTypes.ingredientes.filter(ingrediente => ingrediente.derivadoLeite === !derivadoLeite) : ingredientTypes.ingredientes
+                        if (ingredientes.length > 0) {
+                            const pqp: IIngredientType = {
+                                nome: ingredientTypes.nome,
+                                url: ingredientTypes.url,
+                                alt_url: ingredientTypes.alt_url,
+                                ingredientes: ingredientes
+                            }
+                            list.push(pqp)
+                        }
+                    }
+                })
+            } else {
+                list = ingredientTypes;
+            }
+        }
+
+        setIngredientList(list);
+
     }
 
 
@@ -132,31 +195,47 @@ const SearchRecipe = () => {
                     value={nomeIngrediente}
                     inputContainerStyle={{ borderBottomWidth: 0 }}
                 />
+
+            </View>
+            <View style={styles.filter}>
+                <View>
+                    <TouchableOpacity
+                        style={derivadoLeite === true ? styles.filterBoxSelected : styles.filterBox}
+                        onPress={() => { derivadoLeite === false ? setDerivadoLeite(true) : setDerivadoLeite(false) }}
+                    >
+                        <RegularText style={derivadoLeite === false ? styles.filterName : styles.filterNameSelected}>Receitas sem lactose</RegularText>
+
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <TouchableOpacity
+                        style={gluten === true ? styles.filterBoxSelected : styles.filterBox}
+                        onPress={() => { gluten === false ? setGluten(true) : setGluten(false) }}
+                    >
+                        <RegularText style={gluten === false ? styles.filterName : styles.filterNameSelected}>Receitas sem gluten</RegularText>
+                    </TouchableOpacity>
+                </View>
             </View>
             <ScrollView>
-                {ingredientTypes.map(ingredientTypes => {
-                    if (ingredientTypes.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase())).length === 0){
-                        return;
-                    }
+                {ingredientList.map(ingredientList => {
                     return (
-                        <View key={ingredientTypes.tipo} style={styles.mainContainer}>
+                        <View key={ingredientList.nome} style={styles.mainContainer}>
                             <View>
                                 <View style={styles.ingredientTypeNameImageContainer}>
-                                    <BoldText style={styles.ingredientTypeName}>{ingredientTypes.tipo}</BoldText>
+                                    <BoldText style={styles.ingredientTypeName}>{ingredientList.nome}</BoldText>
                                     <Image style={styles.ingredientTypeIcon}
                                         source={{
-                                            uri: ingredientTypes.url
+                                            uri: ingredientList.url
                                         }} />
                                 </View>
                                 <View style={styles.ingredietContainer}>
-                                    {ingredientTypes.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase())).map(ingrediente => {
+                                    {ingredientList.ingredientes.map(ingrediente => {
                                         return (
                                             <TouchableOpacity
                                                 style={selectedItems.includes(ingrediente.id) ? styles.ingredientSelected : styles.ingredient}
                                                 onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}
                                                 key={ingrediente.id}
                                             >
-
                                                 <RegularText style={selectedItems.includes(ingrediente.id) ? styles.ingredientNameSelected : styles.ingredientName}>{ingrediente.nome}</RegularText>
                                             </TouchableOpacity>
                                         )
@@ -310,6 +389,41 @@ const styles = StyleSheet.create({
         right: 20,
         backgroundColor: '#e02041',
         justifyContent: 'center',
+    },
+
+    filter: {
+        margin: 10,
+        flexDirection: 'row'
+    },
+
+    filterBox: {
+        alignContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#EAEAEA',
+        borderRadius: 8,
+        height: 40,
+        padding: 5,
+        margin: 5,
+        justifyContent: 'center'
+    },
+
+    filterBoxSelected: {
+        alignContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#e02041',
+        borderRadius: 8,
+        height: 40,
+        padding: 5,
+        margin: 5,
+        justifyContent: 'center'
+    },
+
+    filterName: {
+        color: 'black'
+    },
+
+    filterNameSelected: {
+        color: 'white'
     },
 
 })
