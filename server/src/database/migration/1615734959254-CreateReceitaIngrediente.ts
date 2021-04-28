@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateReceitaIngrediente1615734959254 implements MigrationInterface {
 
@@ -9,10 +9,9 @@ export class CreateReceitaIngrediente1615734959254 implements MigrationInterface
                 {
                     name: 'id',
                     type: 'integer',
-                    unsigned: true,
                     isPrimary: true,
                     isGenerated: true,
-                    generationStrategy: 'increment',
+                    generationStrategy: 'increment'
                 },
                 {
                     name: 'quantidade',
@@ -22,35 +21,35 @@ export class CreateReceitaIngrediente1615734959254 implements MigrationInterface
                     isNullable: true
                 },
                 {
-                    name: 'id_unidade',
+                    name: 'unidade_id',
                     type: 'integer',
                     isNullable: true
                 },
                 {
-                    name: 'id_ingrediente',
+                    name: 'ingrediente_id',
                     type: 'integer'
                 },
                 {
-                    name: 'id_receita',
+                    name: 'receita_id',
                     type: 'integer'
                 }
             ],
             foreignKeys: [
                 {
                     name: 'receitaIngredienteUnidade',
-                    columnNames: [ 'id_unidade' ],
+                    columnNames: [ 'unidade_id' ],
                     referencedTableName: 'unidade',
                     referencedColumnNames: [ 'id' ]
                 },
                 {
                     name: 'receitaIngredienteIngrediente',
-                    columnNames: [ 'id_ingrediente' ],
+                    columnNames: [ 'ingrediente_id' ],
                     referencedTableName: 'ingrediente',
                     referencedColumnNames: [ 'id' ]
                 },
                 {
                     name: 'receitaIngredienteReceita',
-                    columnNames: [ 'id_receita' ],
+                    columnNames: [ 'receita_id' ],
                     referencedTableName: 'receita',
                     referencedColumnNames: [ 'id' ]
                 }
@@ -58,7 +57,7 @@ export class CreateReceitaIngrediente1615734959254 implements MigrationInterface
             uniques: [
                 {
                     name: 'receitaIngrediente',
-                    columnNames: [ 'id_receita', 'id_ingrediente' ]
+                    columnNames: [ 'receita_id', 'ingrediente_id' ]
                 }
             ]
         }));

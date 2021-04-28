@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 
-import Util from '../util/Util';
+import util from '../util/util';
 
 import { UsuarioRepository } from '../repository/UsuarioRepository';
 
@@ -64,12 +64,12 @@ class UsuarioService {
         const arquivo = request.file as Express.Multer.File;
 
         const nomeArquivo = arquivo.filename;
-        const isExtensao = Util.isExtensao(nomeArquivo, [ 'jpg', 'jpeg', 'png' ]);
+        const isExtensao = util.isExtensao(nomeArquivo, [ 'jpg', 'jpeg', 'png' ]);
 
         if (!isExtensao || !userId) {
             console.log(`Removendo arquivo ${ nomeArquivo }.\nImportação não concluída.`);
-            console.log(path.join(Util.getPath('usuario')));
-            fs.unlink(path.join(Util.getPath('usuario'),nomeArquivo), (err) => {
+            console.log(path.join(util.getPath('usuario')));
+            fs.unlink(path.join(util.getPath('usuario'),nomeArquivo), (err) => {
                 if (err) throw err;
             });
 
@@ -86,7 +86,7 @@ class UsuarioService {
             return response.status(201).json({ message: 'Imagem de perfil salva com sucesso!' });
         }
 
-        return Util.syserror(400, 'Usuario não econtrado!');
+        return util.syserror(400, response, 'Usuario não econtrado!');
     }
 
     async create(request: Request, response: Response) {
@@ -105,7 +105,7 @@ class UsuarioService {
 
         await repository.save(usuario);
 
-        return Util.systrace(201, 'Usuário criado com sucesso.');
+        return util.systrace(201, response, 'Usuário criado com sucesso.');
     }
 
     async createBulk(request: Request, response: Response) {

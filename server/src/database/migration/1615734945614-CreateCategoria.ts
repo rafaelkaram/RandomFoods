@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateCategoria1615734945614 implements MigrationInterface {
 
@@ -9,7 +9,7 @@ export class CreateCategoria1615734945614 implements MigrationInterface {
                 {
                     name: 'id',
                     type: 'integer',
-                    unsigned: true,
+                    isPrimary: true,
                     isGenerated: true,
                     generationStrategy: 'increment'
                 },
@@ -25,14 +25,14 @@ export class CreateCategoria1615734945614 implements MigrationInterface {
                     ]
                 },
                 {
-                    name: 'id_receita',
+                    name: 'receita_id',
                     type: 'integer'
                 }
             ],
             foreignKeys: [
                 {
                     name: 'categoriaReceita',
-                    columnNames: [ 'id_receita' ],
+                    columnNames: [ 'receita_id' ],
                     referencedTableName: 'receita',
                     referencedColumnNames: [ 'id' ],
                     onUpdate: 'CASCADE',
