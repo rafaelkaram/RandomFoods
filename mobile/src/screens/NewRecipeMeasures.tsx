@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Text, ScrollView, StyleSheet, Dimensions, View, Image, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, Dimensions, View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IIngredienteTipo } from '../constants/interfaces';
 import api from '../services/api';
 import IngredientMeasure from '../components/IngredientMeasure';
-import { setAutoLogAppEventsEnabledAsync } from 'expo-facebook';
-import { Feather, AntDesign } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import ItalicText from '../components/ItalicText'
+import BoldText from '../components/BoldText'
+import RegularText from '../components/RegularText';
 
 const NewRecipeMeasures = ({ route }: { route: any }) => {
     const navigation = useNavigation();
 
     const [ingredientsCart, setIngredientsCart] = useState<IIngredienteTipo[]>([]);
     const [load, setLoad] = useState(false);
-    const Height = Dimensions.get("window").height;
-    const Width = Dimensions.get("window").width;
+    const [selectedItems, setSelectedItems] = useState<number[]>([]);
+    const [ingredient, setIngredient] = useState<number>()
+    const [type, settype] = useState<number>()
 
     useEffect(() => {
         if (route.params) {
-            console.log(route.params);
             const { idIngredientes } = route.params;
             const params = { ids: idIngredientes };
             api.get('/busca/ingrediente', { params })
@@ -42,13 +43,23 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
             </View>)
     }
 
-    function handleNavigateToMeasures() {
-        // const idIngredientes = ingredientsCart.map(ingrediente => {
-        //     return ingrediente.id;
-        // })
-        // if (ingredientsCart.length > 0 && nomeReceita)
-        //     navigation.navigate('Medidas', { idIngredientes });
-    }
+    // function removeIngredient(id: number) {
+    //     ingredientsCart.map((carrinho, index) => {
+    //         carrinho.tipo.ingredientes.map((ingrediente, index) => {
+    //             if (ingrediente.id === id) {
+    //                 setIngredient(index)
+    //                 return
+    //             }
+    //         })
+    //         console.log(ingredient);
+            
+    //         carrinho.tipo.ingredientes.splice(ingredient, 1)
+    //         console.log(carrinho.tipo.ingredientes);
+            
+    //     })
+
+    // }
+
 
 
 
@@ -64,8 +75,18 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
 
                     return (
                         <View key={tipos.tipo.nome}>
-                            <Text >{tipos.tipo.nome}</Text>
-
+                            {/* <TouchableOpacity onPress={() => removeIngredient(27)}>
+                                <RegularText>BOTAO</RegularText>
+                            </TouchableOpacity> */}
+                            <View style={styles.ingredientType}>
+                                <BoldText style={{ paddingTop: 15 }}>{tipos.tipo.nome}</BoldText>
+                                <Image
+                                    style={{ width: 50, height: 50 }}
+                                    source={{
+                                        uri: tipos.tipo.url
+                                    }}
+                                />
+                            </View>
                             {tipos.tipo.ingredientes.map(ingrediente => {
                                 if (ingrediente.tipoUnidade === 'UNIDADE') {
                                     ingrediente.unidades.push({
@@ -74,6 +95,7 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                                         sigla: 'U',
                                         taxaConversao: '1.000',
                                         tipo: 'UNIDADE',
+                                        qtd: 1
                                     });
                                 } else if (ingrediente.tipoUnidade === 'VOLUME') {
                                     ingrediente.unidades.push({
@@ -82,6 +104,7 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                                         sigla: 'L',
                                         taxaConversao: '1.000',
                                         tipo: 'VOLUME',
+                                        qtd: 1
                                     });
                                     ingrediente.unidades.push({
                                         id: 2,
@@ -89,6 +112,7 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                                         sigla: 'Ml',
                                         taxaConversao: '0.001',
                                         tipo: 'VOLUME',
+                                        qtd: 100
                                     });
                                 } else {
                                     ingrediente.unidades.push({
@@ -97,6 +121,7 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                                         sigla: 'Mg',
                                         taxaConversao: '0.001',
                                         tipo: 'PESO',
+                                        qtd: 100
                                     });
                                     ingrediente.unidades.push({
                                         id: 4,
@@ -104,6 +129,7 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                                         sigla: 'g',
                                         taxaConversao: '1.000',
                                         tipo: 'PESO',
+                                        qtd: 100
                                     });
                                     ingrediente.unidades.push({
                                         id: 6,
@@ -111,6 +137,7 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                                         sigla: 'Kg',
                                         taxaConversao: '1000.000',
                                         tipo: 'PESO',
+                                        qtd: 1
                                     });
                                 }
                                 return (
@@ -119,18 +146,17 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                             })}
                         </View>
                     )
-
-
                 })}
-
-
-                <TouchableOpacity
-                    style={styles.arrow}
-                    onPress={handleNavigateToMeasures}
-                >
-                    <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
-                </TouchableOpacity>
+                <View style={{ height: 80 }}></View>
             </ScrollView>
+
+            {/* <TouchableOpacity
+                style={styles.arrow}
+                onPress={handleNavigateToMeasures}
+            >
+                <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
+            </TouchableOpacity> */}
+
         </SafeAreaView>
     );
 }
@@ -142,13 +168,20 @@ const Width = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
 
+    ingredientType: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        margin: 10,
+        marginHorizontal: 100
+
+    },
 
     arrow: {
         width: 60,
         height: 60,
         borderRadius: 80,
         position: 'absolute',
-        top: (Height - 100),
+        top: (Height - 130),
         right: 20,
         backgroundColor: '#e02041',
         justifyContent: 'center',
@@ -156,7 +189,8 @@ const styles = StyleSheet.create({
     newRecipeImage: {
         width: 320,
         height: 70,
-        marginHorizontal: 10
+        marginHorizontal: 10,
+        alignSelf: 'center'
     },
     subTitle: {
         marginBottom: 10,

@@ -62,10 +62,12 @@ interface IIngredienteTipo {
         nome: string,
         sigla: string,
         taxaConversao: string,
-        tipo: string
-      }]
+        tipo: string,
+        qtd: number
+      }],
     }]
   }
+
 }
 
 
@@ -82,8 +84,10 @@ interface IIngrediente {
       nome: string,
       sigla: string,
       taxaConversao: string,
-      tipo: string
+      tipo: string,
+      qtd: number
     }]
+    
 }
 
 
