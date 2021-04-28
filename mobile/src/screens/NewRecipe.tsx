@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 80,
         position: 'absolute',
-        top: (Height - 100),
+        top: (Height - 130),
         right: 20,
         backgroundColor: '#e02041',
         justifyContent: 'center',

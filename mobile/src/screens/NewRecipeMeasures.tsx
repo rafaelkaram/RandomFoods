@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Dimensions, View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { IIngredienteTipo } from '../constants/interfaces';
+import { IIngredienteTipo, IIngrediente } from '../constants/interfaces';
 import api from '../services/api';
 import IngredientMeasure from '../components/IngredientMeasure';
 import { AntDesign } from '@expo/vector-icons';
@@ -15,9 +15,6 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
 
     const [ingredientsCart, setIngredientsCart] = useState<IIngredienteTipo[]>([]);
     const [load, setLoad] = useState(false);
-    const [selectedItems, setSelectedItems] = useState<number[]>([]);
-    const [ingredient, setIngredient] = useState<number>()
-    const [type, settype] = useState<number>()
 
     useEffect(() => {
         if (route.params) {
@@ -43,25 +40,24 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
             </View>)
     }
 
-    // function removeIngredient(id: number) {
-    //     ingredientsCart.map((carrinho, index) => {
-    //         carrinho.tipo.ingredientes.map((ingrediente, index) => {
-    //             if (ingrediente.id === id) {
-    //                 setIngredient(index)
-    //                 return
-    //             }
-    //         })
-    //         console.log(ingredient);
-            
-    //         carrinho.tipo.ingredientes.splice(ingredient, 1)
-    //         console.log(carrinho.tipo.ingredientes);
-            
-    //     })
+    function removeIngredient(id: number) {
 
-    // }
+        const newCart: IIngredienteTipo[] = []
 
-
-
+        ingredientsCart.map((carrinho, index) => {
+            const ingredientes: IIngrediente[] = carrinho.ingredientes.filter(ingrediente => ingrediente.id !== id)
+            if (ingredientes.length > 0) {
+                const cart: IIngredienteTipo = {
+                    nome: carrinho.nome,
+                    url: carrinho.url,
+                    alt_url: carrinho.alt_url,
+                    ingredientes
+                }
+                newCart.push(cart)
+            }
+        })
+        setIngredientsCart(newCart)
+    }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -74,20 +70,17 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                 {ingredientsCart.map((tipos, index) => {
 
                     return (
-                        <View key={tipos.tipo.nome}>
-                            {/* <TouchableOpacity onPress={() => removeIngredient(27)}>
-                                <RegularText>BOTAO</RegularText>
-                            </TouchableOpacity> */}
+                        <View key={tipos.nome}>
                             <View style={styles.ingredientType}>
-                                <BoldText style={{ paddingTop: 15 }}>{tipos.tipo.nome}</BoldText>
+                                <BoldText style={{ paddingTop: 15, fontSize: 18 }}>{tipos.nome}</BoldText>
                                 <Image
                                     style={{ width: 50, height: 50 }}
                                     source={{
-                                        uri: tipos.tipo.url
+                                        uri: tipos.url
                                     }}
                                 />
                             </View>
-                            {tipos.tipo.ingredientes.map(ingrediente => {
+                            {tipos.ingredientes.map(ingrediente => {
                                 if (ingrediente.tipoUnidade === 'UNIDADE') {
                                     ingrediente.unidades.push({
                                         id: 5,
@@ -141,7 +134,7 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                                     });
                                 }
                                 return (
-                                    <IngredientMeasure key={ingrediente.id} ingrediente={ingrediente} index={index} />
+                                    <IngredientMeasure key={ingrediente.id} ingrediente={ingrediente} removeIngrediente={(id: number) => removeIngredient(id)} index={index} />
                                 )
                             })}
                         </View>
@@ -150,12 +143,9 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                 <View style={{ height: 80 }}></View>
             </ScrollView>
 
-            {/* <TouchableOpacity
-                style={styles.arrow}
-                onPress={handleNavigateToMeasures}
-            >
+            <TouchableOpacity style={styles.arrow}>
                 <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
-            </TouchableOpacity> */}
+            </TouchableOpacity>
 
         </SafeAreaView>
     );
