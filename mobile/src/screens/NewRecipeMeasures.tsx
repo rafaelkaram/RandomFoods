@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Text, ScrollView, StyleSheet, Dimensions, View, Image, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, Dimensions, View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { IIngredienteTipo } from '../constants/interfaces';
+import { IIngredienteTipo, IIngrediente } from '../constants/interfaces';
 import api from '../services/api';
 import IngredientMeasure from '../components/IngredientMeasure';
-import { setAutoLogAppEventsEnabledAsync } from 'expo-facebook';
-import { Feather, AntDesign } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import ItalicText from '../components/ItalicText'
+import BoldText from '../components/BoldText'
+import RegularText from '../components/RegularText';
 
 const NewRecipeMeasures = ({ route }: { route: any }) => {
     const navigation = useNavigation();
 
     const [ingredientsCart, setIngredientsCart] = useState<IIngredienteTipo[]>([]);
     const [load, setLoad] = useState(false);
-    const Height = Dimensions.get("window").height;
-    const Width = Dimensions.get("window").width;
 
     useEffect(() => {
         if (route.params) {
-            console.log(route.params);
             const { idIngredientes } = route.params;
             const params = { ids: idIngredientes };
             api.get('/busca/ingrediente', { params })
@@ -51,8 +49,24 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
         // if (ingredientsCart.length > 0 && nomeReceita)
         //     navigation.navigate('Medidas', { idIngredientes });
     }
+    function removeIngredient(id: number) {
 
+        const newCart: IIngredienteTipo[] = []
 
+        ingredientsCart.map((carrinho, index) => {
+            const ingredientes: IIngrediente[] = carrinho.ingredientes.filter(ingrediente => ingrediente.id !== id)
+            if (ingredientes.length > 0) {
+                const cart: IIngredienteTipo = {
+                    nome: carrinho.nome,
+                    url: carrinho.url,
+                    alt_url: carrinho.alt_url,
+                    ingredientes
+                }
+                newCart.push(cart)
+            }
+        })
+        setIngredientsCart(newCart)
+    }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -65,10 +79,17 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                 {ingredientsCart.map((tipos, index) => {
 
                     return (
-                        <View key={tipos.tipo.nome}>
-                            <Text >{tipos.tipo.nome}</Text>
-
-                            {tipos.tipo.ingredientes.map(ingrediente => {
+                        <View key={tipos.nome}>
+                            <View style={styles.ingredientType}>
+                                <BoldText style={{ paddingTop: 15, fontSize: 18 }}>{tipos.nome}</BoldText>
+                                <Image
+                                    style={{ width: 50, height: 50 }}
+                                    source={{
+                                        uri: tipos.url
+                                    }}
+                                />
+                            </View>
+                            {tipos.ingredientes.map(ingrediente => {
                                 if (ingrediente.tipoUnidade === 'UNIDADE') {
                                     ingrediente.unidades.push({
                                         id: 5,
@@ -76,6 +97,7 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                                         sigla: 'U',
                                         taxaConversao: '1.000',
                                         tipo: 'UNIDADE',
+                                        qtd: 1
                                     });
                                 } else if (ingrediente.tipoUnidade === 'VOLUME') {
                                     ingrediente.unidades.push({
@@ -84,6 +106,7 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                                         sigla: 'L',
                                         taxaConversao: '1.000',
                                         tipo: 'VOLUME',
+                                        qtd: 1
                                     });
                                     ingrediente.unidades.push({
                                         id: 2,
@@ -91,6 +114,7 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                                         sigla: 'Ml',
                                         taxaConversao: '0.001',
                                         tipo: 'VOLUME',
+                                        qtd: 100
                                     });
                                 } else {
                                     ingrediente.unidades.push({
@@ -99,6 +123,7 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                                         sigla: 'Mg',
                                         taxaConversao: '0.001',
                                         tipo: 'PESO',
+                                        qtd: 100
                                     });
                                     ingrediente.unidades.push({
                                         id: 4,
@@ -106,6 +131,7 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                                         sigla: 'g',
                                         taxaConversao: '1.000',
                                         tipo: 'PESO',
+                                        qtd: 100
                                     });
                                     ingrediente.unidades.push({
                                         id: 6,
@@ -113,19 +139,19 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
                                         sigla: 'Kg',
                                         taxaConversao: '1000.000',
                                         tipo: 'PESO',
+                                        qtd: 1
                                     });
                                 }
                                 return (
-                                    <IngredientMeasure key={ingrediente.id} ingrediente={ingrediente} index={index} />
+                                    <IngredientMeasure key={ingrediente.id} ingrediente={ingrediente} removeIngrediente={(id: number) => removeIngredient(id)} index={index} />
                                 )
                             })}
                         </View>
                     )
-
-
                 })}
-
+                <View style={{ height: 80 }}></View>
             </ScrollView>
+
             <TouchableOpacity
                 style={styles.arrow}
                 onPress={handleNavigateToSteps}
@@ -144,13 +170,20 @@ const Width = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
 
+    ingredientType: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        margin: 10,
+        marginHorizontal: 100
+
+    },
 
     arrow: {
         width: 60,
         height: 60,
         borderRadius: 80,
         position: 'absolute',
-        top: (Height - 100),
+        top: (Height - 130),
         right: 20,
         backgroundColor: '#e02041',
         justifyContent: 'center',
@@ -158,7 +191,8 @@ const styles = StyleSheet.create({
     newRecipeImage: {
         width: 320,
         height: 70,
-        marginHorizontal: 10
+        marginHorizontal: 10,
+        alignSelf: 'center'
     },
     subTitle: {
         marginBottom: 10,
@@ -166,5 +200,6 @@ const styles = StyleSheet.create({
     },
 
 })
+
 
 export default NewRecipeMeasures;

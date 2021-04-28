@@ -97,8 +97,7 @@ class IngredienteService {
 
             if (ingredientesObj.length > 0) {
 
-
-                ingredientes.push({ tipo: imageView.renderMany(ingredientesObj) });
+                ingredientes.push(imageView.renderMany(ingredientesObj));
             }
         }
 
