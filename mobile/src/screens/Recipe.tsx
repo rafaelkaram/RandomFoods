@@ -22,7 +22,10 @@ const Recipe = ({ route }: { route: any }) => {
     useEffect(() => {
         if (route.params) {
             const { ingredientes } = route.params
-            const params = { ids: ingredientes }
+            const { derivadoLeite } = route.params
+            const { gluten } = route.params
+
+            const params = { ids: ingredientes, derivadoLeite: derivadoLeite, gluten: gluten }
 
             api.get('/busca/combinacoes', { params }
             ).then(response => {

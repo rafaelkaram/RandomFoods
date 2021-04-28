@@ -12,28 +12,35 @@ import { ReceitaIngrediente } from '../entity/ReceitaIngrediente';
 
 class ReceitaIngredienteService {
     // Métodos internos
-    async findPerfectMatch(ids: number[], derivadoLeite: string, gluten: string): Promise<number[]> {
+
+    async findPerfectMatch(ids: number[]): Promise<number[]> {
         const repository = getCustomRepository(ReceitaIngredienteRepository);
 
-        const idsReceita = await repository.findByAllIngredients(ids, derivadoLeite, gluten);
+        const idsReceita = await repository.findByAllIngredients(ids);
 
+        
         if(!idsReceita) {
             throw 'Nenhuma receita encontrada.';
         }
 
-        return idsReceita;
+        const idsR = idsReceita.map(item => { return item.id });
+        
+        return idsR;
     }
 
-    async findPartialMatch(ids: number[], derivadoLeite: string, gluten: string): Promise<number[]> {
+    async findPartialMatch(ids: number[]): Promise<number[]> {
         const repository = getCustomRepository(ReceitaIngredienteRepository);
 
-        const idsReceita = await repository.findByPartialIngredients(ids, derivadoLeite, gluten);
+        const idsReceita = await repository.findByPartialIngredients(ids);
 
+        
         if(!idsReceita) {
             throw 'Nenhuma receita encontrada.';
         }
 
-        return idsReceita;
+        const idsR = idsReceita.map(item => { return item.id });
+        
+        return idsR;
     }
 
     async findReceita(receita: Receita) {
