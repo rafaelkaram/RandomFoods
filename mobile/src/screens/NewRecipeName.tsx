@@ -18,10 +18,11 @@ const NewRecipeName = () => {
     const [load, setLoad] = useState(false)
     const [nomeReceita, setNomeReceita] = useState('');
     const [tipoReceita, setTipoReceita] = useState('');
-    const [minutos, setMinutos] = useState(0);
+    const [minutos, setMinutos] = useState('');
     const [tempoPreparo, setTempoPreparo] = useState('00:00');
-    const [porcoes, setPorcoes] = useState(0);
+    const [porcoes, setPorcoes] = useState('');
     const [tipos, setTipos] = useState([]);
+    const rgx = /^[0-9]*[.,]?[0-9]*$/;
 
 
     useEffect(() => {
@@ -47,8 +48,45 @@ const NewRecipeName = () => {
             navigation.navigate('Nova Receita Ingredientes');
     }
 
+    function handleInputValue(type: string, signal: string) {
+        const sinal = signal
+        const tipo = type
 
+        let novoValor = 0
+        if (sinal == '+') {
+            if (tipo == 'tempoPreparo') {
+                setMinutos(minutos + 1)
+            } else if (tipo == 'porções') {
+                setPorcoes(porcoes + 1)
+            }
 
+        } else if (sinal == '-') {
+            if (tipo == 'tempoPreparo') {
+                novoValor = (Number(minutos) - 1) < 0 ? 0 : Number(minutos) - 1
+                setMinutos(novoValor.toString())
+            } else if (tipo == 'porções') {
+                novoValor = (Number(porcoes) - 1) < 0 ? 0 : Number(porcoes) - 1
+                setPorcoes(novoValor.toString())
+            }
+        }
+    }
+    function inputValueValidator(value: string, type: string) {
+
+        if (!value.match(rgx) || Number(value) > 1000) {
+            if (type == 'tempoPreparo') {
+                setMinutos(minutos)
+            } else if (type == 'porções') {
+                setPorcoes(porcoes)
+            }
+        } else {
+            if (type == 'tempoPreparo') {
+                setMinutos(value.toString())
+            } else if (type == 'porções') {
+                setPorcoes(value.toString())
+
+            }
+        }
+    }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -93,22 +131,24 @@ const NewRecipeName = () => {
                     <BoldText style={styles.textContainer}>Tempo de preparo (Minutos)</BoldText>
                     <View style={styles.dadosDisplay}>
                         <TouchableOpacity
-                            onPress={() => setMinutos(minutos - 1)}>
+                            onPress={() => handleInputValue("tempoPreparo", "-")}>
                             <AntDesign name="minuscircleo" size={24} color='black' />
 
                         </TouchableOpacity>
                         <View>
                             <Input
                                 placeholder="Tempo de preparo"
-                                //onChangeText={(value) => setMinutos(value)}
-                                value={minutos.toString()}
-                                disabled= {true}
+                                keyboardType="numeric"
+                                onChangeText={(value) => inputValueValidator(value, 'tempoPreparo')}
+                                value={minutos}
+
                                 style={{ textAlign: 'center' }}
                                 inputContainerStyle={{ borderWidth: 1, marginTop: 20, marginLeft: 10, marginRight: 10, width: 50, borderRadius: 10 }}
                             />
                         </View>
                         <TouchableOpacity
-                            onPress={() => setMinutos(minutos + 1)}>
+                            onPress={() => handleInputValue("tempoPreparo", "+")}
+                        >
                             <AntDesign name="pluscircleo" size={24} color='black' />
                         </TouchableOpacity>
                     </View>
@@ -118,22 +158,23 @@ const NewRecipeName = () => {
                     <BoldText style={styles.textContainer}>Quantidade de porções</BoldText>
                     <View style={styles.dadosDisplay}>
                         <TouchableOpacity
-                            onPress={() => setPorcoes(porcoes - 1)}>
+                            onPress={() => handleInputValue("porções", "-")}>
                             <AntDesign name="minuscircleo" size={24} color='black' />
 
                         </TouchableOpacity>
                         <View>
                             <Input
                                 placeholder="Quantidade de porções"
-                                onChangeText={(value) => setNomeReceita(value)}
-                                disabled= {true}
-                                value={porcoes.toString()}
+                                onChangeText={(value) => inputValueValidator(value, 'porções')}
+                                keyboardType="numeric"
+                                value={porcoes}
                                 style={{ textAlign: 'center' }}
                                 inputContainerStyle={{ borderWidth: 1, marginTop: 20, marginLeft: 10, marginRight: 10, width: 50, borderRadius: 10 }}
                             />
                         </View>
                         <TouchableOpacity
-                            onPress={() => setPorcoes(porcoes + 1)}>
+                            onPress={() => handleInputValue("porções", "+")}
+                            onLongPress={() => handleInputValue("porções", "+")}>
                             <AntDesign name="pluscircleo" size={24} color='black' />
                         </TouchableOpacity>
                     </View>
@@ -149,6 +190,7 @@ const NewRecipeName = () => {
         </SafeAreaView>
     );
 }
+
 
 
 const Height = Dimensions.get("window").height

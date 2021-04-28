@@ -42,7 +42,9 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
             </View>)
     }
 
-    function handleNavigateToMeasures() {
+    function handleNavigateToSteps() {
+
+        navigation.navigate('Nova Receita Steps');
         // const idIngredientes = ingredientsCart.map(ingrediente => {
         //     return ingrediente.id;
         // })
@@ -123,14 +125,14 @@ const NewRecipeMeasures = ({ route }: { route: any }) => {
 
                 })}
 
-
-                <TouchableOpacity
-                    style={styles.arrow}
-                    onPress={handleNavigateToMeasures}
-                >
-                    <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
-                </TouchableOpacity>
             </ScrollView>
+            <TouchableOpacity
+                style={styles.arrow}
+                onPress={handleNavigateToSteps}
+            >
+                <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
+            </TouchableOpacity>
+
         </SafeAreaView>
     );
 }

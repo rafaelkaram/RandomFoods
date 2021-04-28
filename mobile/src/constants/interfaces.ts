@@ -150,6 +150,12 @@ interface IUser {
   ativo: boolean
 }
 
+interface IRecipeStep{
+  id:number,
+  descricao: string,
+  edit:boolean,
+}
+
 export {
   IRecipe,
   IRecipeType,
@@ -161,5 +167,6 @@ export {
   ICategory,
   IComment,
   IVote,
-  IUser
+  IUser,
+  IRecipeStep,
 }
