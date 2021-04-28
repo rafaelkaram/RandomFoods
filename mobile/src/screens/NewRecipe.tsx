@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Button, Image, StyleSheet, Dimensions, Modal, Alert, Pressable } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Modal, Alert, Pressable } from 'react-native'
 import { Input } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,10 +9,9 @@ import RegularText from '../components/RegularText'
 import ItalicText from '../components/ItalicText'
 import fixString from '../assets/functions/utils'
 import { Feather, AntDesign } from '@expo/vector-icons';
-// import logoImg from '../../assets/random_foods.png';
 import { IIngredientType, IIngredientCart } from '../constants/interfaces';
 import api from '../services/api';
-import { block } from 'react-native-reanimated';
+
 
 const NewRecipe = () => {
     const navigation = useNavigation();
