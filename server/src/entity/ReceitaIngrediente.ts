@@ -13,14 +13,14 @@ export class ReceitaIngrediente {
   quantidade: number;
 
   @ManyToOne(() => Unidade, unidade => unidade.ingredientesReceitas)
-  @JoinColumn({ name: 'unidade_id' })
+  @JoinColumn({ name: 'id_unidade' })
   unidade: Unidade;
 
   @ManyToOne(() => Ingrediente, ingrediente => ingrediente.ingredienteReceitas)
-  @JoinColumn({ name: 'ingrediente_id' })
+  @JoinColumn({ name: 'id_ingrediente' })
   ingrediente: Ingrediente;
 
   @ManyToOne(() => Receita, receita => receita.ingredientesReceita)
-  @JoinColumn({ name: 'receita_id' })
+  @JoinColumn({ name: 'id_receita' })
   receita: Receita;
 }
