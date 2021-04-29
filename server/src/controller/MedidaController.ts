@@ -4,7 +4,7 @@ import { getCustomRepository } from 'typeorm';
 import { MedidaRepository } from '../repository/MedidaRepository';
 
 import { Medida } from '../model/Medida';
-import { TipoUnidade as tipoUnidade } from '../model/TipoUnidade';
+import { TipoUnidade, TipoUnidade as tipoUnidade } from '../model/TipoUnidade';
 
 class MedidaController {
   // Metodos internos
@@ -24,13 +24,13 @@ class MedidaController {
     await medida.save();
   }
 
-  async findByIngredient(sigla: string, ingrediente?: string): Promise<Medida> {
+  async findByType(nome: string, tipo?: TipoUnidade): Promise<Medida> {
     const repository = getCustomRepository(MedidaRepository);
 
-    if (ingrediente)
-      return await repository.findByIngredient(sigla.toLowerCase(), ingrediente.toLowerCase());
+    if (tipo)
+      return await repository.findByType(nome.toLowerCase(), tipo);
 
-    return await repository.findBySigla(sigla.toLowerCase());
+    return await repository.findByNome(nome.toLowerCase());
   }
 }
 

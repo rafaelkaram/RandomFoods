@@ -1,6 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 
 import { Receita } from '../entity/Receita';
+import { Usuario } from '../model/Usuario';
 
 @EntityRepository(Receita)
 export class ReceitaRepository extends Repository<Receita> {
@@ -14,6 +15,15 @@ export class ReceitaRepository extends Repository<Receita> {
       .getRawMany();
 
     return tipoReceita;
+  }
+
+  async findByNameAndUser(nome: string, usuario: Usuario): Promise<Receita>{
+    const receita: Receita = await this.createQueryBuilder('r')
+      .where('r.usuario = :usuario', { usuario })
+      .andWhere('r.nome = :nome', { nome })
+      .getOneOrFail();
+
+    return receita;
   }
 
   async findByFiltro(ids: number[]): Promise<Receita[]>{

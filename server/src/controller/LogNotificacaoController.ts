@@ -3,6 +3,9 @@ import { Request, Response } from 'express';
 import { NOTIFICACAO_COMENTARIO, NOTIFICACAO_AVALIACAO } from '../util/msg';
 import util from '../util/util';
 
+import { Usuario } from '../model/Usuario';
+
+
 class LogNotificacaoController {
   // Métodos das rotas
   async show(request: Request, response: Response) {
@@ -12,6 +15,8 @@ class LogNotificacaoController {
 
     return util.systrace(200, response, msg);
   }
+
+  // Métodos internos
 
 }
 
