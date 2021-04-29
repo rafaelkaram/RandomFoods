@@ -1,6 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 
 import { Medida } from '../model/Medida';
+import { TipoUnidade } from '../model/TipoUnidade';
 
 @EntityRepository(Medida)
 export class MedidaRepository extends Repository<Medida> {
@@ -17,19 +18,19 @@ export class MedidaRepository extends Repository<Medida> {
     return medidas;
   }
 
-  async findByIngredient(sigla: string, ingrediente: string): Promise<Medida> {
+  async findByType(nome: string, tipo: TipoUnidade): Promise<Medida> {
     const medida: any = this.createQueryBuilder()
-      .where('LOWER(ingrediente.nome) = :ingrediente', { ingrediente })
-      .andWhere('LOWER(sigla) = :sigla', { sigla })
+      .where('tipoUnidade = :tipo', { tipo })
+      .andWhere('LOWER(nome) = :nome', { nome })
       .getOne();
 
     return medida;
   }
 
-  async findBySigla(sigla: string): Promise<Medida> {
+  async findByNome(nome: string): Promise<Medida> {
     const medida: any = this.createQueryBuilder()
       .where('ingrediente is null')
-      .andWhere('LOWER(sigla) = :sigla', { sigla })
+      .andWhere('LOWER(nome) = :nome', { nome })
       .getOne();
 
     return medida;

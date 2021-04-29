@@ -11,8 +11,13 @@ import { TipoUnidade as tipoUnidade } from '../model/TipoUnidade';
 class IngredienteController {
     // Métodos das rotas
     async index(request: Request, response: Response) {
+        const repository = getCustomRepository(IngredienteRepository);
 
+        const ingredientes = await repository.findAll();
+
+        return util.systrace(200, response, ingredientes);
     }
+
     // Métodos internos
     async import(dados: any) {
         const {

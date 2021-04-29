@@ -6,6 +6,7 @@ import { ReceitaRepository } from '../repository/ReceitaRepository';
 import UsuarioController from './UsuarioController';
 
 import { Receita, Tipo } from '../model/Receita';
+import { Usuario } from '../model/Usuario';
 
 class ReceitaController {
     // Métodos internos
@@ -23,6 +24,14 @@ class ReceitaController {
         } catch (err) {
             throw err;
         }
+    }
+
+    async findByNameAndUser(nome: string, usuario: Usuario): Promise<Receita> {
+        const repository = getCustomRepository(ReceitaRepository);
+
+        const receita: any = await repository.findByNameAndUser(nome, usuario);
+
+        return receita;
     }
 }
 

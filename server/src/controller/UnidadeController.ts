@@ -29,10 +29,12 @@ class UnidadeController {
         const medidaController = new MedidaController();
         const ingredienteController = new IngredienteController();
 
-        const medida = await medidaController.findByIngredient(NomeMedida, NomeIngrediente);
         let ingrediente: Ingrediente | undefined = undefined;
-        if (NomeIngrediente) ingrediente = await ingredienteController.findByName(NomeIngrediente);
+        if (NomeIngrediente)  {
+            ingrediente = await ingredienteController.findByName(NomeIngrediente);
+        }
 
+        const medida = ingrediente ? await medidaController.findByType(NomeMedida, ingrediente.tipoUnidade) : await medidaController.findByType(NomeMedida);
         const unidade = new Unidade(TaxaConversao, medida);
 
         if (ingrediente) unidade.ingrediente = ingrediente;
