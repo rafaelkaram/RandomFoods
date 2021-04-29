@@ -29,18 +29,21 @@ class IngredienteController {
             Gluten
         } = dados as {
             Nome: string,
-            TipoUnidade: tipoUnidade,
-            TipoIngrediente: tipoIngrediente,
+            TipoUnidade: string,
+            TipoIngrediente: string,
             SemMedida?: string,
             DerivadoLeite?: string,
             Gluten?: string
-            };
+        };
+
+        const tipoU: tipoUnidade = <tipoUnidade>TipoUnidade.trim().toUpperCase();
+        const tipoI: tipoIngrediente = <tipoIngrediente>TipoIngrediente.trim().toUpperCase();
 
         const semMedida = util.getBoolean(SemMedida);
         const derivadoLeite = util.getBoolean(DerivadoLeite);
         const gluten = util.getBoolean(Gluten);
 
-        const ingrediente = new Ingrediente(Nome, TipoUnidade, TipoIngrediente);
+        const ingrediente = new Ingrediente(Nome, tipoU, tipoI);
 
         if (semMedida !== null) ingrediente.semMedida = semMedida;
         if (derivadoLeite !== null) ingrediente.derivadoLeite = derivadoLeite;
@@ -51,7 +54,7 @@ class IngredienteController {
     async findByName(nome: string): Promise<Ingrediente> {
         const repository = getCustomRepository(IngredienteRepository);
 
-        const ingrediente = await repository.findByName(nome.toLowerCase());
+        const ingrediente = await repository.findByName(nome.trim().toLowerCase());
 
         if (!ingrediente) {
             throw Error('Ingrediente não encontrado.');

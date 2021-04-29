@@ -20,7 +20,7 @@ export class MedidaRepository extends Repository<Medida> {
 
   async findByType(nome: string, tipo: TipoUnidade): Promise<Medida> {
     const medida: any = this.createQueryBuilder()
-      .where('tipoUnidade = :tipo', { tipo })
+      .where('tipo_unidade = :tipo', { tipo })
       .andWhere('LOWER(nome) = :nome', { nome })
       .getOne();
 
