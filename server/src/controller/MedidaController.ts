@@ -28,9 +28,9 @@ class MedidaController {
     const repository = getCustomRepository(MedidaRepository);
 
     if (tipo)
-      return await repository.findByType(nome.toLowerCase(), tipo);
+      return await repository.findByType(nome.trim().toLowerCase(), tipo);
 
-    return await repository.findByNome(nome.toLowerCase());
+    return await repository.findByNome(nome.trim().toLowerCase());
   }
 }
 
