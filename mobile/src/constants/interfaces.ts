@@ -32,58 +32,27 @@ interface IRecipeType {
   count: number,
 }
 
-// interface IIngredient {
-//   id: number,
-//   nome: string,
-//   tipoUnidade: string,
-//   //id_tipo_ingrediente: number,
-//   semMedida: boolean,
-//   //derivadoLeite: boolean,
-//   //glutem: boolean,
-//   unidades: IUnidade[],
-//   url: string,
-// }
-
 interface IIngredienteTipo {
-  tipo: {
-    nome: string,
-    url: string,
-    alt_url: string,
-    ingredientes: [{
-      id: number,
-      nome: string,
-      semMedida: boolean,
-      derivadoLeite: boolean,
-      gluten: boolean,
-      tipoIngrediente: string
-      tipoUnidade: string,
-      unidades: [{
-        id: number,
-        nome: string,
-        sigla: string,
-        taxaConversao: string,
-        tipo: string
-      }]
-    }]
-  }
+  nome: string,
+  url: string,
+  alt_url: string,
+  ingredientes: IIngrediente[],
 }
 
-
 interface IIngrediente {
+  id: number,
+  nome: string,
+  semMedida: boolean,
+  tipoUnidade: string,
+  unidades: [{
     id: number,
     nome: string,
-    semMedida: boolean,
-    derivadoLeite: boolean,
-    gluten: boolean,
-    tipoIngrediente: string
-    tipoUnidade: string,
-    unidades: [{
-      id: number,
-      nome: string,
-      sigla: string,
-      taxaConversao: string,
-      tipo: string
-    }]
+    sigla: string,
+    taxaConversao: string,
+    tipo: string,
+    qtd: number
+  }]
+
 }
 
 interface IIngrediente2 {
@@ -151,6 +120,12 @@ interface IUser {
   ativo: boolean
 }
 
+interface IRecipeStep{
+  id:number,
+  descricao: string,
+  edit:boolean,
+}
+
 export {
   IRecipe,
   IRecipeType,
@@ -163,5 +138,6 @@ export {
   ICategory,
   IComment,
   IVote,
-  IUser
+  IUser,
+  IRecipeStep,
 }
