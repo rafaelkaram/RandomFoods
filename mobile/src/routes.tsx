@@ -20,6 +20,7 @@ import Profile from './screens/Profile'
 
 import App from '../App'
 import SearchRecipe from './screens/SearchRecipe'
+import NewRecipeSteps from './screens/NewRecipeSteps'
 
 
 const AppStack = createStackNavigator()
@@ -35,6 +36,7 @@ const RecipeStack = () => {
             <AppStack.Screen name="Nova Receita Nome" component={NewRecipeName} />
             <AppStack.Screen name="Nova Receita Ingredientes" component={NewRecipe} />
             <AppStack.Screen name="Medidas" component={NewRecipeMeasures} />
+            <AppStack.Screen name="Nova Receita Steps" component={NewRecipeSteps} />
             <AppStack.Screen name="Receita" component={Recipe} />
             <AppStack.Screen name="Receita Selecionada" component={SelectedRecipe} />
         </AppStack.Navigator>
