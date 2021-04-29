@@ -5,28 +5,17 @@ import XLSX from 'xlsx';
 
 import util from '../util/util';
 
-import CategoriaController from './CategoriaController';
-import IngredienteController from './IngredienteController';
-import ReceitaController from './ReceitaController';
-import ReceitaIngredienteController from './ReceitaIngredienteController';
-import UnidadeController from './UnidadeController';
-
-import { Ingrediente } from '../model/Ingrediente';
-import { Receita, Tipo } from '../model/Receita';
-import { ReceitaIngrediente } from '../model/ReceitaIngrediente';
-import { TipoUnidade } from '../model/TipoUnidade';
-import { Unidade } from '../model/Unidade';
-import { Perfil as perfil, Usuario } from '../model/Usuario';
-
 class FileImportController {
     // Métodos das rotas
-    async createUser(request: Request, response: Response) {
+    async create(request: Request, response: Response) {
         const arquivos = request.files as Express.Multer.File[];
+        const { nome } = request.params;
 
+        const { sheetName, controller } = util.getImportData(nome);
         const erros: { arquivo: string; error: any; }[] = [];
         const errosInsercao: { error: any; }[] = [];
         let invalidos: number = 0;
-        let qtdeUsuarios: number = 0;
+        let qtde: number = 0;
 
         for (let i in arquivos) {
         const arquivo = arquivos[i];
@@ -44,71 +33,15 @@ class FileImportController {
 
                     const workbook = XLSX.readFile(path.join(util.getPath('import'), nomeArquivo));
 
-                    const sheetUsuario = XLSX.utils.sheet_to_json(workbook.Sheets['Usuário']);
+                    const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-                    for (let j in sheetUsuario) {
-                        const dados = sheetUsuario[j];
+                    for (let j in sheet) {
+                        const dados = sheet[j];
 
                         try {
-                            const {
-                                Login,
-                                Nome,
-                                Email,
-                                Senha,
-                                Ativo,
-                                TrocaLogin,
-                                Perfil,
-                                NotificarSeguidor,
-                                NotificarAvaliacao,
-                                NotificarComentario,
-                                NotificarFavorito,
-                                NotificarResposta,
-                                NotificarMarca,
-                            } = dados as {
-                                Login: string,
-                                Nome: string,
-                                Email: string,
-                                Senha: string,
-                                Ativo?: string,
-                                TrocaLogin?: string,
-                                Perfil?: perfil,
-                                NotificarSeguidor?: string,
-                                NotificarAvaliacao?: string,
-                                NotificarComentario?: string,
-                                NotificarFavorito?: string,
-                                NotificarResposta?: string,
-                                NotificarMarca?: string,
-                                };
 
-                                const hash = util.getHash(Senha);
-                                const ativo = util.getBoolean(Ativo);
-                                const trocaLogin = util.getBoolean(TrocaLogin);
-                                const seguidor = util.getBoolean(NotificarSeguidor);
-                                const avaliacao = util.getBoolean(NotificarAvaliacao);
-                                const comentario = util.getBoolean(NotificarComentario);
-                                const favorito = util.getBoolean(NotificarFavorito);
-                                const resposta = util.getBoolean(NotificarResposta);
-                                const marca = util.getBoolean(NotificarMarca);
-
-                                const usuario = new Usuario();
-                                usuario.login = Login;
-                                usuario.nome = Nome;
-                                usuario.email = Email;
-                                usuario.senha = hash;
-
-                                if (ativo !== null) usuario.ativo = ativo;
-                                if (trocaLogin !== null) usuario.trocaLogin = trocaLogin;
-                                if (Perfil) usuario.perfil = Perfil;
-                                if (seguidor !== null) usuario.notificarSeguidor = seguidor;
-                                if (avaliacao !== null) usuario.notificarAvaliacao = avaliacao;
-                                if (comentario !== null) usuario.notificarComentario = comentario;
-                                if (favorito !== null) usuario.notificarFavorito = favorito;
-                                if (resposta !== null) usuario.notificarResposta = resposta;
-                                if (marca !== null) usuario.notificarMarca = marca;
-
-                                await usuario.save();
-
-                                qtdeUsuarios++;
+                            await controller.import(dados);
+                            qtde++;
 
                             } catch (err) {
                                 console.error(err);
@@ -125,12 +58,12 @@ class FileImportController {
 
         return util.systrace(201, response, {
             importacao: `${ arquivos.length - invalidos } arquivos importados com sucesso. ${ invalidos } possuiam formato inválido e não foram importados.`,
-            sucesso: `${ qtdeUsuarios } usuários cadastrados com sucesso.`,
+            sucesso: `${ qtde } ${ nome } cadastrados com sucesso.`,
             erro: errosInsercao
         });
     }
 
-    async createRecipe(request: Request, response: Response) {
+    /*async createRecipe(request: Request, response: Response) {
         const arquivos = request.files as Express.Multer.File[];
 
         const erros: { arquivo: string; error: any; }[] = [];
@@ -198,7 +131,7 @@ class FileImportController {
                                         Unidade,
                                         Quantidade
                                     } = dadosIngrediente as {
-                                        Ingrediente: string,
+                                        NomeIngrediente: string,
                                         Unidade?: string,
                                         Quantidade?: number
                                     };
@@ -272,7 +205,7 @@ class FileImportController {
         return util.systrace(201, response, {
             message: `${ arquivos.length - invalidos } arquivos importados com sucesso. ${ invalidos } possuiam formato inválido e não foram importados.`
         });
-    }
+    }*/
 }
 
 export default FileImportController;

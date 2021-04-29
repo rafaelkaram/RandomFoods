@@ -25,19 +25,26 @@ export enum TipoIngrediente {
 
 @Entity('ingrediente')
 export class Ingrediente extends BaseEntity {
+  constructor(nome: string, tipoUnidade: TipoUnidade, tipoIngrediente: TipoIngrediente) {
+    super();
+    this.nome = nome;
+    this.tipoUnidade = tipoUnidade;
+    this.tipoIngrediente = tipoIngrediente;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ length: 100, unique: true })
   nome: string;
 
-  @Column({ name: 'sem_medida' })
+  @Column({ name: 'sem_medida', default: false })
   semMedida: boolean;
 
-  @Column({ name: 'derivado_leite' })
+  @Column({ name: 'derivado_leite', default: false })
   derivadoLeite: boolean;
 
-  @Column()
+  @Column({ default: false })
   gluten: boolean;
 
   @Column({ name: 'tipo_ingrediente', type: 'enum', enum: TipoIngrediente })

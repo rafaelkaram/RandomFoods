@@ -168,7 +168,7 @@ class IngredienteService {
     async findByName(nome: string): Promise<Ingrediente> {
         const repository = getCustomRepository(IngredienteRepository);
 
-        const ingredientes = await repository.findByNome(nome);
+        const ingredientes = await repository.findByName(nome.toLowerCase());
 
         if (!ingredientes) {
             throw Error('Ingrediente não encontrado.');

@@ -6,8 +6,10 @@ import uploadMidiaConfig from './config/uploadMidia';
 import uploadProfilePicConfig from './config/uploadProfilePic';
 
 import FileImportController from './controller/FileImportController';
+import LogNotificacaoController from './controller/LogNotificacaoController';
 
 const fileImportController = new FileImportController();
+const logNotificacaoController = new LogNotificacaoController();
 
 import AvaliacaoService from './service/AvaliacaoService';
 import CategoriaService from './service/CategoriaService';
@@ -36,8 +38,9 @@ const uploadProfilePic = multer(uploadProfilePicConfig);
 
 // Rotas novas
 // Rotas de cadastro
-// Ultilizar parametros cagados
-routes.post('/importacao/usuario', uploadFiles.array('files'), fileImportController.createUser);
+// Rotas de importação
+routes.post('/importacao/:nome', uploadFiles.array('files'), fileImportController.create);
+routes.post('/teste', logNotificacaoController.show);
 
 // Rotas de cadastro
 // Utilizar parametros através do body da requisição

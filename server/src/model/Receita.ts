@@ -16,6 +16,14 @@ export enum Tipo {
 @Entity('receita')
 @Unique([ 'usuario', 'nome' ])
 export class Receita extends BaseEntity {
+  constructor(nome: string, descricao: string, tipo: Tipo, usuario: Usuario) {
+    super();
+    this.nome = nome;
+    this.descricao = descricao;
+    this.tipo = tipo;
+    this.usuario = usuario;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

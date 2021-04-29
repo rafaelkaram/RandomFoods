@@ -16,6 +16,14 @@ export enum Perfil {
 
 @Entity('usuario')
 export class Usuario extends BaseEntity {
+  constructor(nome: string, login: string, email: string, senha: string) {
+    super();
+    this.nome = nome;
+    this.login = login;
+    this.email = email;
+    this.senha = senha;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

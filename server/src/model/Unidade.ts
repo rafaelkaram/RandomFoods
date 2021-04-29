@@ -5,6 +5,12 @@ import { Medida } from './Medida';
 
 @Entity('unidade')
 export class Unidade extends BaseEntity {
+  constructor(taxaConversao: number, medida: Medida) {
+    super();
+    this.taxaConversao = taxaConversao;
+    this.medida = medida;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

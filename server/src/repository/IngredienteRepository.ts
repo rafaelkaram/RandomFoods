@@ -51,10 +51,9 @@ export class IngredienteRepository extends Repository<Ingrediente> {
     return ingredientes;
   }
 
-
-  async findByNome(nome: string): Promise<Ingrediente> {
-    const ingrediente: Ingrediente = await this.createQueryBuilder('i')
-      .where('LOWER(i.nome) = :nome', { nome: nome.toLowerCase() })
+  async findByName(nome: string): Promise<Ingrediente> {
+    const ingrediente: any = await this.createQueryBuilder('i')
+      .where('LOWER(i.nome) = :nome', { nome })
       .getOne();
 
     return ingrediente;
