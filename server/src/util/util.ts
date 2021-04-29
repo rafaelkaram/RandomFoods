@@ -97,8 +97,8 @@ export default {
 
     if (value) {
       const text = value.toLowerCase();
-      if (text === 'true' || text === 'sim') return true;
-      if (text === 'false' || text === 'nao' || text === 'não') return false;
+      if (text === 'true' || text === 'sim' || text === '1') return true;
+      if (text === 'false' || text === 'nao' || text === 'não' || text === '0') return false;
     }
 
     return null;
@@ -190,18 +190,6 @@ export default {
       return { sheetName, controller };
 
     } throw Error('Tipo de importação não encontrada.');
-  },
-
-  getcontroller(msg: string, params?: string[]): string {
-    if (params && params.length > 0) {
-      let text = msg;
-      for (let i = 0; i < params.length; i++) {
-        text = text.replace(`{${ i.toString() }}`, params[i]);
-      }
-      return text;
-    }
-
-    return msg;
   },
 
   getMessage(msg: string, params?: string[]): string {
