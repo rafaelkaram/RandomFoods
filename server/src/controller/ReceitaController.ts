@@ -5,26 +5,19 @@ import { ReceitaRepository } from '../repository/ReceitaRepository';
 
 import UsuarioController from './UsuarioController';
 
-import { Receita, Tipo } from '../entity/Receita';
+import { Receita, Tipo } from '../model/Receita';
 
 class ReceitaController {
     // Métodos internos
     async insert(nome: string, descricao: string, tipo: Tipo, usuarioStr?: string): Promise<Receita> {
-        const repository = getCustomRepository(ReceitaRepository);
-
         try {
             const usuarioController = new UsuarioController();
 
             const usuario = await usuarioController.findByLoginOrEmail(usuarioStr);
 
-            const receita = repository.create({
-                nome,
-                descricao,
-                tipo,
-                usuario
-            });
+            const receita = new Receita(nome, descricao, tipo, usuario);
 
-            await repository.save(receita);
+            await receita.save();
 
             return receita;
         } catch (err) {

@@ -6,6 +6,13 @@ import { Usuario } from './Usuario';
 @Entity('favorito')
 @Unique([ 'usuario', 'receita' ])
 export class Favorito extends BaseEntity {
+  constructor(usuario: Usuario, receita: Receita, log: LogNotificacao) {
+    super();
+    this.usuario = usuario;
+    this.receita = receita;
+    this.log = log;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

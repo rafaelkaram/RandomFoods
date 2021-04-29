@@ -8,6 +8,13 @@ export enum Tipo {
 
 @Entity('midia')
 export class Midia extends BaseEntity {
+  constructor(path: string, tipo: Tipo, receita: Receita) {
+    super();
+    this.path = path;
+    this.tipo = tipo;
+    this.receita = receita;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

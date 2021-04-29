@@ -6,6 +6,14 @@ import { Marca } from './Marca';
 
 @Entity('comentario')
 export class Comentario extends BaseEntity {
+  constructor(valor: string, usuario: Usuario, receita: Receita, log: LogNotificacao) {
+    super();
+    this.valor = valor;
+    this.usuario = usuario;
+    this.receita = receita;
+    this.log = log;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -34,6 +42,6 @@ export class Comentario extends BaseEntity {
   @OneToOne(() => LogNotificacao)
   log: LogNotificacao;
 
-  @OneToOne(() => LogNotificacao)
+  @OneToOne(() => LogNotificacao, { nullable: true })
   logResposta: LogNotificacao;
 }

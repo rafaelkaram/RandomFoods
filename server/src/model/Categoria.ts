@@ -9,9 +9,14 @@ export enum Tipo {
   VEGETARIANA = 'Vegetariana'
 }
 
-
 @Entity('categoria')
 export class Categoria extends BaseEntity {
+  constructor(nome: Tipo, receita: Receita) {
+    super();
+    this.nome = nome;
+    this.receita = receita;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -9,6 +9,11 @@ import { Usuario } from './Usuario';
 
 @Entity('log_notificacao')
 export class LogNotificacao extends BaseEntity {
+  constructor(usuario: Usuario) {
+    super();
+    this.usuario = usuario;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -25,7 +30,7 @@ export class LogNotificacao extends BaseEntity {
   @JoinColumn({ name: 'usuario_id' })
   usuario: Usuario;
 
-  @ManyToOne(() => Receita, receita => receita.logsNotificacao)
+  @ManyToOne(() => Receita, receita => receita.logsNotificacao, { nullable: true })
   @JoinColumn({ name: 'receita_id' })
   receita: Receita;
 

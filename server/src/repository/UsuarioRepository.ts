@@ -18,7 +18,7 @@ export class UsuarioRepository extends Repository<Usuario> {
   }
 
   async findByLoginOrEmail(data: string): Promise<Usuario> {
-    const usuario: Usuario = await this.createQueryBuilder('u')
+    const usuario: any = await this.createQueryBuilder('u')
       .where('u.ativo = :ativo', { ativo: true })
       .andWhere('u.email = :email', { email: data })
       //.andWhere('u.email = :email OR u.login = :login', { email: data, login: data })

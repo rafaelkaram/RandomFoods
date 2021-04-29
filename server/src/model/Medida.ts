@@ -5,6 +5,13 @@ import { TipoUnidade } from './TipoUnidade';
 @Entity('medida')
 @Unique([ 'nome', 'tipoUnidade' ])
 export class Medida extends BaseEntity {
+  constructor(nome: string, valor: number, tipoUnidade: TipoUnidade) {
+    super();
+    this.nome = nome;
+    this.valor = valor;
+    this.tipoUnidade = tipoUnidade;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

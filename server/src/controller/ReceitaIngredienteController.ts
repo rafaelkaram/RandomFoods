@@ -3,25 +3,18 @@ import { getCustomRepository } from 'typeorm';
 
 import { ReceitaIngredienteRepository } from '../repository/ReceitaIngredienteRepository';
 
-import { Receita } from '../entity/Receita';
-import { ReceitaIngrediente } from '../entity/ReceitaIngrediente';
+import { Receita } from '../model/Receita';
+import { ReceitaIngrediente } from '../model/ReceitaIngrediente';
 //import { ReceitaIngredienteDTO } from '../dto/ReceitaIngredienteDTO';
 
 class ReceitaIngredienteController {
     // Métodos internos
     async insertByRecipe(item: ReceitaIngrediente): Promise<ReceitaIngrediente> {
-        const repository = getCustomRepository(ReceitaIngredienteRepository);
-
         const { quantidade, unidade, ingrediente, receita } = item;
 
-        const receitaIngrediente = repository.create({
-            quantidade,
-            unidade,
-            ingrediente,
-            receita
-        });
+        const receitaIngrediente = new ReceitaIngrediente(ingrediente, receita, quantidade);
 
-        await repository.save(receitaIngrediente);
+        await receitaIngrediente.save();
 
         return receitaIngrediente;
     }

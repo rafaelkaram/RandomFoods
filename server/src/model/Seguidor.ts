@@ -5,6 +5,13 @@ import { Usuario } from './Usuario';
 @Entity('seguidor')
 @Unique([ 'usuario', 'seguidor' ])
 export class Seguidor extends BaseEntity {
+  constructor(usuario: Usuario, seguidor: Usuario, log: LogNotificacao) {
+    super();
+    this.usuario = usuario;
+    this.seguidor = seguidor;
+    this.log = log;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 
