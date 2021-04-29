@@ -27,7 +27,7 @@ export enum TipoIngrediente {
 export class Ingrediente extends BaseEntity {
   constructor(nome: string, tipoUnidade: TipoUnidade, tipoIngrediente: TipoIngrediente) {
     super();
-    this.nome = nome;
+    this.nome = nome.trim();
     this.tipoUnidade = tipoUnidade;
     this.tipoIngrediente = tipoIngrediente;
   }
