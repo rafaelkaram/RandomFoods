@@ -1,30 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Button, Image, StyleSheet, Dimensions, Modal } from 'react-native'
-import CheckBox from '@react-native-community/checkbox';
-import { Input } from 'react-native-elements'
+import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Modal } from 'react-native';
+import { Input } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
-import BoldText from '../components/BoldText'
-import RegularText from '../components/RegularText'
-import ItalicText from '../components/ItalicText'
-import fixString from '../assets/functions/utils'
-import { IIngredientType, IIngredientCart, IIngrediente2 } from '../constants/interfaces';
 import { Feather, AntDesign } from '@expo/vector-icons';
-import api from '../services/api';
 
-const SearchRecipe = () => {
+import api from '../../services/api';
+
+import { IListaIngredientes, ICart, IIngrediente } from '../../constants/interfaces';
+import screens from '../../constants/screens';
+import fixString from '../../assets/functions/utils';
+
+import BoldText from '../../components/BoldText';
+import Loading from '../../components/Loading';
+import ItalicText from '../../components/ItalicText';
+import RegularText from '../../components/RegularText';
+
+
+const Filtro = () => {
     const navigation = useNavigation();
 
-    const [ingredientsCart, setIngredientsCart] = useState<IIngredientCart[]>([]);
-    const [ingredientTypes, setIngredientTypes] = useState<IIngredientType[]>([]);
-    const [ingredientList, setIngredientList] = useState<IIngredientType[]>([]);
+    const [ingredientsCart, setIngredientsCart] = useState<ICart[]>([]);
+    const [ingredientTypes, setIngredientTypes] = useState<IListaIngredientes[]>([]);
+    const [ingredientList, setIngredientList] = useState<IListaIngredientes[]>([]);
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
-    const [load, setLoad] = useState(false)
-    const [modalVisible, setModalVisible] = useState(false);
-    const [nomeIngrediente, setnomeIngrediente] = useState('');
-    const [derivadoLeite, setDerivadoLeite] = useState(false);
-    const [gluten, setGluten] = useState(false);
+    const [load, setLoad] = useState<boolean>(false)
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [nomeIngrediente, setnomeIngrediente] = useState<string>('');
+    const [derivadoLeite, setDerivadoLeite] = useState<boolean>(false);
+    const [gluten, setGluten] = useState<boolean>(false);
 
     useEffect(() => {
         api.get('/busca/tipo-ingrediente')
@@ -40,13 +45,12 @@ const SearchRecipe = () => {
     }, [gluten, derivadoLeite, nomeIngrediente]);
 
 
-    function handleNavigateToRecipe() {
-
+    const handleNavigateToRecipe = () => {
         if (ingredientsCart.length > 0)
-            navigation.navigate('Receita', { ingredientes: selectedItems, derivadoLeite: derivadoLeite, gluten: gluten })
+            navigation.navigate(screens.resultadoPesquisa, { ingredientes: selectedItems, derivadoLeite: derivadoLeite, gluten: gluten })
     }
 
-    function handleSelectItem(id: number, nome: string) {
+    const handleSelectItem = (id: number, nome: string) => {
         const alredySelected = selectedItems.findIndex(item => item === id);
 
         if (alredySelected >= 0) {
@@ -64,69 +68,43 @@ const SearchRecipe = () => {
         }
     }
 
-    function filterIngredients() {
-        let list: IIngredientType[] = [];
-        if (nomeIngrediente !== '') {
-            ingredientTypes.map(ingredientTypes => {
-                const list1 = ingredientTypes.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase()));
-                const list2 = gluten ? list1.filter(ingrediente => ingrediente.gluten === !gluten) : list1
-                if (list2.length > 0) {
-                    const l2: IIngrediente2[] = ingredientTypes.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase()))
-                    const pqp: IIngredientType = {
-                        nome: ingredientTypes.nome,
-                        url: ingredientTypes.url,
-                        alt_url: ingredientTypes.alt_url,
-                        ingredientes: l2
-                    }
-                    list.push(pqp)
-                }
-            })
-        } else {
-            if (gluten || derivadoLeite) {
-                ingredientTypes.map(ingredientTypes => {
-                    const ingredientes: IIngrediente2[] = gluten ? ingredientTypes.ingredientes.filter(ingrediente => ingrediente.gluten === !gluten) : ingredientTypes.ingredientes
-                    if (ingredientes.length > 0) {
-                        const ingredientes2: IIngrediente2[] = derivadoLeite ? ingredientes.filter(ingrediente => ingrediente.derivadoLeite === !derivadoLeite) : ingredientes
-                        if (ingredientes2.length > 0) {
-                            const pqp: IIngredientType = {
-                                nome: ingredientTypes.nome,
-                                url: ingredientTypes.url,
-                                alt_url: ingredientTypes.alt_url,
-                                ingredientes: ingredientes2
-                            }
-                            list.push(pqp)
-                        }
-                    } else {
-                        const ingredientes: IIngrediente2[] = derivadoLeite ? ingredientTypes.ingredientes.filter(ingrediente => ingrediente.derivadoLeite === !derivadoLeite) : ingredientTypes.ingredientes
-                        if (ingredientes.length > 0) {
-                            const pqp: IIngredientType = {
-                                nome: ingredientTypes.nome,
-                                url: ingredientTypes.url,
-                                alt_url: ingredientTypes.alt_url,
-                                ingredientes: ingredientes
-                            }
-                            list.push(pqp)
-                        }
-                    }
-                })
-            } else {
-                list = ingredientTypes;
+    const filterGlutenEDerivadoLeite = (gluten: boolean, derivadoLeite: boolean, ingredientes: IIngrediente[], tipoIngrediente: IListaIngredientes) => {
+        const glutenList = gluten ? ingredientes.filter(ingrediente => ingrediente.gluten === !gluten) : ingredientes;
+        const derviadoLeiteList = derivadoLeite ? glutenList.filter(ingrediente => ingrediente.derivadoLeite === !derivadoLeite) : glutenList;
+
+        if (derviadoLeiteList.length > 0)
+            return {
+                nome: tipoIngrediente.nome,
+                url: tipoIngrediente.url,
+                ingredientes: derviadoLeiteList
             }
+
+        return null;
+    }
+
+    const filterIngredients = () => {
+        let list: IListaIngredientes[] = [];
+        if (nomeIngrediente !== '') {
+            ingredientTypes.map(ingredientType => {
+                const list1: IIngrediente[] = ingredientType.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase()));
+                const list2: IListaIngredientes | null = filterGlutenEDerivadoLeite(gluten, derivadoLeite, list1, ingredientType);
+                if(list2) list.push(list2);
+            });
+        } else if (gluten || derivadoLeite) {
+            ingredientTypes.map(ingredientType => {
+                const list2: IListaIngredientes | null = filterGlutenEDerivadoLeite(gluten, derivadoLeite, ingredientType.ingredientes, ingredientType);
+                if(list2) list.push(list2);
+            });
+        } else {
+            list = ingredientTypes;
         }
 
         setIngredientList(list);
-
     }
 
 
     if (!load) {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Image
-                    source={require('../assets/giphy.gif')}
-                    style={{ width: 200, height: 200, }}
-                />
-            </View>)
+        return <Loading />
     }
 
     return (
@@ -256,10 +234,8 @@ const SearchRecipe = () => {
     );
 }
 
-
 const Height = Dimensions.get("window").height;
 const Width = Dimensions.get("window").width;
-
 
 const styles = StyleSheet.create({
 
@@ -428,4 +404,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default SearchRecipe;
+export default Filtro;

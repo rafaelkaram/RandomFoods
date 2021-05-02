@@ -1,39 +1,31 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState } from 'react';
 
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Input } from 'react-native-elements'
-import { IIngrediente, IRecipeStep } from '../constants/interfaces';
-import CheckBox from '@react-native-community/checkbox';
-import { ScrollView } from 'react-native-gesture-handler';
-import { Picker } from '@react-native-picker/picker';
-import BoldText from '../components/BoldText'
 import { Feather } from '@expo/vector-icons';
 
-import { Ionicons } from '@expo/vector-icons';
+import { IPassoReceita } from '../constants/interfaces';
 
-const StepRecipe = (props: { steps: IRecipeStep, index: number, finished:any }) => {
+import BoldText from '../components/BoldText';
 
+const StepRecipe = (props: { step: IPassoReceita, index: number, finished: Function }) => {
 
-    const [textTitle, setTextTitle] = useState('');
-    const [desc, setDesc] = useState('');
-    const [edit, setEdit] = useState(true)
-    const step = props.steps;
+    const [textTitle, setTextTitle] = useState<string>('');
+    const [desc, setDesc] = useState<string>('');
+    const [edit, setEdit] = useState<boolean>(true)
+    const step = props.step;
+    const id = props.index;
     const finished = props.finished;
 
-
-
     //const ingrediente = props.ingrediente;
-
-
 
     // console.log(ingrediente.nome)
     return (
 
-        <SafeAreaView
-            key={step.id}>
+        <SafeAreaView>
             <View style={styles.component}>
-                <BoldText>{step.id}.</BoldText>
+                <BoldText>{id}.</BoldText>
                 <View style={styles.column}>
                     {(step.edit) &&
                         <View>
@@ -56,17 +48,13 @@ const StepRecipe = (props: { steps: IRecipeStep, index: number, finished:any }) 
                 {(step.edit) &&
                     <TouchableOpacity
                         onPress={() => {
-                            finished(step.id,desc)
+                            finished(id,desc)
                         }}>
                         <Feather name="check" size={24} color="green" />
                     </TouchableOpacity>
                 }
-
             </View>
-
         </SafeAreaView>
-
-
     );
 }
 
@@ -81,10 +69,12 @@ const styles = StyleSheet.create({
         marginRight: 10,
         padding: 10,
     },
+
     column: {
         marginLeft: 20,
         flexDirection: "column"
     },
+
     title: {
         fontWeight: 'bold',
         textAlign: 'center',
@@ -94,6 +84,7 @@ const styles = StyleSheet.create({
         margin: 10,
         marginBottom: 0,
     },
+
     inputTitle: {
         backgroundColor: 'white',
         margin: 10,
@@ -102,6 +93,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
 
     },
+
     inputDesc: {
         backgroundColor: 'white',
         padding: 10,
@@ -111,6 +103,7 @@ const styles = StyleSheet.create({
         height: 250,
 
     },
+
     options: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -129,6 +122,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         textAlign: 'center'
     },
+
     recipeStep: {
 
         borderRadius: 2,

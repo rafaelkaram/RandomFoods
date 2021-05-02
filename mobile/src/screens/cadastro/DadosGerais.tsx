@@ -1,27 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Button, Image, StyleSheet, Dimensions } from 'react-native'
-
-import { Input } from 'react-native-elements'
+import { View, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions } from 'react-native';
+import { Input } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import api from '../services/api';
-import BoldText from '../components/BoldText'
-import RegularText from '../components/RegularText'
-import ItalicText from '../components/ItalicText'
-import { AntDesign } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { AntDesign } from '@expo/vector-icons';
 
+import api from '../../services/api';
 
-const NewRecipeName = () => {
+import screens from '../../constants/screens';
+
+import BoldText from '../../components/BoldText';
+import ItalicText from '../../components/ItalicText';
+import Loading from '../../components/Loading';
+
+const DadosGerais = () => {
     const navigation = useNavigation();
 
-    const [load, setLoad] = useState(false)
-    const [nomeReceita, setNomeReceita] = useState('');
-    const [tipoReceita, setTipoReceita] = useState('');
-    const [minutos, setMinutos] = useState('');
-    const [tempoPreparo, setTempoPreparo] = useState('00:00');
-    const [porcoes, setPorcoes] = useState('');
-    const [tipos, setTipos] = useState([]);
+
+    const [load, setLoad] = useState<boolean>(false)
+    const [nomeReceita, setNomeReceita] = useState<string>('');
+    const [tipoReceita, setTipoReceita] = useState<string>('');
+    const [minutos, setMinutos] = useState<string>('');
+    const [tempoPreparo, setTempoPreparo] = useState<string>('00:00');
+    const [porcoes, setPorcoes] = useState<string>('');
+    const [tipos, setTipos] = useState<string[]>([]);
     const rgx = /^[0-9]*[.,]?[0-9]*$/;
 
 
@@ -35,20 +38,16 @@ const NewRecipeName = () => {
     }, []);
 
     if (!load) {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Image
-                    source={require('../assets/giphy.gif')}
-                    style={{ width: 200, height: 200, }}
-                />
-            </View>)
-    }
-    function handleNavigateToIngredients() {
-        if (nomeReceita)
-            navigation.navigate('Nova Receita Ingredientes');
+        return <Loading />
     }
 
-    function handleInputValue(type: string, signal: string) {
+    const handleNavigateToIngredients = () => {
+        if (nomeReceita)
+            // Não passa os dados que criou aqui? Como que o sistema vai saber deles depois?
+            navigation.navigate(screens.cadastroIngredientes);
+    }
+
+    const handleInputValue = (type: string, signal: string) => {
         const sinal = signal
         const tipo = type
 
@@ -70,7 +69,8 @@ const NewRecipeName = () => {
             }
         }
     }
-    function inputValueValidator(value: string, type: string) {
+
+    const inputValueValidator = (value: string, type: string) => {
 
         if (!value.match(rgx) || Number(value) > 1000) {
             if (type == 'tempoPreparo') {
@@ -191,8 +191,6 @@ const NewRecipeName = () => {
     );
 }
 
-
-
 const Height = Dimensions.get("window").height
 const Width = Dimensions.get("window").width;
 
@@ -274,4 +272,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default NewRecipeName;
+export default DadosGerais;

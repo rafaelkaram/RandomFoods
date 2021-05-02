@@ -26,7 +26,7 @@ const Comment = ({ comentarios }: { comentarios: any }) => {
                     <Text>{moment(comentarios.data).format('HH:mm')}</Text>
                 </View>
             </View>
-            <SubComment id={comentarios.id} />
+            <SubComment id={comentarios.id} comments={ comentarios } />
         </View>
     );
 }

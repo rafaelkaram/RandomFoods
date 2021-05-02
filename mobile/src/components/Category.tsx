@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import RegularText from './RegularText';
 
-const Category = (props: any) => {
+const Category = (props: { nome: string }) => {
     return (
         <View style={ styles.container }>
             <RegularText style={ styles.text }>{ props.nome }</RegularText>

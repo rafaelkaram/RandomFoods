@@ -1,42 +1,73 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image } from 'react-native';
-import { VictoryPie, VictoryLegend } from 'victory-native';
+import { Text, ScrollView, TouchableOpacity, View, StyleSheet, Dimensions, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { VictoryPie, VictoryLegend } from 'victory-native';
 import { DataTable } from 'react-native-paper';
-import ItalicText from '../components/ItalicText'
+import { Avatar } from "react-native-elements";
 
-import api from '../services/api'
-import { IRecipeType, ICategory, IVote } from '../constants/interfaces';
-import Colors from '../constants/colors';
+import api from '../../services/api'
+import Colors from '../../constants/colors';
 
+import { IUsuario, IPainelTipoReceita, IPainelCategorias, IPainelVotos } from '../../constants/interfaces';
 
+import ItalicText from '../../components/ItalicText';
+import BoldText from '../../components/BoldText';
 
-const UserDashboard = () => {
+const Painel = () => {
 
-    const [recipeType, setRecipeType] = useState<IRecipeType[]>([])
-    const [recipeCategory, setRecipeCategory] = useState<ICategory[]>([])
-    const [topVotedRecipe, setTopVotedRecipe] = useState<IVote[]>([])
+    const [ usuario, setUsuario ] = useState<IUsuario>();;
+    const [ recipeType, setRecipeType ] = useState<IPainelTipoReceita[]>([]);
+    const [ recipeCategory, setRecipeCategory ] = useState<IPainelCategorias[]>([]);
+    const [ topVotedRecipe, setTopVotedRecipe ] = useState<IPainelVotos[]>([]);
 
-    const id = 1
 
     useEffect(() => {
-        api.get(`recipesType/${id}`)
+        api.get(`busca/usuario`).then(response => {
+            setUsuario(response.data[0]);
+        });
+        // });
+        // api.get(`usuario`).then(response => {
+        //     setUsuario(response.data[0]);
+
+        //     const names= response.data[0]?.nome.split(" ")
+        //     const tam  = names.length - 1
+        //     const firstName :string = names[0]
+        //     const lastName :string = names[tam]
+        //     setInitials(firstName[0]+lastName[0]);
+
+        //     api.get(`recipesType/${usuario?.id}`)
+        //     .then(response => {
+        //         setRecipeType(response.data)
+
+        //     })
+        // api.get(`recipesCategory/${usuario?.id}`)
+        //     .then(response => {
+        //         setRecipeCategory(response.data)
+        //     })
+
+        // api.get(`topVotedRecipe/${usuario?.id}`)
+        //     .then(response => {
+        //         setTopVotedRecipe(response.data)
+        //     })
+
+    }, []);
+
+    useEffect(() => {
+        api.get(`/dashboard/tipos-receita/${usuario?.id}`)
             .then(response => {
                 setRecipeType(response.data)
 
             })
-        api.get(`recipesCategory/${id}`)
+        api.get(`/dashboard/categorias/${usuario?.id}`)
             .then(response => {
                 setRecipeCategory(response.data)
             })
 
-        api.get(`topVotedRecipe/${id}`)
+        api.get(`/dashboard/avaliacoes/${usuario?.id}`)
             .then(response => {
                 setTopVotedRecipe(response.data)
-
             })
-    }, []);
-
+    }, [ usuario ]);
 
     const pieTypeData = recipeType.map((item) => {
         return (
@@ -73,12 +104,20 @@ const UserDashboard = () => {
     const totalRecipes: number = pieTypeData.reduce(function (a, b) { return a + b.y }, 0)
 
 
+
     return (
         <SafeAreaView style={styles.main}>
-            <ScrollView>
-                <Image
-                    style={{ width: 212, height: 66, margin: 15 }}
-                    source={require('../assets/dashboard.png')} />
+            <ScrollView >
+                <View style={styles.mainContainer}>
+                    <Avatar
+                        size="large"
+                        rounded
+                        title={usuario?.iniciais}
+                        activeOpacity={0.7}
+                        containerStyle={{ backgroundColor: 'lightgrey' }}
+                    />
+                    <BoldText style={styles.name}>{usuario?.nome}</BoldText>
+                </View>
                 <View style={styles.totalRecipes}>
                     <Text style={styles.totalRecipesTitle}>Receitas Cadastradas:</Text>
                     <Text style={styles.totalRecipesText}>{totalRecipes}</Text>
@@ -156,10 +195,28 @@ const UserDashboard = () => {
 const chartHeight = Dimensions.get("window").height * 0.5;
 const chartWidth = Dimensions.get("window").width;
 
-
-
 const styles = StyleSheet.create({
+    mainContainer: {
+        margin: 20,
+        marginHorizontal: 15,
+        backgroundColor: "white",
+        height: 120,
+        borderRadius: 15,
+        flexDirection: 'row',
+        padding: 20,
+        alignItems: 'center'
 
+    },
+    image: {
+        borderWidth: 1,
+        height: 100,
+        width: 100,
+        textAlign: 'center',
+    },
+    name: {
+        marginLeft: 20,
+        fontSize: 18,
+    },
     main: {
         flex: 1,
         backgroundColor: Colors.background
@@ -250,9 +307,10 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         backgroundColor: "white",
         borderRadius: 10,
-        marginTop: 10
+        marginTop: 10,
+        marginBottom: 15,
     }
 
 })
 
-export default UserDashboard
+export default Painel;

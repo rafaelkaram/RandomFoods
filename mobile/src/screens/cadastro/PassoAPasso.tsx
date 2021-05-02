@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Button, Image, StyleSheet, Dimensions } from 'react-native'
-
-import { Input } from 'react-native-elements'
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import api from '../services/api';
-import BoldText from '../components/BoldText'
-import ItalicText from '../components/ItalicText'
-import { AntDesign } from '@expo/vector-icons';
-import { IRecipeStep } from '../constants/interfaces';
-import StepRecipe from '../components/StepRecipe';
 
+import { IPassoReceita } from '../../constants/interfaces';
 
+import ItalicText from '../../components/ItalicText';
+import StepRecipe from '../../components/StepRecipe';
 
 // const NewStep = () => {
 
@@ -40,46 +35,27 @@ import StepRecipe from '../components/StepRecipe';
 //     );
 
 // }
-const NewRecipeSteps = () => {
+const PassoAPasso = () => {
     const navigation = useNavigation();
 
-    const [load, setLoad] = useState(false)
-    const [steps, setSteps] = useState<IRecipeStep[]>([]);
-    const [id, setId] = useState(1);
-    const [titulo, setTitulo] = useState("")
-    const [desc, setDesc] = useState("")
-    const [edit, setEdit] = useState(true)
+    const [load, setLoad] = useState(false);
+    const [steps, setSteps] = useState<IPassoReceita[]>([]);
+    const [titulo, setTitulo] = useState('');
+    const [desc, setDesc] = useState('');
+    const [edit, setEdit] = useState(true);
 
-    function addStep() {
-        setId((oldId) => oldId + 1);
-        setSteps([...steps, { id, descricao: "", edit: true }])
+    const addStep = () => {
+        setSteps([...steps, { descricao: '', edit: true }])
+    }
 
+    const finishedStep = (index: number, descricao: string) => {
+
+        steps.splice(index - 1, 1)
+        setSteps([...steps, { descricao: descricao, edit: false }])
 
     }
 
-    function finishedStep(id: number, descricao: string) {
-
-        steps.splice(id - 1, 1)
-        setSteps([...steps, { id, descricao: descricao, edit: false }])
-
-    }
-
-
-    useEffect(() => {
-        setLoad(true);
-
-    }, []);
-
-    if (!load) {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Image
-                    source={require('../assets/giphy.gif')}
-                    style={{ width: 200, height: 200, }}
-                />
-            </View>)
-    }
-    // function handleNavigateToIngredients() {
+    // const handleNavigateToIngredients = () => {
     //     if (nomeReceita)
     //         navigation.navigate('Nova Receita Ingredientes');
     // }
@@ -105,11 +81,11 @@ const NewRecipeSteps = () => {
                 </TouchableOpacity>
             </View>
             <ScrollView>
-                {steps.map((steps, index) => {
+                {steps.map((step, index) => {
                     return (
                         <View
-                            key={steps.id}>
-                            <StepRecipe key={steps.id} steps={steps} index={index} finished={(id: number, desc: string) => { finishedStep(id, desc) }} />
+                            key={index}>
+                            <StepRecipe step={step} index={index} finished={(index: number, desc: string) => { finishedStep(index, desc) }} />
                         </View>
                     )
                 })}
@@ -124,7 +100,6 @@ const NewRecipeSteps = () => {
         </SafeAreaView >
     );
 }
-
 
 const Height = Dimensions.get("window").height
 const Width = Dimensions.get("window").width;
@@ -144,7 +119,6 @@ const styles = StyleSheet.create({
 
     },
 
-
     arrow: {
         width: 60,
         height: 60,
@@ -159,4 +133,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default NewRecipeSteps;
+export default PassoAPasso;

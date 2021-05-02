@@ -1,28 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Modal, Alert, Pressable } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Modal } from 'react-native'
 import { Input } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
-import BoldText from '../components/BoldText'
-import RegularText from '../components/RegularText'
-import ItalicText from '../components/ItalicText'
-import fixString from '../assets/functions/utils'
 import { Feather, AntDesign } from '@expo/vector-icons';
-import { IIngredientType, IIngredientCart } from '../constants/interfaces';
-import api from '../services/api';
 
+import api from '../../services/api';
 
-const NewRecipe = () => {
+import { IListaIngredientes, ICart } from '../../constants/interfaces';
+import screens from '../../constants/screens';
+
+import BoldText from '../../components/BoldText';
+import Loading from '../../components/Loading';
+import RegularText from '../../components/RegularText';
+import ItalicText from '../../components/ItalicText';
+import fixString from '../../assets/functions/utils';
+
+const Ingredientes = () => {
     const navigation = useNavigation();
 
-    const [ingredientsCart, setIngredientsCart] = useState<IIngredientCart[]>([]);
-    const [ingredientTypes, setIngredientTypes] = useState<IIngredientType[]>([]);
+    const [ingredientsCart, setIngredientsCart] = useState<ICart[]>([]);
+    const [ingredientTypes, setIngredientTypes] = useState<IListaIngredientes[]>([]);
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
-    const [load, setLoad] = useState(false)
-    const [modalVisible, setModalVisible] = useState(false);
-    const [nomeIngrediente, setnomeIngrediente] = useState('');
-    const [nomeReceita, setnomeReceita] = useState('');
+    const [load, setLoad] = useState<boolean>(false)
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [nomeIngrediente, setnomeIngrediente] = useState<string>('');
+    const [nomeReceita, setnomeReceita] = useState<string>('');
 
 
     useEffect(() => {
@@ -38,15 +42,15 @@ const NewRecipe = () => {
     }, []);
 
 
-    function handleNavigateToMeasures() {
+    const handleNavigateToMeasures = () => {
         const idIngredientes = ingredientsCart.map(ingrediente => {
             return ingrediente.id;
         })
         if (ingredientsCart.length > 0)
-            navigation.navigate('Medidas', { idIngredientes });
+            navigation.navigate(screens.cadastroQuantidades, { idIngredientes });
     }
 
-    function handleSelectItem(id: number, nome: string ) {
+    const handleSelectItem = (id: number, nome: string ) => {
         const alredySelected = selectedItems.findIndex(item => item === id);
 
         if (alredySelected >= 0) {
@@ -65,13 +69,7 @@ const NewRecipe = () => {
     }
 
     if (!load) {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Image
-                    source={require('../assets/giphy.gif')}
-                    style={{ width: 200, height: 200, }}
-                />
-            </View>)
+        return <Loading />
     }
 
     return (
@@ -338,4 +336,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default NewRecipe
+export default Ingredientes
