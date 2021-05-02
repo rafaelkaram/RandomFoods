@@ -1,143 +1,136 @@
-interface IRecipe {
+interface IComentario {
   id: number,
-  receita: string,
-  descricao: string,
-  nota: number,
-  qtdeNotas: number,
-  tipo: string,
-  dataCadastro: Date,
-  ingredientes: [{
-    id: number,
-    nome: string,
-    qtde: number,
-  }],
-  usuario: {
-    id: number,
-    nome: string,
-    nomeUsuario: string,
-    path: string,
-  },
-  midias: [{
-    id: number,
-    url: string
-  }],
-  categorias: [{
-    id: number,
-    nome: string,
-  }]
+  conteudo: string,
+  comentarioPai: number,
+  data: Date,
+  usuario: IUsuarioSimples
 }
-
-interface IRecipeType {
-  tipo: string,
-  count: number,
-}
-
-interface IIngredienteTipo {
-  nome: string,
-  url: string,
-  alt_url: string,
-  ingredientes: IIngrediente[],
-}
-
 interface IIngrediente {
   id: number,
   nome: string,
-  semMedida: boolean,
-  tipoUnidade: string,
-  unidades: [{
-    id: number,
-    nome: string,
-    sigla: string,
-    taxaConversao: string,
-    tipo: string,
-    qtd: number
-  }]
-
+  gluten?: boolean,
+  derivadoLeite?: boolean,
+  semMedida?: boolean,
+  tipoUnidade?: string,
+  unidades?: IUnidade[]
 }
 
-interface IIngrediente2 {
+interface IMidia {
+  id: number,
+  path: string,
+  tipo: string,
+  dataCadastro: Date
+}
+
+interface IReceita {
   id: number,
   nome: string,
-  semMedida: boolean,
-  derivadoLeite: boolean,
-  gluten: boolean,
-  tipoIngrediente: string,
-  tipoUnidade: string
+  descricao: string,
+  foto?: string,
+  nota: number,
+  numNotas: number,
+  usuario: IUsuarioSimples,
+  ingredientes: IIngredienteReceita[],
+  midias?: IMidia[],
+  categorias: string[]
 }
 
-interface IIngredientType {
-  nome: string,
-  url: string,
-  alt_url: string,
-  ingredientes: IIngrediente2[]
-}
-
-interface IIngredientCart {
+interface IReceitaSimples {
   id: number,
   nome: string,
+  foto?: string,
+  nota: number,
+  numNotas: number,
 }
 interface IUnidade {
   id: number,
   nome: string,
-  sigla: string,
-  taxaConversao: string,
-  tipo: string,
+  incremento: number
 }
 
-interface ICategory {
+interface IUsuario {
+  id: number,
+  idExterno: string,
+  login: string,
+  nome: string,
+  iniciais: string,
+  email: string,
+  perfil: string,
+  path: string,
+  dataCadastro: Date,
+  ativo: boolean,
+  trocaLogin: boolean,
+  notificarSeguidor: boolean,
+  notificarAvaliacao: boolean,
+  notificarComentario: boolean,
+  notificarFavorito: boolean,
+  notificarResposta: boolean,
+  notificarMarca: boolean,
+  qtdeLogs: number
+}
+
+interface IUsuarioSimples {
+  id: number,
+  nome: string,
+  login: string,
+  perfil:boolean,
+  path: string,
+  ativo: boolean
+}
+
+interface ICart {
+  id: number,
+  nome: string
+}
+
+interface IIngredienteReceita {
+  id: number,
+  nome: string,
+  qtde: number,
+}
+
+interface IListaIngredientes {
+  nome: string,
+  url: string,
+  ingredientes: IIngrediente[]
+}
+
+interface IPainelCategorias {
   nome_categoria: string,
   count: number,
 }
 
-interface IComment {
-  filter(arg0: ({ obj }: { obj: any; }) => boolean): Comment,
-  id: number,
-  comentarioPai: number,
-  valor: string,
-  data: Date,
-  usuario: {
-    id: number,
-    nome: string,
-    path: string,
-    nomeUsuario: string,
-  }
+interface IPainelTipoReceita {
+  tipo: string,
+  count: number,
 }
 
-interface IVote {
+interface IPainelVotos {
   id: number,
   nome: string,
   nota: string,
   num_notas: number
 }
 
-interface IUser {
-  id: number,
-  nome: string,
-  email: string,
-  data_cadastro: Date,
-  data_ultimo_acesso: Date,
-  data_ultima_acao: Date,
-  ativo: boolean
-}
-
-interface IRecipeStep{
-  id:number,
+interface IPassoReceita {
   descricao: string,
-  edit:boolean,
+  edit: boolean
 }
 
 export {
-  IRecipe,
-  IRecipeType,
-  IIngredienteTipo,
+  IComentario,
   IIngrediente,
-  IIngrediente2,
-  IIngredientType,
-  IIngredientCart,
+  IMidia,
+  IReceita,
+  IReceitaSimples,
   IUnidade,
-  ICategory,
-  IComment,
-  IVote,
-  IUser,
-  IRecipeStep,
+  IUsuario,
+  IUsuarioSimples,
+  ICart,
+  IIngredienteReceita,
+  IListaIngredientes,
+  IPainelCategorias,
+  IPainelTipoReceita,
+  IPainelVotos,
+  IPassoReceita,
 }

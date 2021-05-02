@@ -1,28 +1,28 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Dimensions } from 'react-native';
-import { Input } from 'react-native-elements'
-import { IIngrediente } from '../constants/interfaces';
 import CheckBox from '@react-native-community/checkbox';
+import { Input } from 'react-native-elements';
 import { AntDesign, Feather } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
-import BoldText from '../components/BoldText'
-import RegularText from '../components/RegularText'
 
-const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente: any, index: number }) => {
+import { IIngrediente, IUnidade } from '../constants/interfaces';
 
-  const [check, setCheck] = useState(false);
-  const [quantidade, setQuantidade] = useState('');
-  const [medida, setMedida] = useState('');
+import RegularText from '../components/RegularText';
+import BoldText from '../components/BoldText';
 
+const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente: Function }) => {
+
+  const [check, setCheck] = useState<boolean>(false);
+  const [quantidade, setQuantidade] = useState<string>('');
+  const [medida, setMedida] = useState<IUnidade>();
 
   const ingrediente = props.ingrediente;
   const removeIngrediente = props.removeIngrediente
-  const unidades = ingrediente.unidades
+  const unidades = ingrediente.unidades;
 
   const rgx = /^[0-9]*[.,]?[0-9]*$/;
 
-
-  function inputValueValidator(value: string) {
+  const inputValueValidator = (value: string) => {
 
     if (!value.match(rgx) || Number(value) > 1000) {
       setQuantidade(quantidade)
@@ -30,19 +30,21 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente
       setQuantidade(value.toString())
   }
 
-  function handleInputValue(value: number, signal: string) {
+  const handleInputValue = (signal: boolean) => {
+    if (!medida) return;
+
+    const value = medida.incremento;
 
     let novoValor = 0
-    if (signal === '+') {
+    if (signal) {
       novoValor = (Number(quantidade) + value) >= 0 && (Number(quantidade) + value) <= 1000 ? (Number(quantidade) + value) : 1000;
       setQuantidade(novoValor.toString())
 
-    } else if (signal === '-') {
+    } else {
       novoValor = (Number(quantidade) - value) >= 0 ? (Number(quantidade) - value) : 0;
       setQuantidade(novoValor.toString())
     }
   }
-
 
   return (
     <View
@@ -68,24 +70,18 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente
       </View>
       {!check ?
         <View style={styles.campos}>
-
-          {!(ingrediente.tipoUnidade === 'UNIDADE') ?
+          {!(ingrediente.tipoUnidade === 'UNIDADE') && unidades ?
             <Picker
               enabled={!check}
-              selectedValue={medida}
+              selectedValue={ medida?.nome }
               style={styles.comboBox}
-              onValueChange={(itemValue) =>
-                setMedida(itemValue)
-              }>
-              {unidades.map(item => {
-
-                return (
-                  <Picker.Item fontFamily='Ubuntu_400Regular' key={item.id} label={item.sigla} value={item.id} />
-
-                )
-              })}
+              onValueChange={ (itemValue, itemIndex) => setMedida(unidades[itemIndex]) }
+            >
+              { unidades?.map(item => {
+                  return <Picker.Item fontFamily='Ubuntu_400Regular' key={item.id} label={item.nome} value={ item.nome } />
+                })
+              }
             </Picker>
-
             : <View style={{ width: Width / 1.8 }}></View>}
           <View>
             <Input
@@ -98,10 +94,10 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente
             ></Input>
           </View>
           <View style={styles.plusMinusContainer}>
-            <TouchableOpacity onPress={() => handleInputValue(ingrediente.unidades[0].qtd, '+')} disabled={check}>
+            <TouchableOpacity onPress={() => handleInputValue(true)} disabled={check}>
               <AntDesign style={styles.plus} name="pluscircleo" size={24} color={check ? 'gray' : 'black'} />
             </TouchableOpacity>
-            <TouchableOpacity disabled={check} onPress={() => handleInputValue(ingrediente.unidades[0].qtd, '-')}>
+            <TouchableOpacity disabled={check} onPress={() => handleInputValue(false)}>
               <AntDesign name="minuscircleo" size={24} color={check ? 'gray' : 'black'} />
             </TouchableOpacity>
           </View>
@@ -116,10 +112,8 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente
   );
 }
 
-const Height = Dimensions.get("window").height
+const Height = Dimensions.get("window").height;
 const Width = Dimensions.get("window").width;
-
-
 
 const styles = StyleSheet.create({
   item: {

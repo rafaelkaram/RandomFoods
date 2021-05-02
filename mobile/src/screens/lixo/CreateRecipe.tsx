@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button, View } from 'react-native';
-import { Constants } from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker'
 

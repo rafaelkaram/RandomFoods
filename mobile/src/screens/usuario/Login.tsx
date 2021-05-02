@@ -4,14 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Input } from "react-native-elements";
 import * as Facebook from 'expo-facebook';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 
-import Config from '../constants/config';
-import MainButton from '../components/MainButton';
-import SmallButton from '../components/SmallButton';
+import Config from '../../constants/config';
+import MainButton from '../../components/MainButton';
+import SmallButton from '../../components/SmallButton';
 
 const facebookLogo = require('../assets/facebook.png');
-const googleLogo = require('../assets/google.png');
 
 export const fbLogin = async () => {
     try {
@@ -21,7 +20,7 @@ export const fbLogin = async () => {
             expirationDate,
             permissions,
             declinedPermissions
-        } = await Facebook.logInWithReadPermissionsAsync({ permissions: ['public_profile'] });
+        }: Facebook.FacebookLoginResult = await Facebook.logInWithReadPermissionsAsync({ permissions: ['public_profile'] });
 
         if (type === 'success') {
             const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
@@ -96,8 +95,6 @@ const Login = () => {
         }
     }
 
-    const handleGoogleLogin = async () => {}
-
     return (
         <SafeAreaView>
             <ScrollView >
@@ -108,7 +105,7 @@ const Login = () => {
                         value={email}
                         inputContainerStyle={{ borderBottomWidth: 0 }}
                         leftIcon={
-                            <Icon
+                            <Ionicons
                                 name='person-outline'
                                 size={24}
                                 color='black'
@@ -122,7 +119,7 @@ const Login = () => {
                         secureTextEntry={true}
                         inputContainerStyle={{ borderBottomWidth: 0 }}
                         leftIcon={
-                            <Icon
+                            <Ionicons
                                 name='lock-closed-outline'
                                 size={24}
                                 color='black'
@@ -139,7 +136,6 @@ const Login = () => {
                     </View>
                     <View style={ styles.socialButtonsView }>
                         <MainButton style={ styles.facebookButton } onPress={ handleFBLogin } image={ facebookLogo }>Facebook</MainButton>
-                        <MainButton style={ styles.googleButton } textStyle={{ color: '#999' }} onPress={ handleGoogleLogin } image={ googleLogo }>Google</MainButton>
                     </View>
                 </View>
             </ScrollView>
@@ -173,10 +169,6 @@ const styles = StyleSheet.create({
 
     facebookButton: {
         backgroundColor: '#3B5998'
-    },
-
-    googleButton: {
-        backgroundColor: 'white'
     },
 
 })

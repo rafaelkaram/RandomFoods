@@ -1,44 +1,39 @@
-import React from 'react'
-import { Image, Text } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import React from 'react';
+import { Image } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { AntDesign } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import Home from './screens/Home'
-import NewRecipeName from './screens/NewRecipeName'
-import NewRecipe from './screens/NewRecipe'
-import NewRecipeMeasures from './screens/NewRecipeMeasures'
-import Dashboard from './screens/Dashboard'
-import Recipe from './screens/Recipe'
-import SelectedRecipe from './screens/SelectedRecipe'
-import Login from './screens/Login'
-import Profile from './screens/Profile'
+import Home from './screens/visualizacao/Home';
+import DadosGerais from './screens/cadastro/DadosGerais';
+import Ingredientes from './screens/cadastro/Ingredientes';
+import Quantidades from './screens/cadastro/Quantidades';
+import Configuracoes from './screens/usuario/Configuracoes';
+import ResultadoPesquisa from './screens/visualizacao/ResultadoPesquisa';
+import Receita from './screens/visualizacao/Receita';
+import Login from './screens/usuario/Login';
+import Painel from './screens/usuario/Painel';
+import Filtro from './screens/visualizacao/Filtro';
+import PassoAPasso from './screens/cadastro/PassoAPasso';
 
-import App from '../App'
-import SearchRecipe from './screens/SearchRecipe'
-import NewRecipeSteps from './screens/NewRecipeSteps'
-
+import screens from './constants/screens';
 
 const AppStack = createStackNavigator()
-
 const Tab = createBottomTabNavigator();
-
 const Drawer = createDrawerNavigator()
-
 
 const RecipeStack = () => {
     return (
-        <AppStack.Navigator headerMode={'none'}>
-            <AppStack.Screen name="Nova Receita Nome" component={NewRecipeName} />
-            <AppStack.Screen name="Nova Receita Ingredientes" component={NewRecipe} />
-            <AppStack.Screen name="Medidas" component={NewRecipeMeasures} />
-            <AppStack.Screen name="Nova Receita Steps" component={NewRecipeSteps} />
-            <AppStack.Screen name="Receita" component={Recipe} />
-            <AppStack.Screen name="Receita Selecionada" component={SelectedRecipe} />
+        <AppStack.Navigator headerMode={ 'none' }>
+            <AppStack.Screen name={ screens.cadastroReceita } component={ DadosGerais } />
+            <AppStack.Screen name={ screens.cadastroIngredientes } component={ Ingredientes } />
+            <AppStack.Screen name={ screens.cadastroQuantidades } component={ Quantidades } />
+            <AppStack.Screen name={ screens.cadastroPassos } component={ PassoAPasso } />
+            <AppStack.Screen name={ screens.resultadoPesquisa } component={ ResultadoPesquisa } />
+            <AppStack.Screen name={ screens.receita } component={ Receita } />
         </AppStack.Navigator>
     )
 }
@@ -46,10 +41,10 @@ const RecipeStack = () => {
 const HomeStack = () => {
     return (
         <AppStack.Navigator headerMode={'none'}>
-            <AppStack.Screen name="Home" component={Home} />
-            <AppStack.Screen name="Pesquisar Receitas" component={SearchRecipe} />
-            <AppStack.Screen name="Receita" component={Recipe} />
-            <AppStack.Screen name="Receita Selecionada" component={SelectedRecipe} />
+            <AppStack.Screen name={ screens.home } component={ Home } />
+            <AppStack.Screen name={ screens.filtro } component={ Filtro } />
+            <AppStack.Screen name={ screens.resultadoPesquisa } component={ ResultadoPesquisa } />
+            <AppStack.Screen name={ screens.receita } component={ Receita } />
         </AppStack.Navigator>
     )
 }
@@ -66,9 +61,9 @@ const HomeStack = () => {
 const UserDrawer = () => {
     return (
         <Drawer.Navigator drawerPosition='right'>
-            <Drawer.Screen name='Login' component={Login} />
-            <Drawer.Screen name='Profile' component={Profile} />
-            <Drawer.Screen name='Dashboard' component={Dashboard} />
+            <Drawer.Screen name={ screens.login } component={ Login } />
+            <Drawer.Screen name={ screens.painel } component={ Painel } />
+            <Drawer.Screen name={ screens.configuracoes } component={ Configuracoes } />
         </Drawer.Navigator>
     )
 }

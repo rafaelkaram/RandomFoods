@@ -1,15 +1,11 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { IComment } from '../constants/interfaces';
+import { IComentario } from '../constants/interfaces';
+
 import Comment from './Comment';
 
-interface SubCommentProps {
-  id: number,
-  comments: IComment[]
-}
-
-const SubComment = (props : SubCommentProps) => {
+const SubComment = (props: { id: number, comments: IComentario[] }) => {
   return (
     <View style={ styles.subCommentContainer }>
       <Comment comentarios={ props.comments } />

@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, ScrollView, StyleSheet, Dimensions, FlatList, TouchableOpacity } from 'react-native'
+import { Text, View, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { Rating, Avatar } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import { DataTable } from 'react-native-paper';
 import moment from 'moment';
+
 import "moment/min/locales";
 
-import { IComment, IRecipe } from '../constants/interfaces';
-import Colors from '../constants/colors';
-import RegularText from '../components/RegularText';
-import Category from '../components/Category';
-import BoldText from '../components/BoldText';
-import api from '../services/api'
+import api from '../../services/api'
 
-const { height, width } = Dimensions.get('window')
+import { IComentario, IReceita } from '../../constants/interfaces';
+import colors from '../../constants/colors';
+
+import RegularText from '../../components/RegularText';
+import Category from '../../components/Category';
+import BoldText from '../../components/BoldText';
+
+const { height, width } = Dimensions.get('window');
 const numberGrid = 3;
 const itemWidth = width / numberGrid;
 moment.locale('pt-br');
@@ -23,17 +24,14 @@ moment.locale('pt-br');
 function SelectedRecipe({ route }: { route: any }) {
 
     const idRecipe = route.params.id;
-    const [recipe, setRecipe] = useState<IRecipe>();
-    const [comments, setComments] = useState<IComment[]>([]);
-    const [nota, setNota] = useState<number>()
-    const [initials, setInitials] = useState("");
+    const [recipe, setRecipe] = useState<IReceita>();
+    const [comments, setComments] = useState<IComentario[]>([]);
+    const [initials, setInitials] = useState<string>('');
 
     useEffect(() => {
 
         api.get(`/busca/receita/${idRecipe}`).then(response => {
             setRecipe(response.data);
-
-            setNota(recipe?.nota)
 
             const names = response.data?.usuario.nome.split(" ")
 
@@ -55,7 +53,7 @@ function SelectedRecipe({ route }: { route: any }) {
 
         //     const tam  = names.length - 1
         //     const firstName :string = names[0]
-        //     const lastName :string = names[tam] 
+        //     const lastName :string = names[tam]
         //     setInitials(firstName[0]+lastName[0]);
 
         // });
@@ -67,7 +65,7 @@ function SelectedRecipe({ route }: { route: any }) {
         //     });
     }, []);
 
-    function ShowComments({ comentarios }: { comentarios: any[] }) {
+    const ShowComments = ({ comentarios }: { comentarios: any[] }) => {
 
         if (!comentarios) {
             return (<Text>Vamos comentar galera!</Text>);
@@ -104,7 +102,7 @@ function SelectedRecipe({ route }: { route: any }) {
         }
     }
 
-    function ShowSubComment({ sub }: { sub: any }) {
+    const ShowSubComment = ({ sub }: { sub: any }) => {
         const childComments = comments.filter(obj => obj.comentarioPai === sub);
         if (childComments) {
             return (
@@ -114,16 +112,15 @@ function SelectedRecipe({ route }: { route: any }) {
             );
 
         }
-        return (<Text></Text>);
+        return (<></>);
     }
 
     return (
-
         <SafeAreaView>
             <ScrollView>
                 <View style={styles.container}>
                     <View style={styles.itemListTitle}>
-                        <BoldText style={styles.titleText}>{recipe?.receita}</BoldText>
+                        <BoldText style={styles.titleText}>{recipe?.nome}</BoldText>
 
                     </View>
                     <View style={styles.autor}>
@@ -138,13 +135,13 @@ function SelectedRecipe({ route }: { route: any }) {
                     </View>
                     <View style={styles.note}>
                         <BoldText>NOTA:</BoldText>
-                        <Rating imageSize={20} readonly startingValue={nota} />
+                        <Rating imageSize={20} readonly startingValue={recipe?.nota} />
                     </View>
 
                     <View style={styles.category}>
                         {recipe?.categorias.map(category => {
                             return (
-                                <Category key={category.id} nome={category.nome} />
+                                <Category key={category} nome={category} />
                             )
                         })}
 
@@ -178,7 +175,7 @@ function SelectedRecipe({ route }: { route: any }) {
 
 const styles = StyleSheet.create({
     itemListTitle: {
-        backgroundColor: Colors.dimmedBackground,
+        backgroundColor: colors.dimmedBackground,
         margin: 3,
         padding: 10,
     },
@@ -199,12 +196,12 @@ const styles = StyleSheet.create({
         marginLeft: 15,
     },
     rating: {
-        backgroundColor: Colors.dimmedBackground,
+        backgroundColor: colors.dimmedBackground,
     },
 
     container: {
         flex: 1,
-        backgroundColor: Colors.background
+        backgroundColor: colors.background
     },
 
     note: {
