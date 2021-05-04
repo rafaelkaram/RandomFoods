@@ -5,8 +5,10 @@ import util from '../util/util';
 
 import { IngredienteRepository } from '../repository/IngredienteRepository';
 
-import { Ingrediente, TipoIngrediente as tipoIngrediente } from '../model/Ingrediente';
-import { TipoUnidade as tipoUnidade } from '../model/TipoUnidade';
+import { Ingrediente, TipoIngrediente } from '../model/Ingrediente';
+import { TipoUnidade } from '../model/TipoUnidade';
+
+import TipoIngredienteView from '../view/TipoIngredienteView';
 
 class IngredienteController {
     // Métodos das rotas
@@ -18,43 +20,60 @@ class IngredienteController {
         return util.systrace(200, response, ingredientes);
     }
 
+    async typeIndex(request: Request, response: Response) {
+        const repository = getCustomRepository(IngredienteRepository);
+
+        const tiposIngrediente = Object.keys(TipoIngrediente);
+        const result = [];
+
+        for (var key in tiposIngrediente) {
+            const tipoIngrediente: TipoIngrediente = <TipoIngrediente> tiposIngrediente[key];
+            const ingredientes = await repository.find({ where: { tipoIngrediente }, order: { nome: 'ASC' } });
+
+            result.push(TipoIngredienteView.renderMany(ingredientes, tipoIngrediente));
+        }
+
+        return response.status(200).json(result);
+    }
+
     // Métodos internos
     async import(dados: any) {
         const {
-            Nome,
-            TipoUnidade,
-            TipoIngrediente,
-            SemMedida,
-            DerivadoLeite,
-            Gluten
+            nome,
+            tipoUnidade,
+            tipoIngrediente,
+            semMedida,
+            derivadoLeite,
+            gluten
         } = dados as {
-            Nome: string,
-            TipoUnidade: string,
-            TipoIngrediente: string,
-            SemMedida?: string,
-            DerivadoLeite?: string,
-            Gluten?: string
+            nome: string,
+            tipoUnidade: string,
+            tipoIngrediente: string,
+            semMedida?: string,
+            derivadoLeite?: string,
+            gluten?: string
         };
 
-        const tipoU: tipoUnidade = <tipoUnidade>TipoUnidade.trim().toUpperCase();
-        const tipoI: tipoIngrediente = <tipoIngrediente>TipoIngrediente.trim().toUpperCase();
+        const tipoU: TipoUnidade = <TipoUnidade> tipoUnidade.trim().toUpperCase();
+        const tipoI: TipoIngrediente = <TipoIngrediente> tipoIngrediente.trim().toUpperCase();
 
-        const semMedida = util.getBoolean(SemMedida);
-        const derivadoLeite = util.getBoolean(DerivadoLeite);
-        const gluten = util.getBoolean(Gluten);
+        const isSemMedida = util.getBoolean(semMedida);
+        const isDerivadoLeite = util.getBoolean(derivadoLeite);
+        const isGluten = util.getBoolean(gluten);
 
-        const ingrediente = new Ingrediente(Nome.trim(), tipoU, tipoI);
+        const ingrediente = new Ingrediente(nome.trim(), tipoU, tipoI);
 
-        if (semMedida !== null) ingrediente.semMedida = semMedida;
-        if (derivadoLeite !== null) ingrediente.derivadoLeite = derivadoLeite;
-        if (gluten !== null) ingrediente.gluten = gluten;
+        if (isSemMedida !== null) ingrediente.semMedida = isSemMedida;
+        if (isDerivadoLeite !== null) ingrediente.derivadoLeite = isDerivadoLeite;
+        if (isGluten !== null) ingrediente.gluten = isGluten;
 
         await ingrediente.save();
     }
+
     async findByName(nome: string): Promise<Ingrediente> {
         const repository = getCustomRepository(IngredienteRepository);
 
-        const ingrediente = await repository.findByName(nome.trim().toLowerCase());
+        const ingrediente: Ingrediente = await repository.findByName(nome);
 
         if (!ingrediente) {
             throw Error('Ingrediente não encontrado.');

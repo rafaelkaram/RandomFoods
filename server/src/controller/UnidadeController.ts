@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, response, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
 
 import { UnidadeRepository } from '../repository/UnidadeRepository';
@@ -11,63 +11,60 @@ import { TipoUnidade } from '../model/TipoUnidade';
 import { Unidade } from '../model/Unidade';
 
 import unidadeView from '../view/UnidadeView';
+import { Medida } from '../model/Medida';
 
 
 class UnidadeController {
+    // Métodos de rotas
+
     // Métodos internos
     async import(dados: any) {
         const {
-            TaxaConversao,
-            NomeMedida,
-            NomeIngrediente
+            taxaConversao,
+            nomeMedida,
+            nomeIngrediente
         } = dados as {
-            TaxaConversao: number,
-            NomeMedida: string,
-            NomeIngrediente?: string,
+            taxaConversao: number,
+            nomeMedida: string,
+            nomeIngrediente?: string,
             };
 
         const medidaController = new MedidaController();
         const ingredienteController = new IngredienteController();
 
         let ingrediente: Ingrediente | undefined = undefined;
-        if (NomeIngrediente)  {
-            ingrediente = await ingredienteController.findByName(NomeIngrediente);
+        if (nomeIngrediente)  {
+            ingrediente = await ingredienteController.findByName(nomeIngrediente);
         }
 
-        const medida = ingrediente ? await medidaController.findByType(NomeMedida, ingrediente.tipoUnidade) : await medidaController.findByType(NomeMedida);
-        const unidade = new Unidade(TaxaConversao, medida);
+        const medida = ingrediente ? await medidaController.findByType(nomeMedida, ingrediente.tipoUnidade) : await medidaController.findByType(nomeMedida);
+        const unidade = new Unidade(taxaConversao, medida);
 
         if (ingrediente) unidade.ingrediente = ingrediente;
 
         await unidade.save();
     }
 
-    async find(nome: string, ingrediente: Ingrediente): Promise<Unidade> {
+    async find(medida: Medida, ingrediente: Ingrediente): Promise<Unidade> {
         const repository = getCustomRepository(UnidadeRepository);
-        const { id, tipoUnidade } = ingrediente;
 
-        if (tipoUnidade === TipoUnidade[TipoUnidade.PESO]) {
-            try {
-                return await repository.findByIngrediente(nome, id);
-            } catch (err) {
-                return repository.findBySigla(nome, [TipoUnidade[TipoUnidade.PESO]]);
-            }
-        } else {
-            return await repository.findBySigla(nome, [TipoUnidade[TipoUnidade.VOLUME], TipoUnidade[TipoUnidade.UNIDADE]]);
+        try {
+            return await repository.findByIngredient(medida, ingrediente);
+        } catch (err) {
+            return await repository.findSI(medida);
         }
     }
 
-    async findSI(tipoUnidade: TipoUnidade): Promise<Unidade[]> {
+    async findSI(medida: Medida): Promise<Unidade> {
         const repository = getCustomRepository(UnidadeRepository);
 
-        const unidades = await repository.find({
-            where: {
-                'tipo': tipoUnidade,
-                'ingrediente': null
-            }
-        });
+        return await repository.findSI(medida);
+    }
 
-        return unidades;
+    async findUnidade(): Promise<Unidade> {
+        const repository = getCustomRepository(UnidadeRepository);
+
+        return await repository.findUnidade();
     }
 }
 
