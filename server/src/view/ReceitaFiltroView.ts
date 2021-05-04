@@ -9,7 +9,7 @@ export default {
         if (receita) {
             return {
                 id: receita.id,
-                receita: receita.nome,
+                nome: receita.nome,
                 dataCadastro: receita.dataCadastro,
                 tipo: receita.tipo,
                 nota: avaliacao.nota,

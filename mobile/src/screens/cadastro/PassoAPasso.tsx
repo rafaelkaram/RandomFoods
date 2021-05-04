@@ -65,7 +65,7 @@ const PassoAPasso = () => {
         <SafeAreaView style={{ flex: 1 }}>
             <Image
                 style={styles.newRecipeImage}
-                source={require('../assets/nova-receita.png')}
+                source={require('../../assets/nova-receita.png')}
             />
             <ItalicText style={styles.subTitle}>Descreva os passos</ItalicText>
 

@@ -10,7 +10,7 @@ import Config from '../../constants/config';
 import MainButton from '../../components/MainButton';
 import SmallButton from '../../components/SmallButton';
 
-const facebookLogo = require('../assets/facebook.png');
+const facebookLogo = require('../../assets/facebook.png');
 
 export const fbLogin = async () => {
     try {
