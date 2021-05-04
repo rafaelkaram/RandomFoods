@@ -13,7 +13,7 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
   const titulo = props.titulo;
   const receitas = props.receitas;
   const navegar = props.navegar;
-
+  
   return (
     <View>
       <Text style={styles.title}>{ titulo }</Text>
@@ -87,9 +87,10 @@ const styles = StyleSheet.create({
     itemListTitle: {
         marginLeft: 10,
         marginTop: 5,
+        fontSize: 15,
+        color: 'black',
         fontWeight: 'bold',
         textAlign: 'center',
-
     },
 });
 
