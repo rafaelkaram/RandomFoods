@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 
-import { Receita } from '../entity/Receita';
+import { Receita } from '../model/Receita';
 import { Usuario } from '../model/Usuario';
 
 @EntityRepository(Receita)

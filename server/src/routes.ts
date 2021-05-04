@@ -1,102 +1,107 @@
 import { Router } from 'express';
-import multer from 'multer';
+import multer     from 'multer';
 
-import uploadFilesConfig from './config/uploadFiles';
-import uploadMidiaConfig from './config/uploadMidia';
-import uploadProfilePicConfig from './config/uploadProfilePic';
+import uploadFilesConfig        from './config/uploadFiles';
+import uploadMidiaConfig        from './config/uploadMidia';
+import uploadProfilePicConfig   from './config/uploadProfilePic';
 
-import FileImportController from './controller/FileImportController';
+import AvaliacaoController      from './controller/AvaliacaoController';
+import CategoriaController      from './controller/CategoriaController';
+import ComentarioController     from './controller/ComentarioController';
+import FileImportController     from './controller/FileImportController';
+import IngredienteController    from './controller/IngredienteController';
 import LogNotificacaoController from './controller/LogNotificacaoController';
+import MidiaController          from './controller/MidiaController';
+import ReceitaController        from './controller/ReceitaController';
+import UnidadeController        from './controller/UnidadeController';
+import UsuarioController        from './controller/UsuarioController';
 
-const fileImportController = new FileImportController();
-const logNotificacaoController = new LogNotificacaoController();
-
-import AvaliacaoService from './service/AvaliacaoService';
-import CategoriaService from './service/CategoriaService';
-import ComentarioService from './service/ComentarioService';
-import FileImportService from './service/FileImportService';
-import IngredienteService from './service/IngredienteService';
-import MidiaService from './service/MidiaService';
-import ReceitaService from './service/ReceitaService';
-import UnidadeService from './service/UnidadeService';
-import UsuarioService from './service/UsuarioService';
-
-const avaliacaoService = new AvaliacaoService();
-const categoriaService = new CategoriaService();
-const comentarioService = new ComentarioService();
-const fileImportService = new FileImportService();
-const ingredienteService = new IngredienteService();
-const midiaService = new MidiaService();
-const receitaService = new ReceitaService();
-const unidadeService = new UnidadeService();
-const usuarioService = new UsuarioService();
+const avaliacaoController       = new AvaliacaoController();
+const categoriaController       = new CategoriaController();
+const comentarioController      = new ComentarioController();
+const fileImportController      = new FileImportController();
+const ingredienteController     = new IngredienteController();
+const logNotificacaoController  = new LogNotificacaoController();
+const midiaController           = new MidiaController();
+const receitaController         = new ReceitaController();
+const unidadeController         = new UnidadeController();
+const usuarioController         = new UsuarioController();
 
 const routes = Router();
-const uploadFiles = multer(uploadFilesConfig);
-const uploadMidia = multer(uploadMidiaConfig);
+const uploadFiles      = multer(uploadFilesConfig);
+const uploadMidia      = multer(uploadMidiaConfig);
 const uploadProfilePic = multer(uploadProfilePicConfig);
 
-// Rotas novas
-// Rotas de cadastro
 // Rotas de importação
+routes.post('/importacao/receita', uploadFiles.array('files'), fileImportController.createRecipe);
 routes.post('/importacao/:nome', uploadFiles.array('files'), fileImportController.create);
-routes.post('/teste', logNotificacaoController.show);
 
+/*
 // Rotas de cadastro
 // Utilizar parametros através do body da requisição
-routes.post('/cadastro/avaliacao', avaliacaoService.create);
-routes.post('/cadastro/comentario', comentarioService.create);
-routes.post('/cadastro/imagem-perfil', uploadProfilePic.single('image'), usuarioService.uploadImage);
-routes.post('/cadastro/ingrediente', ingredienteService.create);
-routes.post('/cadastro/ingredientes', ingredienteService.createBulk);
-routes.post('/cadastro/midia', uploadMidia.array('midias'), midiaService.create);
-routes.post('/cadastro/receita', receitaService.create);
-routes.post('/cadastro/unidade', unidadeService.create);
-routes.post('/cadastro/unidades', unidadeService.createBulk);
-routes.post('/cadastro/usuario', usuarioService.create);
-routes.post('/cadastro/usuarios', usuarioService.createBulk);
-
+routes.post('/cadastro/avaliacao', avaliacaoController.create);
+routes.post('/cadastro/comentario', comentarioController.create);
+routes.post('/cadastro/imagem-perfil', uploadProfilePic.single('image'), usuarioController.uploadImage);
+routes.post('/cadastro/ingrediente', ingredienteController.create);
+routes.post('/cadastro/ingredientes', ingredienteController.createBulk);
+routes.post('/cadastro/midia', uploadMidia.array('midias'), midiaController.create);
+routes.post('/cadastro/receita', receitaController.create);
+routes.post('/cadastro/unidade', unidadeController.create);
+routes.post('/cadastro/unidades', unidadeController.createBulk);
+routes.post('/cadastro/usuario', usuarioController.create);
+routes.post('/cadastro/usuarios', usuarioController.createBulk);
+*/
 // Rotas de busca (buscar todos)
 // Utilizar parametros através de query ou endereço
-routes.get('/busca/ingredientes', ingredienteService.index);
-routes.get('/busca/tipo-ingrediente', ingredienteService.typeIndex);
-routes.get('/busca/receita', receitaService.index);
-routes.get('/busca/tipo-receita', receitaService.findTypeRecipe);
-routes.get('/busca/unidade', unidadeService.index);
-routes.get('/busca/unidade-ingrediente', unidadeService.list);
-routes.get('/busca/usuario', usuarioService.index);
+routes.get('/busca/tipo-receita', receitaController.typeIndex);
+routes.get('/busca/tipo-ingrediente', ingredienteController.typeIndex);
 
+/*
+routes.get('/busca/ingredientes', ingredienteController.index);
+routes.get('/busca/receita', receitaController.index);
+routes.get('/busca/unidade', unidadeController.index);
+routes.get('/busca/unidade-ingrediente', unidadeController.list);
+routes.get('/busca/usuario', usuarioController.index);
+*/
+
+/*
 // Rotas de busca (buscar único)
 // Utilizar parametros através de query ou endereço
-routes.get('/busca/comentario/:id', comentarioService.fetch);
-routes.get('/busca/ingrediente/:id', ingredienteService.fetch);
-routes.get('/busca/receita/:id', receitaService.fetch);
-routes.get('/busca/unidade/:id', unidadeService.fetch);
-routes.get('/busca/usuario/:id', usuarioService.fetch);
+routes.get('/busca/comentario/:id', comentarioController.fetch);
+routes.get('/busca/ingrediente/:id', ingredienteController.fetch);
+routes.get('/busca/receita/:id', receitaController.fetch);
+routes.get('/busca/unidade/:id', unidadeController.fetch);
+routes.get('/busca/usuario/:id', usuarioController.fetch);
+*/
 
+/*
 // Rotas de busca (busca personalizada)
 // Utilizar parametros através de query ou endereço
-routes.get('/busca/comentario-receita/:idReceita', comentarioService.findByReceita);
-routes.get('/busca/combinacoes', receitaService.findMatches);
-routes.get('/busca/ingrediente', ingredienteService.searchByIds);
-routes.get('/busca/receita-usuario/:idUsuario', receitaService.findByUser);
+routes.get('/busca/comentario-receita/:idReceita', comentarioController.findByReceita);
+routes.get('/busca/combinacoes', receitaController.findMatches);
+routes.get('/busca/ingrediente', ingredienteController.searchByIds);
+routes.get('/busca/receita-usuario/:idUsuario', receitaController.findByUser);
+*/
 
+/*
 // Rotas Dashboard
 // Utilizar parametros através de query ou endereço
-routes.get('/dashboard/avaliacoes/:id', avaliacaoService.findVoted);
-routes.get('/dashboard/categorias/:id', categoriaService.countCategoryByUserId);
-routes.get('/dashboard/tipos-receita/:id', receitaService.countTypeByUserId);
+routes.get('/dashboard/avaliacoes/:id', avaliacaoController.findVoted);
+routes.get('/dashboard/categorias/:id', categoriaController.countCategoryByUserId);
+routes.get('/dashboard/tipos-receita/:id', receitaController.countTypeByUserId);
+*/
 
+/*
 
 // Rotas de remoção
-routes.delete('/remove/ingrediente/:id', ingredienteService.remove);
-routes.delete('/remove/unidade/:id', unidadeService.remove);
-routes.delete('/remove/usuario/:id', usuarioService.remove);
-//routes.delete('/remove/receita/:id', receitaService.remove);
+routes.delete('/remove/ingrediente/:id', ingredienteController.remove);
+routes.delete('/remove/unidade/:id', unidadeController.remove);
+routes.delete('/remove/usuario/:id', usuarioController.remove);
+//routes.delete('/remove/receita/:id', receitaController.remove);
 
 // Demais rotas
-routes.post('/autenticar', usuarioService.validate); // ??? Manter?
-routes.post('/importacao/receita', uploadFiles.array('files'), fileImportService.create);
-routes.get('/find-ip', fileImportService.getIp);
+routes.post('/autenticar', usuarioController.validate); // ??? Manter?
+routes.get('/find-ip', fileImportController.getIp);
+*/
 
 export default routes;
