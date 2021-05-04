@@ -172,11 +172,12 @@ class ReceitaService {
                 const ri = await receitaIngredienteService.findReceita(receita);
                 
                 if (glutenBoolean && ri.filter(ri2 => ri2.ingrediente.gluten).length > 0) {
-                    break;
+                    continue;
                 }
                 if (derivadoLeiteBoolean && ri.filter(ri2 => ri2.ingrediente.derivadoLeite).length > 0) {
-                    break;
+                    continue;
                 }
+                
                 idsReais.push(id);
             }
 
@@ -205,10 +206,10 @@ class ReceitaService {
                 const ri = await receitaIngredienteService.findReceita(receita);
                 
                 if (glutenBoolean && ri.filter(ri2 => ri2.ingrediente.gluten).length > 0) {
-                    break;
+                    continue;
                 }
                 if (derivadoLeiteBoolean && ri.filter(ri2 => ri2.ingrediente.derivadoLeite).length > 0) {
-                    break;
+                    continue;
                 }
                 idsReais2.push(id);
             }
