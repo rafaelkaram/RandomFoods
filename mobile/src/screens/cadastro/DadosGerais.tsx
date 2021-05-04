@@ -94,7 +94,7 @@ const DadosGerais = () => {
                 <View style={styles.newRecipeImageBasketContainer}>
                     <Image
                         style={styles.newRecipeImage}
-                        source={require('../assets/nova-receita.png')}
+                        source={require('../../assets/nova-receita.png')}
                     />
                 </View>
                 <ItalicText style={styles.subTitle}>Escolha o nome da receita</ItalicText>
