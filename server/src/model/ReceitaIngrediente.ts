@@ -6,17 +6,16 @@ import { Unidade } from './Unidade';
 @Entity('receita_ingrediente')
 @Unique([ 'receita', 'ingrediente' ])
 export class ReceitaIngrediente extends BaseEntity {
-  constructor(ingrediente: Ingrediente, receita: Receita, quantidade: number) {
+  constructor(ingrediente: Ingrediente, receita: Receita) {
     super();
     this.ingrediente = ingrediente;
     this.receita = receita;
-    this.quantidade = quantidade;
   }
 
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   quantidade: number;
 
   @ManyToOne(() => Unidade, unidade => unidade.ingredientesReceitas, { nullable: true })

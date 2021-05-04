@@ -4,6 +4,7 @@ import { NOTIFICACAO_COMENTARIO, NOTIFICACAO_AVALIACAO } from '../util/msg';
 import util from '../util/util';
 
 import { Usuario } from '../model/Usuario';
+import { TipoUnidade } from '../model/TipoUnidade';
 
 
 class LogNotificacaoController {

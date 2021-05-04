@@ -5,7 +5,8 @@ export default {
   storage: multer.diskStorage({
     destination: util.getPath('import'),
     filename: (request, file, cb) => {
-      const fileName = `${Date.now()}-${file.originalname}`;
+      const { nome } = request.params;
+      const fileName = `${Date.now()}-${ nome ? nome.toUpperCase() : 'RECEITA' }`;
 
       cb(null, fileName);
     }

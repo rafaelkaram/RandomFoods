@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getCustomRepository } from 'typeorm';
+import { getCustomRepository, Repository, In } from 'typeorm';
 
 import { ReceitaIngredienteRepository } from '../repository/ReceitaIngredienteRepository';
 
@@ -9,14 +9,24 @@ import { ReceitaIngrediente } from '../model/ReceitaIngrediente';
 
 class ReceitaIngredienteController {
     // Métodos internos
-    async insertByRecipe(item: ReceitaIngrediente): Promise<ReceitaIngrediente> {
-        const { quantidade, unidade, ingrediente, receita } = item;
+    async findMatches(filtro: { gluten: boolean, derivadoLeite: boolean, ids?: number[] }): Promise<ReceitaIngrediente> {
+        const repository = getCustomRepository(ReceitaIngredienteRepository);
 
-        const receitaIngrediente = new ReceitaIngrediente(ingrediente, receita, quantidade);
+        const { gluten, derivadoLeite, ids } = filtro as { gluten: boolean, derivadoLeite: boolean, ids: number[] };
 
-        await receitaIngrediente.save();
+        let receitas: number[] | undefined = undefined;
+        if (ids) receitas = await repository.findByIngredients(ids);
+        else receitas = await repository.findCapeta();
 
-        return receitaIngrediente;
+        if (receitas)  {
+
+        }
+        ids.forEach(element => {
+            teste.push(element);
+        });
+
+        console.log(teste);
+
     }
 }
 
