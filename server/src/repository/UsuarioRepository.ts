@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Usuario } from '../entity/Usuario';
+
+import { Usuario } from '../model/Usuario';
 
 @EntityRepository(Usuario)
 export class UsuarioRepository extends Repository<Usuario> {
@@ -20,8 +21,7 @@ export class UsuarioRepository extends Repository<Usuario> {
   async findByLoginOrEmail(data: string): Promise<Usuario> {
     const usuario: any = await this.createQueryBuilder('u')
       .where('u.ativo = :ativo', { ativo: true })
-      .andWhere('u.email = :email', { email: data })
-      //.andWhere('u.email = :email OR u.login = :login', { email: data, login: data })
+      .andWhere('LOWER(u.email) = :email OR LOWER(u.login) = :login', { email: data, login: data })
       .getOne();
 
     return usuario;
