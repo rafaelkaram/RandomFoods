@@ -113,8 +113,10 @@ interface IPainelVotos {
 }
 
 interface IPassoReceita {
+  id: number,
   descricao: string,
-  edit: boolean
+  edit: boolean,
+  update: boolean
 }
 
 export {
