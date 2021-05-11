@@ -77,14 +77,14 @@ const Ingredientes = () => {
             <View style={styles.newRecipeImageBasketContainer}>
                 <Image
                     style={styles.newRecipeImage}
-                    source={require('../assets/nova-receita.png')}
+                    source={require('../../assets/nova-receita.png')}
                 />
                 <TouchableOpacity
                     style={styles.basketContainer}
                     onPress={() => setModalVisible(true)}>
                     <Image
                         style={{ width: 40, height: 40 }}
-                        source={require('../assets/basket-icon.png')}
+                        source={require('../../assets/basket-icon.png')}
                     />
                     <View style={styles.basketCounter}>
                         <Text style={{ alignSelf: 'center', color: 'white' }}>{ingredientsCart.length}</Text>

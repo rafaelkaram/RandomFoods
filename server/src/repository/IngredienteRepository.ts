@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Ingrediente, TipoIngrediente } from '../entity/Ingrediente';
+import { Ingrediente } from '../model/Ingrediente';
 
 @EntityRepository(Ingrediente)
 export class IngredienteRepository extends Repository<Ingrediente> {
@@ -54,7 +54,7 @@ export class IngredienteRepository extends Repository<Ingrediente> {
   async findByName(nome: string): Promise<Ingrediente> {
     const ingrediente: any = await this.createQueryBuilder('i')
       .where('LOWER(i.nome) = :nome', { nome })
-      .getOne();
+      .getOneOrFail();
 
     return ingrediente;
   }

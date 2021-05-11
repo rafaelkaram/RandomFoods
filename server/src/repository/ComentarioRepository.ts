@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Comentario } from '../entity/Comentario';
+import { Comentario } from '../model/Comentario';
 
 @EntityRepository(Comentario)
 export class ComentarioRepository extends Repository<Comentario> {
@@ -15,7 +15,7 @@ export class ComentarioRepository extends Repository<Comentario> {
 
     return comentarios;
   }
-  
+
   async findByReceita(id: number): Promise<Comentario[]> {
     const comentarios: Comentario[] = await this.createQueryBuilder('c')
       .innerJoinAndSelect('c.usuario', 'usuario')

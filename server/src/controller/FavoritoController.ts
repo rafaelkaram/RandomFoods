@@ -1,26 +1,24 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
 
-import { AvaliacaoRepository } from '../repository/AvaliacaoRepository';
+import { FavoritoRepository } from '../repository/FavoritoRepository';
 
 import ReceitaController from './ReceitaController';
 import UsuarioController from './UsuarioController';
 
-import { Avaliacao } from '../model/Avaliacao';
+import { Favorito } from '../model/Favorito';
 import { LogNotificacao } from '../model/LogNotificacao';
 import { Receita } from '../model/Receita';
 import { Usuario } from '../model/Usuario';
 
-class AvaliacaoController {
+class FavoritoController {
     // Métodos internos
     async import(dados: any) {
         const {
-            nota,
             nomeUsuario,
             nomeReceita,
             nomeUsuarioReceita
         } = dados as {
-            nota: number,
             nomeUsuario: string,
             nomeReceita: string,
             nomeUsuarioReceita: string
@@ -36,22 +34,14 @@ class AvaliacaoController {
         const log: LogNotificacao = new LogNotificacao(usuarioReceita);
         await log.save();
 
-        const avaliacao: Avaliacao = new Avaliacao(nota, usuario, receita, log);
+        const favorito: Favorito = new Favorito(usuario, receita, log);
 
-        await avaliacao.save();
+        await favorito.save();
 
-        log.avaliacao = avaliacao;
+        log.favorito = favorito;
 
         await log.save();
     }
-
-    async countVotes(id: number): Promise<{ nota: number, qtdeNotas: number}> {
-        const repository = getCustomRepository(AvaliacaoRepository);
-
-        const avaliacao = await repository.findByReceitaId(id);
-
-        return avaliacao;
-    }
 }
 
-export default AvaliacaoController;
+export default FavoritoController;

@@ -4,22 +4,24 @@ import { getCustomRepository } from 'typeorm';
 import { MedidaRepository } from '../repository/MedidaRepository';
 
 import { Medida } from '../model/Medida';
-import { TipoUnidade, TipoUnidade as tipoUnidade } from '../model/TipoUnidade';
+import { TipoUnidade } from '../model/TipoUnidade';
 
 class MedidaController {
   // Metodos internos
   async import(dados: any) {
     const {
-      Sigla,
-      Valor,
-      TipoUnidade,
+      nome,
+      valor,
+      tipoUnidade,
     } = dados as {
-      Sigla: string,
-      Valor: number,
-      TipoUnidade: tipoUnidade,
-      };
+      nome: string,
+      valor: number,
+      tipoUnidade: string,
+    };
 
-    const medida = new Medida(Sigla, Valor, TipoUnidade);
+    const tipo = <TipoUnidade> tipoUnidade.trim().toUpperCase();
+
+    const medida = new Medida(nome.trim(), valor, tipo);
 
     await medida.save();
   }
@@ -30,7 +32,16 @@ class MedidaController {
     if (tipo)
       return await repository.findByType(nome.trim().toLowerCase(), tipo);
 
-    return await repository.findByNome(nome.trim().toLowerCase());
+    return await repository.findByName(nome.trim().toLowerCase());
+  }
+
+  async findByName(nome: string, tipo?: TipoUnidade): Promise<Medida> {
+    const repository = getCustomRepository(MedidaRepository);
+
+    if (tipo)
+      return await repository.findByType(nome.trim().toLowerCase(), tipo);
+
+    return await repository.findByName(nome.trim().toLowerCase());
   }
 }
 
