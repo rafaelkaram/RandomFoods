@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Midia } from '../entity/Midia';
+import { Midia } from '../model/Midia';
 
 @EntityRepository(Midia)
 export class MidiaRepository extends Repository<Midia> {

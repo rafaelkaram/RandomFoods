@@ -112,14 +112,14 @@ const Filtro = () => {
             <View style={styles.searchRecipeImageBasketContainer}>
                 <Image
                     style={styles.searchRecipeImage}
-                    source={require('../assets/pesquisar-receitas.png')}
+                    source={require('../../assets/pesquisar-receitas.png')}
                 />
                 <TouchableOpacity
                     style={styles.basketContainer}
                     onPress={() => setModalVisible(true)}>
                     <Image
                         style={{ width: 40, height: 40 }}
-                        source={require('../assets/basket-icon.png')}
+                        source={require('../../assets/basket-icon.png')}
                     />
                     <View style={styles.basketCounter}>
                         <Text style={{ alignSelf: 'center', color: 'white' }}>{ingredientsCart.length}</Text>

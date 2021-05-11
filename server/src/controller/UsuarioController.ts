@@ -7,7 +7,7 @@ import util from '../util/util';
 
 import { UsuarioRepository } from '../repository/UsuarioRepository';
 
-import { Usuario, Perfil as Profile } from '../model/Usuario';
+import { Usuario, Perfil } from '../model/Usuario';
 
 class UsuarioController {
     // Métodos das rotas
@@ -15,50 +15,50 @@ class UsuarioController {
     async import(dados: any) {
 
         const {
-            Login,
-            Nome,
-            Email,
-            Senha,
-            Ativo,
-            TrocaLogin,
-            Perfil,
-            NotificarSeguidor,
-            NotificarAvaliacao,
-            NotificarComentario,
-            NotificarFavorito,
-            NotificarResposta,
-            NotificarMarca,
+            login,
+            nome,
+            email,
+            senha,
+            ativo,
+            trocaLogin,
+            perfil,
+            notificarSeguidor,
+            notificarAvaliacao,
+            notificarComentario,
+            notificarFavorito,
+            notificarResposta,
+            notificarMarca,
         } = dados as {
-            Login: string,
-            Nome: string,
-            Email: string,
-            Senha: string,
-            Ativo?: string,
-            TrocaLogin?: string,
-            Perfil?: Profile,
-            NotificarSeguidor?: string,
-            NotificarAvaliacao?: string,
-            NotificarComentario?: string,
-            NotificarFavorito?: string,
-            NotificarResposta?: string,
-            NotificarMarca?: string,
+            login: string,
+            nome: string,
+            email: string,
+            senha: string,
+            ativo?: string,
+            trocaLogin?: string,
+            perfil?: Perfil,
+            notificarSeguidor?: string,
+            notificarAvaliacao?: string,
+            notificarComentario?: string,
+            notificarFavorito?: string,
+            notificarResposta?: string,
+            notificarMarca?: string,
         };
 
-        const hash = util.getHash(Senha);
-        const ativo = util.getBoolean(Ativo);
-        const trocaLogin = util.getBoolean(TrocaLogin);
-        const seguidor = util.getBoolean(NotificarSeguidor);
-        const avaliacao = util.getBoolean(NotificarAvaliacao);
-        const comentario = util.getBoolean(NotificarComentario);
-        const favorito = util.getBoolean(NotificarFavorito);
-        const resposta = util.getBoolean(NotificarResposta);
-        const marca = util.getBoolean(NotificarMarca);
+        const hash = util.getHash(senha);
+        const isAtivo = util.getBoolean(ativo);
+        const isTrocaLogin = util.getBoolean(trocaLogin);
+        const seguidor = util.getBoolean(notificarSeguidor);
+        const avaliacao = util.getBoolean(notificarAvaliacao);
+        const comentario = util.getBoolean(notificarComentario);
+        const favorito = util.getBoolean(notificarFavorito);
+        const resposta = util.getBoolean(notificarResposta);
+        const marca = util.getBoolean(notificarMarca);
 
-        const usuario = new Usuario(Login, Nome, Email, hash);
+        const usuario = new Usuario(login, nome, email, hash);
 
-        if (ativo !== null) usuario.ativo = ativo;
-        if (trocaLogin !== null) usuario.trocaLogin = trocaLogin;
-        if (Perfil) usuario.perfil = Perfil;
+        if (isAtivo !== null) usuario.ativo = isAtivo;
+        if (isTrocaLogin !== null) usuario.trocaLogin = isTrocaLogin;
+        if (perfil) usuario.perfil = perfil;
         if (seguidor !== null) usuario.notificarSeguidor = seguidor;
         if (avaliacao !== null) usuario.notificarAvaliacao = avaliacao;
         if (comentario !== null) usuario.notificarComentario = comentario;
@@ -74,9 +74,10 @@ class UsuarioController {
         const repository = getCustomRepository(UsuarioRepository);
 
         let usuario: any = null;
-        if (data)
-            usuario = await repository.findByLoginOrEmail(data);
-
+        if (data) {
+            const valor = data.trim().toLowerCase();
+            usuario = await repository.findByLoginOrEmail(valor);
+        }
         if (!usuario)
             usuario = await repository.findOne({ id: 1 });
 

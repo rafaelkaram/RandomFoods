@@ -1,7 +1,9 @@
-import { Brackets, EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 
-import { TipoUnidade } from '../entity/TipoUnidade';
-import { Unidade } from '../entity/Unidade';
+import { Ingrediente } from '../model/Ingrediente';
+import { Medida } from '../model/Medida';
+import { TipoUnidade } from '../model/TipoUnidade';
+import { Unidade } from '../model/Unidade';
 
 @EntityRepository(Unidade)
 export class UnidadeRepository extends Repository<Unidade> {
@@ -24,24 +26,39 @@ export class UnidadeRepository extends Repository<Unidade> {
     return unidades;
   }
 
-  async findBySigla(nome: string, tiposUnidade: TipoUnidade[]): Promise<Unidade> {
+  async findBySigla(medida: Medida, ingredientes: Ingrediente[]): Promise<Unidade> {
     const unidade: Unidade = await this.createQueryBuilder('u')
-      .where('u.tipo IN (:...tiposUnidade)', { tiposUnidade })
-      .andWhere(new Brackets(qb => {
-        qb.where('LOWER(u.sigla) = :sigla', { sigla: nome.toLowerCase() } )
-          .orWhere('LOWER(u.nome) = :nome', { nome: nome.toLowerCase() })
-      }))
+      .where('u.ingrediente IN (:...ingredientes)', { ingredientes })
+      .andWhere('u.medida = :medida', { medida })
       .getOneOrFail();
 
     return unidade;
   }
 
-  async findByIngrediente(nome: string, id: number): Promise<Unidade> {
+  async findByIngredient(medida: Medida, ingrediente: Ingrediente): Promise<Unidade> {
     const unidade: Unidade = await this.createQueryBuilder('u')
-      .where('LOWER(u.sigla) = :nome', { nome: nome.toLowerCase() })
-      .andWhere('u.ingrediente = :ingrediente', { ingrediente: id })
+      .where('u.medida = :medida', { medida })
+      .andWhere('u.ingrediente = :ingrediente', { ingrediente })
       .getOneOrFail();
 
     return unidade;
   }
+
+  async findSI(medida: Medida): Promise<Unidade> {
+    const unidade: Unidade = await this.createQueryBuilder('u')
+      .where('u.medida = :medida', { medida })
+      .andWhere('u.ingrediente is null')
+      .getOneOrFail();
+
+    return unidade;
+  }
+
+  async findUnidade(): Promise<Unidade> {
+    const unidade: Unidade = await this.createQueryBuilder('u')
+      .where('u.medida.tipoUnidade = :tipo', { tipo: TipoUnidade.UNIDADE })
+      .andWhere('u.ingrediente is null')
+      .getOneOrFail();
+
+    return unidade;
+}
 }

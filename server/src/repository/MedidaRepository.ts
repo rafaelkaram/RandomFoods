@@ -27,7 +27,7 @@ export class MedidaRepository extends Repository<Medida> {
     return medida;
   }
 
-  async findByNome(nome: string): Promise<Medida> {
+  async findByName(nome: string): Promise<Medida> {
     const medida: any = this.createQueryBuilder()
       .where('ingrediente is null')
       .andWhere('LOWER(nome) = :nome', { nome })

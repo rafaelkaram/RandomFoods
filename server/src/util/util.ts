@@ -104,6 +104,12 @@ export default {
     return null;
   },
 
+  getBoolean2(value?: string | boolean): boolean {
+    const bool: boolean | null = this.getBoolean(value);
+
+    return bool ? true : false;
+  },
+
   getImportData(nome: string): { sheetName: string, controller: any } {
     if (nome === 'avaliacao' || nome === 'avaliacões') {
 
