@@ -66,7 +66,7 @@ class ReceitaController {
         const usuarioReceita = await usuarioController.findByLoginOrEmail(usuario);
         const receita = new Receita(nome, descricao, tipo, usuarioReceita);
 
-        receita.save();
+        await receita.save();
 
         if (dadosCategoria && dadosCategoria.length > 0) {
             for (let k in dadosCategoria) {
