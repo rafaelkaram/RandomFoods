@@ -12,7 +12,24 @@ import { Receita } from '../model/Receita';
 import { Usuario } from '../model/Usuario';
 import { Marca } from '../model/Marca';
 
+import comentarioView from '../view/ComentarioView';
+
 class ComentarioController {
+    // Métodos das rotas
+    async findByReceita(request: Request, response: Response) {
+        const repository = getCustomRepository(ComentarioRepository);
+
+        const { idReceita } = request.params;
+
+        const comentarios = await repository.findByReceita(parseInt(idReceita));
+
+        if (!comentarios) {
+            return response.status(400).json({ error: 'Comentarios não encontrado!' });
+        }
+
+        return response.status(200).json(comentarioView.renderMany(comentarios));
+    }
+
     // Métodos internos
     async import(dados: any) {
         const repository = getCustomRepository(ComentarioRepository);

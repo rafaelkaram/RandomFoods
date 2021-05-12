@@ -36,6 +36,8 @@ const Filtro = () => {
             .then(response => {
                 setIngredientTypes(response.data);
                 setIngredientList(response.data);
+                console.log(response.data);
+
                 setLoad(true)
             })
     }, []);

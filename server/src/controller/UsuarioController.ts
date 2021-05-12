@@ -11,6 +11,14 @@ import { Usuario, Perfil } from '../model/Usuario';
 
 class UsuarioController {
     // Métodos das rotas
+    async index(request: Request, response: Response) {
+        const repository = getCustomRepository(UsuarioRepository);
+
+        const usuarios = await repository.findAll();
+
+        return util.systrace(200, response, usuarios);
+    }
+
     // Métodos internos
     async import(dados: any) {
 

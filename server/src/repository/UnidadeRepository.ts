@@ -29,7 +29,7 @@ export class UnidadeRepository extends Repository<Unidade> {
   async findBySigla(medida: Medida, ingredientes: Ingrediente[]): Promise<Unidade> {
     const unidade: Unidade = await this.createQueryBuilder('u')
       .where('u.ingrediente IN (:...ingredientes)', { ingredientes })
-      .andWhere('u.medida = :medida', { medida })
+      .andWhere('u.medida = :medida', { medida: medida.id })
       .getOneOrFail();
 
     return unidade;
@@ -37,8 +37,8 @@ export class UnidadeRepository extends Repository<Unidade> {
 
   async findByIngredient(medida: Medida, ingrediente: Ingrediente): Promise<Unidade> {
     const unidade: Unidade = await this.createQueryBuilder('u')
-      .where('u.medida = :medida', { medida })
-      .andWhere('u.ingrediente = :ingrediente', { ingrediente })
+      .where('u.medida = :medida', { medida: medida.id })
+      .andWhere('u.ingrediente = :ingrediente', { ingrediente: ingrediente.id })
       .getOneOrFail();
 
     return unidade;
@@ -46,19 +46,19 @@ export class UnidadeRepository extends Repository<Unidade> {
 
   async findSI(medida: Medida): Promise<Unidade> {
     const unidade: Unidade = await this.createQueryBuilder('u')
-      .where('u.medida = :medida', { medida })
+      .where('u.medida = :medida', { medida: medida.id })
       .andWhere('u.ingrediente is null')
       .getOneOrFail();
 
     return unidade;
   }
 
-  async findUnidade(): Promise<Unidade> {
-    const unidade: Unidade = await this.createQueryBuilder('u')
-      .where('u.medida.tipoUnidade = :tipo', { tipo: TipoUnidade.UNIDADE })
+  async findSI2(tipo?: TipoUnidade): Promise<Unidade[]> {
+    const unidade: Unidade[] = await this.createQueryBuilder('u')
+      .where('u.medida.tipoUnidade = :tipo', { tipo: tipo ? tipo : TipoUnidade.UNIDADE })
       .andWhere('u.ingrediente is null')
-      .getOneOrFail();
+      .getMany();
 
     return unidade;
-}
+  }
 }

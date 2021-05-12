@@ -7,11 +7,11 @@ import IngredienteController from './IngredienteController';
 import MedidaController from './MedidaController';
 
 import { Ingrediente } from '../model/Ingrediente';
+import { Medida } from '../model/Medida';
 import { TipoUnidade } from '../model/TipoUnidade';
 import { Unidade } from '../model/Unidade';
 
 import unidadeView from '../view/UnidadeView';
-import { Medida } from '../model/Medida';
 
 
 class UnidadeController {
@@ -51,6 +51,8 @@ class UnidadeController {
         try {
             return await repository.findByIngredient(medida, ingrediente);
         } catch (err) {
+            console.log(medida);
+
             return await repository.findSI(medida);
         }
     }
@@ -61,10 +63,10 @@ class UnidadeController {
         return await repository.findSI(medida);
     }
 
-    async findUnidade(): Promise<Unidade> {
+    async findSI2(tipo?: TipoUnidade): Promise<Unidade[]> {
         const repository = getCustomRepository(UnidadeRepository);
 
-        return await repository.findUnidade();
+        return await repository.findSI2(tipo);
     }
 }
 

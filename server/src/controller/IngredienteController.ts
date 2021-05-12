@@ -5,10 +5,12 @@ import util from '../util/util';
 
 import { IngredienteRepository } from '../repository/IngredienteRepository';
 
+import UnidadeController from './UnidadeController';
+
 import { Ingrediente, TipoIngrediente } from '../model/Ingrediente';
 import { TipoUnidade } from '../model/TipoUnidade';
 
-import TipoIngredienteView from '../view/TipoIngredienteView';
+import tipoIngredienteView from '../view/TipoIngredienteView';
 
 class IngredienteController {
     // Métodos das rotas
@@ -30,10 +32,52 @@ class IngredienteController {
             const tipoIngrediente: TipoIngrediente = <TipoIngrediente> tiposIngrediente[key];
             const ingredientes = await repository.find({ where: { tipoIngrediente }, order: { nome: 'ASC' } });
 
-            result.push(TipoIngredienteView.renderMany(ingredientes, tipoIngrediente));
+            if (ingredientes && ingredientes.length > 0)
+                result.push(tipoIngredienteView.renderManySimple(ingredientes, tipoIngrediente));
         }
 
         return response.status(200).json(result);
+    }
+
+    async findByIds(request: Request, response: Response) {
+        const repository = getCustomRepository(IngredienteRepository);
+
+        const { ids } = request.query as { ids: string[] };
+        if (!ids) {
+            throw 'Nenhum ingrediente encontrado.';
+        }
+
+        const idsIngredientes = ids.map((id: string) => {
+            return parseInt(id);
+        });
+
+        const tiposIngrediente = Object.keys(TipoIngrediente);
+
+        const ingredientes = [];
+
+        const unidadeController = new UnidadeController();
+
+        for (var key in tiposIngrediente) {
+            const tipoIngrediente: TipoIngrediente = <TipoIngrediente>tiposIngrediente[key];
+
+            const ingredientesObj = await repository.findByIdsWithUnidades(idsIngredientes, tipoIngrediente);
+            ingredientesObj.forEach(async ingrediente => {
+                const unidades = await unidadeController.findSI2(ingrediente.tipoUnidade);
+                unidades.forEach(unidade => {
+                    ingrediente.unidades.push(unidade);
+                });
+            });
+
+            if (ingredientesObj.length > 0) {
+                ingredientes.push(tipoIngredienteView.renderMany(ingredientesObj, tipoIngrediente));
+            }
+        }
+
+        if (!ingredientes) {
+            throw 'Nenhum ingrediente encontrado.';
+        }
+
+        return response.status(200).json(ingredientes);
     }
 
     // Métodos internos

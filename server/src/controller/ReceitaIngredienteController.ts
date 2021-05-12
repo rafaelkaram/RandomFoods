@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getCustomRepository, Repository, In } from 'typeorm';
+import { getCustomRepository } from 'typeorm';
 
 import { ReceitaIngredienteRepository } from '../repository/ReceitaIngredienteRepository';
 
@@ -9,24 +9,30 @@ import { ReceitaIngrediente } from '../model/ReceitaIngrediente';
 
 class ReceitaIngredienteController {
     // Métodos internos
-    async findMatches(filtro: { gluten: boolean, derivadoLeite: boolean, ids?: number[] }): Promise<ReceitaIngrediente> {
+    async findReceita(receita: Receita): Promise<ReceitaIngrediente[]> {
         const repository = getCustomRepository(ReceitaIngredienteRepository);
 
-        const { gluten, derivadoLeite, ids } = filtro as { gluten: boolean, derivadoLeite: boolean, ids: number[] };
-
-        let receitas: number[] | undefined = undefined;
-        if (ids) receitas = await repository.findByIngredients(ids);
-        else receitas = await repository.findCapeta();
-
-        if (receitas)  {
-
-        }
-        ids.forEach(element => {
-            teste.push(element);
+        const ingredientes = await repository.find({
+            relations: [ 'ingrediente', 'unidade' ],
+            where: {
+                receita,
+            },
         });
 
-        console.log(teste);
+        return ingredientes;
+    }
 
+    async findMatches(filtro: { gluten: boolean, derivadoLeite: boolean, ids?: number[], categorias?: string[] }): Promise<{ perfect: number[], partial: number[] }> {
+        const repository = getCustomRepository(ReceitaIngredienteRepository);
+
+        const { gluten, derivadoLeite, ids, categorias } = filtro as { gluten: boolean, derivadoLeite: boolean, ids: number[], categorias: string[] };
+
+        const receitas = {
+            perfect: await repository.findMatches(true, ids, gluten, derivadoLeite, categorias),
+            partial: await repository.findMatches(false, ids, gluten, derivadoLeite, categorias)
+        }
+
+        return receitas;
     }
 }
 
