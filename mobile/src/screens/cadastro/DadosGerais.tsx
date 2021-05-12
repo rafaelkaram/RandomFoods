@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Alert } from 'react-native';
 import { Input } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
-
 import api from '../../services/api';
-
 import screens from '../../constants/screens';
-
 import BoldText from '../../components/BoldText';
 import ItalicText from '../../components/ItalicText';
 import Loading from '../../components/Loading';
@@ -41,10 +38,24 @@ const DadosGerais = () => {
         return <Loading />
     }
 
+
+    const createButtonAlert = () =>
+        Alert.alert(
+            "Nome da Receita",
+            "Adicione um nome a sua receita",
+            [
+                { text: "OK", onPress: () => console.log("OK Pressed") }
+            ]
+        );
+
     const handleNavigateToIngredients = () => {
-        if (nomeReceita)
+        if (!nomeReceita) {
+            createButtonAlert()
+        }
+        else {
             // Não passa os dados que criou aqui? Como que o sistema vai saber deles depois?
             navigation.navigate(screens.cadastroIngredientes);
+        }
     }
 
     const handleInputValue = (type: string, signal: string) => {
