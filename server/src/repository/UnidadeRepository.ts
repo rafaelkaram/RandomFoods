@@ -55,7 +55,8 @@ export class UnidadeRepository extends Repository<Unidade> {
 
   async findSI2(tipo?: TipoUnidade): Promise<Unidade[]> {
     const unidade: Unidade[] = await this.createQueryBuilder('u')
-      .where('u.medida.tipoUnidade = :tipo', { tipo: tipo ? tipo : TipoUnidade.UNIDADE })
+      .innerJoin('u.medida', 'm')
+      .where('m.tipoUnidade = :tipo', { tipo: tipo ? tipo : TipoUnidade.UNIDADE })
       .andWhere('u.ingrediente is null')
       .getMany();
 
