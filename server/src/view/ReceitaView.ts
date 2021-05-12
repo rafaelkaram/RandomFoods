@@ -17,23 +17,17 @@ export default {
 
     const categorias = receita.categorias.map(categoria => {
       return categoria.nome;
-    })
+    });
 
-    if (receita) {
-
-      return {
-        id: receita.id,
-        receita: receita.nome,
-        foto: path,
-        usuario: usuarioView.renderSimple(receita.usuario),
-        categorias,
-        nota: avaliacao.nota,
-        numNotas: avaliacao.qtdeNotas
-      };
-
-    }
-
-    return null;
+    return {
+      id: receita.id,
+      receita: receita.nome,
+      foto: path,
+      usuario: usuarioView.renderSimple(receita.usuario),
+      categorias,
+      nota: avaliacao.nota,
+      numNotas: avaliacao.qtdeNotas
+    };
   },
 
   render(receita: Receita, ingredienteList: ReceitaIngrediente[], midias: Midia[], avaliacao: { nota: number, qtdeNotas: number}, qtdeLogs: number) {
