@@ -19,6 +19,6 @@ export default {
   },
 
   renderMany(rI: ReceitaIngrediente[]) {
-    return rI.map(ingrediente => { this.render(ingrediente); });
+    return rI.map(ingrediente => { return this.render(ingrediente); });
   }
 };
