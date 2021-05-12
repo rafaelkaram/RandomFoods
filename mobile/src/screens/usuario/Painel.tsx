@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, ScrollView, TouchableOpacity, View, StyleSheet, Dimensions, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { VictoryPie, VictoryLegend } from 'victory-native';
+//import { VictoryPie, VictoryLegend } from 'victory-native';
 import { DataTable } from 'react-native-paper';
 import { Avatar } from "react-native-elements";
 
@@ -125,7 +125,7 @@ const Painel = () => {
                 <View style={styles.pieContainer}>
                     <View style={styles.typePie}>
                         <ItalicText style={styles.chartsTitle}>{`Receitas\npor Tipo`}</ItalicText>
-                        <VictoryPie
+                        {/* <VictoryPie
                             height={((chartHeight / 2) - 50)}
                             width={(chartWidth / 2)}
                             colorScale={["orange", "#e02041"]}
@@ -139,13 +139,13 @@ const Painel = () => {
                             colorScale={["orange", "#e02041"]}
                             data={pieTypeLegend}
                             style={{ labels: { fontSize: 15 } }}
-                        />
+                        /> */}
                     </View>
 
                     <View style={styles.categoryPie}>
                         <ItalicText style={styles.chartsTitle}>{`Receitas\npor Categoria`}</ItalicText>
 
-                        <VictoryPie
+                        {/* <VictoryPie
                             height={((chartHeight / 2) - 50)}
                             width={(chartWidth / 2)}
                             colorScale={["#10a377", "#62e399", "#3f9665", "#29e379", "#99ffc5"]}
@@ -153,13 +153,13 @@ const Painel = () => {
                             data={pieCategoryData}
                             innerRadius={30}
                             style={{ labels: { fontSize: 15 } }}
-                        />
+                        /> */}
                         <ScrollView>
-                            <VictoryLegend x={10}
+                            {/* <VictoryLegend x={10}
                                 colorScale={["#10a377", "#62e399", "#3f9665", "#29e379", "#99ffc5"]}
                                 data={pieCategoryLegend}
                                 style={{ labels: { fontSize: 15 } }}
-                            />
+                            /> */}
                         </ScrollView>
                     </View>
                 </View>
