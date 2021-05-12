@@ -17,7 +17,7 @@ export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente>
     return receitas;
   }
 
-  async findMatches(isPerfect: boolean, ids: number[], gluten: boolean, derivadoLeite: boolean, categorias: string[]): Promise<number[]> {
+  async findMatches(isPerfect: boolean, ids: number[], gluten: boolean, derivadoLeite: boolean, categorias: string[]): Promise<{ id: number }[]> {
 
     const query = this.createQueryBuilder('ri')
       .select('ri.receita.id', 'id')

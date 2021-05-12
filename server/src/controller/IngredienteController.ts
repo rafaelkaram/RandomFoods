@@ -59,14 +59,13 @@ class IngredienteController {
 
         for (var key in tiposIngrediente) {
             const tipoIngrediente: TipoIngrediente = <TipoIngrediente>tiposIngrediente[key];
-
             const ingredientesObj = await repository.findByIdsWithUnidades(idsIngredientes, tipoIngrediente);
-            ingredientesObj.forEach(async ingrediente => {
+            await Promise.all(ingredientesObj.map(async ingrediente => {
                 const unidades = await unidadeController.findSI2(ingrediente.tipoUnidade);
-                unidades.forEach(unidade => {
+                await Promise.all(unidades.map(unidade => {
                     ingrediente.unidades.push(unidade);
-                });
-            });
+                }));
+            }));
 
             if (ingredientesObj.length > 0) {
                 ingredientes.push(tipoIngredienteView.renderMany(ingredientesObj, tipoIngrediente));

@@ -36,7 +36,6 @@ const Filtro = () => {
             .then(response => {
                 setIngredientTypes(response.data);
                 setIngredientList(response.data);
-                console.log(response.data);
 
                 setLoad(true)
             })
@@ -174,6 +173,7 @@ const Filtro = () => {
                     onChangeText={(value) => setnomeIngrediente(value)}
                     value={nomeIngrediente}
                     inputContainerStyle={{ borderBottomWidth: 0 }}
+                    style={styles.inputIngredient}
                 />
 
             </View>
@@ -371,7 +371,8 @@ const styles = StyleSheet.create({
 
     filter: {
         margin: 10,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginTop: 0
     },
 
     filterBox: {
@@ -403,6 +404,14 @@ const styles = StyleSheet.create({
     filterNameSelected: {
         color: 'white'
     },
+
+    inputIngredient: {
+        borderWidth: 1,
+        paddingBottom: 5,
+        paddingLeft: 5,
+        borderRadius: 10,
+        borderColor: 'gray',
+    }
 
 })
 

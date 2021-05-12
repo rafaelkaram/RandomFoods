@@ -43,10 +43,11 @@ class ReceitaController {
             const avaliacao: { nota: number, qtdeNotas: number } = await avaliacaoController.countVotes(id);
             const midias: Midia[] = receita.midias.filter(midia => midia.thumbnail);
 
-            return receitaView.renderSimple(receita, avaliacao, midias.length > 0 ? midias[0] : undefined);
+            if (receita)
+                return receitaView.renderSimple(receita, avaliacao, midias.length > 0 ? midias[0] : undefined);
         })
 
-        return response.status(200).json(receitasList);
+        return util.systrace(200, response, receitasList);
     }
 
     async import(dados: { nome: string, descricao: string, tipo: string, usuario?: string },
@@ -159,7 +160,7 @@ class ReceitaController {
         const glutenBoolean: boolean = util.getBoolean2(gluten && <string> gluten);
         const derivadoLeiteBoolean: boolean = util.getBoolean2(derivadoLeite && <string> derivadoLeite);
 
-        const ids2: number[] = ids.map((id: string) => {
+        const ids2: number[] = ids?.map((id: string) => {
             return parseInt(id);
         });
 
@@ -170,14 +171,14 @@ class ReceitaController {
             const matchesPerfeitos: any[] = [];
             const matchesParciais: any[] = [];
 
-            perfect.forEach(async id => {
-                const receita = await this.buildReceita(id);
+            await Promise.all(perfect.map(async id => {
+                const receita = await ReceitaController.buildReceita(id);
                 matchesPerfeitos.push(receita);
-            });
-            partial.forEach(async id => {
-                const receita = await this.buildReceita(id);
+            }));
+            await Promise.all(partial.map(async id => {
+                const receita = await ReceitaController.buildReceita(id);
                 matchesParciais.push(receita);
-            });
+            }));
 
             return util.systrace(200, response, { matchesPerfeitos, matchesParciais });
 
@@ -207,7 +208,7 @@ class ReceitaController {
         return receita;
     }
 
-    async buildReceita(id: number) {
+    static async buildReceita (id: number) {
         const repository = getCustomRepository(ReceitaRepository);
 
         const receita: Receita = await repository.findOneOrFail({
