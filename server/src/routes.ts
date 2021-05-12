@@ -55,31 +55,32 @@ routes.post('/cadastro/usuarios', usuarioController.createBulk);
 // Utilizar parametros através de query ou endereço
 routes.get('/busca/tipo-receita', receitaController.typeIndex);
 routes.get('/busca/tipo-ingrediente', ingredienteController.typeIndex);
+routes.get('/busca/receita', receitaController.index);
+routes.get('/busca/usuario', usuarioController.index);
 
 /*
 routes.get('/busca/ingredientes', ingredienteController.index);
-routes.get('/busca/receita', receitaController.index);
 routes.get('/busca/unidade', unidadeController.index);
 routes.get('/busca/unidade-ingrediente', unidadeController.list);
-routes.get('/busca/usuario', usuarioController.index);
 */
 
-/*
 // Rotas de busca (buscar único)
 // Utilizar parametros através de query ou endereço
+routes.get('/busca/receita/:id', receitaController.fetch);
+/*
 routes.get('/busca/comentario/:id', comentarioController.fetch);
 routes.get('/busca/ingrediente/:id', ingredienteController.fetch);
-routes.get('/busca/receita/:id', receitaController.fetch);
 routes.get('/busca/unidade/:id', unidadeController.fetch);
 routes.get('/busca/usuario/:id', usuarioController.fetch);
 */
 
-/*
+
 // Rotas de busca (busca personalizada)
 // Utilizar parametros através de query ou endereço
+routes.get('/busca/ingrediente', ingredienteController.findByIds);
 routes.get('/busca/comentario-receita/:idReceita', comentarioController.findByReceita);
-routes.get('/busca/combinacoes', receitaController.findMatches);
-routes.get('/busca/ingrediente', ingredienteController.searchByIds);
+routes.get('/busca/combinacoes', receitaController.findMatches.bind(ReceitaController));
+/*
 routes.get('/busca/receita-usuario/:idUsuario', receitaController.findByUser);
 */
 

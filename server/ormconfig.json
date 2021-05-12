@@ -2,13 +2,14 @@
   "type": "postgres",
   "host": "tcctads.c97xz2y9jkrb.sa-east-1.rds.amazonaws.com",
   "port": 5432,
+  "database": "rf_dev",
   "username": "postgres",
   "password": "abc123**",
   "migrations": [
     "./src/database/migration/**.ts"
   ],
   "entities" : [
-    "./src/entity/**.ts"
+    "./src/model/**.ts"
   ],
   "cli": {
     "migrationsDir": "./src/database/migration"

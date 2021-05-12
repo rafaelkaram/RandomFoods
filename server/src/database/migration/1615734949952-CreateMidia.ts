@@ -35,6 +35,11 @@ export class CreateMidia1615734949952 implements MigrationInterface {
                 {
                     name: 'receita_id',
                     type: 'integer'
+                },
+                {
+                    name: 'thumbnail',
+                    type: 'boolean',
+                    default: false
                 }
             ],
             foreignKeys: [
