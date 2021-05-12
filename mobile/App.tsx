@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import AppLoading from 'expo-app-loading';
 import { Ubuntu_700Bold, Ubuntu_500Medium_Italic, Ubuntu_400Regular} from '@expo-google-fonts/ubuntu';
 import { Oswald_300Light, useFonts} from '@expo-google-fonts/oswald';
 
 import Routes from './src/routes';
+
+import Loading from './src/components/Loading';
 
 export default function App() {
   const [fontsLoad] = useFonts({
@@ -15,7 +16,7 @@ export default function App() {
   });
 
   if(!fontsLoad){
-    return <AppLoading/>
+    return <Loading/>
   }
   return (
     <>
