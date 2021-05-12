@@ -17,9 +17,9 @@ export class LogNotificacaoRepository extends Repository<LogNotificacao> {
   }
 
   async countNotRead(id: number): Promise<number> {
-    const qtde: number = await this.createQueryBuilder()
-      .where('usuario.id = :id', { id })
-      .andWhere('visualizada = :isVisualizado', { isVisualizado: true })
+    const qtde: number = await this.createQueryBuilder('l')
+      .where('l.usuario = :id', { id })
+      .andWhere('l.visualizada = :isVisualizado', { isVisualizado: true })
       .getCount();
 
     return qtde;
