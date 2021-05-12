@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
+import { getCustomRepository } from 'typeorm';
 
 import { NOTIFICACAO_COMENTARIO, NOTIFICACAO_AVALIACAO } from '../util/msg';
 import util from '../util/util';
 
 import { Usuario } from '../model/Usuario';
 import { TipoUnidade } from '../model/TipoUnidade';
+import { LogNotificacaoRepository } from '../repository/LogNotificacaoRepository';
 
 
 class LogNotificacaoController {
@@ -18,6 +20,13 @@ class LogNotificacaoController {
   }
 
   // Métodos internos
+  async countNotRead(usuario: Usuario): Promise<number> {
+    const repository = getCustomRepository(LogNotificacaoRepository);
+
+    const qtde: number = await repository.countNotRead(usuario.id);
+
+    return qtde;
+  }
 
 }
 

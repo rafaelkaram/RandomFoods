@@ -1,21 +1,42 @@
-import { ReceitaIngrediente } from "../entity/ReceitaIngrediente";
-
-import ingredienteUnidadeView from "./IngredienteUnidadeView";
+import { Ingrediente } from "../model/Ingrediente";
 
 export default {
-  render(rI: ReceitaIngrediente) {
-    if (rI) {
+  renderSimple(ingrediente: Ingrediente) {
+    if (ingrediente) {
       return {
-        id: rI.ingrediente.id,
-        nome: rI.ingrediente.nome,
-        qtde: ingredienteUnidadeView.render(rI.unidade, rI.ingrediente, rI.quantidade)
-      };
+        id: ingrediente.id,
+        nome: ingrediente.nome,
+        gluten: ingrediente.gluten,
+        derivadoLeite: ingrediente.derivadoLeite
+      }
     }
 
     return null;
   },
 
-  renderMany(ingredienteList: ReceitaIngrediente[]) {
+  render(ingrediente: Ingrediente) {
+    if (ingrediente) {
+      return {
+        id: ingrediente.id,
+        nome: ingrediente.nome,
+        semMedida: ingrediente.semMedida,
+        unidades: ingrediente.unidades
+      }
+    }
+
+    return null;
+  },
+
+  renderMany(ingredienteList: Ingrediente[]) {
     return ingredienteList.map(ingrediente => this.render(ingrediente));
+  },
+
+  renderManyComplex(ingredienteList: Ingrediente[]) {
+    return ;
+    //return ingredienteList.map(ingrediente => this.render(ingrediente));
+  },
+
+  renderManySimple(ingredienteList: Ingrediente[]) {
+    return ingredienteList.map(ingrediente => this.renderSimple(ingrediente));
   }
 };

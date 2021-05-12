@@ -30,8 +30,15 @@ const Recipe = ({ route }: { route: any }) => {
 
             api.get('/busca/combinacoes', { params }
             ).then(response => {
-                setMatchesPerfeitos(response.data.matchesPerfeitos)
-                setMatchesParciais(response.data.matchesParciais)
+                if (response.data) {
+                    setMatchesPerfeitos(response.data.matchesPerfeitos)
+                    setMatchesParciais(response.data.matchesParciais)
+                } else {
+                    api.get('busca/receita').then(response => {
+                        setReceitas(response.data)
+                        setLoad(true)
+                    })
+                }
 
                 setLoad(true)
             })

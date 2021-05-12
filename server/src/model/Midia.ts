@@ -30,6 +30,9 @@ export class Midia extends BaseEntity {
   @Column({ default: true })
   ativa: boolean;
 
+  @Column({ default: false })
+  thumbnail: boolean;
+
   @ManyToOne(() => Receita, receita => receita.midias)
   @JoinColumn({ name: 'receita_id' })
   receita: Receita;

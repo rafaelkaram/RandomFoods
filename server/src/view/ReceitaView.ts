@@ -1,13 +1,42 @@
-import { Midia } from "../entity/Midia";
-import { Receita } from "../entity/Receita";
-import { ReceitaIngrediente } from "../entity/ReceitaIngrediente";
+import util from "../util/util";
 
-import ingredienteView from "./IngredienteView";
+import { Midia } from "../model/Midia";
+import { Receita } from "../model/Receita";
+import { ReceitaIngrediente } from "../model/ReceitaIngrediente";
+
+import ingredienteView from "./ReceitaIngredienteView";
 import midiaView from "./MidiaView";
 import usuarioView from "./UsuarioView";
 
 export default {
-  render(receita: Receita, ingredienteList: ReceitaIngrediente[], midias: Midia[], avaliacao: { nota: number, qtdeNotas: number}) {
+  renderSimple(receita: Receita, avaliacao: { nota: number, qtdeNotas: number}, midia?: Midia) {
+    const filePath = midia?.path;
+    const path = filePath ?
+      `http://${ util.getLocalIP() }:${ process.env.PORT }/uploads/midia/receita/${ filePath }` :
+      `http://${ util.getLocalIP() }:${ process.env.PORT }/uploads/midia/receita/receita-padrao.png`;
+
+    const categorias = receita.categorias.map(categoria => {
+      return categoria.nome;
+    })
+
+    if (receita) {
+
+      return {
+        id: receita.id,
+        receita: receita.nome,
+        foto: path,
+        usuario: usuarioView.renderSimple(receita.usuario),
+        categorias,
+        nota: avaliacao.nota,
+        numNotas: avaliacao.qtdeNotas
+      };
+
+    }
+
+    return null;
+  },
+
+  render(receita: Receita, ingredienteList: ReceitaIngrediente[], midias: Midia[], avaliacao: { nota: number, qtdeNotas: number}, qtdeLogs: number) {
     if (receita && ingredienteList) {
 
       return {
@@ -16,7 +45,7 @@ export default {
         descricao: receita.descricao,
         dataCadastro: receita.dataCadastro,
         tipo: receita.tipo,
-        usuario: usuarioView.render(receita.usuario),
+        usuario: usuarioView.render(receita.usuario, qtdeLogs),
         nota: avaliacao.nota,
         qtdeNotas: avaliacao.qtdeNotas,
         ingredientes: ingredienteView.renderMany(ingredienteList),
