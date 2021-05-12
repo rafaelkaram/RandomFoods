@@ -26,43 +26,20 @@ function SelectedRecipe({ route }: { route: any }) {
     const idRecipe = route.params.id;
     const [recipe, setRecipe] = useState<IReceita>();
     const [comments, setComments] = useState<IComentario[]>([]);
-    const [initials, setInitials] = useState<string>('');
 
     useEffect(() => {
 
-        api.get(`/busca/receita/${idRecipe}`).then(response => {
-            setRecipe(response.data);
-
-            const names = response.data?.usuario.nome.split(" ")
-
-            const tam = names.length - 1
-            const firstName: string = names[0]
-            const lastName: string = names[tam]
-            setInitials(firstName[0] + lastName[0]);
-
-        });
+        api.get(`/busca/receita/${idRecipe}`)
+            .then(response => {
+                setRecipe(response.data);
+            }
+        );
         api.get(`busca/comentario-receita/${idRecipe}`)
             .then(response => {
                 setComments(response.data);
-            });
-        // api.get(`receita/${idRecipe}`).then(response => {
-        //     setRecipe(response.data);
-        //     setNota(recipe?.nota)
+            }
+        );
 
-        //     const names= response.data?.usuario.split(" ")
-
-        //     const tam  = names.length - 1
-        //     const firstName :string = names[0]
-        //     const lastName :string = names[tam]
-        //     setInitials(firstName[0]+lastName[0]);
-
-        // });
-        // api.get(`comentar/${idRecipe}`)
-        //     .then(response => {
-        //         //console.log(response.data);
-        //         setComments(response.data.comentarios);
-        //         setSubComments(response.data.filhos);
-        //     });
     }, []);
 
     const ShowComments = ({ comentarios }: { comentarios: any[] }) => {
@@ -127,7 +104,7 @@ function SelectedRecipe({ route }: { route: any }) {
                         <Avatar
                             size="small"
                             rounded
-                            title={initials}
+                            title={recipe?.usuario.iniciais}
                             activeOpacity={0.7}
                             containerStyle={{ backgroundColor: 'lightgrey' }}
                         />

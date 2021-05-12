@@ -19,6 +19,7 @@ export class MidiaRepository extends Repository<Midia> {
   async findByReceita(id: number): Promise<Midia[]> {
     const midias: Midia[] = await this.createQueryBuilder('m')
       .where('m.receita.id = :id', { id })
+      .orderBy('m.dataCadastro', 'DESC')
       .getMany();
 
     return midias;

@@ -38,10 +38,13 @@ interface IReceita {
 interface IReceitaSimples {
   id: number,
   nome: string,
-  foto?: string,
+  foto: string,
+  usuario: IUsuarioSimples,
+  categorias: string[],
   nota: number,
   numNotas: number,
 }
+
 interface IUnidade {
   id: number,
   nome: string,
@@ -50,7 +53,7 @@ interface IUnidade {
 
 interface IUsuario {
   id: number,
-  idExterno: string,
+  idExterno?: string,
   login: string,
   nome: string,
   iniciais: string,
@@ -71,8 +74,9 @@ interface IUsuario {
 
 interface IUsuarioSimples {
   id: number,
-  nome: string,
   login: string,
+  nome: string,
+  iniciais: string,
   perfil:boolean,
   path: string,
   ativo: boolean
@@ -86,6 +90,7 @@ interface ICart {
 interface IIngredienteReceita {
   id: number,
   nome: string,
+  medida: string,
   qtde: number,
 }
 
@@ -113,8 +118,10 @@ interface IPainelVotos {
 }
 
 interface IPassoReceita {
+  id: number,
   descricao: string,
-  edit: boolean
+  edit: boolean,
+  update: boolean
 }
 
 export {

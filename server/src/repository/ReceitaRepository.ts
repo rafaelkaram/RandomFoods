@@ -26,10 +26,11 @@ export class ReceitaRepository extends Repository<Receita> {
     return receita;
   }
 
-  async findByFiltro(ids: number[]): Promise<Receita[]>{
+  async findByIds(ids: number[]): Promise<Receita[]>{
     const receitas = await this.createQueryBuilder('r')
-      .leftJoinAndSelect('r.midias', 'midias')
-      .where('r.id in (:...ids)', { ids })
+      //.innerJoin('r.ingrediente', 'ingrediente')
+      .leftJoin('r.midias', 'midias')
+      .where('r.id in ( :...ids )', { ids })
       .getMany();
 
     return receitas;
