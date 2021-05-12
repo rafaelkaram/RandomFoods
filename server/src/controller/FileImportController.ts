@@ -118,7 +118,7 @@ class FileImportController {
 
                         } catch (err) {
                             console.error(err);
-                            errosInsercao.push({ receita: dadosReceita.nome.trim(), error: err })
+                            errosInsercao.push({ receita: dadoReceita.nome, error: err.message ? err.message : err });
                         }
                     }
 
