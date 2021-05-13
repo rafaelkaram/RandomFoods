@@ -1,5 +1,7 @@
 import { Ingrediente } from "../model/Ingrediente";
 
+import unidadeView from "./UnidadeView";
+
 export default {
   renderSimple(ingrediente: Ingrediente) {
     if (ingrediente) {
@@ -20,7 +22,7 @@ export default {
         id: ingrediente.id,
         nome: ingrediente.nome,
         semMedida: ingrediente.semMedida,
-        unidades: ingrediente.unidades
+        unidades: unidadeView.renderMany(ingrediente.unidades)
       }
     }
 
