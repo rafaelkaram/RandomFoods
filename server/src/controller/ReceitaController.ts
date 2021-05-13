@@ -43,20 +43,22 @@ class ReceitaController {
             const avaliacao: { nota: number, qtdeNotas: number } = await avaliacaoController.countVotes(id);
             const midias: Midia[] = receita.midias.filter(midia => midia.thumbnail);
 
-            return receitaView.renderSimple(receita, avaliacao, midias.length > 0 ? midias[0] : undefined);
+            if (receita)
+                return receitaView.renderSimple(receita, avaliacao, midias.length > 0 ? midias[0] : undefined);
         })
 
-        return response.status(200).json(receitasList);
+        return util.systrace(200, response, receitasList);
     }
 
-    async import(dados: { nome: string, descricao: string, tipo: string, usuario?: string },
+    async import(dados: { nome: string, descricao: string, tempoPreparo: number, tipo: string, usuario?: string },
         dadosIngrediente: { nomeIngrediente: string, unidade?: string, quantidade?: number }[],
         dadosCategoria: { categoria: string }[]) {
 
-        const nome = dados.nome.trim();
-        const descricao = dados.descricao.trim();
-        const tipo = <Tipo> dados.tipo.trim().toUpperCase();
-        const usuario = dados.usuario?.trim().toLowerCase();
+        const nome: string = dados.nome.trim();
+        const descricao: string = dados.descricao.trim();
+        const tempoPreparo: number = dados.tempoPreparo ? dados.tempoPreparo : 0;
+        const tipo: Tipo = <Tipo> dados.tipo.trim().toUpperCase();
+        const usuario: string | undefined = dados.usuario?.trim().toLowerCase();
 
         const ingredienteController = new IngredienteController();
         const medidaController = new MedidaController();
@@ -64,9 +66,9 @@ class ReceitaController {
         const usuarioController = new UsuarioController();
 
         const usuarioReceita = await usuarioController.findByLoginOrEmail(usuario);
-        const receita = new Receita(nome, descricao, tipo, usuarioReceita);
+        const receita = new Receita(nome, descricao, tempoPreparo, tipo, usuarioReceita);
 
-        receita.save();
+        await receita.save();
 
         if (dadosCategoria && dadosCategoria.length > 0) {
             for (let k in dadosCategoria) {
@@ -152,32 +154,33 @@ class ReceitaController {
     }
 
     async findMatches(request: Request, response: Response) {
-        const { ids, derivadoLeite, gluten } = request.query as { ids: string[], derivadoLeite: string, gluten: string };
+        const { ids, tempoPreparo, derivadoLeite, gluten } = request.query as { ids: string[], tempoPreparo: string, derivadoLeite: string, gluten: string };
 
         const rIController = new ReceitaIngredienteController();
 
         const glutenBoolean: boolean = util.getBoolean2(gluten && <string> gluten);
         const derivadoLeiteBoolean: boolean = util.getBoolean2(derivadoLeite && <string> derivadoLeite);
+        const tempo: number = tempoPreparo ? parseInt(tempoPreparo) : 0;
 
-        const ids2: number[] = ids.map((id: string) => {
+        const ids2: number[] = ids?.map((id: string) => {
             return parseInt(id);
         });
 
         try {
-            console.log({ gluten: glutenBoolean, derivadoLeite: derivadoLeiteBoolean, ids: ids2 });
+            console.log({ tempoPreparo: tempo, gluten: glutenBoolean, derivadoLeite: derivadoLeiteBoolean, ids: ids2 });
 
-            const { perfect, partial } = await rIController.findMatches({ gluten: glutenBoolean, derivadoLeite: derivadoLeiteBoolean, ids: ids2 });
+            const { perfect, partial } = await rIController.findMatches({ tempoPreparo: tempo, gluten: glutenBoolean, derivadoLeite: derivadoLeiteBoolean, ids: ids2 });
             const matchesPerfeitos: any[] = [];
             const matchesParciais: any[] = [];
 
-            perfect.forEach(async id => {
-                const receita = await this.buildReceita(id);
+            await Promise.all(perfect.map(async id => {
+                const receita = await ReceitaController.buildReceita(id);
                 matchesPerfeitos.push(receita);
-            });
-            partial.forEach(async id => {
-                const receita = await this.buildReceita(id);
+            }));
+            await Promise.all(partial.map(async id => {
+                const receita = await ReceitaController.buildReceita(id);
                 matchesParciais.push(receita);
-            });
+            }));
 
             return util.systrace(200, response, { matchesPerfeitos, matchesParciais });
 
@@ -207,7 +210,7 @@ class ReceitaController {
         return receita;
     }
 
-    async buildReceita(id: number) {
+    static async buildReceita (id: number) {
         const repository = getCustomRepository(ReceitaRepository);
 
         const receita: Receita = await repository.findOneOrFail({

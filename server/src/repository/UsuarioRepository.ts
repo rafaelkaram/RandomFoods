@@ -19,10 +19,10 @@ export class UsuarioRepository extends Repository<Usuario> {
   }
 
   async findByLoginOrEmail(data: string): Promise<Usuario> {
-    const usuario: any = await this.createQueryBuilder('u')
+    const usuario: Usuario = await this.createQueryBuilder('u')
       .where('u.ativo = :ativo', { ativo: true })
       .andWhere('LOWER(u.email) = :email OR LOWER(u.login) = :login', { email: data, login: data })
-      .getOne();
+      .getOneOrFail();
 
     return usuario;
   }

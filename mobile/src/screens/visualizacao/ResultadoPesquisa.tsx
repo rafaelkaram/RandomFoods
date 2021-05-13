@@ -12,6 +12,8 @@ import screens from '../../constants/screens';
 import Loading from '../../components/Loading';
 import RecipeList from '../../components/RecipeList';
 
+import ItalicText from '../../components/ItalicText';
+
 const Recipe = ({ route }: { route: any }) => {
 
     const navigation = useNavigation();
@@ -60,23 +62,36 @@ const Recipe = ({ route }: { route: any }) => {
     }
 
     return (
-        <SafeAreaView>
-            <ScrollView style={ styles.body }>
-                { receitas ? (
+            <SafeAreaView>
+                <ScrollView style={styles.body}>
+                    {receitas.length === 0 ? (
                         <View>
-                            <RecipeList titulo='Receitas Perfeitas para suas escolhas' receitas={ matchesPerfeitos } navegar={(id: number) => handleNavigateToRecipe(id)} />
-                            <RecipeList titulo='Outras Receitas que podem te interessar' receitas={ matchesParciais } navegar={(id: number) => handleNavigateToRecipe(id)} />
+                            {matchesPerfeitos.length > 0 ? (
+                                <RecipeList titulo='Receitas Perfeitas para suas escolhas' receitas={matchesPerfeitos} navegar={(id: number) => handleNavigateToRecipe(id)} />
+                            ) : <></>}
+                            {matchesParciais.length > 0 ? (
+                                <RecipeList titulo='Outras Receitas com suas escolhas' receitas={matchesParciais} navegar={(id: number) => handleNavigateToRecipe(id)} />
+                            ) : <></>}
+                            {matchesParciais.length === 0 && matchesPerfeitos.length === 0 ? (
+                                <ItalicText style={styles.subTitle}>Não encontramos receitas com os ingredientes selecionados</ItalicText>
+                            ): <></>}
                         </View>
-                    ) : <RecipeList titulo='Receitas' receitas={ receitas } navegar={(id: number) => handleNavigateToRecipe(id)} />
-                }
-            </ScrollView>
-        </SafeAreaView>
-        )
+                    ) : <RecipeList titulo='Receitas' receitas={receitas} navegar={(id: number) => handleNavigateToRecipe(id)} />
+                    }
+                </ScrollView>
+            </SafeAreaView>
+    )
 }
 
 const styles = StyleSheet.create({
     body: {
         backgroundColor: colors.background,
+    },
+    subTitle: {
+        marginBottom: 10,
+        textAlign: 'center',
+        fontSize: 20,
+        margin: 3,
     },
 })
 

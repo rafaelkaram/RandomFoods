@@ -24,6 +24,10 @@ export class CreateReceita1615645839369 implements MigrationInterface {
                     type: 'text'
                 },
                 {
+                    name: 'tempo_preparo',
+                    type: 'number'
+                },
+                {
                     name: 'tipo',
                     type: 'enum',
                     enum: [ 'DOCE', 'SALGADO' ]

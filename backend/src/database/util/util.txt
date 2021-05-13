@@ -1,6 +1,0 @@
-No PostgreSQL:
-
-rodar os comandos para criar database, usuario e dar privilégios ao usuário:
-create database random_foods;
-create user random_foods with password 'random_foods';
-grant all privileges on database random_foods to random_foods;
