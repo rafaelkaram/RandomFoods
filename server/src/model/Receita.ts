@@ -34,7 +34,7 @@ export class Receita extends BaseEntity {
   @Column()
   descricao: string;
 
-  @Column()
+  @Column({ name: 'tempo_preparo' })
   tempoPreparo: number;
 
   @Column({ type: 'enum', enum: Tipo })
