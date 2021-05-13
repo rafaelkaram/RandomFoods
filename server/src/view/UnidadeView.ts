@@ -1,20 +1,12 @@
-import { Unidade } from "../entity/Unidade";
+import { Unidade } from "../model/Unidade";
 
 export default {
   render(unidade: Unidade) {
-    if (unidade.ingrediente) {
       return {
         id: unidade.id,
-        nome: unidade.nome,
-        valor: unidade.nome
+        nome: unidade.medida.nome,
+        incremento: unidade.medida.valor
       };
-    }
-
-    return {
-      id: unidade.id,
-      nome: unidade.nome,
-      valor: `${ unidade.nome } (${ unidade.sigla })`
-    };
   },
 
   renderMany(unidades: Unidade[]) {

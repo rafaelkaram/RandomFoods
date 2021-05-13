@@ -22,7 +22,7 @@ export class MedidaRepository extends Repository<Medida> {
     const medida: any = this.createQueryBuilder()
       .where('tipo_unidade = :tipo', { tipo })
       .andWhere('LOWER(nome) = :nome', { nome })
-      .getOne();
+      .getOneOrFail();
 
     return medida;
   }
@@ -31,7 +31,7 @@ export class MedidaRepository extends Repository<Medida> {
     const medida: any = this.createQueryBuilder()
       .where('ingrediente is null')
       .andWhere('LOWER(nome) = :nome', { nome })
-      .getOne();
+      .getOneOrFail();
 
     return medida;
   }
