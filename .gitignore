@@ -12,3 +12,4 @@ mobile/src/services/api.ts
 mobile/yarn-debug.log*
 mobile/yarn-error.log*
 mobile/yarn.lock
+mobile/package-lock.json

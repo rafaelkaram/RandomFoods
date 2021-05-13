@@ -94,7 +94,7 @@ class FileImportController {
                     const sheetCategoria = XLSX.utils.sheet_to_json(workbook.Sheets['Categoria']);
 
                     const dadosReceita: any = sheetReceita.map(dados => {
-                        return dados as { nome: string, descricao: string, tipo: string, usuario?: string };
+                        return dados as { nome: string, descricao: string, tempoPreparo: number, tipo: string, usuario?: string };
                     });
                     const dadosIngrediente: any = sheetIngrediente.map(dados => {
                         return dados as { receita: string, nomeIngrediente: string, unidade?: string, quantidade?: number };
@@ -118,7 +118,7 @@ class FileImportController {
 
                         } catch (err) {
                             console.error(err);
-                            errosInsercao.push({ receita: dadosReceita.nome.trim(), error: err })
+                            errosInsercao.push({ receita: dadoReceita.nome, error: err.message ? err.message : err });
                         }
                     }
 

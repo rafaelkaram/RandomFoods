@@ -79,7 +79,7 @@ routes.get('/busca/usuario/:id', usuarioController.fetch);
 // Utilizar parametros através de query ou endereço
 routes.get('/busca/ingrediente', ingredienteController.findByIds);
 routes.get('/busca/comentario-receita/:idReceita', comentarioController.findByReceita);
-routes.get('/busca/combinacoes', receitaController.findMatches.bind(ReceitaController));
+routes.get('/busca/combinacoes', receitaController.findMatches);
 /*
 routes.get('/busca/receita-usuario/:idUsuario', receitaController.findByUser);
 */
