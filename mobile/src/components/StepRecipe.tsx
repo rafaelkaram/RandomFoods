@@ -16,7 +16,9 @@ const StepRecipe = (props: {
     removeStep: Function,
     setModal: Function,
     setLast: Function,
-    update: Function
+    update: Function,
+    newUpdate: Function
+
 }) => {
 
     const [textTitle, setTextTitle] = useState<string>('');
@@ -29,14 +31,9 @@ const StepRecipe = (props: {
     const setModal = props.setModal;
     const setLast = props.setLast;
     const update = props.update;
-    // if (step.update){
-    //     setDesc(step.descricao)
-    // }
+    const newUpdate = props.newUpdate;
+   
 
-
-    //const ingrediente = props.ingrediente;
-
-    // console.log(ingrediente.nome)
     return (
 
         <SafeAreaView>
@@ -49,30 +46,18 @@ const StepRecipe = (props: {
                             <BoldText style={{ marginBottom: 10, fontSize: 18 }}>{id + 1}º Passo</BoldText>
                         </View>
                         <View style={styles.divider}></View>
-
                         <View style={styles.newRow}>
                             <View>
-
                                 <Input
                                     placeholder="Descrição"
                                     multiline={true}
                                     autoFocus
                                     onChangeText={(value) => setDesc(value)}
-                                    value={desc? desc:step.descricao}
+                                    value={desc ? desc : step.descricao}
                                     inputContainerStyle={{ borderBottomWidth: 0, width: 300, height: 100 }}
                                 />
-
-
                             </View>
-                            {/* <TouchableOpacity
-                                    onPress={() => {
-                                        if (desc) {
-                                            finished(id, desc)
-                                            setModal(false)
-                                        }
-                                    }}>
-                                    <Feather name="check" size={24} color="green" />
-                                </TouchableOpacity> */}
+
                         </View>
                         <View style={styles.modalFooter}>
                             {/* <View style={styles.divider}></View> */}
@@ -80,7 +65,14 @@ const StepRecipe = (props: {
                                 <TouchableOpacity style={{ ...styles.actions, backgroundColor: "#21ba45" }}
                                     onPress={() => {
                                         if (desc) {
-                                            finished(id, desc)
+                                            if (step.update) {
+                                                step.edit = false
+                                                step.update = false
+                                                step.descricao = desc
+                                                update(step.id, step)
+                                            } else {
+                                                finished(id, desc)
+                                            }
                                             setModal(false)
                                         }
                                     }}>
@@ -88,10 +80,13 @@ const StepRecipe = (props: {
                                 </TouchableOpacity>
                                 <TouchableOpacity style={{ ...styles.actions, backgroundColor: "#db2828" }}
                                     onPress={() => {
-                                        setModal(false)
-                                        if (!update) {
+                                        if (!step.update) {
                                             removeStep(id)
+                                        } else {
+                                            step.edit = false
+                                            step.update = false
                                         }
+                                        setModal(false)
                                         setLast(true)
                                     }}>
                                     <BoldText style={{ alignSelf: 'center', color: 'white', fontSize: 18 }}>X</BoldText>
@@ -101,19 +96,15 @@ const StepRecipe = (props: {
                     </View>
                 }
                 {(!step.edit) &&
-
-
                     <View style={styles.newRow}>
-                        <BoldText style={{ fontSize: 20 }}>{id + 1}.</BoldText>
+                        <BoldText style={{ fontSize: 20 }}>{id+1}.</BoldText>
                         <Text style={{ width: 260, marginLeft: 20 }}>{step.descricao}</Text>
                         <TouchableOpacity
                             style={{ marginLeft: 15 }}
                             onPress={() => {
-                                step.edit = true
-                                step.update = true
-                                //setDesc(step.descricao)
+                                newUpdate(step)
                                 setModal(true)
-                                // update(id,step)
+                                //console.log(step)
                             }
                             }>
                             <Feather name="edit" size={24} color="black" />

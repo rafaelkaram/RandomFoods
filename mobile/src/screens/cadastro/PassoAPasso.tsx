@@ -14,33 +14,6 @@ import { IPassoReceita } from '../../constants/interfaces';
 import ItalicText from '../../components/ItalicText';
 import StepRecipe from '../../components/StepRecipe';
 
-// const NewStep = () => {
-
-//     return (
-//         <View>
-//             <Input
-//                 placeholder="Titulo"
-//                 onChangeText={(value) => setTitulo(value)}
-//                 value={titulo}
-//                 inputContainerStyle={{ borderBottomWidth: 0, marginTop: 10 }}
-//             />
-//             <Input
-//                 placeholder="Descrição"
-//                 onChangeText={(value) => setDesc(value)}
-//                 value={desc}
-//                 inputContainerStyle={{ borderBottomWidth: 0, marginTop: 10 }}
-//             />
-
-//             <TouchableOpacity
-//                 style={styles.add}
-//                 onPress={() => addStep(titulo, desc)}
-//             >
-//                 Confirmar
-//             </TouchableOpacity>
-//         </View>
-//     );
-
-// }
 const PassoAPasso = () => {
     const navigation = useNavigation();
 
@@ -53,26 +26,73 @@ const PassoAPasso = () => {
     const addStep = () => {
         if (lastFinished) {
             setId((oldId) => oldId + 1);
-            setSteps([...steps, { id: id, descricao: '', edit: true, update:false }])
+            setSteps([...steps, { id: id, descricao: '', edit: true, update: false }])
             setLastFinished(false)
+            
         }
 
     }
 
     const finishedStep = (index: number, descricao: string) => {
         steps.splice(index, 1)
-        setSteps([...steps, { id: index+1 ,descricao: descricao, edit: false, update:false }])
+        setSteps([...steps, { id: index + 1, descricao: descricao, edit: false, update: false }])
         setLastFinished(true)
     }
-    const updateStep = (id: number, newStep:IPassoReceita) => {
-        const stepIndex = steps.findIndex((step, index) => index == id)          
+
+    const updateStep = (id: number, newStep: IPassoReceita) => {
+        const stepIndex = steps.findIndex((step, index) => step.id == newStep.id)
         steps.splice(stepIndex, 1)
         steps.push(newStep)
+        steps.sort((a, b) => a.id - b.id)
+        setLastFinished(true)
+    }
+
+    const newUpdate = (stepParam: IPassoReceita) => {
+        const stepIndex = steps.findIndex((step) => step.id == stepParam.id)
+        steps.splice(stepIndex, 1)
+        stepParam.edit = true
+        stepParam.update = true
+        steps.push(stepParam)
+        steps.sort((a, b) => a.id - b.id)
+        return (
+            <Modal
+                animationType="none"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => { setModalVisible(!modalVisible); }}
+            >
+               
+                <BlurView intensity={50} style={[StyleSheet.absoluteFill, styles.nonBlurredContent]}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center' }}>
+                        <View style={styles.modalContainer}>
+                            <ScrollView >
+                                    <View >
+
+                                        <StepRecipe
+                                            step={stepParam}
+                                            index={stepParam.id}
+                                            setModal={(modalVisible: boolean) => setModal(modalVisible)}
+                                            setLast={(lastFinished: boolean) => setLast(lastFinished)}
+                                            newUpdate={(stepParam: IPassoReceita) => newUpdate(stepParam)}
+                                            finished={(id: number, desc: string) => { finishedStep(id, desc) }}
+                                            update={(index: number, step: IPassoReceita) => { updateStep(index, step) }}
+                                            removeStep={(id: number) => removeStep(id)} />
+                                    </View>
+                               
+                            </ScrollView>
+
+                        </View>
+                    </View>
+                </BlurView>
+            </Modal>
+        )
     }
 
     const setModal = (modalVisible: boolean) => {
         setModalVisible(modalVisible);
     }
+
+    
 
     function setLast(last: boolean) {
         setLastFinished(last);
@@ -89,7 +109,7 @@ const PassoAPasso = () => {
                     id: index + 1,
                     descricao: vetorStep.descricao,
                     edit: false,
-                    update:false
+                    update: false
                 }
 
                 newSteps.push(newPasso)
@@ -110,19 +130,22 @@ const PassoAPasso = () => {
                 key={item.id} style={styles.component}
                 onLongPress={drag}>
                 {/* {(!item.edit) && */}
-                    <StepRecipe step={item}
-                        index={index}
-                        setModal={(modalVisible: boolean) => setModal(modalVisible)}
-                        setLast={(lastFinished: boolean) => setLast(lastFinished)}
-                        update={(index: number, step: IPassoReceita) => { updateStep(index, step) }}
-                        finished={(index: number, desc: string) => { finishedStep(index, desc) }}
-                        removeStep={(id: number) => removeStep(id)} />
-                         {/* } */}
+                <StepRecipe 
+                    step={item}
+                    index={index}
+                    setModal={(modalVisible: boolean) => setModal(modalVisible)}
+                    setLast={(lastFinished: boolean) => setLast(lastFinished)}
+                    newUpdate={(stepParam: IPassoReceita) => newUpdate(stepParam)}
+                    update={(index: number, step: IPassoReceita) => { updateStep(index, step) }}
+                    finished={(index: number, desc: string) => { finishedStep(index, desc) }}
+                    removeStep={(id: number) => removeStep(id)} />
+                {/* } */}
 
             </TouchableOpacity>
         );
     }
 
+    //steps.sort((a, b) => a.id - b.id)
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <Image
@@ -132,68 +155,48 @@ const PassoAPasso = () => {
             <ItalicText style={styles.subTitle}>Descreva os passos</ItalicText>
 
             <View>
-                {steps.map((steps, index) => {
+                {console.log(steps)}
+                {steps.map((step, index) => {
+                    
                     return (
+                        <View>
+                        {(step.edit && !step.update) &&
                         <Modal
-                            key={index}
+                            key={step.id }
                             animationType="none"
                             transparent={true}
                             visible={modalVisible}
                             onRequestClose={() => { setModalVisible(!modalVisible); }}
                         >
+                            
                             <BlurView intensity={50} style={[StyleSheet.absoluteFill, styles.nonBlurredContent]}>
                                 <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center' }}>
-                                    {/* <TouchableOpacity
-                                        style={styles.modalX}
-                                        onPress={() => {
-                                            setModalVisible(!modalVisible)
-                                            removeStep(index)
-                                            setLastFinished(true)
-                                        }}
-                                    >
-                                        <BoldText style={{ alignSelf: 'center', color: 'white' }}>X</BoldText>
-                                    </TouchableOpacity> */}
                                     <View style={styles.modalContainer}>
-                                        {/* <View style={{ alignItems: 'center' }}>
-                                            <BoldText style={{ marginBottom: 10, fontSize: 18 }}>Novo passo</BoldText>
-                                        </View>
-                                        <View style={styles.divider}></View> */}
                                         <ScrollView >
-
-                                            {(steps.edit) &&
+                                    
+                                            {(step.edit && !step.update) &&
                                                 <View >
 
                                                     <StepRecipe
-                                                        step={steps}
+                                                        step={step}
                                                         index={index}
                                                         setModal={(modalVisible: boolean) => setModal(modalVisible)}
                                                         setLast={(lastFinished: boolean) => setLast(lastFinished)}
+                                                        newUpdate={(stepParam: IPassoReceita) => newUpdate(stepParam)}
                                                         finished={(id: number, desc: string) => { finishedStep(id, desc) }}
                                                         update={(index: number, step: IPassoReceita) => { updateStep(index, step) }}
                                                         removeStep={(id: number) => removeStep(id)} />
-
                                                 </View>
-
                                             }
-
                                         </ScrollView>
-                                        {/* <View style={styles.modalFooter}>
-                                            <View style={styles.divider}></View>
-                                            <View style={{ flexDirection: "row-reverse", margin: 10 }}>
-                                                <TouchableOpacity style={{ ...styles.actions, backgroundColor: "#21ba45" }}
-                                                    onPress={() => {
-                                                       
-                                                            finishedStep(index, steps.descricao)
-                                                            setModalVisible(false)
-                                                        }}>
-                                                            <Feather name="check" size={24} color="white" />
-                                                </TouchableOpacity>
-                                            </View>
-                                        </View> */}
+
                                     </View>
                                 </View>
                             </BlurView>
+                        
                         </Modal>
+                        }
+                        </View>
                     )
                 })}
 
@@ -216,30 +219,12 @@ const PassoAPasso = () => {
                 <DraggableFlatList
                     data={steps}
                     renderItem={renderItem}
-                    keyExtractor={(item, index) => `draggable-item-${index}`}
-                    onDragEnd={({ data }) => setSteps(data)}
+                    keyExtractor={(item, index) => `draggable-item-${item.id}`}
+                    onDragEnd={({ data }) => {setSteps(data)
+                        steps.sort((a, b) => a.id - b.id)}}
                 />
 
             </View>
-
-            {/* {steps.map((step, index) => {
-                    return (
-                        <View
-                            key={index}>
-                            <StepRecipe step={step} 
-                            index={index} 
-                            finished={(index: number, desc: string) => { finishedStep(index, desc)}} 
-                            removeStep={(id: number) => removeStep(id)}/>
-                        </View>
-                    )
-                })} */}
-            {/* </ScrollView> */}
-            {/* <TouchableOpacity
-                style={styles.arrow}
-                onPress={handleNavigateToIngredients}
-            >
-                <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
-            </TouchableOpacity> */}
 
         </SafeAreaView >
     );
