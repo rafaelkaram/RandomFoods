@@ -22,6 +22,7 @@ export default {
     return {
       id: receita.id,
       receita: receita.nome,
+      tempoPreparo: receita.tempoPreparo,
       foto: path,
       usuario: usuarioView.renderSimple(receita.usuario),
       categorias,
@@ -37,6 +38,7 @@ export default {
         id: receita.id,
         receita: receita.nome,
         descricao: receita.descricao,
+        tempoPreparo: receita.tempoPreparo,
         dataCadastro: receita.dataCadastro,
         tipo: receita.tipo,
         usuario: usuarioView.render(receita.usuario, qtdeLogs),

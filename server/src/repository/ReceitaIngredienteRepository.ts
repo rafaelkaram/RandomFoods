@@ -1,5 +1,6 @@
 import { EntityRepository, Repository, Brackets } from 'typeorm';
 import { Ingrediente } from '../model/Ingrediente';
+import { Receita } from '../model/Receita';
 
 import { ReceitaIngrediente } from '../model/ReceitaIngrediente';
 
@@ -17,7 +18,7 @@ export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente>
     return receitas;
   }
 
-  async findMatches(isPerfect: boolean, ids: number[], gluten: boolean, derivadoLeite: boolean, categorias: string[]): Promise<{ id: number }[]> {
+  async findMatches(isPerfect: boolean, ids: number[], tempoPreparo: number, gluten: boolean, derivadoLeite: boolean, categorias: string[]): Promise<{ id: number }[]> {
 
     const query = this.createQueryBuilder('ri')
       .select('ri.receita.id', 'id')
@@ -50,6 +51,21 @@ export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente>
       if (derivadoLeite) query.setParameter('derivadoLeite', true);
       query.setParameter('countZero', 0);
 
+    }
+
+    if (tempoPreparo !== 0) {
+      query.andWhere(qb => {
+        const subQuery = qb.subQuery()
+          .select('r.id')
+          .from(Receita, 'r')
+          .where(' r.tempoPreparo = :tempoPreparo ');
+
+        const sub = subQuery.getQuery();
+
+        return 'ri.receita.id IN (' + sub + ')';
+      });
+
+      query.setParameter('tempoPreparo', tempoPreparo);
     }
 
     query.groupBy('ri.receita.id');

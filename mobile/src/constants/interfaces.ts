@@ -26,6 +26,7 @@ interface IReceita {
   id: number,
   nome: string,
   descricao: string,
+  tempoPreparo: number,
   foto?: string,
   nota: number,
   numNotas: number,
@@ -38,6 +39,7 @@ interface IReceita {
 interface IReceitaSimples {
   id: number,
   nome: string,
+  tempoPreparo: number,
   foto: string,
   usuario: IUsuarioSimples,
   categorias: string[],
