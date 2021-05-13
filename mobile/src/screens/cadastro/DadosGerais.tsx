@@ -54,9 +54,9 @@ const DadosGerais = () => {
         let novoValor = 0
         if (sinal == '+') {
             if (tipo == 'tempoPreparo') {
-                setMinutos(minutos + 1)
+                setMinutos((Number(minutos) + 1).toString())
             } else if (tipo == 'porções') {
-                setPorcoes(porcoes + 1)
+                setPorcoes((Number(porcoes) + 1).toString())
             }
 
         } else if (sinal == '-') {
