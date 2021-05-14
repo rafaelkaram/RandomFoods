@@ -84,13 +84,12 @@ routes.get('/busca/combinacoes', receitaController.findMatches);
 routes.get('/busca/receita-usuario/:idUsuario', receitaController.findByUser);
 */
 
-/*
+
 // Rotas Dashboard
 // Utilizar parametros através de query ou endereço
 routes.get('/dashboard/avaliacoes/:id', avaliacaoController.findVoted);
 routes.get('/dashboard/categorias/:id', categoriaController.countCategoryByUserId);
 routes.get('/dashboard/tipos-receita/:id', receitaController.countTypeByUserId);
-*/
 
 /*
 

@@ -25,6 +25,18 @@ import { Usuario } from '../model/Usuario';
 import receitaView from '../view/ReceitaView';
 
 class ReceitaController {
+    // Métodos das rotas
+    async countTypeByUserId(request: Request, response: Response) {
+        const repository = getCustomRepository(ReceitaRepository);
+
+        const { id } = request.params;
+        const usuarioId = parseInt(id);
+
+        const tipos = await repository.countTypeByUserId(usuarioId);
+
+        return response.status(200).json(tipos);
+    }
+
     // Métodos internos
     async index(request: Request, response: Response) {
         const repository = getCustomRepository(ReceitaRepository);
