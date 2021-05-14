@@ -12,6 +12,18 @@ import { Receita } from '../model/Receita';
 import { Usuario } from '../model/Usuario';
 
 class AvaliacaoController {
+    // Métodos das rotas
+    async findVoted(request: Request, response: Response){
+        const repository = getCustomRepository(AvaliacaoRepository);
+
+        const { id } = request.params;
+        const usuarioId = parseInt(id);
+
+        const avaliacoes = await repository.findByUserId(usuarioId);
+
+        return response.status(200).json(avaliacoes);
+    }
+
     // Métodos internos
     async import(dados: any) {
         const {
