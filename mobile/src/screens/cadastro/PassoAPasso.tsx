@@ -159,10 +159,10 @@ const PassoAPasso = () => {
                 {steps.map((step, index) => {
                     
                     return (
-                        <View>
+                        <View key={step.id }>
                         {(step.edit && !step.update) &&
                         <Modal
-                            key={step.id }
+                            //key={step.id }
                             animationType="none"
                             transparent={true}
                             visible={modalVisible}
