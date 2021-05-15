@@ -2,6 +2,7 @@ import { Response } from 'express';
 import crypto from 'crypto';
 import path from 'path';
 import os from 'os';
+import fs from 'fs';
 
 import {
   FACTOR,
@@ -58,25 +59,17 @@ export default {
     return false;
   },
 
-  getFolderName(nomeArquivo: string): string {
-    const nome = nomeArquivo.split('.').shift();
-
-    if (!nome)
-      throw Error('Arquivo não possui nome');
-
-    const userCode = nome.split('-').pop() as string;
-
-    return userCode;
-  },
-
-  getPath(tipo: string, nomeArquivo?: string): string {
-    if (tipo === 'midia' && nomeArquivo) {
-      const folderName = this.getFolderName(nomeArquivo);
-      return path.join(__dirname, '..', '..', 'uploads', 'midia', 'receita', folderName);
+  getPath(tipo: string, buffer?: string): string {
+    if (tipo === 'midia' && buffer) {
+      return path.join(__dirname, '..', '..', 'uploads', 'midia', 'receita', buffer);
     }
 
     if (tipo === 'usuario') {
       return path.join(__dirname, '..', '..', 'uploads', 'midia', 'usuario');
+    }
+
+    if (tipo === 'temp') {
+      return path.join(__dirname, '..', '..', 'uploads', 'temp');
     }
 
     return path.join(__dirname, '..', '..', 'uploads', 'imports');
@@ -125,20 +118,6 @@ export default {
 
       return { sheetName, controller };
 
-    } else if (nome === 'comentario' || nome === 'comentarios') {
-
-      const sheetName = SHEET_COMENTARIO;
-      const controller = new ComentarioController();
-
-      return { sheetName, controller };
-
-    } else if (nome === 'favorito' || nome === 'favoritos') {
-
-      const sheetName = SHEET_FAVORITO;
-      const controller = new FavoritoController();
-
-      return { sheetName, controller };
-
     } else if (nome === 'ingrediente' || nome === 'ingredientes') {
 
       const sheetName = SHEET_INGREDIENTE;
@@ -146,38 +125,10 @@ export default {
 
       return { sheetName, controller };
 
-    } else if (nome === 'marca' || nome === 'marcas') {
-
-      const sheetName = SHEET_MARCA;
-      const controller = new MarcaController();
-
-      return { sheetName, controller };
-
     } else if (nome === 'medida' || nome === 'medidas') {
 
       const sheetName = SHEET_MEDIDA;
       const controller = new MedidaController();
-
-      return { sheetName, controller };
-
-    } else if (nome === 'midia' || nome === 'midias') {
-
-      const sheetName = SHEET_MIDIA;
-      const controller = new MidiaController();
-
-      return { sheetName, controller };
-
-    } else if (nome === 'receita' || nome === 'receitas') {
-
-      const sheetName = SHEET_RECEITA;
-      const controller = new ReceitaController();
-
-      return { sheetName, controller };
-
-    } else if (nome === 'seguidor' || nome === 'seguidors') {
-
-      const sheetName = SHEET_SEGUIDOR;
-      const controller = new SeguidorController();
 
       return { sheetName, controller };
 
@@ -212,6 +163,18 @@ export default {
 
   encryptMidia(valor?: string): string {
     return Buffer.from(valor ? valor : 'error').toString('hex');
+  },
+
+  moveFile(type: string, buffer: string, name: string): void {
+    const srcPath = path.join(this.getPath('temp'), name);
+    const destPath = path.join(this.getPath(type.toLowerCase(), buffer), name);
+
+    if (!fs.existsSync(srcPath)) {
+      throw Error('Source file doens\'t exists.');
+    }
+
+    fs.copyFileSync(srcPath, destPath);
+    fs.unlinkSync(srcPath);
   },
 
   systrace (status: number, response: Response, value?: any): Response {

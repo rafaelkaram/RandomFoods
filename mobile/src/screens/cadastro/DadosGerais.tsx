@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Alert } from 'react-native';
+import { Alert, Dimensions, Image, Platform, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Input } from 'react-native-elements';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Feather, Ionicons } from '@expo/vector-icons';
+
 import api from '../../services/api';
+
 import screens from '../../constants/screens';
+import { IMidiaPicker } from '../../constants/interfaces';
+
 import BoldText from '../../components/BoldText';
 import ItalicText from '../../components/ItalicText';
 import Loading from '../../components/Loading';
+import colors from '../../constants/colors';
 
 const DadosGerais = () => {
     const navigation = useNavigation();
 
 
-    const [load, setLoad] = useState<boolean>(false)
-    const [nomeReceita, setNomeReceita] = useState<string>('');
-    const [tipoReceita, setTipoReceita] = useState<string>('');
-    const [minutos, setMinutos] = useState<string>('');
-    const [tempoPreparo, setTempoPreparo] = useState<string>('00:00');
-    const [porcoes, setPorcoes] = useState<string>('');
-    const [tipos, setTipos] = useState<string[]>([]);
+    const [ load, setLoad ] = useState<boolean>(false)
+    const [ nomeReceita, setNomeReceita ] = useState<string>('');
+    const [ tipoReceita, setTipoReceita ] = useState<string>('');
+    const [ minutos, setMinutos ] = useState<string>('');
+    const [ tempoPreparo, setTempoPreparo ] = useState<string>('00:00');
+    const [ porcoes, setPorcoes ] = useState<string>('');
+    const [ tipos, setTipos ] = useState<string[]>([]);
+    const [ midias, setMidias ] = useState<IMidiaPicker[]>([]);
     const rgx = /^[0-9]*[.,]?[0-9]*$/;
 
 
@@ -31,6 +38,18 @@ const DadosGerais = () => {
                 setTipos(response.data);
                 setLoad(true);
             });
+        (async () => {
+            if (Platform.OS !== 'web') {
+                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                if (status !== 'granted') {
+                Alert.alert('Permissão',
+                'É necessário dar permissão para poder adicionar fotos e vídeos',
+                [
+                    { text: 'OK', onPress: () => console.log('Os maluco concordou!') }
+                ]);
+                }
+            }
+        })();
 
     }, []);
 
@@ -39,7 +58,7 @@ const DadosGerais = () => {
     }
 
 
-    const createButtonAlert = () =>
+    const createButtonAlert = () => {
         Alert.alert(
             "Nome da Receita",
             "Adicione um nome a sua receita",
@@ -47,13 +66,59 @@ const DadosGerais = () => {
                 { text: "OK", onPress: () => console.log("OK Pressed") }
             ]
         );
+    }
 
-    const handleNavigateToIngredients = () => {
+    const handleAddMidia = async () => {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+        });
+
+        if (!result.cancelled) {
+            const midia: IMidiaPicker = result as IMidiaPicker;
+            setMidias([...midias, midia ]);
+        }
+    }
+
+    const handleRemoveMidia = async (id: number) => {
+        const midiaList = midias.filter((midia: IMidiaPicker, index: number) => index !== id);
+        setMidias([...midiaList]);
+    }
+
+    const handleNavigateToIngredients = async () => {
         if (!nomeReceita) {
             createButtonAlert()
         }
         else {
-            // Não passa os dados que criou aqui? Como que o sistema vai saber deles depois?
+            const data = new FormData();
+
+            data.append('teste', 'sim');
+            data.append('nome', nomeReceita);
+            data.append('descricao', `Serve ${ porcoes } porção(ões)\n\n`);
+            data.append('tipo', tipoReceita);
+            data.append('tempoPreparo', tempoPreparo);
+
+            midias?.forEach((midia, index) => {
+                if (midia.type === 'image')
+                    data.append('midias', {
+                        name: `image_${index}.png`,
+                        type: 'image/png',
+                        uri: midia.uri
+                    } as any);
+                if (midia.type === 'video')
+                    data.append('midias', {
+                        name: `video_${index}.mp4`,
+                        type: 'video/mp4',
+                        uri: midia.uri
+                    } as any);
+            });
+
+            await api.post('cadastro/receita', data).then(response => {
+                console.log({ msg: 'Recebemos resposta!', response: response.data })
+                });
+
             navigation.navigate(screens.cadastroIngredientes);
         }
     }
@@ -113,11 +178,37 @@ const DadosGerais = () => {
                 <View style={styles.container}>
                     <BoldText style={styles.textContainer}>Nome da receita</BoldText>
                     <Input
-                        placeholder="Insira o nome da receita"
+                        placeholder='Insira o nome da receita'
                         onChangeText={(value) => setNomeReceita(value)}
                         value={nomeReceita}
                         inputContainerStyle={{ borderBottomWidth: 0, marginTop: 10 }}
                     />
+                </View>
+                <View style={ styles.container } >
+                    <BoldText style={ styles.textContainer }>Midias da receita</BoldText>
+                    <View style={ styles.midiaContainer }>
+                        { midias.map((midia, index) => {
+                        return (
+                            <View style={ styles.midiaView } key={ index } >
+                                <Image
+                                    source={{ uri: midia.uri }}
+                                    style={ styles.midia }
+                                />
+                                <TouchableOpacity style={ styles.midiaRemove } onPress={() => handleRemoveMidia(index)} >
+                                    <Feather name='minus' size={16} color={ colors.dimmedBackground } />
+                                </TouchableOpacity>
+                                { midia.type === 'video' &&
+                                <View style={ styles.playIcon } >
+                                    <Ionicons name='play' size={20} color={ colors.dimmedBackground } />
+                                </View>
+                                }
+                            </View>
+                        );
+                        })}
+                        <TouchableOpacity style={ styles.midiaInput } onPress={ handleAddMidia } >
+                            <Feather name='plus' size={24} color={ colors.dimmedBackground } />
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View style={styles.container}>
                     <BoldText style={styles.textContainer}>Tipo de receita</BoldText>
@@ -243,13 +334,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 
-
     container: {
         margin: 10,
         padding: 10,
         backgroundColor: 'white',
         borderRadius: 20,
-        height: 150,
+        minHeight: 130,
 
     },
 
@@ -271,15 +361,68 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: (Height - 100),
         right: 20,
-        backgroundColor: '#e02041',
+        backgroundColor: colors.dimmedBackground,
         justifyContent: 'center',
     },
+
     comboBox: {
         margin: 20,
         width: 180,
         height: 40,
         borderWidth: 1
     },
+
+    midiaContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        paddingTop: 10
+    },
+
+    midia: {
+        width: 64,
+        height: 64,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: colors.primary,
+        marginBottom: 10,
+        marginRight: 8
+    },
+
+    midiaInput: {
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        borderStyle: 'dashed',
+        borderColor: colors.dimmedBackground,
+        borderWidth: 1.4,
+        borderRadius: 20,
+        height: 64,
+        width: 64,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+
+    midiaView: {
+        position: 'relative'
+    },
+
+    midiaRemove: {
+        position: 'absolute',
+        top: 2,
+        right: 11,
+        backgroundColor: colors.backgroundDimmed,
+        borderColor: colors.dimmedBackground,
+        borderWidth: 0.5,
+        borderRadius: 20,
+        padding: 3
+    },
+
+    playIcon: {
+        position: 'absolute',
+        bottom: 12,
+        margin: 0,
+        padding: 0,
+        left: 7,
+    }
 
 })
 
