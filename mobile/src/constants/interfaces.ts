@@ -102,6 +102,17 @@ interface IListaIngredientes {
   ingredientes: IIngrediente[]
 }
 
+interface IMidiaPicker {
+  cancelled: boolean,
+  type: string,
+  uri: string,
+  width: number,
+  height: number,
+  exif?: any,
+  base64?: any,
+  duration?: any,
+}
+
 interface IPainelCategorias {
   nome_categoria: string,
   count: number,
@@ -126,6 +137,11 @@ interface IPassoReceita {
   update: boolean
 }
 
+interface IPassoReceita2 {
+  descricao: string,
+  edit: boolean
+}
+
 export {
   IComentario,
   IIngrediente,
@@ -138,8 +154,10 @@ export {
   ICart,
   IIngredienteReceita,
   IListaIngredientes,
+  IMidiaPicker,
   IPainelCategorias,
   IPainelTipoReceita,
   IPainelVotos,
   IPassoReceita,
+  IPassoReceita2
 }
