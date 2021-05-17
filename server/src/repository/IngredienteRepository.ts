@@ -39,9 +39,8 @@ export class IngredienteRepository extends Repository<Ingrediente> {
   //   return ingredientes;
   // }
 
-  async findByIdsWithUnidades(ids: number[], tipo: string): Promise<Ingrediente[]> {
+  async findByIdsAndType(ids: number[], tipo: string): Promise<Ingrediente[]> {
     const ingredientes: Ingrediente[] = await this.createQueryBuilder('i')
-      .leftJoinAndSelect('i.unidades', 'unidade')
       .where('i.id IN (:...ids)', { ids })
       .andWhere('i.tipoIngrediente = :tipo', { tipo })
       .orderBy('i.tipoIngrediente', 'ASC')
