@@ -55,13 +55,13 @@ class UnidadeController {
         }
     }
 
-    async findByIngredient(ingrediente: Ingrediente): Promise<Unidade[] | undefined> {
+    async findByIngredient(ingrediente: Ingrediente): Promise<Unidade[]> {
         const repository = getCustomRepository(UnidadeRepository);
 
         try {
             return await repository.findByIngredientAndType(ingrediente);
         } catch (err) {
-            return undefined;
+            return [];
         }
     }
 
