@@ -24,7 +24,7 @@ interface IMidia {
 
 interface IReceita {
   id: number,
-  nome: string,
+  receita: string,
   descricao: string,
   tempoPreparo: number,
   foto?: string,
@@ -38,7 +38,7 @@ interface IReceita {
 
 interface IReceitaSimples {
   id: number,
-  nome: string,
+  receita: string,
   tempoPreparo: number,
   foto: string,
   usuario: IUsuarioSimples,
