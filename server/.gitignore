@@ -11,6 +11,9 @@
 # production
 /build
 
+# temp files
+/uploads/temp/*
+
 # misc
 .DS_Store
 .env

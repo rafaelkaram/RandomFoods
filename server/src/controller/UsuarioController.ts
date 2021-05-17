@@ -78,16 +78,24 @@ class UsuarioController {
 
     }
 
+    async find(id: number): Promise<Usuario> {
+        const repository = getCustomRepository(UsuarioRepository);
+
+        const usuario: Usuario = await repository.findOneOrFail({ id });
+
+        return usuario;
+    }
+
     async findByLoginOrEmail(data?: string): Promise<Usuario> {
         const repository = getCustomRepository(UsuarioRepository);
 
-        let usuario: any = null;
+        let usuario: Usuario | null = null;
         if (data) {
             const valor = data.trim().toLowerCase();
             usuario = await repository.findByLoginOrEmail(valor);
         }
         if (!usuario)
-            usuario = await repository.findOne({ id: 1 });
+            usuario = await repository.findOneOrFail({ id: 1 });
 
         return usuario;
     }

@@ -9,6 +9,7 @@ import UnidadeController from './UnidadeController';
 
 import { Ingrediente, TipoIngrediente } from '../model/Ingrediente';
 import { TipoUnidade } from '../model/TipoUnidade';
+import { Unidade } from '../model/Unidade';
 
 import tipoIngredienteView from '../view/TipoIngredienteView';
 
@@ -59,12 +60,18 @@ class IngredienteController {
 
         for (var key in tiposIngrediente) {
             const tipoIngrediente: TipoIngrediente = <TipoIngrediente>tiposIngrediente[key];
-            const ingredientesObj = await repository.findByIdsWithUnidades(idsIngredientes, tipoIngrediente);
+            const ingredientesObj: Ingrediente[] = await repository.findByIdsAndType(idsIngredientes, tipoIngrediente);
             await Promise.all(ingredientesObj.map(async ingrediente => {
-                const unidades = await unidadeController.findSI2(ingrediente.tipoUnidade);
-                await Promise.all(unidades.map(unidade => {
-                    ingrediente.unidades.push(unidade);
+                const unidadesIngrediente: Unidade[] = [];
+                const unidadesEspecificas: Unidade[] = await unidadeController.findByIngredient(ingrediente);
+                const unidades: Unidade[] = await unidadeController.findSI2(ingrediente.tipoUnidade);
+                await Promise.all(unidadesEspecificas?.map(unidade => {
+                    unidadesIngrediente.push(unidade);
                 }));
+                await Promise.all(unidades?.map(unidade => {
+                    unidadesIngrediente.push(unidade);
+                }));
+                ingrediente.unidades = unidadesIngrediente;
             }));
 
             if (ingredientesObj.length > 0) {

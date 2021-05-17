@@ -11,8 +11,6 @@ import { Medida } from '../model/Medida';
 import { TipoUnidade } from '../model/TipoUnidade';
 import { Unidade } from '../model/Unidade';
 
-import unidadeView from '../view/UnidadeView';
-
 
 class UnidadeController {
     // Métodos de rotas
@@ -54,6 +52,16 @@ class UnidadeController {
             console.log(medida);
 
             return await repository.findSI(medida);
+        }
+    }
+
+    async findByIngredient(ingrediente: Ingrediente): Promise<Unidade[]> {
+        const repository = getCustomRepository(UnidadeRepository);
+
+        try {
+            return await repository.findByIngredientAndType(ingrediente);
+        } catch (err) {
+            return [];
         }
     }
 

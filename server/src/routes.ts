@@ -36,16 +36,17 @@ const uploadProfilePic = multer(uploadProfilePicConfig);
 routes.post('/importacao/receita', uploadFiles.array('files'), fileImportController.createRecipe);
 routes.post('/importacao/:nome', uploadFiles.array('files'), fileImportController.create);
 
-/*
+
 // Rotas de cadastro
 // Utilizar parametros através do body da requisição
+routes.post('/cadastro/receita', uploadMidia.array('midias'), receitaController.create);
+/*
 routes.post('/cadastro/avaliacao', avaliacaoController.create);
 routes.post('/cadastro/comentario', comentarioController.create);
 routes.post('/cadastro/imagem-perfil', uploadProfilePic.single('image'), usuarioController.uploadImage);
 routes.post('/cadastro/ingrediente', ingredienteController.create);
 routes.post('/cadastro/ingredientes', ingredienteController.createBulk);
 routes.post('/cadastro/midia', uploadMidia.array('midias'), midiaController.create);
-routes.post('/cadastro/receita', receitaController.create);
 routes.post('/cadastro/unidade', unidadeController.create);
 routes.post('/cadastro/unidades', unidadeController.createBulk);
 routes.post('/cadastro/usuario', usuarioController.create);
@@ -84,13 +85,12 @@ routes.get('/busca/combinacoes', receitaController.findMatches);
 routes.get('/busca/receita-usuario/:idUsuario', receitaController.findByUser);
 */
 
-/*
+
 // Rotas Dashboard
 // Utilizar parametros através de query ou endereço
 routes.get('/dashboard/avaliacoes/:id', avaliacaoController.findVoted);
 routes.get('/dashboard/categorias/:id', categoriaController.countCategoryByUserId);
 routes.get('/dashboard/tipos-receita/:id', receitaController.countTypeByUserId);
-*/
 
 /*
 

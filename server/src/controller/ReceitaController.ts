@@ -1,6 +1,7 @@
-import { Request, Response } from 'express';
+import e, { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
-
+import fs from 'fs';
+import path from 'path';
 import util from '../util/util';
 
 import { ReceitaRepository } from '../repository/ReceitaRepository';
@@ -17,7 +18,7 @@ import UsuarioController from './UsuarioController';
 import { Categoria, Tipo as TipoCategoria } from '../model/Categoria';
 import { Ingrediente } from '../model/Ingrediente';
 import { Medida } from '../model/Medida';
-import { Midia } from '../model/Midia';
+import { Midia, Tipo as TipoMidia } from '../model/Midia';
 import { Receita, Tipo } from '../model/Receita';
 import { ReceitaIngrediente } from '../model/ReceitaIngrediente';
 import { Usuario } from '../model/Usuario';
@@ -25,6 +26,69 @@ import { Usuario } from '../model/Usuario';
 import receitaView from '../view/ReceitaView';
 
 class ReceitaController {
+    // Métodos das rotas
+    async create(request: Request, response: Response) {
+        const { teste, nome, tempoPreparo, descricao, tipo, usuarioId } = request.body as { teste?: string, nome: string, tempoPreparo: string, descricao: string, tipo: Tipo, usuarioId: string };
+        const arquivos = request.files as Express.Multer.File[];
+
+        if (teste === 'sim') return util.systrace(200, response, 'Recebi as info bro, deu boa');
+
+        const usuarioController = new UsuarioController();
+
+        const usuario = await usuarioController.find(parseInt(usuarioId));
+        const receita = new Receita(nome, descricao, parseInt(tempoPreparo), tipo, usuario);
+
+        await receita.save();
+
+        const buffer: string = util.encryptMidia(receita.id.toString());
+        const midiaPath = util.getPath('midia', buffer);
+
+        fs.mkdirSync(midiaPath);
+
+        let isThumbnail = true;
+
+        await Promise.all(arquivos.map(async arquivo => {
+            const nomeArquivo = arquivo.filename;
+            const isExtensao = util.isExtensao(nomeArquivo, [ 'png', 'mp4' ]);
+
+            if (!isExtensao) {
+                console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
+                fs.unlink(path.join(util.getPath('temp'), nomeArquivo), (err) => {
+                    if (err) throw err;
+                });
+            } else {
+                util.moveFile('midia', buffer, nomeArquivo);
+
+                const extensao: string | undefined = nomeArquivo.split('.').pop();
+
+                const midia = new Midia(`${ buffer }/${ nomeArquivo }`, TipoMidia.VIDEO, receita);
+
+                if (extensao === 'png') {
+                    midia.tipo = TipoMidia.FOTO;
+                    if (isThumbnail) {
+                        isThumbnail = false;
+                        midia.thumbnail = true;
+                    }
+                }
+
+                await midia.save();
+            }
+        }));
+
+        return util.systrace(201, response, receita.id);
+    }
+
+    async countTypeByUserId(request: Request, response: Response) {
+        const repository = getCustomRepository(ReceitaRepository);
+
+        const { id } = request.params;
+        const usuarioId = parseInt(id);
+
+        const tipos = await repository.countTypeByUserId(usuarioId);
+
+        return util.systrace(200, response, tipos);
+    }
+
     // Métodos internos
     async index(request: Request, response: Response) {
         const repository = getCustomRepository(ReceitaRepository);
@@ -38,14 +102,14 @@ class ReceitaController {
 
         const avaliacaoController = new AvaliacaoController();
 
-        const receitasList = receitas.map(async receita => {
+        const receitasList = await Promise.all(receitas.map(async receita => {
             const id = receita.id;
             const avaliacao: { nota: number, qtdeNotas: number } = await avaliacaoController.countVotes(id);
             const midias: Midia[] = receita.midias.filter(midia => midia.thumbnail);
 
             if (receita)
                 return receitaView.renderSimple(receita, avaliacao, midias.length > 0 ? midias[0] : undefined);
-        })
+        }));
 
         return util.systrace(200, response, receitasList);
     }
@@ -107,7 +171,7 @@ class ReceitaController {
 
     async typeIndex(request: Request, response: Response) {
 
-        const tipos= Object.keys(Tipo);
+        const tipos = Object.keys(Tipo);
 
         return response.status(200).json(tipos);
     }
