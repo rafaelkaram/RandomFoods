@@ -219,8 +219,8 @@ const DadosGerais = () => {
                         onValueChange={(itemValue) =>
                             setTipoReceita(itemValue)
                         }>
+                            <Picker.Item label={ 'Selecione um tipo' } value={ '' } />
                         {tipos.map(item => {
-
                             return (
                                 <Picker.Item key={item} label={item} value={item} />
 
