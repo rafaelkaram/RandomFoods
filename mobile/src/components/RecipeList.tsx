@@ -36,9 +36,9 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                                   containerStyle={styles.itemListImage}
                                   rounded
                               />
-                            ) : ( <Text style={styles.itemListImage}>{ item.nome }</Text> )
+                            ) : ( <Text style={styles.itemListImage}>{ item.receita }</Text> )
                           }
-                          <BoldText style={styles.itemListTitle}>{ item.nome }</BoldText>
+                          <BoldText style={styles.itemListTitle}>{ item.receita }</BoldText>
                           <Rating imageSize={20} readonly startingValue={Number(item.nota)} />
                       </TouchableOpacity>
                   </View>
@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
     },
 
     itemListTitle: {
-        marginLeft: 10,
         marginTop: 5,
         fontSize: 15,
         color: 'black',

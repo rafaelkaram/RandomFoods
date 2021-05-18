@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Text, View, ScrollView, StyleSheet, Dimensions } from 'react-native';
-import { Rating, Avatar } from 'react-native-elements';
+import { Rating, Avatar, Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo } from '@expo/vector-icons';
 import moment from 'moment';
@@ -26,19 +26,21 @@ function SelectedRecipe({ route }: { route: any }) {
     const idRecipe = route.params.id;
     const [recipe, setRecipe] = useState<IReceita>();
     const [comments, setComments] = useState<IComentario[]>([]);
+    const [etapas, setEtapas] = useState<string[]>([])
 
     useEffect(() => {
 
         api.get(`/busca/receita/${idRecipe}`)
             .then(response => {
                 setRecipe(response.data);
+                setEtapas(response.data?.descricao.split('\\n'))
             }
-        );
+            );
         api.get(`busca/comentario-receita/${idRecipe}`)
             .then(response => {
                 setComments(response.data);
             }
-        );
+            );
 
     }, []);
 
@@ -97,8 +99,17 @@ function SelectedRecipe({ route }: { route: any }) {
             <ScrollView>
                 <View style={styles.container}>
                     <View style={styles.itemListTitle}>
-                        <BoldText style={styles.titleText}>{recipe?.nome}</BoldText>
+                        <BoldText style={styles.titleText}>{recipe?.receita}</BoldText>
 
+                    </View>
+                    <View style={{ alignSelf: 'center', marginTop: 10 }}>
+                        <Avatar
+                            size="xlarge"
+                            rounded
+                            title={recipe?.foto}
+                            activeOpacity={0.7}
+                            containerStyle={{ backgroundColor: 'lightgrey' }}
+                        />
                     </View>
                     <View style={styles.autor}>
                         <Avatar
@@ -110,9 +121,32 @@ function SelectedRecipe({ route }: { route: any }) {
                         />
                         <Text style={styles.autorName}>{recipe?.usuario.nome}</Text>
                     </View>
-                    <View style={styles.note}>
-                        <BoldText>NOTA:</BoldText>
-                        <Rating imageSize={20} readonly startingValue={recipe?.nota} />
+
+                    <View style={styles.rating}>
+                        <View style={styles.note}>
+                            <BoldText>Nota: </BoldText>
+                            <Rating
+                                imageSize={20}
+                                readonly
+                                startingValue={recipe?.nota}
+                            />
+                        </View>
+                    </View>
+
+                    <View style={styles.time}>
+                        <View style={{ alignSelf: 'center', marginRight: 10 }}>
+                            <Icon
+                                name='clock'
+                                type='font-awesome-5'
+                                size={20}
+                            />
+                        </View>
+                        <View>
+                            <BoldText>Tempo de Preparo:  </BoldText>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Text style={{marginLeft: 5}}>{recipe?.tempoPreparo} Minutos</Text>
+                            </View>
+                        </View>
                     </View>
 
                     <View style={styles.category}>
@@ -124,7 +158,7 @@ function SelectedRecipe({ route }: { route: any }) {
 
                     </View>
                     <View style={styles.ingredientList}>
-                        <BoldText>INGREDIENTES:</BoldText>
+                        <BoldText>Ingredientes:</BoldText>
 
                         {recipe?.ingredientes.map(ingredient => {
                             return (
@@ -138,8 +172,16 @@ function SelectedRecipe({ route }: { route: any }) {
                     </View>
 
                     <View style={styles.itemListDescribe}>
-                        <RegularText>{recipe?.descricao.split('\\n').map((desc, index) => (
-                            <Text key={index}>{'\n'}{desc}</Text>))}</RegularText>
+                        <BoldText>Preparo:</BoldText>
+                        {etapas.map((etapa, index) => {
+                            return(
+                                <View key={index} style={{margin: 10}}>
+                                    <RegularText>
+                                        {etapa}
+                                    </RegularText>
+                                </View>
+                            )
+                        })}
                     </View>
                     <ShowComments comentarios={comments.filter(comentario => (comentario.comentarioPai === null))} />
 
@@ -168,12 +210,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',
+        borderRadius: 15,
     },
     autorName: {
         marginLeft: 15,
-    },
-    rating: {
-        backgroundColor: colors.dimmedBackground,
     },
 
     container: {
@@ -184,7 +224,7 @@ const styles = StyleSheet.create({
     note: {
         flexDirection: 'row',
         padding: 3,
-        margin: 10,
+        alignItems: 'center',
     },
 
     type: {
@@ -202,6 +242,7 @@ const styles = StyleSheet.create({
         margin: 10,
         padding: 5,
         backgroundColor: 'white',
+        borderRadius: 15,
     },
 
     ingredient: {
@@ -233,6 +274,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         padding: 5,
         backgroundColor: 'white',
+        borderRadius: 15,
     },
 
     comments: {
@@ -267,6 +309,25 @@ const styles = StyleSheet.create({
     identacao: {
         marginTop: 10,
         //backgroundColor:'red',
+    },
+
+    rating: {
+        backgroundColor: 'white',
+        margin: 10,
+        padding: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderRadius: 15,
+    },
+
+    time: {
+        backgroundColor: 'white',
+        margin: 10,
+        padding: 10,
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        borderRadius: 15,
     },
 });
 
