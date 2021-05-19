@@ -102,7 +102,7 @@ routes.delete('/remove/usuario/:id', usuarioController.remove);
 
 // Demais rotas
 routes.post('/autenticar', usuarioController.validate); // ??? Manter?
-routes.get('/find-ip', fileImportController.getIp);
 */
+routes.get('/getFolderName', fileImportController.getFolderPath);
 
 export default routes;
