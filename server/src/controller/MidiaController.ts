@@ -47,6 +47,11 @@ class MidiaController {
         const receita: Receita = await receitaController.find(parseInt(idReceita));
 
         const buffer: string = util.encryptMidia(idReceita);
+        const midiaPath: string = util.getPath('midia', buffer);
+
+        if (!fs.existsSync(midiaPath)) {
+            fs.mkdirSync(midiaPath);
+        }
 
         midias.map(async data => {
             const nomeArquivo = data.filename;
