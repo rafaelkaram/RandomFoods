@@ -11,7 +11,7 @@ import "moment/min/locales";
 
 import api from '../../services/api'
 
-import { IComentario, IReceita } from '../../constants/interfaces';
+import { IComentario, IMidia, IReceita } from '../../constants/interfaces';
 import colors from '../../constants/colors';
 
 import RegularText from '../../components/RegularText';
@@ -29,6 +29,7 @@ function SelectedRecipe({ route }: { route: any }) {
     const [recipe, setRecipe] = useState<IReceita>();
     const [comments, setComments] = useState<IComentario[]>([]);
     const [etapas, setEtapas] = useState<string[]>([])
+    const [midias, setMidias] = useState<IMidia[]>([])
     const isCarousel = React.useRef(null)
 
     useEffect(() => {
@@ -37,6 +38,7 @@ function SelectedRecipe({ route }: { route: any }) {
             .then(response => {
                 setRecipe(response.data);
                 setEtapas(response.data?.descricao.split('\\n'))
+                setMidias(response.data?.midias)
             }
             );
         api.get(`busca/comentario-receita/${idRecipe}`)
@@ -117,7 +119,7 @@ function SelectedRecipe({ route }: { route: any }) {
                             layout="default"
                             layoutCardOffset={9}
                             ref={isCarousel}
-                            data={recipe?.midias}
+                            data={midias}
                             renderItem={CarouselCardItem}
                             sliderWidth={SLIDER_WIDTH}
                             itemWidth={ITEM_WIDTH}
