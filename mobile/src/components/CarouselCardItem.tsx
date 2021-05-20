@@ -25,21 +25,22 @@ const CarouselItems = ({ midias }: { midias: IMidia[] }) => {
                 </View>
             )
         } else if (item.tipo === 'VIDEO') {
-            <View key={index}>
-                <VideoPlayer
-                    videoProps={{
-                        shouldPlay: true,
-                        resizeMode: Video.RESIZE_MODE_CONTAIN,
-                        source: {
-                            uri: item.path,
-                        },
-                    }}
-                    width={ITEM_WIDTH}
-                    height={300}
-                    inFullscreen={true}
-                    showFullscreenButton={false}
-                />
-            </View>
+            return (
+                <View key={index}>
+                    <VideoPlayer
+                        videoProps={{
+                            shouldPlay: true,
+                            resizeMode: Video.RESIZE_MODE_CONTAIN,
+                            source: {
+                                uri: item.path,
+                            },
+                        }}
+                        width={ITEM_WIDTH}
+                        height={300}
+                        inFullscreen={true}
+                        showFullscreenButton={false}
+                    />
+                </View>)
         }
         return (
             <View style={styles.container} key={index}>
