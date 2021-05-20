@@ -19,6 +19,7 @@ import MedidaController from '../controller/MedidaController';
 import IngredienteController from '../controller/IngredienteController';
 import AvaliacaoController from '../controller/AvaliacaoController';
 import CategoriaController from '../controller/CategoriaController';
+import { Tipo } from '../model/Midia';
 
 export default {
   getLocalIP() {
@@ -159,10 +160,12 @@ export default {
     return Buffer.from(valor ? valor : 'error').toString('hex');
   },
 
-  moveFile(type: string, buffer: string, name: string): string {
-    const nomeArquivo: string = Date.now().toString();
-    const srcPath: string = path.join(this.getPath('temp'), name);
-    const destPath: string = path.join(this.getPath(type.toLowerCase(), buffer), nomeArquivo);
+  moveFile(buffer: string, nome: string, novoNome?: string, tipo?: Tipo): void {
+    const srcPath: string = path.join(this.getPath('temp'), nome);
+    let destPath: string = '';
+
+    if (tipo) destPath = path.join(this.getPath('midia', buffer), `${ novoNome }.${ tipo === Tipo.FOTO ? 'png' : 'mp4' }`);
+    else destPath = path.join(this.getPath('usuario'), `${ buffer }.png`);
 
     if (!fs.existsSync(srcPath)) {
       throw Error('Source file doens\'t exists.');
@@ -170,8 +173,6 @@ export default {
 
     fs.copyFileSync(srcPath, destPath);
     fs.unlinkSync(srcPath);
-
-    return nomeArquivo;
   },
 
   systrace (status: number, response: Response, value?: any): Response {

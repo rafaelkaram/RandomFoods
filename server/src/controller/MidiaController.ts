@@ -60,11 +60,14 @@ class MidiaController {
             } else {
                 const extensao: string | undefined = nomeArquivo.split('.').pop();
 
-                const midia = new Midia(util.moveFile('midia', buffer, nomeArquivo), Tipo.VIDEO, receita);
+                const novoNome: string = Date.now().toString();
+                const midia: Midia = new Midia(novoNome, Tipo.VIDEO, receita);
 
                 if (extensao === 'png') {
                     midia.tipo = Tipo.FOTO;
                 }
+
+                util.moveFile(midia.tipo, buffer, nomeArquivo)
 
                 await midia.save();
             }

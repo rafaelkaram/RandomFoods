@@ -59,7 +59,8 @@ class ReceitaController {
             } else {
                 const extensao: string | undefined = nomeArquivo.split('.').pop();
 
-                const midia = new Midia(util.moveFile('midia', buffer, nomeArquivo), TipoMidia.VIDEO, receita);
+                const novoNome: string = Date.now().toString();
+                const midia: Midia = new Midia(novoNome, TipoMidia.VIDEO, receita);
 
                 if (extensao === 'png') {
                     midia.tipo = TipoMidia.FOTO;
@@ -68,6 +69,8 @@ class ReceitaController {
                         midia.thumbnail = true;
                     }
                 }
+
+                util.moveFile(midia.tipo, buffer, nomeArquivo)
 
                 await midia.save();
             }
