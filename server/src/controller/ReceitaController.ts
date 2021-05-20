@@ -10,7 +10,6 @@ import AvaliacaoController from './AvaliacaoController';
 import IngredienteController from './IngredienteController';
 import LogNotificacaoController from './LogNotificacaoController';
 import MedidaController from './MedidaController';
-import MidiaController from './MidiaController';
 import ReceitaIngredienteController from './ReceitaIngredienteController';
 import UnidadeController from './UnidadeController';
 import UsuarioController from './UsuarioController';

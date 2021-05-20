@@ -23,8 +23,6 @@ class MidiaController {
     }
 
     async create(request: Request, response: Response) {
-        const repository = getCustomRepository(MidiaRepository);
-
         const { idReceita } = request.body as { idReceita: string | undefined};
         const midias = request.files as Express.Multer.File[];
 
@@ -53,30 +51,34 @@ class MidiaController {
             fs.mkdirSync(midiaPath);
         }
 
-        midias.map(async data => {
-            const nomeArquivo = data.filename;
-            const isExtensao = util.isExtensao(nomeArquivo, [ 'png', 'mp4' ]);
+        try {
+            midias.map(async data => {
+                const nomeArquivo = data.filename;
+                const isExtensao = util.isExtensao(nomeArquivo, [ 'png', 'mp4' ]);
 
-            if (!isExtensao) {
-                console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
-                fs.unlink(path.join(util.getPath('temp'), nomeArquivo), (err) => {
-                    if (err) throw err;
-                });
-            } else {
-                const extensao: string | undefined = nomeArquivo.split('.').pop();
+                if (!isExtensao) {
+                    console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
+                    fs.unlink(path.join(util.getPath('temp'), nomeArquivo), (err) => {
+                        if (err) throw err;
+                    });
+                } else {
+                    const extensao: string | undefined = nomeArquivo.split('.').pop();
 
-                const novoNome: string = Date.now().toString();
-                const midia: Midia = new Midia(novoNome, Tipo.VIDEO, receita);
+                    const novoNome: string = Date.now().toString();
+                    const midia: Midia = new Midia(novoNome, Tipo.VIDEO, receita);
 
-                if (extensao === 'png') {
-                    midia.tipo = Tipo.FOTO;
+                    if (extensao === 'png') {
+                        midia.tipo = Tipo.FOTO;
+                    }
+
+                    util.moveFile(buffer, nomeArquivo, novoNome, midia.tipo);
+
+                    await midia.save();
                 }
-
-                util.moveFile(buffer, nomeArquivo, novoNome, midia.tipo);
-
-                await midia.save();
-            }
-        });
+            });
+        } catch (err) {
+            return util.syserror(400, response, 'Deu erro, não sei qual foi, mas deu erro');
+        }
 
         return util.systrace(201, response, 'Midias salvas com sucesso.');
     }
