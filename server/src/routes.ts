@@ -104,5 +104,6 @@ routes.delete('/remove/usuario/:id', usuarioController.remove);
 routes.post('/autenticar', usuarioController.validate); // ??? Manter?
 */
 routes.get('/folder-name/:id', fileImportController.getFolderPath);
+routes.get('/atualiza-pasta', fileImportController.getNewFolderPath);
 
 export default routes;
