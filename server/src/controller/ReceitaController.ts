@@ -205,10 +205,9 @@ class ReceitaController {
             }
 
             const avaliacao: { nota: number, qtdeNotas: number } = await avaliacaoController.countVotes(parseInt(id));
-            const midias: Midia[] = await midiaController.findByReceita(parseInt(id));
             const qtdeLogs: number = await logController.countNotRead(receita.usuario);
 
-            return response.status(200).json(receitaView.render(receita, ingredientes, midias, avaliacao, qtdeLogs));
+            return response.status(200).json(receitaView.render(receita, ingredientes, avaliacao, qtdeLogs));
 
         } catch (e) {
             console.error(e);
