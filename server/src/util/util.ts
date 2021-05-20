@@ -8,14 +8,8 @@ import {
   FACTOR,
   SHEET_AVALIACAO,
   SHEET_CATEGORIA,
-  SHEET_COMENTARIO,
-  SHEET_FAVORITO,
   SHEET_INGREDIENTE,
-  SHEET_MARCA,
   SHEET_MEDIDA,
-  SHEET_MIDIA,
-  SHEET_RECEITA,
-  SHEET_SEGUIDOR,
   SHEET_UNIDADE,
   SHEET_USUARIO
 } from './constants';
@@ -25,6 +19,7 @@ import MedidaController from '../controller/MedidaController';
 import IngredienteController from '../controller/IngredienteController';
 import AvaliacaoController from '../controller/AvaliacaoController';
 import CategoriaController from '../controller/CategoriaController';
+import { Tipo } from '../model/Midia';
 
 export default {
   getLocalIP() {
@@ -165,9 +160,12 @@ export default {
     return Buffer.from(valor ? valor : 'error').toString('hex');
   },
 
-  moveFile(type: string, buffer: string, name: string): void {
-    const srcPath = path.join(this.getPath('temp'), name);
-    const destPath = path.join(this.getPath(type.toLowerCase(), buffer), name);
+  moveFile(buffer: string, nome: string, novoNome?: string, tipo?: Tipo): void {
+    const srcPath: string = path.join(this.getPath('temp'), nome);
+    let destPath: string = '';
+
+    if (tipo) destPath = path.join(this.getPath('midia', buffer), `${ novoNome }.${ tipo === Tipo.FOTO ? 'png' : 'mp4' }`);
+    else destPath = path.join(this.getPath('usuario'), `${ buffer }.png`);
 
     if (!fs.existsSync(srcPath)) {
       throw Error('Source file doens\'t exists.');

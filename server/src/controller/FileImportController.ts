@@ -135,6 +135,24 @@ class FileImportController {
             erro: errosInsercao
         });
     }
+
+    async getFolderPath(request: Request, response: Response) {
+        const { id } = request.params as { id: string };
+
+        const buffer = util.encryptMidia(id);
+        const midiaPath = path.join('uploads', 'midias', 'receita', buffer);
+
+        util.systrace(201, response, midiaPath);
+    }
+
+    async getNewFolderPath(request: Request, response: Response) {
+        const { idOld, idNew } = request.query as { idOld: string, idNew: string };
+
+        const pastaAntiga = util.encryptMidia(idOld);
+        const pastaNova = util.encryptMidia(idNew);
+
+        util.systrace(201, response, { pastaAntiga, pastaNova });
+    }
 }
 
 export default FileImportController;
