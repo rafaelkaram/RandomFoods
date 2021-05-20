@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { View, ScrollView, Button, Platform, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import screens from '../../constants/screens';
+import api from './../../services/api'
+import AuthContext from '../../contexts/auth';
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -86,6 +88,17 @@ const Home = () => {
     }, []);
 
 
+    const {signed, signIn, signOut} = useContext(AuthContext)
+    
+    function handleSignIn(){
+        signIn()
+    }
+
+    function handleSignOut(){
+        signOut()
+    }
+
+
     const handleNavigateToSearchRecipe = () => {
         navigation.navigate(screens.filtro);
     }
@@ -120,6 +133,10 @@ const Home = () => {
                     <Button title="Notificação Local" onPress={async () => { await schedulePushNotification() }} />
                     <View style={{margin: 10}}></View>
                     <Button title="Push Notification" onPress={() => sendPushNotification()} />
+                    <View style={{margin: 10}}></View>
+                    <Button title="Sign In" onPress={() => handleSignIn()} />
+                    <View style={{margin: 10}}></View>
+                    <Button title="Sign Out" onPress={() => handleSignOut()} />
                 </View>
             </ScrollView>
         </SafeAreaView>

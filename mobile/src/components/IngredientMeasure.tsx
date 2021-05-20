@@ -75,7 +75,7 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente
               enabled={!check}
               selectedValue={ medida?.nome }
               style={styles.comboBox}
-              onValueChange={ (itemValue, itemIndex) => setMedida(unidades[itemIndex]) }
+              onValueChange={ (itemValue, itemPosition) => setMedida(unidades[itemPosition-1])}
             >
               <Picker.Item fontFamily='Ubuntu_400Regular' label={ 'Selecione uma unidade' } value={ '' } />
               { unidades?.map(item => {
