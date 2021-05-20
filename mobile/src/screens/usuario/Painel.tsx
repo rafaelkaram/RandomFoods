@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Text, ScrollView, TouchableOpacity, View, StyleSheet, Dimensions, Image } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { Text, ScrollView, TouchableOpacity, View, StyleSheet, Dimensions, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-//import { VictoryPie, VictoryLegend } from 'victory-native';
+import { VictoryPie, VictoryLegend } from 'victory-native';
 import { DataTable } from 'react-native-paper';
 import { Avatar } from "react-native-elements";
-
+import AuthContext from './../../contexts/auth'
 import api from '../../services/api'
 import Colors from '../../constants/colors';
-
+import Loading from '../../components/Loading';
 import { IUsuario, IPainelTipoReceita, IPainelCategorias, IPainelVotos } from '../../constants/interfaces';
 
 import ItalicText from '../../components/ItalicText';
@@ -15,41 +15,28 @@ import BoldText from '../../components/BoldText';
 
 const Painel = () => {
 
-    const [ usuario, setUsuario ] = useState<IUsuario>();;
-    const [ recipeType, setRecipeType ] = useState<IPainelTipoReceita[]>([]);
-    const [ recipeCategory, setRecipeCategory ] = useState<IPainelCategorias[]>([]);
-    const [ topVotedRecipe, setTopVotedRecipe ] = useState<IPainelVotos[]>([]);
+    const [usuario, setUsuario] = useState<IUsuario>();;
+    const [recipeType, setRecipeType] = useState<IPainelTipoReceita[]>([]);
+    const [recipeCategory, setRecipeCategory] = useState<IPainelCategorias[]>([]);
+    const [topVotedRecipe, setTopVotedRecipe] = useState<IPainelVotos[]>([]);
+    const [load, setLoad] = useState<boolean>(false)
+
+    const { user, signOut } = useContext(AuthContext)
+
+    function handleSignOut() {
+        signOut()
+    }
 
 
     useEffect(() => {
-        api.get(`busca/usuario`).then(response => {
-            setUsuario(response.data[0]);
-        });
-        // });
-        // api.get(`usuario`).then(response => {
-        //     setUsuario(response.data[0]);
-
-        //     const names= response.data[0]?.nome.split(" ")
-        //     const tam  = names.length - 1
-        //     const firstName :string = names[0]
-        //     const lastName :string = names[tam]
-        //     setInitials(firstName[0]+lastName[0]);
-
-        //     api.get(`recipesType/${usuario?.id}`)
-        //     .then(response => {
-        //         setRecipeType(response.data)
-
-        //     })
-        // api.get(`recipesCategory/${usuario?.id}`)
-        //     .then(response => {
-        //         setRecipeCategory(response.data)
-        //     })
-
-        // api.get(`topVotedRecipe/${usuario?.id}`)
-        //     .then(response => {
-        //         setTopVotedRecipe(response.data)
-        //     })
-
+        if (user) {
+            setUsuario(user);
+            setLoad(true)
+            console.log("painel logado", usuario);
+        }else{
+            console.log("painel nao logado");
+            
+        }
     }, []);
 
     useEffect(() => {
@@ -67,7 +54,7 @@ const Painel = () => {
             .then(response => {
                 setTopVotedRecipe(response.data)
             })
-    }, [ usuario ]);
+    }, [usuario]);
 
     const pieTypeData = recipeType.map((item) => {
         return (
@@ -103,7 +90,9 @@ const Painel = () => {
 
     const totalRecipes: number = pieTypeData.reduce(function (a, b) { return a + b.y }, 0)
 
-
+    if (!load) {
+        return <Loading />
+    }
 
     return (
         <SafeAreaView style={styles.main}>
@@ -125,7 +114,7 @@ const Painel = () => {
                 <View style={styles.pieContainer}>
                     <View style={styles.typePie}>
                         <ItalicText style={styles.chartsTitle}>{`Receitas\npor Tipo`}</ItalicText>
-                        {/* <VictoryPie
+                        <VictoryPie
                             height={((chartHeight / 2) - 50)}
                             width={(chartWidth / 2)}
                             colorScale={["orange", "#e02041"]}
@@ -139,13 +128,13 @@ const Painel = () => {
                             colorScale={["orange", "#e02041"]}
                             data={pieTypeLegend}
                             style={{ labels: { fontSize: 15 } }}
-                        /> */}
+                        />
                     </View>
 
                     <View style={styles.categoryPie}>
                         <ItalicText style={styles.chartsTitle}>{`Receitas\npor Categoria`}</ItalicText>
 
-                        {/* <VictoryPie
+                        <VictoryPie
                             height={((chartHeight / 2) - 50)}
                             width={(chartWidth / 2)}
                             colorScale={["#10a377", "#62e399", "#3f9665", "#29e379", "#99ffc5"]}
@@ -153,13 +142,13 @@ const Painel = () => {
                             data={pieCategoryData}
                             innerRadius={30}
                             style={{ labels: { fontSize: 15 } }}
-                        /> */}
+                        />
                         <ScrollView>
-                            {/* <VictoryLegend x={10}
+                            <VictoryLegend x={10}
                                 colorScale={["#10a377", "#62e399", "#3f9665", "#29e379", "#99ffc5"]}
                                 data={pieCategoryLegend}
                                 style={{ labels: { fontSize: 15 } }}
-                            /> */}
+                            />
                         </ScrollView>
                     </View>
                 </View>
@@ -187,6 +176,8 @@ const Painel = () => {
                         </DataTable>
                     </View>
                 </View>
+                <View style={{ margin: 10 }}></View>
+                <Button title="Sign Out" onPress={() => handleSignOut()} />
             </ScrollView>
         </SafeAreaView>
     )
