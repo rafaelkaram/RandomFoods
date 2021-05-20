@@ -10,7 +10,6 @@ import AvaliacaoController from './AvaliacaoController';
 import IngredienteController from './IngredienteController';
 import LogNotificacaoController from './LogNotificacaoController';
 import MedidaController from './MedidaController';
-import MidiaController from './MidiaController';
 import ReceitaIngredienteController from './ReceitaIngredienteController';
 import UnidadeController from './UnidadeController';
 import UsuarioController from './UsuarioController';
@@ -35,15 +34,17 @@ class ReceitaController {
 
         const usuarioController = new UsuarioController();
 
-        const usuario = await usuarioController.find(parseInt(usuarioId));
-        const receita = new Receita(nome, descricao, parseInt(tempoPreparo), tipo, usuario);
+        const usuario: Usuario = await usuarioController.find(parseInt(usuarioId));
+        const receita: Receita = new Receita(nome, descricao, parseInt(tempoPreparo), tipo, usuario);
 
         await receita.save();
 
         const buffer: string = util.encryptMidia(receita.id.toString());
-        const midiaPath = util.getPath('midia', buffer);
+        const midiaPath: string = util.getPath('midia', buffer);
 
-        fs.mkdirSync(midiaPath);
+        if (!fs.existsSync(midiaPath)) {
+            fs.mkdirSync(midiaPath);
+        }
 
         let isThumbnail = true;
 
@@ -57,11 +58,10 @@ class ReceitaController {
                     if (err) throw err;
                 });
             } else {
-                util.moveFile('midia', buffer, nomeArquivo);
-
                 const extensao: string | undefined = nomeArquivo.split('.').pop();
 
-                const midia = new Midia(`${ buffer }/${ nomeArquivo }`, TipoMidia.VIDEO, receita);
+                const novoNome: string = Date.now().toString();
+                const midia: Midia = new Midia(novoNome, TipoMidia.VIDEO, receita);
 
                 if (extensao === 'png') {
                     midia.tipo = TipoMidia.FOTO;
@@ -70,6 +70,8 @@ class ReceitaController {
                         midia.thumbnail = true;
                     }
                 }
+
+                util.moveFile(buffer, nomeArquivo, novoNome, midia.tipo);
 
                 await midia.save();
             }
@@ -184,7 +186,6 @@ class ReceitaController {
         try {
             const receitaIngredienteController = new ReceitaIngredienteController();
             const avaliacaoController = new AvaliacaoController();
-            const midiaController = new MidiaController();
             const logController = new LogNotificacaoController();
 
             const receita = await repository.findOne({
@@ -205,10 +206,9 @@ class ReceitaController {
             }
 
             const avaliacao: { nota: number, qtdeNotas: number } = await avaliacaoController.countVotes(parseInt(id));
-            const midias: Midia[] = await midiaController.findByReceita(parseInt(id));
             const qtdeLogs: number = await logController.countNotRead(receita.usuario);
 
-            return response.status(200).json(receitaView.render(receita, ingredientes, midias, avaliacao, qtdeLogs));
+            return response.status(200).json(receitaView.render(receita, ingredientes, avaliacao, qtdeLogs));
 
         } catch (e) {
             console.error(e);
