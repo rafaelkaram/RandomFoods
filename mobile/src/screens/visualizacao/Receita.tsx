@@ -108,18 +108,11 @@ function SelectedRecipe({ route }: { route: any }) {
 
                     </View>
                     <View style={{ alignItems: 'center' }}>
-                        {/* <Avatar
-                            size="xlarge"
-                            rounded
-                            title={recipe?.foto}
-                            activeOpacity={0.7}
-                            containerStyle={{ backgroundColor: 'lightgrey' }}
-                        /> */}
                         <Carousel
                             layout="default"
                             layoutCardOffset={9}
                             ref={isCarousel}
-                            data={midias}
+                            data={midias.sort((a, b) => a.id - b.id)}
                             renderItem={CarouselCardItem}
                             sliderWidth={SLIDER_WIDTH}
                             itemWidth={ITEM_WIDTH}
