@@ -43,7 +43,9 @@ class ReceitaController {
         const buffer: string = util.encryptMidia(receita.id.toString());
         const midiaPath: string = util.getPath('midia', buffer);
 
-        fs.mkdirSync(midiaPath);
+        if (!fs.existsSync(midiaPath)) {
+            fs.mkdirSync(midiaPath);
+        }
 
         let isThumbnail = true;
 
