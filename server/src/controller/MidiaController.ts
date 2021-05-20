@@ -32,46 +32,45 @@ class MidiaController {
             midias.map(midia => {
                 const nomeArquivo: string = midia.filename;
 
-                console.log(`Removendo arquivo ${ nomeArquivo }.`);
-                const midiaPath: string = util.getPath('midia', nomeArquivo);
-                fs.unlink(path.join(midiaPath, nomeArquivo), (err) => {
+                console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
+                fs.unlink(path.join(util.getPath('temp'), nomeArquivo), (err) => {
                     if (err) throw err;
                 });
             });
-            return response.status(400).json({ error: 'Receita não encontrada!' });
+            return util.syserror(400, response, 'Receita não encontrada!');
         } else if (!midias) {
-            return response.status(400).json({ error: 'Nenhuma mídia encontrada!' });
+            return util.syserror(400, response, 'Nenhuma mídia encontrada!');
         }
 
         const receitaController = new ReceitaController();
 
         const receita: Receita = await receitaController.find(parseInt(idReceita));
 
+        const buffer: string = util.encryptMidia(idReceita);
+
         midias.map(async data => {
             const nomeArquivo = data.filename;
-            const isFoto = util.isExtensao(nomeArquivo, [ 'jpg', 'jpeg', 'png' ]);
-            const isVideo = util.isExtensao(nomeArquivo, [ 'mp4', 'mkv', 'webp' ]);
-            const folder = util.getFolderName(nomeArquivo);
-            const midiaPath = util.getPath('midia', nomeArquivo)
+            const isExtensao = util.isExtensao(nomeArquivo, [ 'png', 'mp4' ]);
 
-            if (!(isFoto || isVideo)) {
-                console.log(`Removendo arquivos.\nImportação não concluída.`);
-                fs.unlink(path.join(midiaPath, nomeArquivo), (err) => {
-                if (err) throw err;
-            });
+            if (!isExtensao) {
+                console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
+                fs.unlink(path.join(util.getPath('temp'), nomeArquivo), (err) => {
+                    if (err) throw err;
+                });
+            } else {
+                const extensao: string | undefined = nomeArquivo.split('.').pop();
+
+                const midia = new Midia(util.moveFile('midia', buffer, nomeArquivo), Tipo.VIDEO, receita);
+
+                if (extensao === 'png') {
+                    midia.tipo = Tipo.FOTO;
+                }
+
+                await midia.save();
             }
-
-            const midia: Midia = repository.create({
-                path: `${folder}/${nomeArquivo}`,
-                tipo: isFoto ? Tipo.FOTO : Tipo.VIDEO,
-                receita
-            });
-
-            await repository.save(midia);
         });
 
-
-        return response.status(201).json({ message: 'Midias salvas com sucesso.' });
+        return util.systrace(201, response, 'Midias salvas com sucesso.');
     }
 
     // Métodos internos
