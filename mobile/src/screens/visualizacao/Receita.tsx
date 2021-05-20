@@ -4,6 +4,8 @@ import { Rating, Avatar, Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo } from '@expo/vector-icons';
 import moment from 'moment';
+import Carousel from 'react-native-snap-carousel'
+import CarouselCardItem, { SLIDER_WIDTH, ITEM_WIDTH } from '../../components/CarouselCardItem'
 
 import "moment/min/locales";
 
@@ -27,6 +29,7 @@ function SelectedRecipe({ route }: { route: any }) {
     const [recipe, setRecipe] = useState<IReceita>();
     const [comments, setComments] = useState<IComentario[]>([]);
     const [etapas, setEtapas] = useState<string[]>([])
+    const isCarousel = React.useRef(null)
 
     useEffect(() => {
 
@@ -102,13 +105,24 @@ function SelectedRecipe({ route }: { route: any }) {
                         <BoldText style={styles.titleText}>{recipe?.receita}</BoldText>
 
                     </View>
-                    <View style={{ alignSelf: 'center', marginTop: 10 }}>
-                        <Avatar
+                    <View style={{ alignItems: 'center' }}>
+                        {/* <Avatar
                             size="xlarge"
                             rounded
                             title={recipe?.foto}
                             activeOpacity={0.7}
                             containerStyle={{ backgroundColor: 'lightgrey' }}
+                        /> */}
+                        <Carousel
+                            layout="default"
+                            layoutCardOffset={9}
+                            ref={isCarousel}
+                            data={recipe?.midias}
+                            renderItem={CarouselCardItem}
+                            sliderWidth={SLIDER_WIDTH}
+                            itemWidth={ITEM_WIDTH}
+                            inactiveSlideShift={0}
+                            useScrollView={true}
                         />
                     </View>
                     <View style={styles.autor}>
@@ -144,7 +158,7 @@ function SelectedRecipe({ route }: { route: any }) {
                         <View>
                             <BoldText>Tempo de Preparo:  </BoldText>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{marginLeft: 5}}>{recipe?.tempoPreparo} Minutos</Text>
+                                <Text style={{ marginLeft: 5 }}>{recipe?.tempoPreparo} Minutos</Text>
                             </View>
                         </View>
                     </View>
@@ -174,8 +188,8 @@ function SelectedRecipe({ route }: { route: any }) {
                     <View style={styles.itemListDescribe}>
                         <BoldText>Preparo:</BoldText>
                         {etapas.map((etapa, index) => {
-                            return(
-                                <View key={index} style={{margin: 10}}>
+                            return (
+                                <View key={index} style={{ margin: 10 }}>
                                     <RegularText>
                                         {etapa}
                                     </RegularText>
