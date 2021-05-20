@@ -70,7 +70,7 @@ class ReceitaController {
                     }
                 }
 
-                util.moveFile(midia.tipo, buffer, nomeArquivo)
+                util.moveFile(buffer, nomeArquivo, novoNome, midia.tipo);
 
                 await midia.save();
             }
