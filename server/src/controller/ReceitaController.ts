@@ -35,13 +35,13 @@ class ReceitaController {
 
         const usuarioController = new UsuarioController();
 
-        const usuario = await usuarioController.find(parseInt(usuarioId));
-        const receita = new Receita(nome, descricao, parseInt(tempoPreparo), tipo, usuario);
+        const usuario: Usuario = await usuarioController.find(parseInt(usuarioId));
+        const receita: Receita = new Receita(nome, descricao, parseInt(tempoPreparo), tipo, usuario);
 
         await receita.save();
 
         const buffer: string = util.encryptMidia(receita.id.toString());
-        const midiaPath = util.getPath('midia', buffer);
+        const midiaPath: string = util.getPath('midia', buffer);
 
         fs.mkdirSync(midiaPath);
 
@@ -57,11 +57,9 @@ class ReceitaController {
                     if (err) throw err;
                 });
             } else {
-                util.moveFile('midia', buffer, nomeArquivo);
-
                 const extensao: string | undefined = nomeArquivo.split('.').pop();
 
-                const midia = new Midia(`${ buffer }/${ nomeArquivo }`, TipoMidia.VIDEO, receita);
+                const midia = new Midia(util.moveFile('midia', buffer, nomeArquivo), TipoMidia.VIDEO, receita);
 
                 if (extensao === 'png') {
                     midia.tipo = TipoMidia.FOTO;
@@ -184,7 +182,6 @@ class ReceitaController {
         try {
             const receitaIngredienteController = new ReceitaIngredienteController();
             const avaliacaoController = new AvaliacaoController();
-            const midiaController = new MidiaController();
             const logController = new LogNotificacaoController();
 
             const receita = await repository.findOne({

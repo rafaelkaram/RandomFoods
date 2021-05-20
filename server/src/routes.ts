@@ -40,13 +40,13 @@ routes.post('/importacao/:nome', uploadFiles.array('files'), fileImportControlle
 // Rotas de cadastro
 // Utilizar parametros através do body da requisição
 routes.post('/cadastro/receita', uploadMidia.array('midias'), receitaController.create);
+routes.post('/cadastro/midia', uploadMidia.array('midias'), midiaController.create);
 /*
 routes.post('/cadastro/avaliacao', avaliacaoController.create);
 routes.post('/cadastro/comentario', comentarioController.create);
 routes.post('/cadastro/imagem-perfil', uploadProfilePic.single('image'), usuarioController.uploadImage);
 routes.post('/cadastro/ingrediente', ingredienteController.create);
 routes.post('/cadastro/ingredientes', ingredienteController.createBulk);
-routes.post('/cadastro/midia', uploadMidia.array('midias'), midiaController.create);
 routes.post('/cadastro/unidade', unidadeController.create);
 routes.post('/cadastro/unidades', unidadeController.createBulk);
 routes.post('/cadastro/usuario', usuarioController.create);

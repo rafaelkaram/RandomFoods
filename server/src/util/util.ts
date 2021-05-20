@@ -8,14 +8,8 @@ import {
   FACTOR,
   SHEET_AVALIACAO,
   SHEET_CATEGORIA,
-  SHEET_COMENTARIO,
-  SHEET_FAVORITO,
   SHEET_INGREDIENTE,
-  SHEET_MARCA,
   SHEET_MEDIDA,
-  SHEET_MIDIA,
-  SHEET_RECEITA,
-  SHEET_SEGUIDOR,
   SHEET_UNIDADE,
   SHEET_USUARIO
 } from './constants';
@@ -165,9 +159,10 @@ export default {
     return Buffer.from(valor ? valor : 'error').toString('hex');
   },
 
-  moveFile(type: string, buffer: string, name: string): void {
-    const srcPath = path.join(this.getPath('temp'), name);
-    const destPath = path.join(this.getPath(type.toLowerCase(), buffer), name);
+  moveFile(type: string, buffer: string, name: string): string {
+    const nomeArquivo: string = Date.now().toString();
+    const srcPath: string = path.join(this.getPath('temp'), name);
+    const destPath: string = path.join(this.getPath(type.toLowerCase(), buffer), nomeArquivo);
 
     if (!fs.existsSync(srcPath)) {
       throw Error('Source file doens\'t exists.');
@@ -175,6 +170,8 @@ export default {
 
     fs.copyFileSync(srcPath, destPath);
     fs.unlinkSync(srcPath);
+
+    return nomeArquivo;
   },
 
   systrace (status: number, response: Response, value?: any): Response {
