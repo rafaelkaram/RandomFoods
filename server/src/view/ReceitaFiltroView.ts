@@ -14,7 +14,7 @@ export default {
                 tipo: receita.tipo,
                 nota: avaliacao.nota,
                 qtdeNotas: avaliacao.qtdeNotas,
-                midias: midiaView.renderMany(receita.midias)
+                midias: midiaView.renderMany(receita.midias, receita.id)
             };
 
         }

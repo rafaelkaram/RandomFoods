@@ -48,7 +48,7 @@ export default {
         qtdeNotas: avaliacao.qtdeNotas,
         ingredientes: ingredienteView.renderMany(ingredienteList),
         categorias: receita.categorias,
-        midias: midiaView.renderMany(receita.midias)
+        midias: midiaView.renderMany(receita.midias, receita.id)
       };
 
     }
