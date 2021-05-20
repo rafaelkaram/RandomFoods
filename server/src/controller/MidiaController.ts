@@ -67,7 +67,7 @@ class MidiaController {
                     midia.tipo = Tipo.FOTO;
                 }
 
-                util.moveFile(midia.tipo, buffer, nomeArquivo)
+                util.moveFile(buffer, nomeArquivo, novoNome, midia.tipo);
 
                 await midia.save();
             }
