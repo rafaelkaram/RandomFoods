@@ -281,7 +281,9 @@ const styles = StyleSheet.create({
         height: 40,
         padding: 5,
         margin: 5,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems:'center',
+        minWidth:50
     },
 
     ingredientSelected: {
@@ -290,7 +292,9 @@ const styles = StyleSheet.create({
         height: 40,
         padding: 5,
         margin: 5,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems:'center',
+        minWidth:50
     },
 
     ingredientName: {
