@@ -26,14 +26,9 @@ const Ingredientes = () => {
     const [load, setLoad] = useState<boolean>(false)
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [nomeIngrediente, setnomeIngrediente] = useState<string>('');
-    const [nomeReceita, setnomeReceita] = useState<string>('');
 
 
     useEffect(() => {
-        // api.get('ingrediente')
-        //     .then(response => {
-        //         setIngredient(response.data);
-        //     });
         api.get('/busca/tipo-ingrediente')
             .then(response => {
                 setIngredientTypes(response.data);
@@ -50,7 +45,7 @@ const Ingredientes = () => {
             navigation.navigate(screens.cadastroQuantidades, { idIngredientes });
     }
 
-    const handleSelectItem = (id: number, nome: string ) => {
+    const handleSelectItem = (id: number, nome: string) => {
         const alredySelected = selectedItems.findIndex(item => item === id);
 
         if (alredySelected >= 0) {
@@ -114,7 +109,9 @@ const Ingredientes = () => {
                                         <View
                                             style={styles.modalList}
                                             key={ingrediente.id}>
-                                            <Text style={{ lineHeight: 30 }}>{ingrediente.nome}</Text>
+                                            <View style={{maxWidth: Width*0.7}}>
+                                                <Text style={{ lineHeight: 30 }}>{ingrediente.nome}</Text>
+                                            </View>
                                             <TouchableOpacity
                                                 onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}>
                                                 <Feather name="trash-2" size={24} color="black" />
@@ -231,6 +228,7 @@ const styles = StyleSheet.create({
     modalList: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        paddingHorizontal: 5
 
     },
 
@@ -240,7 +238,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderColor: '#E5EAFA',
         borderWidth: 3,
-        width: Width * 0.7,
+        width: Width*0.9,
         height: Height * 0.6,
     },
 
@@ -283,7 +281,9 @@ const styles = StyleSheet.create({
         height: 40,
         padding: 5,
         margin: 5,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems:'center',
+        minWidth:50
     },
 
     ingredientSelected: {
@@ -292,7 +292,9 @@ const styles = StyleSheet.create({
         height: 40,
         padding: 5,
         margin: 5,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems:'center',
+        minWidth:50
     },
 
     ingredientName: {
@@ -313,7 +315,7 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: 'white',
         borderRadius: 20,
-        height:120,
+        height: 120,
 
     },
 

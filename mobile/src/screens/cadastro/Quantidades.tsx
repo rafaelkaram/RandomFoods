@@ -20,7 +20,7 @@ const Quantidades = ({ route }: { route: any }) => {
     const [ingredientsCart, setIngredientsCart] = useState<IListaIngredientes[]>([]);
     const [load, setLoad] = useState<boolean>(false);
 
-    useEffect(() => {
+    useEffect(() => { 
         if (route.params) {
             const { idIngredientes } = route.params;
             const params = { ids: idIngredientes };
