@@ -3,7 +3,15 @@ import { getCustomRepository } from 'typeorm';
 
 import fs from 'fs';
 import path from 'path';
-import util from '../util/util';
+
+import {
+    encryptMidia,
+    getPath,
+    isExtensao,
+    moveFile,
+    syserror,
+    systrace
+} from '../util/util';
 
 import { MidiaRepository } from '../repository/MidiaRepository';
 
@@ -31,21 +39,21 @@ class MidiaController {
                 const nomeArquivo: string = midia.filename;
 
                 console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
-                fs.unlink(path.join(util.getPath('temp'), nomeArquivo), (err) => {
+                fs.unlink(path.join(getPath('temp'), nomeArquivo), (err) => {
                     if (err) throw err;
                 });
             });
-            return util.syserror(400, response, 'Receita não encontrada!');
+            return syserror(400, response, 'Receita não encontrada!');
         } else if (!midias) {
-            return util.syserror(400, response, 'Nenhuma mídia encontrada!');
+            return syserror(400, response, 'Nenhuma mídia encontrada!');
         }
 
         const receitaController = new ReceitaController();
 
         const receita: Receita = await receitaController.find(parseInt(idReceita));
 
-        const buffer: string = util.encryptMidia(idReceita);
-        const midiaPath: string = util.getPath('midia', buffer);
+        const buffer: string = encryptMidia(idReceita);
+        const midiaPath: string = getPath('midia', buffer);
 
         if (!fs.existsSync(midiaPath)) {
             fs.mkdirSync(midiaPath);
@@ -54,11 +62,11 @@ class MidiaController {
         try {
             midias.map(async data => {
                 const nomeArquivo = data.filename;
-                const isExtensao = util.isExtensao(nomeArquivo, [ 'png', 'mp4' ]);
+                const validFile = isExtensao(nomeArquivo, [ 'png', 'mp4' ]);
 
-                if (!isExtensao) {
+                if (!validFile) {
                     console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
-                    fs.unlink(path.join(util.getPath('temp'), nomeArquivo), (err) => {
+                    fs.unlink(path.join(getPath('temp'), nomeArquivo), (err) => {
                         if (err) throw err;
                     });
                 } else {
@@ -71,16 +79,16 @@ class MidiaController {
                         midia.tipo = Tipo.FOTO;
                     }
 
-                    util.moveFile(buffer, nomeArquivo, novoNome, midia.tipo);
+                    moveFile(buffer, nomeArquivo, novoNome, midia.tipo);
 
                     await midia.save();
                 }
             });
         } catch (err) {
-            return util.syserror(400, response, 'Deu erro, não sei qual foi, mas deu erro');
+            return syserror(400, response, 'Deu erro, não sei qual foi, mas deu erro');
         }
 
-        return util.systrace(201, response, 'Midias salvas com sucesso.');
+        return systrace(201, response, 'Midias salvas com sucesso.');
     }
 
     // Métodos internos

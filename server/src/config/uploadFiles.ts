@@ -1,9 +1,9 @@
 import multer from 'multer';
-import util from '../util/util';
+import { getPath } from '../util/util';
 
 export default {
   storage: multer.diskStorage({
-    destination: util.getPath('import'),
+    destination: getPath('import'),
     filename: (request, file, cb) => {
       const { nome } = request.params;
       const originalName: string = file.originalname;

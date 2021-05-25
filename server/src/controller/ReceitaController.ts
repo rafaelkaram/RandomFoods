@@ -1,8 +1,7 @@
-import e, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
 import fs from 'fs';
 import path from 'path';
-import util from '../util/util';
 
 import { ReceitaRepository } from '../repository/ReceitaRepository';
 
@@ -14,6 +13,15 @@ import ReceitaIngredienteController from './ReceitaIngredienteController';
 import UnidadeController from './UnidadeController';
 import UsuarioController from './UsuarioController';
 
+import {
+    encryptMidia,
+    getBoolean2,
+    getPath,
+    isExtensao,
+    moveFile,
+    syserror,
+    systrace
+} from '../util/util';
 import { Categoria, Tipo as TipoCategoria } from '../model/Categoria';
 import { Ingrediente } from '../model/Ingrediente';
 import { Medida } from '../model/Medida';
@@ -26,72 +34,6 @@ import receitaView from '../view/ReceitaView';
 
 class ReceitaController {
     // Métodos das rotas
-    async create(request: Request, response: Response) {
-        const { teste, nome, tempoPreparo, descricao, tipo, usuarioId } = request.body as { teste?: string, nome: string, tempoPreparo: string, descricao: string, tipo: Tipo, usuarioId: string };
-        const arquivos = request.files as Express.Multer.File[];
-
-        if (teste === 'sim') return util.systrace(200, response, 'Recebi as info bro, deu boa');
-
-        const usuarioController = new UsuarioController();
-
-        const usuario: Usuario = await usuarioController.find(parseInt(usuarioId));
-        const receita: Receita = new Receita(nome, descricao, parseInt(tempoPreparo), tipo, usuario);
-
-        await receita.save();
-
-        const buffer: string = util.encryptMidia(receita.id.toString());
-        const midiaPath: string = util.getPath('midia', buffer);
-
-        if (!fs.existsSync(midiaPath)) {
-            fs.mkdirSync(midiaPath);
-        }
-
-        let isThumbnail = true;
-
-        await Promise.all(arquivos.map(async arquivo => {
-            const nomeArquivo = arquivo.filename;
-            const isExtensao = util.isExtensao(nomeArquivo, [ 'png', 'mp4' ]);
-
-            if (!isExtensao) {
-                console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
-                fs.unlink(path.join(util.getPath('temp'), nomeArquivo), (err) => {
-                    if (err) throw err;
-                });
-            } else {
-                const extensao: string | undefined = nomeArquivo.split('.').pop();
-
-                const novoNome: string = Date.now().toString();
-                const midia: Midia = new Midia(novoNome, TipoMidia.VIDEO, receita);
-
-                if (extensao === 'png') {
-                    midia.tipo = TipoMidia.FOTO;
-                    if (isThumbnail) {
-                        isThumbnail = false;
-                        midia.thumbnail = true;
-                    }
-                }
-
-                util.moveFile(buffer, nomeArquivo, novoNome, midia.tipo);
-
-                await midia.save();
-            }
-        }));
-
-        return util.systrace(201, response, receita.id);
-    }
-
-    async countTypeByUserId(request: Request, response: Response) {
-        const repository = getCustomRepository(ReceitaRepository);
-
-        const { id } = request.params;
-        const usuarioId = parseInt(id);
-
-        const tipos = await repository.countTypeByUserId(usuarioId);
-
-        return util.systrace(200, response, tipos);
-    }
-
-    // Métodos internos
     async index(request: Request, response: Response) {
         const repository = getCustomRepository(ReceitaRepository);
 
@@ -113,9 +55,75 @@ class ReceitaController {
                 return receitaView.renderSimple(receita, avaliacao, midias.length > 0 ? midias[0] : undefined);
         }));
 
-        return util.systrace(200, response, receitasList);
+        return systrace(200, response, receitasList);
     }
 
+    async create(request: Request, response: Response) {
+        const { teste, nome, tempoPreparo, descricao, tipo, usuarioId } = request.body as { teste?: string, nome: string, tempoPreparo: string, descricao: string, tipo: Tipo, usuarioId: string };
+        const arquivos = request.files as Express.Multer.File[];
+
+        if (teste === 'sim') return systrace(200, response, 'Recebi as info bro, deu boa');
+
+        const usuarioController = new UsuarioController();
+
+        const usuario: Usuario = await usuarioController.find(parseInt(usuarioId));
+        const receita: Receita = new Receita(nome, descricao, parseInt(tempoPreparo), tipo, usuario);
+
+        await receita.save();
+
+        const buffer: string = encryptMidia(receita.id.toString());
+        const midiaPath: string = getPath('midia', buffer);
+
+        if (!fs.existsSync(midiaPath)) {
+            fs.mkdirSync(midiaPath);
+        }
+
+        let isThumbnail = true;
+
+        await Promise.all(arquivos.map(async arquivo => {
+            const nomeArquivo = arquivo.filename;
+            const validFile = isExtensao(nomeArquivo, [ 'png', 'mp4' ]);
+
+            if (!validFile) {
+                console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
+                fs.unlink(path.join(getPath('temp'), nomeArquivo), (err) => {
+                    if (err) throw err;
+                });
+            } else {
+                const extensao: string | undefined = nomeArquivo.split('.').pop();
+
+                const novoNome: string = Date.now().toString();
+                const midia: Midia = new Midia(novoNome, TipoMidia.VIDEO, receita);
+
+                if (extensao === 'png') {
+                    midia.tipo = TipoMidia.FOTO;
+                    if (isThumbnail) {
+                        isThumbnail = false;
+                        midia.thumbnail = true;
+                    }
+                }
+
+                moveFile(buffer, nomeArquivo, novoNome, midia.tipo);
+
+                await midia.save();
+            }
+        }));
+
+        return systrace(201, response, receita.id);
+    }
+
+    async countTypeByUserId(request: Request, response: Response) {
+        const repository = getCustomRepository(ReceitaRepository);
+
+        const { id } = request.params;
+        const usuarioId = parseInt(id);
+
+        const tipos = await repository.countTypeByUserId(usuarioId);
+
+        return systrace(200, response, tipos);
+    }
+
+    // Métodos internos
     async import(dados: { nome: string, descricao: string, tempoPreparo: number, tipo: string, usuario?: string },
         dadosIngrediente: { nomeIngrediente: string, unidade?: string, quantidade?: number }[],
         dadosCategoria: { categoria: string }[]) {
@@ -222,8 +230,8 @@ class ReceitaController {
 
         const rIController = new ReceitaIngredienteController();
 
-        const glutenBoolean: boolean = util.getBoolean2(gluten && <string> gluten);
-        const derivadoLeiteBoolean: boolean = util.getBoolean2(derivadoLeite && <string> derivadoLeite);
+        const glutenBoolean: boolean = getBoolean2(gluten && <string> gluten);
+        const derivadoLeiteBoolean: boolean = getBoolean2(derivadoLeite && <string> derivadoLeite);
         const tempo: number = tempoPreparo ? parseInt(tempoPreparo) : 0;
 
         const ids2: number[] = ids?.map((id: string) => {
@@ -246,11 +254,22 @@ class ReceitaController {
                 matchesParciais.push(receita);
             }));
 
-            return util.systrace(200, response, { matchesPerfeitos, matchesParciais });
+            return systrace(200, response, { matchesPerfeitos, matchesParciais });
 
         } catch (e) {
-            util.syserror(400, response, e);
+            syserror(400, response, e);
         }
+    }
+
+    async remove(request: Request, response: Response) {
+        const repository = getCustomRepository(ReceitaRepository);
+        const { id } = request.params;
+
+        const receita = await repository.findOneOrFail({ id: parseInt(id) });
+        receita.ativa = false;
+        receita.save();
+
+        return systrace(204, response);
     }
 
     // Métodos internos

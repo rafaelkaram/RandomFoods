@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
 
-import util from '../util/util';
+import { getBoolean, systrace } from '../util/util';
 
 import { IngredienteRepository } from '../repository/IngredienteRepository';
 
@@ -20,7 +20,7 @@ class IngredienteController {
 
         const ingredientes = await repository.findAll();
 
-        return util.systrace(200, response, ingredientes);
+        return systrace(200, response, ingredientes);
     }
 
     async typeIndex(request: Request, response: Response) {
@@ -107,9 +107,9 @@ class IngredienteController {
         const tipoU: TipoUnidade = <TipoUnidade> tipoUnidade.trim().toUpperCase();
         const tipoI: TipoIngrediente = <TipoIngrediente> tipoIngrediente.trim().toUpperCase();
 
-        const isSemMedida = util.getBoolean(semMedida);
-        const isDerivadoLeite = util.getBoolean(derivadoLeite);
-        const isGluten = util.getBoolean(gluten);
+        const isSemMedida = getBoolean(semMedida);
+        const isDerivadoLeite = getBoolean(derivadoLeite);
+        const isGluten = getBoolean(gluten);
 
         const ingrediente = new Ingrediente(nome.trim(), tipoU, tipoI);
 

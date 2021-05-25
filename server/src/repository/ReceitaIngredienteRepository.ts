@@ -6,141 +6,66 @@ import { ReceitaIngrediente } from '../model/ReceitaIngrediente';
 
 @EntityRepository(ReceitaIngrediente)
 export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente> {
+	// Métodos internos
+	async findMatches(isPerfect: boolean, ids: number[], tempoPreparo: number, gluten: boolean, derivadoLeite: boolean, categorias: string[]): Promise<{ id: number }[]> {
 
-  async findByIngredients(ids: number[]): Promise<number[]> {
+		const query = this.createQueryBuilder('ri')
+		.select('ri.receita.id', 'id')
+		.where('ri.receita.ativo = :ativo ', { ativo: true });
 
-    const receitas: number[] = await this.createQueryBuilder('ri')
-      .select('ri.receita.id', 'id')
-      .where('ri.ingrediente IN ( :...ids )', { ids })
-      .groupBy('ri.receita.id')
-      .getRawMany();
+		if (ids && ids.length > 0)
+		query.andWhere('ri.ingrediente IN ( :...ids )', { ids });
 
-    return receitas;
-  }
+		if (gluten || derivadoLeite) {
+		query.andWhere(qb => {
+			const subQuery = qb.subQuery()
+			.select('ri2.receita.id')
+			.from(ReceitaIngrediente, 'ri2')
+			.from(Ingrediente, 'i')
+			.where(' ri2.ingrediente.id = i.id ');
+			if (gluten)
+			subQuery.andWhere('i.gluten = :gluten')
+			if (derivadoLeite)
+			subQuery.andWhere('i.derivadoLeite = :derivadoLeite');
 
-  async findMatches(isPerfect: boolean, ids: number[], tempoPreparo: number, gluten: boolean, derivadoLeite: boolean, categorias: string[]): Promise<{ id: number }[]> {
+			subQuery.groupBy('ri2.receita.id')
+			.having('COUNT(ri2.*) = :countZero');
 
-    const query = this.createQueryBuilder('ri')
-      .select('ri.receita.id', 'id')
-      .where(' 1 = 1 ');
+			const sub = subQuery.getQuery();
 
-    if (ids && ids.length > 0)
-      query.andWhere('ri.ingrediente IN ( :...ids )', { ids });
+			return 'ri.receita.id IN (' + sub + ')';
+		});
 
-    if (gluten || derivadoLeite) {
-      query.andWhere(qb => {
-        const subQuery = qb.subQuery()
-          .select('ri2.receita.id')
-          .from(ReceitaIngrediente, 'ri2')
-          .from(Ingrediente, 'i')
-          .where(' ri2.ingrediente.id = i.id ');
-        if (gluten)
-          subQuery.andWhere('i.gluten = :gluten')
-        if (derivadoLeite)
-          subQuery.andWhere('i.derivadoLeite = :derivadoLeite');
+		if (gluten) query.setParameter('gluten', true);
+		if (derivadoLeite) query.setParameter('derivadoLeite', true);
+		query.setParameter('countZero', 0);
 
-        subQuery.groupBy('ri2.receita.id')
-          .having('COUNT(ri2.*) = :countZero');
+		}
 
-        const sub = subQuery.getQuery();
+		if (tempoPreparo !== 0) {
+			query.andWhere(qb => {
+				const subQuery = qb.subQuery()
+				.select('r.id')
+				.from(Receita, 'r')
+				.where(' r.tempoPreparo = :tempoPreparo ');
 
-        return 'ri.receita.id IN (' + sub + ')';
-      });
+				const sub = subQuery.getQuery();
 
-      if (gluten) query.setParameter('gluten', true);
-      if (derivadoLeite) query.setParameter('derivadoLeite', true);
-      query.setParameter('countZero', 0);
+				return 'ri.receita.id IN (' + sub + ')';
+			});
 
-    }
+			query.setParameter('tempoPreparo', tempoPreparo);
+		}
 
-    if (tempoPreparo !== 0) {
-      query.andWhere(qb => {
-        const subQuery = qb.subQuery()
-          .select('r.id')
-          .from(Receita, 'r')
-          .where(' r.tempoPreparo = :tempoPreparo ');
+		query.groupBy('ri.receita.id');
 
-        const sub = subQuery.getQuery();
+		if (isPerfect) query.having('COUNT(ri.*) = :count', { count: ids.length });
+		else query.having('COUNT(ri.*) < :count', { count: ids.length });
 
-        return 'ri.receita.id IN (' + sub + ')';
-      });
+		query.orderBy('ri.receita.id', 'ASC');
 
-      query.setParameter('tempoPreparo', tempoPreparo);
-    }
+		const receitas = await query.getRawMany();
 
-    query.groupBy('ri.receita.id');
-
-    if (isPerfect) query.having('COUNT(ri.*) = :count', { count: ids.length });
-    else query.having('COUNT(ri.*) < :count', { count: ids.length });
-
-    query.orderBy('ri.receita.id', 'ASC');
-
-    const receitas = await query.getRawMany();
-
-    return receitas;
-  }
-
-  async findByIngredients2(ids: number[], gluten: boolean, derivadoLeite: boolean): Promise<number[]> {
-    const query = this.createQueryBuilder('ri')
-      .select('ri.receita.id', 'id')
-      .where('ri.receita IN ( :...ids )', { ids });
-
-    if (gluten) {
-      query.andWhere('ri.ingrediente.gluten = true')
-    }
-
-    if (derivadoLeite) {
-      query.andWhere('ri.ingrediente.derivadoLeite = true')
-    }
-
-    query.groupBy('ri.receita.id')
-      .having('COUNT(ri.*) = :count', { count: 0 })
-      .orderBy('ri.receita.id', 'ASC');
-
-    return await query.getRawMany();;
-  }
-
-  async findWithoutIngredient(gluten: boolean, derivadoLeite: boolean): Promise<number[]> {
-
-    const query = this.createQueryBuilder('ri')
-      .select('ri.receita.id', 'id')
-      .where('1 = 1');
-
-    if (gluten) {
-      query.andWhere('ri.ingrediente.gluten = true')
-    }
-
-    if (derivadoLeite) {
-      query.andWhere('ri.ingrediente.derivadoLeite = true')
-    }
-
-    query.groupBy('ri.receita.id')
-      .having('COUNT(ri.*) = :count', { count: 0 })
-      .orderBy('ri.receita.id');
-
-    const ids: number[] = await query.getRawMany();
-
-    return ids;
-  }
-
-  /*async findMatches(ids: number[]): Promise<number[]> {
-
-    const receitas: number[] = await this.createQueryBuilder('ri')
-      .select('ri.receita.id', 'id')
-      .innerJoinAndSelect('ri.ingrediente', 'ingrediente', 'ri.ingrediente.id IN ( :...ids )', { ids })
-      .getRawMany();
-
-    return receitas;
-  }*/
-
-  async findByPartialIngredients(ids: number[]): Promise<number[]>{
-    const receitas: number[] = await this.createQueryBuilder('ri')
-      .select('ri.receita.id', 'id')
-      .where('ri.ingrediente IN ( :...ids )', { ids })
-      .groupBy('ri.receita.id')
-      .having('COUNT(ri.*) < :count', { count: ids.length })
-      .getRawMany();
-
-    return receitas;
-  }
+		return receitas;
+	}
 }

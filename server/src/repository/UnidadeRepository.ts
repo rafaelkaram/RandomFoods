@@ -8,70 +8,70 @@ import { Unidade } from '../model/Unidade';
 @EntityRepository(Unidade)
 export class UnidadeRepository extends Repository<Unidade> {
 
-  async findAll(): Promise<Unidade[]> {
-    return this.findOrdered('id', true)
-  }
+	async findAll(): Promise<Unidade[]> {
+		return this.findOrdered('id', true)
+	}
 
-  async findOrdered(order: string, ascending: boolean): Promise<Unidade[]> {
-    const unidades: Unidade[] = await this.createQueryBuilder()
-      .orderBy(order, ascending ? 'ASC' : 'DESC')
-      .getMany();
+	async findOrdered(order: string, ascending: boolean): Promise<Unidade[]> {
+		const unidades: Unidade[] = await this.createQueryBuilder()
+			.orderBy(order, ascending ? 'ASC' : 'DESC')
+			.getMany();
 
-    return unidades;
-  }
+		return unidades;
+	}
 
-  async findWithIngrediente(): Promise<Unidade[]> {
-    const unidades: Unidade[] = await this.find({ relations: [ 'ingrediente' ], order: { id: 'ASC' } });
+	async findWithIngrediente(): Promise<Unidade[]> {
+		const unidades: Unidade[] = await this.find({ relations: [ 'ingrediente' ], order: { id: 'ASC' } });
 
-    return unidades;
-  }
+		return unidades;
+	}
 
-  async findBySigla(medida: Medida, ingredientes: Ingrediente[]): Promise<Unidade> {
-    const unidade: Unidade = await this.createQueryBuilder('u')
-      .innerJoinAndSelect('u.medida', 'm')
-      .where('u.ingrediente IN (:...ingredientes)', { ingredientes })
-      .andWhere('u.medida = :medida', { medida: medida.id })
-      .getOneOrFail();
+	async findBySigla(medida: Medida, ingredientes: Ingrediente[]): Promise<Unidade> {
+		const unidade: Unidade = await this.createQueryBuilder('u')
+			.innerJoinAndSelect('u.medida', 'm')
+			.where('u.ingrediente IN (:...ingredientes)', { ingredientes })
+			.andWhere('u.medida = :medida', { medida: medida.id })
+			.getOneOrFail();
 
-    return unidade;
-  }
+		return unidade;
+	}
 
-  async findByIngredient(medida: Medida, ingrediente: Ingrediente): Promise<Unidade> {
-    const unidade: Unidade = await this.createQueryBuilder('u')
-      .innerJoinAndSelect('u.medida', 'm')
-      .where('u.medida = :medida', { medida: medida.id })
-      .andWhere('u.ingrediente = :ingrediente', { ingrediente: ingrediente.id })
-      .getOneOrFail();
+	async findByIngredient(medida: Medida, ingrediente: Ingrediente): Promise<Unidade> {
+		const unidade: Unidade = await this.createQueryBuilder('u')
+			.innerJoinAndSelect('u.medida', 'm')
+			.where('u.medida = :medida', { medida: medida.id })
+			.andWhere('u.ingrediente = :ingrediente', { ingrediente: ingrediente.id })
+			.getOneOrFail();
 
-    return unidade;
-  }
+		return unidade;
+	}
 
-  async findByIngredientAndType(ingrediente: Ingrediente): Promise<Unidade[]> {
-    const unidades: Unidade[] = await this.createQueryBuilder('u')
-      .innerJoinAndSelect('u.medida', 'm')
-      .andWhere('u.ingrediente = :ingrediente', { ingrediente: ingrediente.id })
-      .getMany();
+	async findByIngredientAndType(ingrediente: Ingrediente): Promise<Unidade[]> {
+		const unidades: Unidade[] = await this.createQueryBuilder('u')
+			.innerJoinAndSelect('u.medida', 'm')
+			.andWhere('u.ingrediente = :ingrediente', { ingrediente: ingrediente.id })
+			.getMany();
 
-    return unidades;
-  }
+		return unidades;
+	}
 
-  async findSI(medida: Medida): Promise<Unidade> {
-    const unidade: Unidade = await this.createQueryBuilder('u')
-      .innerJoinAndSelect('u.medida', 'm')
-      .where('u.medida = :medida', { medida: medida.id })
-      .andWhere('u.ingrediente is null')
-      .getOneOrFail();
+	async findSI(medida: Medida): Promise<Unidade> {
+		const unidade: Unidade = await this.createQueryBuilder('u')
+			.innerJoinAndSelect('u.medida', 'm')
+			.where('u.medida = :medida', { medida: medida.id })
+			.andWhere('u.ingrediente is null')
+			.getOneOrFail();
 
-    return unidade;
-  }
+		return unidade;
+	}
 
-  async findSI2(tipo?: TipoUnidade): Promise<Unidade[]> {
-    const unidade: Unidade[] = await this.createQueryBuilder('u')
-      .innerJoinAndSelect('u.medida', 'm')
-      .where('m.tipoUnidade = :tipo', { tipo: tipo ? tipo : TipoUnidade.UNIDADE })
-      .andWhere('u.ingrediente is null')
-      .getMany();
+	async findSI2(tipo?: TipoUnidade): Promise<Unidade[]> {
+		const unidade: Unidade[] = await this.createQueryBuilder('u')
+			.innerJoinAndSelect('u.medida', 'm')
+			.where('m.tipoUnidade = :tipo', { tipo: tipo ? tipo : TipoUnidade.UNIDADE })
+			.andWhere('u.ingrediente is null')
+			.getMany();
 
-    return unidade;
-  }
+		return unidade;
+	}
 }

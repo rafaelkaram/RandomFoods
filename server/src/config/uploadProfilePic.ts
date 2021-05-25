@@ -1,14 +1,14 @@
 import multer from 'multer';
-import util from '../util/util';
+import { encryptMidia, getPath } from '../util/util';
 
 export default {
   storage: multer.diskStorage({
-    destination: util.getPath('usuario'),
+    destination: getPath('usuario'),
     filename: (request, file, cb) => {
       const userId: string | undefined = request.headers.authorization;
       const originalName: string = file.originalname;
       const extensao: string | undefined = originalName.split('.').pop();
-      const buffer = util.encryptMidia(userId);
+      const buffer = encryptMidia(userId);
       const fileName: string = `${ buffer }.${ extensao }`;
 
       cb(null, fileName);

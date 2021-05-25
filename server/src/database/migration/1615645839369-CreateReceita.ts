@@ -40,7 +40,7 @@ export class CreateReceita1615645839369 implements MigrationInterface {
                 {
                     name: 'ativa',
                     type: 'boolean',
-                    default: true
+                    default: false
                 },
                 {
                     name: 'usuario_id',

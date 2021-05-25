@@ -8,41 +8,40 @@ import { TipoUnidade } from '../model/TipoUnidade';
 
 class MedidaController {
   // Metodos internos
-  async import(dados: any) {
-    const {
-      nome,
-      valor,
-      tipoUnidade,
-    } = dados as {
-      nome: string,
-      valor: number,
-      tipoUnidade: string,
-    };
+	async import(dados: any) {
+		const {
+		nome,
+		valor,
+		tipoUnidade,
+		} = dados as {
+		nome: string,
+		valor: number,
+		tipoUnidade: string,
+		};
 
-    const tipo = <TipoUnidade> tipoUnidade.trim().toUpperCase();
+		const tipo = <TipoUnidade> tipoUnidade.trim().toUpperCase();
+		const medida = new Medida(nome.trim(), valor, tipo);
 
-    const medida = new Medida(nome.trim(), valor, tipo);
+		await medida.save();
+	}
 
-    await medida.save();
-  }
+	async findByType(nome: string, tipo?: TipoUnidade): Promise<Medida> {
+		const repository = getCustomRepository(MedidaRepository);
 
-  async findByType(nome: string, tipo?: TipoUnidade): Promise<Medida> {
-    const repository = getCustomRepository(MedidaRepository);
+		if (tipo)
+			return await repository.findByType(nome.trim().toLowerCase(), tipo);
 
-    if (tipo)
-      return await repository.findByType(nome.trim().toLowerCase(), tipo);
+		return await repository.findByName(nome.trim().toLowerCase());
+	}
 
-    return await repository.findByName(nome.trim().toLowerCase());
-  }
+	async findByName(nome: string, tipo?: TipoUnidade): Promise<Medida> {
+		const repository = getCustomRepository(MedidaRepository);
 
-  async findByName(nome: string, tipo?: TipoUnidade): Promise<Medida> {
-    const repository = getCustomRepository(MedidaRepository);
+		if (tipo)
+			return await repository.findByType(nome.trim().toLowerCase(), tipo);
 
-    if (tipo)
-      return await repository.findByType(nome.trim().toLowerCase(), tipo);
-
-    return await repository.findByName(nome.trim().toLowerCase());
-  }
+		return await repository.findByName(nome.trim().toLowerCase());
+	}
 }
 
 export default MedidaController;
