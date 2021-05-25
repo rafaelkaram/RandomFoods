@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
-import fs from 'fs';
-import path from 'path';
 
-import util from '../util/util';
+import { getBoolean, getHash, systrace } from '../util/util';
 
 import { UsuarioRepository } from '../repository/UsuarioRepository';
 
@@ -16,7 +14,18 @@ class UsuarioController {
 
         const usuarios = await repository.findAll();
 
-        return util.systrace(200, response, usuarios);
+        return systrace(200, response, usuarios);
+    }
+
+    async remove(request: Request, response: Response) {
+        const repository = getCustomRepository(UsuarioRepository);
+        const { id } = request.params;
+
+        const usuario = await repository.findOneOrFail({ id: parseInt(id) });
+        usuario.ativo = false;
+        usuario.save();
+
+        return systrace(204, response);
     }
 
     // Métodos internos
@@ -52,15 +61,15 @@ class UsuarioController {
             notificarMarca?: string,
         };
 
-        const hash = util.getHash(senha);
-        const isAtivo = util.getBoolean(ativo);
-        const isTrocaLogin = util.getBoolean(trocaLogin);
-        const seguidor = util.getBoolean(notificarSeguidor);
-        const avaliacao = util.getBoolean(notificarAvaliacao);
-        const comentario = util.getBoolean(notificarComentario);
-        const favorito = util.getBoolean(notificarFavorito);
-        const resposta = util.getBoolean(notificarResposta);
-        const marca = util.getBoolean(notificarMarca);
+        const hash = getHash(senha);
+        const isAtivo = getBoolean(ativo);
+        const isTrocaLogin = getBoolean(trocaLogin);
+        const seguidor = getBoolean(notificarSeguidor);
+        const avaliacao = getBoolean(notificarAvaliacao);
+        const comentario = getBoolean(notificarComentario);
+        const favorito = getBoolean(notificarFavorito);
+        const resposta = getBoolean(notificarResposta);
+        const marca = getBoolean(notificarMarca);
 
         const usuario = new Usuario(login, nome, email, hash);
 

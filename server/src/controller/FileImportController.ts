@@ -3,7 +3,13 @@ import fs from 'fs';
 import path from 'path';
 import XLSX from 'xlsx';
 
-import util from '../util/util';
+import {
+    encryptMidia,
+    getImportData,
+    getPath,
+    isExtensao,
+    systrace
+} from '../util/util';
 
 import ReceitaController from './ReceitaController';
 
@@ -13,7 +19,7 @@ class FileImportController {
         const arquivos = request.files as Express.Multer.File[];
         const { nome } = request.params;
 
-        const { sheetName, controller } = util.getImportData(nome);
+        const { sheetName, controller } = getImportData(nome);
         const erros: { arquivo: string; error: any; }[] = [];
         const errosInsercao: { error: any; }[] = [];
         let invalidos: number = 0;
@@ -22,18 +28,18 @@ class FileImportController {
         for (let i in arquivos) {
         const arquivo = arquivos[i];
             const nomeArquivo = arquivo.filename;
-            const isExtensao = util.isExtensao(nomeArquivo, [ 'xlsx', 'xls', 'csv' ]);
+            const validFile = isExtensao(nomeArquivo, [ 'xlsx', 'xls', 'csv' ]);
 
-            if (!isExtensao) {
+            if (!validFile) {
                 invalidos++;
                 console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
-                fs.unlink(path.join(util.getPath('import'), nomeArquivo), (err) => {
+                fs.unlink(path.join(getPath('import'), nomeArquivo), (err) => {
                     if (err) throw err;
                 });
             } else {
                 try {
 
-                    const workbook = XLSX.readFile(path.join(util.getPath('import'), nomeArquivo));
+                    const workbook = XLSX.readFile(path.join(getPath('import'), nomeArquivo));
 
                     const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
@@ -58,7 +64,7 @@ class FileImportController {
             }
         }
 
-        return util.systrace(201, response, {
+        return systrace(201, response, {
             importacao: `${ arquivos.length - invalidos } arquivos importados com sucesso. ${ invalidos } possuiam formato inválido e não foram importados.`,
             sucesso: `${ qtde } ${ nome } cadastrados com sucesso.`,
             erro: errosInsercao
@@ -76,18 +82,18 @@ class FileImportController {
         for (let i in arquivos) {
             const arquivo = arquivos[i];
             const nomeArquivo = arquivo.filename;
-            const isExtensao = util.isExtensao(nomeArquivo, [ 'xlsx', 'xls', 'csv' ]);
+            const validFile = isExtensao(nomeArquivo, [ 'xlsx', 'xls', 'csv' ]);
 
-            if (!isExtensao) {
+            if (!validFile) {
                 invalidos++;
                 console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
-                fs.unlink(path.join(util.getPath('import'), nomeArquivo), (err) => {
+                fs.unlink(path.join(getPath('import'), nomeArquivo), (err) => {
                     if (err) throw err;
                 });
             } else {
                 try {
 
-                    const workbook: XLSX.WorkBook = XLSX.readFile(path.join(util.getPath('import'), nomeArquivo));
+                    const workbook: XLSX.WorkBook = XLSX.readFile(path.join(getPath('import'), nomeArquivo));
 
                     const sheetReceita = XLSX.utils.sheet_to_json(workbook.Sheets['Receita']);
                     const sheetIngrediente = XLSX.utils.sheet_to_json(workbook.Sheets['Ingrediente']);
@@ -129,7 +135,7 @@ class FileImportController {
             }
         }
 
-        return util.systrace(201, response, {
+        return systrace(201, response, {
             importacao: `${ arquivos.length - invalidos } arquivos importados com sucesso. ${ invalidos } possuiam formato inválido e não foram importados.`,
             sucesso: `${ qtde } receitas cadastradas com sucesso.`,
             erro: errosInsercao
@@ -139,19 +145,19 @@ class FileImportController {
     async getFolderPath(request: Request, response: Response) {
         const { id } = request.params as { id: string };
 
-        const buffer = util.encryptMidia(id);
+        const buffer = encryptMidia(id);
         const midiaPath = path.join('uploads', 'midias', 'receita', buffer);
 
-        util.systrace(201, response, midiaPath);
+        systrace(201, response, midiaPath);
     }
 
     async getNewFolderPath(request: Request, response: Response) {
         const { idOld, idNew } = request.query as { idOld: string, idNew: string };
 
-        const pastaAntiga = util.encryptMidia(idOld);
-        const pastaNova = util.encryptMidia(idNew);
+        const pastaAntiga = encryptMidia(idOld);
+        const pastaNova = encryptMidia(idNew);
 
-        util.systrace(201, response, { pastaAntiga, pastaNova });
+        systrace(201, response, { pastaAntiga, pastaNova });
     }
 }
 

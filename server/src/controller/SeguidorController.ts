@@ -8,7 +8,7 @@ import UsuarioController from './UsuarioController';
 import { Seguidor } from '../model/Seguidor';
 import { LogNotificacao } from '../model/LogNotificacao';
 import { Usuario } from '../model/Usuario';
-import util from '../util/util';
+import { getBoolean } from '../util/util';
 
 class SeguidorController {
     // Métodos internos
@@ -27,7 +27,7 @@ class SeguidorController {
 
         const usuario: Usuario = await usuarioController.findByLoginOrEmail(nomeUsuario);
         const usuarioSeguidor: Usuario = await usuarioController.findByLoginOrEmail(nomeSeguidor);
-        const notificar: boolean | null = util.getBoolean(notificarSeguidor);
+        const notificar: boolean | null = getBoolean(notificarSeguidor);
 
         const log: LogNotificacao = new LogNotificacao(usuarioSeguidor);
         await log.save();

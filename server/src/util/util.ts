@@ -5,206 +5,188 @@ import os from 'os';
 import fs from 'fs';
 
 import {
-  FACTOR,
-  SHEET_AVALIACAO,
-  SHEET_CATEGORIA,
-  SHEET_INGREDIENTE,
-  SHEET_MEDIDA,
-  SHEET_UNIDADE,
-  SHEET_USUARIO
+	FACTOR,
+	SHEET_AVALIACAO,
+	SHEET_CATEGORIA,
+	SHEET_INGREDIENTE,
+	SHEET_MEDIDA,
+	SHEET_UNIDADE,
+	SHEET_USUARIO
 } from './constants';
+
 import UsuarioController from '../controller/UsuarioController';
 import UnidadeController from '../controller/UnidadeController';
 import MedidaController from '../controller/MedidaController';
 import IngredienteController from '../controller/IngredienteController';
 import AvaliacaoController from '../controller/AvaliacaoController';
 import CategoriaController from '../controller/CategoriaController';
+
 import { Tipo } from '../model/Midia';
 
-export default {
-  getLocalIP() {
-    const networkInterfaces = os.networkInterfaces;
+export const getLocalIP = () => {
+	const networkInterfaces = os.networkInterfaces;
 
-    const nets = networkInterfaces();
+	const nets = networkInterfaces();
 
-    for (const name of Object.keys(nets)) {
-      for (const net of nets[name]) {
-        if (net.family === 'IPv4' && !net.internal) {
-          return net.address;
-        }
-      }
-    }
+	for (const name of Object.keys(nets)) {
+		for (const net of nets[name]) {
+			if (net.family === 'IPv4' && !net.internal) {
+			return net.address;
+			}
+		}
+	}
 
-    return '127.0.0.1';
-  },
+	return '127.0.0.1';
+}
 
-  isExtensao(nomeArquivo: string, extensoes: string[]): boolean {
-    const extensao = nomeArquivo.split('.').pop();
+export const isExtensao = (nomeArquivo: string, extensoes: string[]): boolean => {
+	const extensao = nomeArquivo.split('.').pop();
 
-    if (!extensao)
-      return false;
+	if (!extensao)
+		return false;
 
-    for (let key in extensoes) {
-      const ext = extensoes[key];
+	for (let key in extensoes) {
+		const ext = extensoes[key];
 
-      if (ext === extensao)
-        return true;
-    }
+		if (ext === extensao)
+			return true;
+	}
 
-    return false;
-  },
+	return false;
+}
 
-  getPath(tipo: string, buffer?: string): string {
-    if (tipo === 'midia' && buffer) {
-      return path.join(__dirname, '..', '..', 'uploads', 'midia', 'receita', buffer);
-    }
+export const getPath = (tipo: string, buffer?: string): string => {
+	if (tipo === 'midia' && buffer)
+		return path.join(__dirname, '..', '..', 'uploads', 'midia', 'receita', buffer);
 
-    if (tipo === 'usuario') {
-      return path.join(__dirname, '..', '..', 'uploads', 'midia', 'usuario');
-    }
+	if (tipo === 'usuario')
+		return path.join(__dirname, '..', '..', 'uploads', 'midia', 'usuario');
 
-    if (tipo === 'temp') {
-      return path.join(__dirname, '..', '..', 'uploads', 'temp');
-    }
+	if (tipo === 'temp')
+		return path.join(__dirname, '..', '..', 'uploads', 'temp');
 
-    return path.join(__dirname, '..', '..', 'uploads', 'imports');
-  },
+	return path.join(__dirname, '..', '..', 'uploads', 'imports');
+}
 
-  getHash(senha: string): string {
-    const hash = crypto.createHmac('sha256', senha)
-      .update(FACTOR)
-      .digest('hex');
+export const getHash = (senha: string): string => {
+	const hash = crypto.createHmac('sha256', senha)
+		.update(FACTOR)
+		.digest('hex');
 
-    return hash;
-  },
+	return hash;
+}
 
-  getBoolean(value?: string | boolean): boolean | null {
-    if (typeof value === 'boolean') {
-      return value;
-    }
+export const getBoolean = (value?: string | boolean): boolean | null => {
+	if (typeof value === 'boolean') return value;
 
-    if (value) {
-      const text = value.toLowerCase();
-      if (text === 'true' || text === 'sim' || text === '1') return true;
-      if (text === 'false' || text === 'nao' || text === 'não' || text === '0') return false;
-    }
+	if (value) {
+		const text = value.toLowerCase();
+		if (text === 'true' || text === 'sim' || text === '1') return true;
+		if (text === 'false' || text === 'nao' || text === 'não' || text === '0') return false;
+	}
 
-    return null;
-  },
+	return null;
+}
 
-  getBoolean2(value?: string | boolean): boolean {
-    const bool: boolean | null = this.getBoolean(value);
+export const getBoolean2 = (value?: string | boolean): boolean => {
+	const bool: boolean | null = getBoolean(value);
 
-    return bool ? true : false;
-  },
+	return bool ? true : false;
+}
 
-  getImportData(nome: string): { sheetName: string, controller: any } {
-    if (nome === 'avaliacao' || nome === 'avaliacões') {
+export const getImportData = (nome: string): { sheetName: string, controller: any } => {
+	if (nome === 'avaliacao' || nome === 'avaliacões') {
 
-      const sheetName = SHEET_AVALIACAO;
-      const controller = new AvaliacaoController();
+		const sheetName = SHEET_AVALIACAO;
+		const controller = new AvaliacaoController();
 
-      return { sheetName, controller };
+		return { sheetName, controller };
 
-    } else if (nome === 'categoria' || nome === 'categorias') {
+	} else if (nome === 'categoria' || nome === 'categorias') {
 
-      const sheetName = SHEET_CATEGORIA;
-      const controller = new CategoriaController();
+		const sheetName = SHEET_CATEGORIA;
+		const controller = new CategoriaController();
 
-      return { sheetName, controller };
+		return { sheetName, controller };
 
-    } else if (nome === 'ingrediente' || nome === 'ingredientes') {
+	} else if (nome === 'ingrediente' || nome === 'ingredientes') {
 
-      const sheetName = SHEET_INGREDIENTE;
-      const controller = new IngredienteController();
+		const sheetName = SHEET_INGREDIENTE;
+		const controller = new IngredienteController();
 
-      return { sheetName, controller };
+		return { sheetName, controller };
 
-    } else if (nome === 'medida' || nome === 'medidas') {
+	} else if (nome === 'medida' || nome === 'medidas') {
 
-      const sheetName = SHEET_MEDIDA;
-      const controller = new MedidaController();
+		const sheetName = SHEET_MEDIDA;
+		const controller = new MedidaController();
 
-      return { sheetName, controller };
+		return { sheetName, controller };
 
-    } else if (nome === 'unidade' || nome === 'unidades') {
+	} else if (nome === 'unidade' || nome === 'unidades') {
 
-      const sheetName = SHEET_UNIDADE;
-      const controller = new UnidadeController();
+		const sheetName = SHEET_UNIDADE;
+		const controller = new UnidadeController();
 
-      return { sheetName, controller };
+		return { sheetName, controller };
 
-    } else if (nome === 'usuario' || nome === 'usuarios') {
+	} else if (nome === 'usuario' || nome === 'usuarios') {
 
-      const sheetName = SHEET_USUARIO;
-      const controller = new UsuarioController();
+		const sheetName = SHEET_USUARIO;
+		const controller = new UsuarioController();
 
-      return { sheetName, controller };
+		return { sheetName, controller };
 
-    } throw Error('Tipo de importação não encontrada.');
-  },
+	} throw Error('Tipo de importação não encontrada.');
+}
 
-  getMessage(msg: string, params?: string[]): string {
-    if (params && params.length > 0) {
-      let text = msg;
-      for (let i = 0; i < params.length; i++) {
-        text = text.replace(`{${ i.toString() }}`, params[i]);
-      }
-      return text;
-    }
+export const getMessage = (msg: string, params?: string[]): string => {
+	if (params && params.length > 0) {
+		let text = msg;
+		for (let i = 0; i < params.length; i++) {
+			text = text.replace(`{${ i.toString() }}`, params[i]);
+		}
+		return text;
+	}
 
-    return msg;
-  },
+	return msg;
+}
 
-  encryptMidia(valor?: string): string {
-    return Buffer.from(valor ? valor : 'error').toString('hex');
-  },
+export const encryptMidia = (valor?: string): string => {
+	return Buffer.from(valor ? valor : 'error').toString('hex');
+}
 
-  moveFile(buffer: string, nome: string, novoNome?: string, tipo?: Tipo): void {
-    const srcPath: string = path.join(this.getPath('temp'), nome);
-    let destPath: string = '';
+export const moveFile = (buffer: string, nome: string, novoNome?: string, tipo?: Tipo): void => {
+	const srcPath: string = path.join(getPath('temp'), nome);
+	let destPath: string = '';
 
-    if (tipo) destPath = path.join(this.getPath('midia', buffer), `${ novoNome }.${ tipo === Tipo.FOTO ? 'png' : 'mp4' }`);
-    else destPath = path.join(this.getPath('usuario'), `${ buffer }.png`);
+	if (tipo) destPath = path.join(getPath('midia', buffer), `${ novoNome }.${ tipo === Tipo.FOTO ? 'png' : 'mp4' }`);
+	else destPath = path.join(getPath('usuario'), `${ buffer }.png`);
 
-    if (!fs.existsSync(srcPath)) {
-      throw Error('Source file doens\'t exists.');
-    }
+	if (!fs.existsSync(srcPath)) throw Error('Source file doens\'t exists.');
 
-    fs.copyFileSync(srcPath, destPath);
-    fs.unlinkSync(srcPath);
-  },
+	fs.copyFileSync(srcPath, destPath);
+	fs.unlinkSync(srcPath);
+}
 
-  systrace (status: number, response: Response, value?: any): Response {
-    if (!value) {
-      if (status === 204) {
-        return response.status(status).send();
-      }
+export const systrace = (status: number, response: Response, value?: any): Response => {
+	if (!value) {
+		if (status === 204) return response.status(status).send();
 
-      throw Error('Status requires response.');
-    }
+		throw Error('Status requires response.');
+	}
+	console.log(value);
 
-    console.log(value);
+	if (status === 200) return response.status(status).json(value);
+	return response.status(status).json({ message: value });
+}
 
-    if (status === 200) {
-      return response.status(status).json(value);
-    }
+export const syserror = (status: number, response: Response, value?: any): Response => {
+	if (!value) {
+		if (status === 401 || status === 403 || status === 405) return response.status(status).send();
+		throw Error('Status requires response.');
+	}
+	console.error(value);
 
-    return response.status(status).json({ message: value });
-  },
-
-  syserror (status: number, response: Response, value?: any): Response {
-    if (!value) {
-      if (status === 401 || status === 403 || status === 405) {
-        return response.status(status).send();
-      }
-
-      throw Error('Status requires response.');
-    }
-
-    console.error(value);
-
-    return response.status(status).json({ error: value });
-  },
-
+	return response.status(status).json({ error: value });
 }

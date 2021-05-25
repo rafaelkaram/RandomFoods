@@ -1,4 +1,4 @@
-import { Request, response, Response } from 'express';
+import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
 
 import { UnidadeRepository } from '../repository/UnidadeRepository';
@@ -6,14 +6,28 @@ import { UnidadeRepository } from '../repository/UnidadeRepository';
 import IngredienteController from './IngredienteController';
 import MedidaController from './MedidaController';
 
+import { systrace } from '../util/util';
 import { Ingrediente } from '../model/Ingrediente';
 import { Medida } from '../model/Medida';
 import { TipoUnidade } from '../model/TipoUnidade';
 import { Unidade } from '../model/Unidade';
 
+import unidadeView from '../view/UnidadeView';
 
 class UnidadeController {
     // Métodos de rotas
+    async index (request: Request, response: Response) {
+        const repository = getCustomRepository(UnidadeRepository);
+
+        const unidades = await repository.find({
+            relations: [ 'medida', 'ingrediente' ],
+            order: {
+                id: 'ASC'
+            }
+        });
+
+        return systrace(200, response, unidadeView.renderManyComplex(unidades));
+    }
 
     // Métodos internos
     async import(dados: any) {
