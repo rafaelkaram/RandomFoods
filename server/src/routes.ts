@@ -51,11 +51,11 @@ routes.post('/cadastro/usuarios', usuarioController.createBulk);
 // Utilizar parametros através de query ou endereço
 routes.get('/busca/tipo-receita', receitaController.typeIndex);
 routes.get('/busca/tipo-ingrediente', ingredienteController.typeIndex);
+routes.get('/busca/categoria', categoriaController.index);
+routes.get('/busca/ingrediente', ingredienteController.index);
 routes.get('/busca/receita', receitaController.index);
 routes.get('/busca/usuario', usuarioController.index);
-routes.get('/busca/ingrediente', ingredienteController.index);
 routes.get('/busca/unidade', unidadeController.index);
-routes.get('/busca/categoria', categoriaController.index);
 
 // Rotas de busca (buscar único)
 routes.get('/busca/receita/:id', receitaController.fetch);
