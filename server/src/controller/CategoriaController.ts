@@ -10,7 +10,7 @@ import { systrace } from '../util/util';
 class CategoriaController {
     // Métodos das rotas
     async index (request: Request, response: Response) {
-        const tipos = Object.keys(Tipo);
+        const tipos = Object.values(Tipo);
 
         return systrace(200, response, tipos);
     }

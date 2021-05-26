@@ -181,7 +181,7 @@ class ReceitaController {
 
     async typeIndex(request: Request, response: Response) {
 
-        const tipos = Object.keys(Tipo);
+        const tipos = Object.values(Tipo);
 
         return response.status(200).json(tipos);
     }
