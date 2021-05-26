@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { Feather, AntDesign } from '@expo/vector-icons';
+import { List } from 'react-native-paper';
 
 import api from '../../services/api';
 
@@ -30,12 +31,20 @@ const Filtro = () => {
     const [nomeIngrediente, setnomeIngrediente] = useState<string>('');
     const [derivadoLeite, setDerivadoLeite] = useState<boolean>(false);
     const [gluten, setGluten] = useState<boolean>(false);
+    const [categorias, setCategorias] = useState<{ nome: string, checka: boolean }[]>([])
 
     useEffect(() => {
         api.get('/busca/tipo-ingrediente')
             .then(response => {
                 setIngredientTypes(response.data);
                 setIngredientList(response.data);
+                setCategorias([
+                    { nome: "Diet", checka: false },
+                    { nome: "Light", checka: false },
+                    { nome: "Fitness", checka: false },
+                    { nome: "Vegana", checka: false },
+                    { nome: "Vegetariana", checka: false }
+                ]);
 
                 setLoad(true)
             })
@@ -89,18 +98,30 @@ const Filtro = () => {
             ingredientTypes.map(ingredientType => {
                 const list1: IIngrediente[] = ingredientType.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase()));
                 const list2: IListaIngredientes | null = filterGlutenEDerivadoLeite(gluten, derivadoLeite, list1, ingredientType);
-                if(list2) list.push(list2);
+                if (list2) list.push(list2);
             });
         } else if (gluten || derivadoLeite) {
             ingredientTypes.map(ingredientType => {
                 const list2: IListaIngredientes | null = filterGlutenEDerivadoLeite(gluten, derivadoLeite, ingredientType.ingredientes, ingredientType);
-                if(list2) list.push(list2);
+                if (list2) list.push(list2);
             });
         } else {
             list = ingredientTypes;
         }
 
         setIngredientList(list);
+    }
+
+    const filterCategory = (categoria: string) => {
+        let newArr: { nome: string, checka: boolean }[] = []
+        categorias.map(c => {
+            if (c.nome === categoria) {
+                newArr.push({ nome: c.nome, checka: !c.checka })
+            } else {
+                newArr.push({ nome: c.nome, checka: c.checka })
+            }
+        })
+        setCategorias(newArr);
     }
 
 
@@ -177,25 +198,52 @@ const Filtro = () => {
                 />
 
             </View>
-            <View style={styles.filter}>
-                <View>
-                    <TouchableOpacity
-                        style={derivadoLeite === true ? styles.filterBoxSelected : styles.filterBox}
-                        onPress={() => { derivadoLeite === false ? setDerivadoLeite(true) : setDerivadoLeite(false) }}
-                    >
-                        <RegularText style={derivadoLeite === false ? styles.filterName : styles.filterNameSelected}>Receitas sem lactose</RegularText>
+            <List.Section title="">
+                <List.Accordion
+                    style={{ width: 150, height: 50, borderRadius: 50, justifyContent: 'center' }}
+                    title="Filtros"
+                    titleStyle={{
+                        color: "#f87062",
+                        textShadowColor: 'black',
+                        textShadowRadius: 0.5,
+                        textShadowOffset: {
+                            width: 0.5,
+                            height: 0.5
+                        }
+                    }}
+                >
+                    <View style={styles.filter}>
+                        <View>
+                            <TouchableOpacity
+                                style={derivadoLeite === true ? styles.filterBoxSelected : styles.filterBox}
+                                onPress={() => { derivadoLeite === false ? setDerivadoLeite(true) : setDerivadoLeite(false) }}
+                            >
+                                <RegularText style={derivadoLeite === false ? styles.filterName : styles.filterNameSelected}>Sem lactose</RegularText>
 
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <TouchableOpacity
-                        style={gluten === true ? styles.filterBoxSelected : styles.filterBox}
-                        onPress={() => { gluten === false ? setGluten(true) : setGluten(false) }}
-                    >
-                        <RegularText style={gluten === false ? styles.filterName : styles.filterNameSelected}>Receitas sem gluten</RegularText>
-                    </TouchableOpacity>
-                </View>
-            </View>
+                            </TouchableOpacity>
+                        </View>
+                        <View>
+                            <TouchableOpacity
+                                style={gluten === true ? styles.filterBoxSelected : styles.filterBox}
+                                onPress={() => { gluten === false ? setGluten(true) : setGluten(false) }}
+                            >
+                                <RegularText style={gluten === false ? styles.filterName : styles.filterNameSelected}>Sem glúten</RegularText>
+                            </TouchableOpacity>
+                        </View>
+                        {categorias.map((categoria, index) => {
+                            return (
+                                <View key={index}>
+                                    <TouchableOpacity
+                                        style={categoria.checka === true ? styles.filterBoxSelected : styles.filterBox}
+                                        onPress={() => { filterCategory(categoria.nome) }}
+                                    >
+                                        <RegularText style={categoria.checka === false ? styles.filterName : styles.filterNameSelected}>{categoria.nome}</RegularText>
+                                    </TouchableOpacity>
+                                </View>)
+                        })}
+                    </View>
+                </List.Accordion>
+            </List.Section>
             <ScrollView>
                 {ingredientList.map(ingredientList => {
                     return (
@@ -334,8 +382,8 @@ const styles = StyleSheet.create({
         padding: 5,
         margin: 5,
         justifyContent: 'center',
-        alignItems:'center',
-        minWidth:50
+        alignItems: 'center',
+        minWidth: 50
     },
 
     ingredientSelected: {
@@ -345,8 +393,8 @@ const styles = StyleSheet.create({
         padding: 5,
         margin: 5,
         justifyContent: 'center',
-        alignItems:'center',
-        minWidth:50
+        alignItems: 'center',
+        minWidth: 50
     },
 
     ingredientName: {
@@ -376,6 +424,7 @@ const styles = StyleSheet.create({
     filter: {
         margin: 10,
         flexDirection: 'row',
+        flexWrap: 'wrap',
         marginTop: 0
     },
 
