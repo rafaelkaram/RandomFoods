@@ -5,9 +5,16 @@ import { CategoriaRepository } from '../repository/CategoriaRepository';
 
 import { Categoria, Tipo } from '../model/Categoria';
 import { Receita } from '../model/Receita';
+import { systrace } from '../util/util';
 
 class CategoriaController {
     // Métodos das rotas
+    async index (request: Request, response: Response) {
+        const tipos = Object.keys(Tipo);
+
+        return systrace(200, response, tipos);
+    }
+
     async countCategoryByUserId(request: Request, response: Response) {
         const repository = getCustomRepository(CategoriaRepository);
 
@@ -16,7 +23,7 @@ class CategoriaController {
 
         const categorias = await repository.countCategoryByUserId(usuarioId);
 
-        return response.status(200).json(categorias);
+        return systrace(200, response, categorias);
     }
 
     // Métodos internos
