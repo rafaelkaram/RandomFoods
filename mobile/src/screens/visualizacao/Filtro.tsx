@@ -31,23 +31,22 @@ const Filtro = () => {
     const [nomeIngrediente, setnomeIngrediente] = useState<string>('');
     const [derivadoLeite, setDerivadoLeite] = useState<boolean>(false);
     const [gluten, setGluten] = useState<boolean>(false);
-    const [categorias, setCategorias] = useState<{ nome: string, checka: boolean }[]>([])
+    const [categoriasSelecionadas, setCategoriasSelecionadas] = useState<string[]>([])
+    const [categorias, setCategorias] = useState<string[]>([])
 
     useEffect(() => {
         api.get('/busca/tipo-ingrediente')
             .then(response => {
                 setIngredientTypes(response.data);
                 setIngredientList(response.data);
-                setCategorias([
-                    { nome: "Diet", checka: false },
-                    { nome: "Light", checka: false },
-                    { nome: "Fitness", checka: false },
-                    { nome: "Vegana", checka: false },
-                    { nome: "Vegetariana", checka: false }
-                ]);
-
-                setLoad(true)
             })
+        api.get('/busca/categoria')
+            .then(response => {
+                setCategorias(response.data)
+            })
+
+            setLoad(true)
+
     }, []);
 
     useEffect(() => {
@@ -61,9 +60,9 @@ const Filtro = () => {
     }
 
     const handleSelectItem = (id: number, nome: string) => {
-        const alredySelected = selectedItems.findIndex(item => item === id);
+        const alreadySelected = selectedItems.findIndex(item => item === id);
 
-        if (alredySelected >= 0) {
+        if (alreadySelected >= 0) {
             const filteredItems = selectedItems.filter(item => item !== id);
             const filteredNames = ingredientsCart.filter(item => item.id !== id);
 
@@ -113,15 +112,13 @@ const Filtro = () => {
     }
 
     const filterCategory = (categoria: string) => {
-        let newArr: { nome: string, checka: boolean }[] = []
-        categorias.map(c => {
-            if (c.nome === categoria) {
-                newArr.push({ nome: c.nome, checka: !c.checka })
-            } else {
-                newArr.push({ nome: c.nome, checka: c.checka })
-            }
-        })
-        setCategorias(newArr);
+        const alreadySelected = categoriasSelecionadas.findIndex(item => item === categoria);
+        if (alreadySelected >= 0) {
+            const filteredItems = categoriasSelecionadas.filter(item => item !== categoria);
+            setCategoriasSelecionadas(filteredItems);
+        } else {
+            setCategoriasSelecionadas([...categoriasSelecionadas, categoria]);
+        }
     }
 
 
@@ -198,52 +195,57 @@ const Filtro = () => {
                 />
 
             </View>
-            <List.Section title="">
-                <List.Accordion
-                    style={{ width: 150, height: 50, borderRadius: 50, justifyContent: 'center' }}
-                    title="Filtros"
-                    titleStyle={{
-                        color: "#f87062",
-                        textShadowColor: 'black',
-                        textShadowRadius: 0.5,
-                        textShadowOffset: {
-                            width: 0.5,
-                            height: 0.5
-                        }
-                    }}
-                >
-                    <View style={styles.filter}>
-                        <View>
-                            <TouchableOpacity
-                                style={derivadoLeite === true ? styles.filterBoxSelected : styles.filterBox}
-                                onPress={() => { derivadoLeite === false ? setDerivadoLeite(true) : setDerivadoLeite(false) }}
-                            >
-                                <RegularText style={derivadoLeite === false ? styles.filterName : styles.filterNameSelected}>Sem lactose</RegularText>
+            <View>
+                <List.Section title="">
+                    <List.Accordion
+                        style={{ width: 150, height: 40, borderRadius: 20, justifyContent: 'center' }}
+                        title="Filtros"
+                        titleStyle={{
+                            color: "#f87062",
+                            textShadowColor: 'black',
+                            textShadowRadius: 0.5,
+                            textShadowOffset: {
+                                width: 0.5,
+                                height: 0.5
+                            }
+                        }}
+                    >
+                        <View style={styles.filter}>
+                            {categorias.map((categoria, index) => {
+                                return (
+                                    <View key={index}>
+                                        <TouchableOpacity
+                                            style={categoriasSelecionadas.includes(categoria) ? styles.filterBoxSelected : styles.filterBox}
+                                            onPress={() => { filterCategory(categoria) }}
+                                        >
+                                            <RegularText style={!categoriasSelecionadas.includes(categoria) ? styles.filterName : styles.filterNameSelected}>{categoria}</RegularText>
+                                        </TouchableOpacity>
+                                    </View>
+                                )
+                            })}
+                        </View>
+                    </List.Accordion>
+                </List.Section>
+                <View style={styles.filter}>
+                    <View>
+                        <TouchableOpacity
+                            style={derivadoLeite === true ? styles.filterBoxSelected : styles.filterBox}
+                            onPress={() => { derivadoLeite === false ? setDerivadoLeite(true) : setDerivadoLeite(false) }}
+                        >
+                            <RegularText style={derivadoLeite === false ? styles.filterName : styles.filterNameSelected}>Sem lactose</RegularText>
 
-                            </TouchableOpacity>
-                        </View>
-                        <View>
-                            <TouchableOpacity
-                                style={gluten === true ? styles.filterBoxSelected : styles.filterBox}
-                                onPress={() => { gluten === false ? setGluten(true) : setGluten(false) }}
-                            >
-                                <RegularText style={gluten === false ? styles.filterName : styles.filterNameSelected}>Sem glúten</RegularText>
-                            </TouchableOpacity>
-                        </View>
-                        {categorias.map((categoria, index) => {
-                            return (
-                                <View key={index}>
-                                    <TouchableOpacity
-                                        style={categoria.checka === true ? styles.filterBoxSelected : styles.filterBox}
-                                        onPress={() => { filterCategory(categoria.nome) }}
-                                    >
-                                        <RegularText style={categoria.checka === false ? styles.filterName : styles.filterNameSelected}>{categoria.nome}</RegularText>
-                                    </TouchableOpacity>
-                                </View>)
-                        })}
+                        </TouchableOpacity>
                     </View>
-                </List.Accordion>
-            </List.Section>
+                    <View>
+                        <TouchableOpacity
+                            style={gluten === true ? styles.filterBoxSelected : styles.filterBox}
+                            onPress={() => { gluten === false ? setGluten(true) : setGluten(false) }}
+                        >
+                            <RegularText style={gluten === false ? styles.filterName : styles.filterNameSelected}>Sem glúten</RegularText>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
             <ScrollView>
                 {ingredientList.map(ingredientList => {
                     return (
