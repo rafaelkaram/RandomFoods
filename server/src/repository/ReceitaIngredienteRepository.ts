@@ -11,7 +11,8 @@ export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente>
 
 		const query = this.createQueryBuilder('ri')
 		.select('ri.receita.id', 'id')
-		.where('ri.receita.ativo = :ativo ', { ativo: true });
+		.innerJoin('ri.receita', 'r')
+		.where('r.ativa = :ativa ', { ativa: true });
 
 		if (ids && ids.length > 0)
 		query.andWhere('ri.ingrediente IN ( :...ids )', { ids });
@@ -45,9 +46,9 @@ export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente>
 		if (tempoPreparo !== 0) {
 			query.andWhere(qb => {
 				const subQuery = qb.subQuery()
-				.select('r.id')
-				.from(Receita, 'r')
-				.where(' r.tempoPreparo = :tempoPreparo ');
+				.select('r2.id')
+				.from(Receita, 'r2')
+				.where(' r2.tempoPreparo = :tempoPreparo ');
 
 				const sub = subQuery.getQuery();
 
