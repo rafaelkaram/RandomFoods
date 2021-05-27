@@ -3,8 +3,17 @@ interface IComentario {
   conteudo: string,
   comentarioPai: number,
   data: Date,
-  usuario: IUsuarioSimples
+  usuario: IUsuarioSimples,
+  idReceita: number
 }
+
+interface IComentarioSend {
+  conteudo: string,
+  comentarioPai: number,
+  idUsuario: number,
+  idReceita: number
+}
+
 interface IIngrediente {
   id: number,
   nome: string,
@@ -79,7 +88,7 @@ interface IUsuarioSimples {
   login: string,
   nome: string,
   iniciais: string,
-  perfil:boolean,
+  perfil:string,
   path: string,
   ativo: boolean
 }

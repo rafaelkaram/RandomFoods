@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Image } from 'react-native';
 
-const BoldText = () => {
+const Loading = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Image
@@ -13,4 +13,4 @@ const BoldText = () => {
   );
 }
 
-export default BoldText;
+export default Loading;
