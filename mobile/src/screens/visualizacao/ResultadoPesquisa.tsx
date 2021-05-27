@@ -27,8 +27,17 @@ const Recipe = ({ route }: { route: any }) => {
             const { ingredientes } = route.params
             const { derivadoLeite } = route.params
             const { gluten } = route.params
-
-            const params = { ids: ingredientes, derivadoLeite: derivadoLeite, gluten: gluten }
+            const { categorias } = route.params
+            const { tipos } = route.params
+            
+            const params = 
+            { 
+                ids: ingredientes, 
+                derivadoLeite: derivadoLeite, 
+                gluten: gluten, 
+                categorias: categorias,
+                tipos: tipos,
+            }
 
             api.get('/busca/combinacoes', { params }
             ).then(response => {
