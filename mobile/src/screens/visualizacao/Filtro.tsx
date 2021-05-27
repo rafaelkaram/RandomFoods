@@ -28,26 +28,34 @@ const Filtro = () => {
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
     const [load, setLoad] = useState<boolean>(false)
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [modalFilter, setModalFilter] = useState<boolean>(false);
     const [nomeIngrediente, setnomeIngrediente] = useState<string>('');
     const [derivadoLeite, setDerivadoLeite] = useState<boolean>(false);
     const [gluten, setGluten] = useState<boolean>(false);
-    const [categorias, setCategorias] = useState<{ nome: string, checka: boolean }[]>([])
+    const [categoriasSelecionadas, setCategoriasSelecionadas] = useState<string[]>([])
+    const [categorias, setCategorias] = useState<string[]>([])
+    const [tipos, setTipos] = useState<string[]>([])
+    const [tiposSelecionados, setTiposSelecionados] = useState<string[]>([])
+    const [tempoDePreparo, setTempoDePreparo] = useState<string>('')
 
     useEffect(() => {
         api.get('/busca/tipo-ingrediente')
             .then(response => {
                 setIngredientTypes(response.data);
                 setIngredientList(response.data);
-                setCategorias([
-                    { nome: "Diet", checka: false },
-                    { nome: "Light", checka: false },
-                    { nome: "Fitness", checka: false },
-                    { nome: "Vegana", checka: false },
-                    { nome: "Vegetariana", checka: false }
-                ]);
-
-                setLoad(true)
             })
+        api.get('/busca/categoria')
+            .then(response => {
+                setCategorias(response.data)
+            })
+
+        api.get('/busca/tipo-receita')
+            .then(response => {
+                setTipos(response.data)
+            })
+
+        setLoad(true)
+
     }, []);
 
     useEffect(() => {
@@ -57,13 +65,21 @@ const Filtro = () => {
 
     const handleNavigateToRecipe = () => {
         if (ingredientsCart.length > 0)
-            navigation.navigate(screens.resultadoPesquisa, { ingredientes: selectedItems, derivadoLeite: derivadoLeite, gluten: gluten })
+            navigation.navigate(screens.resultadoPesquisa,
+                {
+                    ingredientes: selectedItems,
+                    derivadoLeite: derivadoLeite,
+                    gluten: gluten,
+                    categorias: categoriasSelecionadas,
+                    tipos: tiposSelecionados,
+                }
+            )
     }
 
     const handleSelectItem = (id: number, nome: string) => {
-        const alredySelected = selectedItems.findIndex(item => item === id);
+        const alreadySelected = selectedItems.findIndex(item => item === id);
 
-        if (alredySelected >= 0) {
+        if (alreadySelected >= 0) {
             const filteredItems = selectedItems.filter(item => item !== id);
             const filteredNames = ingredientsCart.filter(item => item.id !== id);
 
@@ -113,17 +129,28 @@ const Filtro = () => {
     }
 
     const filterCategory = (categoria: string) => {
-        let newArr: { nome: string, checka: boolean }[] = []
-        categorias.map(c => {
-            if (c.nome === categoria) {
-                newArr.push({ nome: c.nome, checka: !c.checka })
-            } else {
-                newArr.push({ nome: c.nome, checka: c.checka })
-            }
-        })
-        setCategorias(newArr);
+        const alreadySelected = categoriasSelecionadas.findIndex(item => item === categoria);
+        if (alreadySelected >= 0) {
+            const filteredItems = categoriasSelecionadas.filter(item => item !== categoria);
+            setCategoriasSelecionadas(filteredItems);
+        } else {
+            setCategoriasSelecionadas([...categoriasSelecionadas, categoria]);
+        }
     }
 
+    const filterType = (tipo: string) => {
+        const alreadySelected = tiposSelecionados.findIndex(item => item === tipo);
+        if (alreadySelected >= 0) {
+            const filteredItems = tiposSelecionados.filter(item => item !== tipo);
+            setTiposSelecionados(filteredItems);
+        } else {
+            setTiposSelecionados([...tiposSelecionados, tipo]);
+        }
+    }
+
+    const handleTempoPreparo = (sinal: string) => {
+
+    }
 
     if (!load) {
         return <Loading />
@@ -188,62 +215,112 @@ const Filtro = () => {
                     </View>
                 </BlurView>
             </Modal>
-            <View>
-                <Input
-                    placeholder="Pesquise por algum ingrediente"
-                    onChangeText={(value) => setnomeIngrediente(value)}
-                    value={nomeIngrediente}
-                    inputContainerStyle={{ borderBottomWidth: 0 }}
-                    style={styles.inputIngredient}
-                />
+            <Input
+                placeholder="Pesquise por algum ingrediente"
+                onChangeText={(value) => setnomeIngrediente(value)}
+                value={nomeIngrediente}
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                style={styles.inputIngredient}
+            />
 
-            </View>
-            <List.Section title="">
-                <List.Accordion
-                    style={{ width: 150, height: 50, borderRadius: 50, justifyContent: 'center' }}
-                    title="Filtros"
-                    titleStyle={{
-                        color: "#f87062",
-                        textShadowColor: 'black',
-                        textShadowRadius: 0.5,
-                        textShadowOffset: {
-                            width: 0.5,
-                            height: 0.5
-                        }
-                    }}
-                >
-                    <View style={styles.filter}>
-                        <View>
-                            <TouchableOpacity
-                                style={derivadoLeite === true ? styles.filterBoxSelected : styles.filterBox}
-                                onPress={() => { derivadoLeite === false ? setDerivadoLeite(true) : setDerivadoLeite(false) }}
-                            >
-                                <RegularText style={derivadoLeite === false ? styles.filterName : styles.filterNameSelected}>Sem lactose</RegularText>
 
-                            </TouchableOpacity>
-                        </View>
-                        <View>
-                            <TouchableOpacity
-                                style={gluten === true ? styles.filterBoxSelected : styles.filterBox}
-                                onPress={() => { gluten === false ? setGluten(true) : setGluten(false) }}
-                            >
-                                <RegularText style={gluten === false ? styles.filterName : styles.filterNameSelected}>Sem glúten</RegularText>
-                            </TouchableOpacity>
-                        </View>
-                        {categorias.map((categoria, index) => {
-                            return (
-                                <View key={index}>
-                                    <TouchableOpacity
-                                        style={categoria.checka === true ? styles.filterBoxSelected : styles.filterBox}
-                                        onPress={() => { filterCategory(categoria.nome) }}
-                                    >
-                                        <RegularText style={categoria.checka === false ? styles.filterName : styles.filterNameSelected}>{categoria.nome}</RegularText>
-                                    </TouchableOpacity>
-                                </View>)
-                        })}
+            <Modal
+                animationType="none"
+                transparent={true}
+                visible={modalFilter}
+                onRequestClose={() => {
+                    setModalFilter(!modalFilter);
+                }}
+            >
+                <BlurView intensity={200} style={[StyleSheet.absoluteFill, styles.nonBlurredContent]}>
+                    <TouchableOpacity
+                        style={styles.modalX}
+                        onPress={() => setModalFilter(!modalFilter)}
+                    >
+                        <BoldText style={{ alignSelf: 'center', color: 'white' }}>X</BoldText>
+                    </TouchableOpacity>
+                    <BoldText style={{ marginBottom: 10 }}>Filtros Selecionados</BoldText>
+                    <View style={styles.modalContainer}>
+                        <ScrollView style={{ maxHeight: Width }}>
+                            <View style={styles.filter}>
+                                <View>
+                                    <Text style={styles.filterListTitle}>Alérgicos</Text>
+                                    <View style={styles.modalFilter}>
+                                        <View>
+                                            <TouchableOpacity
+                                                style={derivadoLeite === true ? styles.filterBoxSelected : styles.filterBox}
+                                                onPress={() => { derivadoLeite === false ? setDerivadoLeite(true) : setDerivadoLeite(false) }}
+                                            >
+                                                <RegularText style={derivadoLeite === false ? styles.filterName : styles.filterNameSelected}>Sem lactose</RegularText>
+
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity
+                                                style={gluten === true ? styles.filterBoxSelected : styles.filterBox}
+                                                onPress={() => { gluten === false ? setGluten(true) : setGluten(false) }}
+                                            >
+                                                <RegularText style={gluten === false ? styles.filterName : styles.filterNameSelected}>Sem glúten</RegularText>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </View>
+
+                                <View>
+                                    <Text style={styles.filterListTitle}>Categorias</Text>
+                                    <View style={styles.modalFilter}>
+                                        {categorias.map((categoria, index) => {
+                                            return (
+                                                <View key={index}>
+                                                    <TouchableOpacity
+                                                        style={categoriasSelecionadas.includes(categoria) ? styles.filterBoxSelected : styles.filterBox}
+                                                        onPress={() => { filterCategory(categoria) }}
+                                                    >
+                                                        <RegularText style={!categoriasSelecionadas.includes(categoria) ? styles.filterName : styles.filterNameSelected}>{categoria}</RegularText>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            )
+                                        })}
+                                    </View>
+                                </View>
+                                <View>
+                                    <Text style={styles.filterListTitle}>Tipos</Text>
+                                    <View style={styles.modalFilter}>
+                                        {tipos.map((tipo, index) => {
+                                            return (
+                                                <View key={index}>
+                                                    <TouchableOpacity
+                                                        style={tiposSelecionados.includes(tipo) ? styles.filterBoxSelected : styles.filterBox}
+                                                        onPress={() => { filterType(tipo) }}
+                                                    >
+                                                        <RegularText style={!tiposSelecionados.includes(tipo) ? styles.filterName : styles.filterNameSelected}>{tipo}</RegularText>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            )
+                                        })}
+                                    </View>
+                                </View>
+                                <View>
+                                    <Text style={styles.filterListTitle}>Tempo de Preparo (Minutos)</Text>
+                                    <View style={styles.modalFilter}>
+                                        <View>
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+                        </ScrollView>
                     </View>
-                </List.Accordion>
-            </List.Section>
+                </BlurView>
+            </Modal>
+            <TouchableOpacity
+                style={styles.filterButton}
+                onPress={() => setModalFilter(true)}>
+                <Text style={styles.filterButtonText}>Filtros</Text>
+            </TouchableOpacity>
+
+
+
+
             <ScrollView>
                 {ingredientList.map(ingredientList => {
                     return (
@@ -425,7 +502,7 @@ const styles = StyleSheet.create({
         margin: 10,
         flexDirection: 'row',
         flexWrap: 'wrap',
-        marginTop: 0
+        marginTop: 0,
     },
 
     filterBox: {
@@ -460,12 +537,50 @@ const styles = StyleSheet.create({
 
     inputIngredient: {
         borderWidth: 1,
-        paddingBottom: 5,
         paddingLeft: 5,
         borderRadius: 10,
         borderColor: 'gray',
-    }
+        marginBottom: -20,
+    },
+    filterList: {
+        width: 120,
+        height: 40,
+        borderRadius: 20,
+        justifyContent: 'center',
+    },
+    filterListTitle: {
+        color: "#f87062",
+        textShadowColor: 'black',
+        textShadowRadius: 0.5,
+        textShadowOffset: {
+            width: 0.5,
+            height: 0.5,
 
+        },
+        margin: 10,
+    },
+    modalFilter: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+    filterButtonText: {
+        color: "white",
+    },
+    filterButton: {
+        alignItems: 'center',
+        alignSelf: 'center',
+        backgroundColor: '#e02041',
+        borderRadius: 8,
+        height: 40,
+        padding: 5,
+        margin: 5,
+        justifyContent: 'center',
+        width: 100
+    },
+    dadosDisplay: {
+        flexDirection: "row",
+        alignItems: 'center',
+    },
 })
 
 export default Filtro;
