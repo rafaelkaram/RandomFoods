@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { Text, View, ScrollView, StyleSheet, Dimensions } from 'react-native';
-import { Rating, Avatar, Icon } from 'react-native-elements';
+import React, { useEffect, useState, useContext } from 'react'
+import { Text, View, ScrollView, StyleSheet, Dimensions, KeyboardAvoidingView } from 'react-native';
+import { Rating, Avatar, Icon, Input } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, AntDesign, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import moment from 'moment';
 import CarouselItems, { SLIDER_WIDTH, ITEM_WIDTH } from '../../components/CarouselCardItem'
 
@@ -10,12 +10,17 @@ import "moment/min/locales";
 
 import api from '../../services/api'
 
-import { IComentario, IMidia, IReceita } from '../../constants/interfaces';
+import { IUsuario, IUsuarioSimples, IComentario, IMidia, IReceita } from '../../constants/interfaces';
 import colors from '../../constants/colors';
 
+import AuthContext from './../../contexts/auth'
 import RegularText from '../../components/RegularText';
 import Category from '../../components/Category';
 import BoldText from '../../components/BoldText';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import InputComment from '../../components/InputComment';
+
 
 const { height, width } = Dimensions.get('window');
 const numberGrid = 3;
@@ -25,12 +30,32 @@ moment.locale('pt-br');
 function SelectedRecipe({ route }: { route: any }) {
 
     const idRecipe = route.params.id;
+    const [usuario, setUsuario] = useState<IUsuario>();;
+    const [infoUsuario, setInfoUsuario] = useState<IUsuarioSimples>();
     const [recipe, setRecipe] = useState<IReceita>();
     const [comments, setComments] = useState<IComentario[]>([]);
+    const [Othercomments, setOtherComments] = useState<IComentario>();
     const [etapas, setEtapas] = useState<string[]>([])
     const [midias, setMidias] = useState<IMidia[]>([])
+    const [newC, setNewC] = useState(false)
+    const [newResposta, setNewResposta] = useState(false)
+    const [newComment, setNewComment] = useState('')
+    const [idCommentPai, setIdCommentpai] = useState<number | null>(null)
+    const [favorita, setFavorita] = useState(false)
+
+
+    const { user } = useContext(AuthContext)
 
     useEffect(() => {
+        if (user) {
+            setUsuario(user);
+            setInfoUsuario({ id: user.id, login: user.login, nome: user.nome, iniciais: user.iniciais, perfil: user.perfil, path: user.path, ativo: user.ativo })
+            console.log("logado", usuario);
+            console.log(infoUsuario)
+        } else {
+            console.log(" nao logado");
+
+        }
 
         api.get(`/busca/receita/${idRecipe}`)
             .then(response => {
@@ -41,6 +66,7 @@ function SelectedRecipe({ route }: { route: any }) {
             );
         api.get(`busca/comentario-receita/${idRecipe}`)
             .then(response => {
+                //console.log(response.data)
                 setComments(response.data);
             }
             );
@@ -48,7 +74,7 @@ function SelectedRecipe({ route }: { route: any }) {
     }, []);
 
     const ShowComments = ({ comentarios }: { comentarios: any[] }) => {
-
+        //console.log(comentarios)
         if (!comentarios) {
             return (<Text>Vamos comentar galera!</Text>);
         } else {
@@ -70,12 +96,26 @@ function SelectedRecipe({ route }: { route: any }) {
                                         </View>
                                     </View>
 
-                                    <RegularText>{comment.valor}</RegularText>
-                                    <View style={styles.commentHour}>
+                                    <RegularText style={{ marginTop: 5 }}>{comment.conteudo}</RegularText>
+                                    {/* <View style={styles.commentHour}>
                                         <Text>{moment(comment.data).format('HH:mm')}</Text>
-                                    </View>
+                                    </View> */}
+                                    <TouchableOpacity style={styles.commentBut}
+                                        onPress={() => {
+                                            if (newC == true) {
+                                                setNewComment('')
+                                                setIdCommentpai(comment.id)
+                                                setNewResposta(true)
+                                            }
+                                            setNewC(!newC)
+                                        }
+                                        }>
+                                        <MaterialCommunityIcons name="comment" size={20} color="black" />
+                                    </TouchableOpacity>
+
                                 </View>
                                 <ShowSubComment sub={comment.id} />
+
                             </View>
                         )
                     })}
@@ -95,6 +135,19 @@ function SelectedRecipe({ route }: { route: any }) {
 
         }
         return (<></>);
+    }
+
+    const submitComment = async (idReceita: number, idPai: number, conteudo: string) => {
+        const comentarioPai = idPai
+        const user = infoUsuario!
+        console.log('chegou!')
+        console.log(idPai)
+        await setComments([...comments, { id: comments.length + 1, data: new Date(), conteudo: conteudo, comentarioPai: comentarioPai, usuario: user, idReceita: idReceita }])
+        console.log(comments)
+    }
+
+    const setNew = () => {
+        setNewC(!newC)
     }
 
     return (
@@ -171,14 +224,45 @@ function SelectedRecipe({ route }: { route: any }) {
                         {etapas.map((etapa, index) => {
                             return (
                                 <View key={index} style={{ margin: 10 }}>
-                                    <RegularText>
+                                    <RegularText style={{ lineHeight: 18 }}>
                                         {etapa}
                                     </RegularText>
                                 </View>
                             )
                         })}
                     </View>
+                    <View style={styles.buttonActions}>
+                        <TouchableOpacity style={favorita ? styles.buttonFavTrue : styles.buttonFavFalse}
+                            onPress={() => {
+                                setFavorita(!favorita)
+                            }}>
+                            <AntDesign name="heart" size={20} color="white" />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.buttonComentar}
+                            onPress={() => {
+                                if (newC == true) {
+                                    setNewComment('')
+                                    setIdCommentpai(0)
+                                    setNewResposta(false)
+                                }
+                                setNewC(!newC)
+                            }}>
+                            <BoldText style={{ color: 'white', fontSize: 16 }}>Comentar</BoldText>
+                            <MaterialCommunityIcons name="comment" size={20} color="white" style={{ marginLeft: 10 }} />
+                        </TouchableOpacity>
+                    </View>
                     <ShowComments comentarios={comments.filter(comentario => (comentario.comentarioPai === null))} />
+
+
+                    {(newC) &&
+                        <InputComment
+                            resposta={newResposta}
+                            idPai={idCommentPai}
+                            idReceita={recipe?.id}
+                            submit={(idReceita: number, idPai: number, conteudo: string) => { submitComment(idReceita, idPai, conteudo) }}
+                            setNew={() => setNew()} />
+
+                    }
 
                 </View>
 
@@ -279,7 +363,7 @@ const styles = StyleSheet.create({
 
     singleComment: {
         backgroundColor: 'white',
-        padding: 10,
+        padding: 15,
         borderRadius: 10,
     },
 
@@ -296,7 +380,7 @@ const styles = StyleSheet.create({
         color: '#999'
     },
 
-    commentHour: {
+    commentBut: {
         paddingTop: 10,
         alignItems: 'flex-end',
     },
@@ -324,6 +408,49 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         borderRadius: 15,
     },
+    commentInput: {
+        borderBottomWidth: 0,
+        borderRadius: 10,
+        width: 300,
+        height: 100,
+        backgroundColor: 'white',
+        marginVertical: 10,
+        padding: 15
+    },
+    commentBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+
+    },
+    buttonComentar: {
+        backgroundColor: colors.dimmedBackground,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        borderRadius: 10,
+        margin: 10,
+        padding: 10,
+    },
+    buttonFavTrue: {
+        backgroundColor: colors.dimmedBackground,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        borderRadius: 10,
+        margin: 10,
+        padding: 10,
+    },
+    buttonFavFalse: {
+        backgroundColor: 'lightgrey',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        borderRadius: 10,
+        margin: 10,
+        padding: 10,
+    },
+    buttonActions: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+
+    }
 });
 
 export default SelectedRecipe;

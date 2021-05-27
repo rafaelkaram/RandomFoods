@@ -10,6 +10,7 @@ import Config from '../../constants/config';
 import MainButton from '../../components/MainButton';
 import SmallButton from '../../components/SmallButton';
 import BoldText from '../../components/BoldText';
+import screens from './../../constants/screens';
 
 const facebookLogo = require('../../assets/facebook.png');
 
@@ -64,6 +65,9 @@ const Login = () => {
     }, []);
 
 
+    const handleNavigateCreateUser = () => {
+        navigation.navigate(screens.cadastroUsuario);
+    }
 
 
     async function handleLogin(e: any) {
@@ -142,7 +146,7 @@ const Login = () => {
                             <SmallButton onPress={() => handleLogin}>Entrar</SmallButton>
                         </View>
                         <View style={styles.singleButt}>
-                            <SmallButton>Cadastrar</SmallButton>
+                            <SmallButton onPress={() =>{handleNavigateCreateUser()}}>Cadastrar</SmallButton>
                         </View>
                     </View>
                     <View style={styles.socialButtonsView}>

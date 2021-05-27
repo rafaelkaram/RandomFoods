@@ -39,22 +39,22 @@ const Painel = () => {
         }
     }, []);
 
-    useEffect(() => {
-        api.get(`/dashboard/tipos-receita/${usuario?.id}`)
-            .then(response => {
-                setRecipeType(response.data)
+    // useEffect(() => {
+    //     api.get(`/dashboard/tipos-receita/${usuario?.id}`)
+    //         .then(response => {
+    //             setRecipeType(response.data)
 
-            })
-        api.get(`/dashboard/categorias/${usuario?.id}`)
-            .then(response => {
-                setRecipeCategory(response.data)
-            })
+    //         })
+    //     api.get(`/dashboard/categorias/${usuario?.id}`)
+    //         .then(response => {
+    //             setRecipeCategory(response.data)
+    //         })
 
-        api.get(`/dashboard/avaliacoes/${usuario?.id}`)
-            .then(response => {
-                setTopVotedRecipe(response.data)
-            })
-    }, [usuario]);
+    //     api.get(`/dashboard/avaliacoes/${usuario?.id}`)
+    //         .then(response => {
+    //             setTopVotedRecipe(response.data)
+    //         })
+    // }, [usuario]);
 
     const pieTypeData = recipeType.map((item) => {
         return (
