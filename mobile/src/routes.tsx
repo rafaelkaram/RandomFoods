@@ -20,6 +20,7 @@ import Login from './screens/usuario/Login';
 import Painel from './screens/usuario/Painel';
 import Filtro from './screens/visualizacao/Filtro';
 import PassoAPasso from './screens/cadastro/PassoAPasso';
+import Usuario from './screens/cadastro/Usuario'
 
 import screens from './constants/screens';
 
@@ -59,8 +60,9 @@ const UserStack = () => {
 
     if (!signed) {
         return (
-            <AppStack.Navigator>
+            <AppStack.Navigator headerMode={'none'}>
                 <AppStack.Screen name={screens.login} component={Login} />
+                <AppStack.Screen name={screens.cadastroUsuario} component={Usuario} />
             </AppStack.Navigator>
         )
     } else {

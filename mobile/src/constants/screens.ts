@@ -3,6 +3,7 @@ export default {
   cadastroPassos: 'Cadastro Passos',
   cadastroIngredientes: 'Cadastro Ingredientes',
   cadastroQuantidades: 'Cadastro Quantidades',
+  cadastroUsuario: 'Cadastro Usuario',
   configuracoes: 'Configurações',
   filtro: 'Filtro de Pesquisa',
   home: 'Home',
