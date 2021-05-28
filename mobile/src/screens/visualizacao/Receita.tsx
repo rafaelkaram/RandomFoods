@@ -213,7 +213,7 @@ function SelectedRecipe({ route }: { route: any }) {
                                 <View style={styles.ingredient} key={ingredient.id}>
                                     <Entypo name="dot-single" size={15} color="black" />
                                     <RegularText>{ingredient.nome}</RegularText>
-                                    <RegularText>{ingredient.qtde ? `: ${ingredient.qtde.toString().replace('.00', '')}` : ' a gosto'}</RegularText>
+                                    <RegularText>{ingredient.medida}</RegularText>
                                 </View>
                             )
                         })}
