@@ -15,7 +15,7 @@ export default {
 				{ nome: 'Ml', taxaConversao: 0.001, tipo: TipoUnidade.VOLUME }
 			];
 
-			let medida: string = rI.quantidade ? `${ rI.quantidade.toString() }` : '';
+			let medida: string = rI.quantidade ? `${ rI.quantidade.toString() }` : 'a gosto';
 
 			if (rI.quantidade) {
 				if (rI.ingrediente.tipoUnidade === TipoUnidade.UNIDADE) {
