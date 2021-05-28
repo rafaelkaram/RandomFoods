@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
+import fs from 'fs';
+import path from 'path';
 
-import { getBoolean, getHash, systrace } from '../util/util';
+import { getBoolean, getHash, getPath, moveFile, systrace, syserror } from '../util/util';
 
 import { UsuarioRepository } from '../repository/UsuarioRepository';
 
@@ -27,6 +29,57 @@ class UsuarioController {
         }));
 
         return systrace(200, response, usuarioView.renderMany(usuariosFull));
+    }
+
+    async fetch(request: Request, response: Response) {
+        const repository = getCustomRepository(UsuarioRepository);
+
+        const { id } = request.params;
+
+        const logNotificacaoController = new LogNotificacaoController();
+
+        const usuario: Usuario = await repository.findOneOrFail({ id: parseInt(id) });
+        const qtdeLogs: number = await logNotificacaoController.countNotRead(usuario);
+
+        return systrace(200, response, usuarioView.render(usuario, qtdeLogs));
+    }
+
+    async exist(request: Request, response: Response) {
+        const repository = getCustomRepository(UsuarioRepository);
+
+        const { value } = request.body as { value: string };
+
+        const usuario = repository.findByLoginOrEmail(value);
+
+        if (usuario) return systrace(204, response);
+        return syserror(404, response);
+    }
+
+    async create(request: Request, response: Response) {
+        const { nome, login, email, senha } = request.body as {
+            nome: string,
+            login: string,
+            email: string,
+            senha: string
+        };
+        const image = request.file as Express.Multer.File;
+
+        const usuario: Usuario = new Usuario(nome, login, email, getHash(senha));
+        await usuario.save();
+
+        if (!usuario) {
+            const nomeArquivo: string = image.filename;
+
+            console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
+            fs.unlink(path.join(getPath('usuario'), nomeArquivo), (err) => {
+                if (err) throw err;
+            });
+            return syserror(400, response, 'Receita não encontrada!');
+        } else if (!image) {
+            return syserror(400, response, 'Nenhuma mídia encontrada!');
+        }
+
+        return systrace(200, response, usuarioView.render(usuario, 0));
     }
 
     async remove(request: Request, response: Response) {

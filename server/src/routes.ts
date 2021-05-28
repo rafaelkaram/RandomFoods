@@ -40,12 +40,11 @@ routes.post('/importacao/:nome', uploadFiles.array('files'), fileImportControlle
 // Utilizar parametros através do body da requisição
 routes.post('/cadastro/receita', uploadMidia.array('midias'), receitaController.create);
 routes.post('/cadastro/midia', uploadMidia.array('midias'), midiaController.create);
+routes.post('/cadastro/usuario', uploadProfilePic.single('image'), usuarioController.create);
 /*
 routes.post('/cadastro/avaliacao', avaliacaoController.create);
 routes.post('/cadastro/comentario', comentarioController.create);
 routes.post('/cadastro/imagem-perfil', uploadProfilePic.single('image'), usuarioController.uploadImage);
-routes.post('/cadastro/usuario', usuarioController.create);
-routes.post('/cadastro/usuarios', usuarioController.createBulk);
 */
 // Rotas de busca (buscar todos)
 // Utilizar parametros através de query ou endereço
@@ -59,11 +58,11 @@ routes.get('/busca/unidade', unidadeController.index);
 
 // Rotas de busca (buscar único)
 routes.get('/busca/receita/:id', receitaController.fetch);
+routes.get('/busca/usuario/:id', usuarioController.fetch);
 /*
 routes.get('/busca/comentario/:id', comentarioController.fetch);
 routes.get('/busca/ingrediente/:id', ingredienteController.fetch);
 routes.get('/busca/unidade/:id', unidadeController.fetch);
-routes.get('/busca/usuario/:id', usuarioController.fetch);
 */
 
 // Rotas de busca (busca personalizada)
@@ -83,6 +82,7 @@ routes.post('/remove/receita/:id', receitaController.remove);
 
 // Demais rotas
 //routes.post('/autenticar', usuarioController.validate);
+routes.post('/validate/usuario', usuarioController.exist);
 routes.get('/folder-name/:id', fileImportController.getFolderPath);
 routes.get('/atualiza-pasta', fileImportController.getNewFolderPath);
 
