@@ -183,7 +183,7 @@ export const systrace = (status: number, response: Response, value?: any): Respo
 
 export const syserror = (status: number, response: Response, value?: any): Response => {
 	if (!value) {
-		if (status === 401 || status === 403 || status === 405) return response.status(status).send();
+		if (status === 401 || status === 403 || status === 404 ||status === 405) return response.status(status).send();
 		throw Error('Status requires response.');
 	}
 	console.error(value);
