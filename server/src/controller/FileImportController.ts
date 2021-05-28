@@ -148,7 +148,7 @@ class FileImportController {
         const buffer = encryptMidia(id);
         const midiaPath = path.join('uploads', 'midias', 'receita', buffer);
 
-        systrace(201, response, midiaPath);
+        systrace(201, response, buffer);
     }
 
     async getNewFolderPath(request: Request, response: Response) {
