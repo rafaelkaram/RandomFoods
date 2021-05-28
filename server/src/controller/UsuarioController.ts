@@ -5,16 +5,28 @@ import { getBoolean, getHash, systrace } from '../util/util';
 
 import { UsuarioRepository } from '../repository/UsuarioRepository';
 
+import LogNotificacaoController from './LogNotificacaoController';
+
 import { Usuario, Perfil } from '../model/Usuario';
+
+import usuarioView from '../view/UsuarioView';
 
 class UsuarioController {
     // Métodos das rotas
     async index(request: Request, response: Response) {
         const repository = getCustomRepository(UsuarioRepository);
 
-        const usuarios = await repository.findAll();
+        const logNotificacaoController = new LogNotificacaoController();
 
-        return systrace(200, response, usuarios);
+        const usuarios: Usuario[] = await repository.findAll();
+        const usuariosFull: { usuario: Usuario, qtdeLogs: number }[] = await Promise.all(usuarios.map(async (usuario: Usuario) => {
+            return {
+                usuario,
+                qtdeLogs: await logNotificacaoController.countNotRead(usuario)
+            }
+        }));
+
+        return systrace(200, response, usuarioView.renderMany(usuariosFull));
     }
 
     async remove(request: Request, response: Response) {

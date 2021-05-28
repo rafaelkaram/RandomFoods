@@ -1,4 +1,6 @@
-import { encryptMidia, getLocalIP } from '../util/util';
+import path from 'path';
+import fs from 'fs';
+import { encryptMidia, getLocalIP, getPath } from '../util/util';
 
 import { Usuario } from "../model/Usuario";
 
@@ -31,6 +33,10 @@ export default {
 		const tam  = nomeCompleto.length - 1;
 		const firstName :string = nomeCompleto[0];
 		const lastName :string = nomeCompleto[tam];
+		const imgName: string = `${ encryptMidia(usuario.id.toString()) }.png`;
+		const existImg: boolean = fs.existsSync(path.join(getPath('usuario'), imgName));
+
+		const imgPath: string = existImg ? `http://${ getLocalIP() }:${ process.env.PORT }/uploads/midia/usuario/${ imgName }` : '';
 
 		return {
 			id: usuario.id,
@@ -40,7 +46,7 @@ export default {
 			iniciais: firstName[0] + lastName[0],
 			email: usuario.email,
 			perfil: usuario.perfil,
-			path: `http://${ getLocalIP() }:${ process.env.PORT }/uploads/midia/usuario/${ encryptMidia(usuario.id.toString()) }.png`,
+			path: imgPath,
 			dataCadastro: usuario.dataCadastro,
 			ativo: usuario.ativo,
 			trocaLogin: usuario.trocaLogin,
