@@ -10,7 +10,7 @@ import "moment/min/locales";
 
 import api from '../../services/api'
 
-import { IUsuario, IUsuarioSimples, IComentario, IMidia, IReceita } from '../../constants/interfaces';
+import { IUsuario, IUsuarioSimples, IComentarioSend, IComentario, IMidia, IReceita } from '../../constants/interfaces';
 import colors from '../../constants/colors';
 
 import AuthContext from './../../contexts/auth'
@@ -30,16 +30,18 @@ moment.locale('pt-br');
 function SelectedRecipe({ route }: { route: any }) {
 
     const idRecipe = route.params.id;
-    const [usuario, setUsuario] = useState<IUsuario>();;
-    const [infoUsuario, setInfoUsuario] = useState<IUsuarioSimples>();
+    const [usuario, setUsuario] = useState<IUsuario>();
+    const [idUser, setIdUser] = useState<number|null>(null);
+    const [userAtivo, setUserAtivo] = useState(false);
+   // const [infoUsuario, setInfoUsuario] = useState<IUsuarioSimples>();
     const [recipe, setRecipe] = useState<IReceita>();
     const [comments, setComments] = useState<IComentario[]>([]);
-    const [Othercomments, setOtherComments] = useState<IComentario>();
+    const [comentarioSend, setComentarioSend] = useState<IComentarioSend>();
     const [etapas, setEtapas] = useState<string[]>([])
     const [midias, setMidias] = useState<IMidia[]>([])
     const [newC, setNewC] = useState(false)
     const [newResposta, setNewResposta] = useState(false)
-    const [newComment, setNewComment] = useState('')
+
     const [idCommentPai, setIdCommentpai] = useState<number | null>(null)
     const [favorita, setFavorita] = useState(false)
 
@@ -49,9 +51,10 @@ function SelectedRecipe({ route }: { route: any }) {
     useEffect(() => {
         if (user) {
             setUsuario(user);
-            setInfoUsuario({ id: user.id, login: user.login, nome: user.nome, iniciais: user.iniciais, perfil: user.perfil, path: user.path, ativo: user.ativo })
+            setIdUser(user.id);
+           // setInfoUsuario({ id: user.id, login: user.login, nome: user.nome, iniciais: user.iniciais, perfil: user.perfil, path: user.path, ativo: user.ativo })
             console.log("logado", usuario);
-            console.log(infoUsuario)
+            //console.log(infoUsuario)
         } else {
             console.log(" nao logado");
 
@@ -88,7 +91,13 @@ function SelectedRecipe({ route }: { route: any }) {
                                     <View>
                                         <View style={styles.commentTitle}>
                                             <View style={styles.commentUserDate}>
-                                                <BoldText>{comment.usuario.nome}</BoldText>
+                                                {(comment.usuario.ativo)&&
+                                                    <BoldText>{comment.usuario.nome}</BoldText>
+                                                }
+                                                {(!comment.usuario.ativo)&&
+                                                    <BoldText style={{color:'lightgrey'}}>Usuário Inativo</BoldText>
+                                                }
+                                                
                                                 <RegularText style={styles.commentDate}> - {moment(comment.data).startOf('day').fromNow()}</RegularText>
                                             </View>
                                             {/* <Rating imageSize={10} readonly startingValue={Number(comment?.avaliacao)} /> */}
@@ -96,14 +105,13 @@ function SelectedRecipe({ route }: { route: any }) {
                                         </View>
                                     </View>
 
-                                    <RegularText style={{ marginTop: 5 }}>{comment.conteudo}</RegularText>
+                                    <RegularText style={ comment.usuario.ativo? {marginTop: 5}:{marginTop: 5 , color:'lightgrey'}}>{comment.conteudo}</RegularText>
                                     {/* <View style={styles.commentHour}>
                                         <Text>{moment(comment.data).format('HH:mm')}</Text>
                                     </View> */}
                                     <TouchableOpacity style={styles.commentBut}
                                         onPress={() => {
                                             if (newC == true) {
-                                                setNewComment('')
                                                 setIdCommentpai(comment.id)
                                                 setNewResposta(true)
                                             }
@@ -139,11 +147,13 @@ function SelectedRecipe({ route }: { route: any }) {
 
     const submitComment = async (idReceita: number, idPai: number, conteudo: string) => {
         const comentarioPai = idPai
-        const user = infoUsuario!
+        const user = idUser
+        setComentarioSend({conteudo:conteudo,comentarioPai:comentarioPai,idUsuario:user!,idReceita:idReceita})
+        //const user:IUsuarioSimples = infoUsuario
         console.log('chegou!')
-        console.log(idPai)
-        await setComments([...comments, { id: comments.length + 1, data: new Date(), conteudo: conteudo, comentarioPai: comentarioPai, usuario: user, idReceita: idReceita }])
-        console.log(comments)
+        //console.log(idPai)
+        //await setComments([...comments, { id: comments.length + 1, data: new Date(), conteudo: conteudo, comentarioPai: comentarioPai, usuario: user, idReceita: idReceita }])
+        //console.log(comments)
     }
 
     const setNew = () => {
@@ -241,7 +251,6 @@ function SelectedRecipe({ route }: { route: any }) {
                         <TouchableOpacity style={styles.buttonComentar}
                             onPress={() => {
                                 if (newC == true) {
-                                    setNewComment('')
                                     setIdCommentpai(0)
                                     setNewResposta(false)
                                 }

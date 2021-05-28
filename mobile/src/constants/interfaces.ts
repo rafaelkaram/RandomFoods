@@ -153,6 +153,7 @@ interface IPassoReceita2 {
 
 export {
   IComentario,
+  IComentarioSend,
   IIngrediente,
   IMidia,
   IReceita,
