@@ -49,10 +49,12 @@ class UsuarioController {
 
         const { value } = request.body as { value: string };
 
-        const usuario = repository.findByLoginOrEmail(value);
-
-        if (usuario) return systrace(204, response);
-        return syserror(404, response);
+        try {
+            await repository.findByLoginOrEmail(value);
+            return syserror(404, response);
+        } catch {
+            return systrace(204, response);
+        }
     }
 
     async create(request: Request, response: Response) {
