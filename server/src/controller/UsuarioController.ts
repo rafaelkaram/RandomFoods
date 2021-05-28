@@ -51,7 +51,7 @@ class UsuarioController {
 
         try {
             await repository.findByLoginOrEmail(value);
-            return syserror(404, response);
+            return syserror(203, response, 'Deu ruim');
         } catch {
             return systrace(204, response);
         }
