@@ -13,7 +13,7 @@ class ReceitaIngredienteController {
         const repository = getCustomRepository(ReceitaIngredienteRepository);
 
         const ingredientes = await repository.find({
-            relations: [ 'ingrediente', 'unidade' ],
+            relations: [ 'ingrediente', 'unidade', 'unidade.medida' ],
             where: {
                 receita,
             },
