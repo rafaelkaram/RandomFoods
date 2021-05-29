@@ -77,6 +77,7 @@ const InputSignUp = (props: {
     if (props.security) {
         return (
             <Input
+                autoCapitalize='none'
                 onEndEditing={() => { validateField(data) }}
                 placeholder={props.placeholder}
                 errorMessage={errorMessage}
@@ -97,6 +98,7 @@ const InputSignUp = (props: {
     } else {
         return (
             <Input
+                autoCapitalize={ props.tipo === 'name' ? 'words' : 'none' }
                 onEndEditing={() => { validateField(data) }}
                 placeholder={props.placeholder}
                 errorMessage={errorMessage}
