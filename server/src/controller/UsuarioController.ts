@@ -3,7 +3,7 @@ import { getCustomRepository } from 'typeorm';
 import fs from 'fs';
 import path from 'path';
 
-import { getBoolean, getHash, getPath, moveFile, systrace, syserror } from '../util/util';
+import { getBoolean, getHash, getPath, moveFile, systrace, syserror, encryptMidia } from '../util/util';
 
 import { UsuarioRepository } from '../repository/UsuarioRepository';
 
@@ -50,7 +50,7 @@ class UsuarioController {
         const { value } = request.body as { value: string };
 
         try {
-            await repository.findByLoginOrEmail(value);
+            await repository.findByLoginOrEmail(value ? value.toLowerCase() : '');
             return syserror(203, response, 'Deu ruim');
         } catch {
             return systrace(204, response);
@@ -66,22 +66,25 @@ class UsuarioController {
         };
         const image = request.file as Express.Multer.File;
 
-        const usuario: Usuario = new Usuario(nome, login, email, getHash(senha));
-        await usuario.save();
+        try {
+            const usuario: Usuario = new Usuario(login, email, getHash(senha));
+            if (nome) usuario.nome = nome;
+            await usuario.save();
 
-        if (!usuario) {
+            const buffer = encryptMidia(usuario.id.toString());
+
+            moveFile(buffer, image.filename);
+
+            return systrace(200, response, usuarioView.render(usuario, 0));
+        } catch (err) {
             const nomeArquivo: string = image.filename;
 
             console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
-            fs.unlink(path.join(getPath('usuario'), nomeArquivo), (err) => {
-                if (err) throw err;
+            fs.unlink(path.join(getPath('usuario'), nomeArquivo), (e) => {
+                if (e) return syserror(400, response, e);;
             });
-            return syserror(400, response, 'Receita não encontrada!');
-        } else if (!image) {
-            return syserror(400, response, 'Nenhuma mídia encontrada!');
+            return syserror(400, response, err);
         }
-
-        return systrace(200, response, usuarioView.render(usuario, 0));
     }
 
     async remove(request: Request, response: Response) {
@@ -138,8 +141,9 @@ class UsuarioController {
         const resposta = getBoolean(notificarResposta);
         const marca = getBoolean(notificarMarca);
 
-        const usuario = new Usuario(login, nome, email, hash);
+        const usuario = new Usuario(login, email, hash);
 
+        if (nome !== null) usuario.nome = nome;
         if (isAtivo !== null) usuario.ativo = isAtivo;
         if (isTrocaLogin !== null) usuario.trocaLogin = isTrocaLogin;
         if (perfil) usuario.perfil = perfil;

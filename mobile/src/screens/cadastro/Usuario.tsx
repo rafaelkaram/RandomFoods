@@ -10,6 +10,7 @@ import ItalicText from '../../components/ItalicText';
 import colors from '../../constants/colors';
 import api from '../../services/api';
 import InputSignUp from '../../components/InputSignUp'
+import RegularText from '../../components/RegularText';
 
 
 const Usuario = () => {
@@ -91,31 +92,34 @@ const Usuario = () => {
                         style={styles.createUserImage}
                         source={require('../../assets/criar-conta.png')}
                     />
-                    <ItalicText style={styles.subTitle}>Dados Gerais</ItalicText>
+                    {/* <ItalicText style={styles.subTitle}>Dados Gerais</ItalicText> */}
                 </View>
 
                 <View style={styles.inputsContainer}>
+                    <View style={ styles.midiaContainer }>
+                    { midia?.uri ?
+                        <View style={styles.midiaView}>
+                            <Image
+                                source={{ uri: midia?.uri }}
+                                style={styles.midia}
+                            />
+                            <TouchableOpacity style={styles.midiaRemove} onPress={() => handleRemoveMidia()} >
+                                {/* <Feather name='minus' size={16} color={colors.dimmedBackground} /> */}
+                                <RegularText style={{ color: colors.dimmedBackground }}>X</RegularText>
+                            </TouchableOpacity>
+
+                        </View>
+                        :
+                        <TouchableOpacity style={styles.midiaInput} onPress={handleAddMidia} >
+                            <Feather name='plus' size={24} color={colors.dimmedBackground} />
+                        </TouchableOpacity>
+                    }
+                    </View>
 
                     <InputSignUp tipo='username' placeholder='Username' icon='person-outline' security={false} setState={setUsername} ></InputSignUp>
                     <InputSignUp tipo='email' placeholder='Email' icon='mail-outline' security={false} setState={setEmail} ></InputSignUp>
                     <InputSignUp tipo='name' placeholder='Nome' icon='person-outline' security={false} setState={setName} ></InputSignUp>
                     <InputSignUp tipo='password' placeholder='Senha' icon='lock-closed-outline' security={true} setState={setPassword} ></InputSignUp>
-
-                    <View style={styles.midiaView}>
-                        <Image
-                            source={{ uri: midia?.uri }}
-                            style={styles.midia}
-                        />
-
-                        <TouchableOpacity style={styles.midiaInput} onPress={handleAddMidia} >
-                            <Feather name='plus' size={24} color={colors.dimmedBackground} />
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.midiaRemove} onPress={() => handleRemoveMidia()} >
-                            <Feather name='minus' size={16} color={colors.dimmedBackground} />
-                        </TouchableOpacity>
-
-                    </View>
 
                     <View style={styles.buttons}>
                         <View style={styles.singleButt}>
@@ -135,7 +139,8 @@ const Usuario = () => {
 const styles = StyleSheet.create({
 
     createuserImageContainer: {
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingBottom: 10
     },
 
     createUserImage: {
@@ -150,10 +155,11 @@ const styles = StyleSheet.create({
 
     inputsContainer: {
         alignContent: 'center',
-        margin: 30,
+        margin: 15,
         padding: 20,
         justifyContent: 'center',
         backgroundColor: 'white',
+        borderRadius: 15
     },
 
     buttons: {
@@ -174,13 +180,19 @@ const styles = StyleSheet.create({
         paddingRight: 10
     },
 
+    midiaContainer: {
+        alignItems: 'center',
+        paddingBottom: 10,
+    },
+
     midia: {
-        width: 64,
-        height: 64,
-        borderRadius: 20,
+        width: 80,
+        height: 80,
+        borderRadius: 40,
         borderWidth: 1,
         borderColor: colors.dimmedBackground,
-        marginRight: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
 
     },
 
@@ -188,30 +200,31 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
         borderStyle: 'dashed',
         borderColor: colors.dimmedBackground,
-        borderWidth: 1.4,
-        borderRadius: 20,
-        height: 64,
-        width: 64,
+        borderWidth: 1,
+        borderRadius: 40,
+        height: 80,
+        width: 80,
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: 20,
     },
 
     midiaView: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        marginBottom: 10
+        position: 'relative'
     },
 
     midiaRemove: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
         backgroundColor: colors.backgroundDimmed,
         borderColor: colors.dimmedBackground,
         borderWidth: 0.5,
         borderRadius: 20,
-        padding: 3,
-        maxHeight: 25,
-        maxWidth: 25,
-        alignSelf: 'center'
+        width: 20,
+        height: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+
     },
 })
 

@@ -160,7 +160,7 @@ export const moveFile = (buffer: string, nome: string, novoNome?: string, tipo?:
 	const srcPath: string = path.join(getPath('temp'), nome);
 	let destPath: string = '';
 
-	if (tipo) destPath = path.join(getPath('midia', buffer), `${ novoNome }.${ tipo === Tipo.FOTO ? 'png' : 'mp4' }`);
+	if (tipo && novoNome) destPath = path.join(getPath('midia', buffer), `${ novoNome }.${ tipo === Tipo.FOTO ? 'png' : 'mp4' }`);
 	else destPath = path.join(getPath('usuario'), `${ buffer }.png`);
 
 	if (!fs.existsSync(srcPath)) throw Error('Source file doens\'t exists.');
