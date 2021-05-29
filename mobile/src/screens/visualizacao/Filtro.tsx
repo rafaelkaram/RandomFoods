@@ -5,9 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { Feather, AntDesign } from '@expo/vector-icons';
-import { List } from 'react-native-paper';
-
 import api from '../../services/api';
+import FilterModal from '../../components/FilterModal'
 
 import { IListaIngredientes, ICart, IIngrediente } from '../../constants/interfaces';
 import screens from '../../constants/screens';
@@ -36,7 +35,8 @@ const Filtro = () => {
     const [categorias, setCategorias] = useState<string[]>([])
     const [tipos, setTipos] = useState<string[]>([])
     const [tiposSelecionados, setTiposSelecionados] = useState<string[]>([])
-    const [tempoDePreparo, setTempoDePreparo] = useState<string>('')
+    const [tempoDePreparo, setTempoDePreparo] = useState<number>(0)
+    const [tempos, setTempos] = useState<number[]>([])
 
     useEffect(() => {
         api.get('/busca/tipo-ingrediente')
@@ -54,6 +54,7 @@ const Filtro = () => {
                 setTipos(response.data)
             })
 
+        setTempos([1,2,3])
         setLoad(true)
 
     }, []);
@@ -72,6 +73,7 @@ const Filtro = () => {
                     gluten: gluten,
                     categorias: categoriasSelecionadas,
                     tipos: tiposSelecionados,
+                    tempoDePreparo: tempoDePreparo,
                 }
             )
     }
@@ -148,10 +150,6 @@ const Filtro = () => {
         }
     }
 
-    const handleTempoPreparo = (sinal: string) => {
-
-    }
-
     if (!load) {
         return <Loading />
     }
@@ -224,7 +222,7 @@ const Filtro = () => {
             />
 
 
-            <Modal
+            {/* <Modal
                 animationType="none"
                 transparent={true}
                 visible={modalFilter}
@@ -301,9 +299,23 @@ const Filtro = () => {
                                     </View>
                                 </View>
                                 <View>
-                                    <Text style={styles.filterListTitle}>Tempo de Preparo (Minutos)</Text>
+                                    <Text style={styles.filterListTitle}>Tempo de Preparo</Text>
                                     <View style={styles.modalFilter}>
                                         <View>
+                                        {tempos.map((tempo, index) => {
+                                            return (
+                                                <View key={index}>
+                                                    <TouchableOpacity
+                                                        style={tempoDePreparo === tempo ? styles.filterBoxSelected : styles.filterBox}
+                                                        onPress={() => { tempoDePreparo === tempo ? setTempoDePreparo(undefined) : setTempoDePreparo(tempo)}}
+                                                    >
+                                                        <RegularText style={tempoDePreparo !== tempo ? styles.filterName : styles.filterNameSelected}>
+                                                            {tempo === 1 ? ("Até 30 Minutos") : tempo === 2 ? ("30 Minutos") : "Mais de 30 Minutos"}
+                                                        </RegularText>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            )
+                                        })}
                                         </View>
                                     </View>
                                 </View>
@@ -311,7 +323,24 @@ const Filtro = () => {
                         </ScrollView>
                     </View>
                 </BlurView>
-            </Modal>
+            </Modal> */}
+            <FilterModal 
+                modalFilter={modalFilter}
+                derivadoLeite={derivadoLeite}
+                gluten={gluten}
+                categoriasSelecionadas={categoriasSelecionadas}
+                categorias={categorias}
+                tipos={tipos}
+                tiposSelecionados={tiposSelecionados}
+                tempoDePreparo={tempoDePreparo}
+                tempos={tempos}
+                filterCategory={(categoria: string) => filterCategory(categoria)}
+                filterType={(tipo: string) => filterType(tipo)}
+                setModalFilter={(modalFilter: boolean) => setModalFilter(modalFilter)}
+                setTempoDePreparo={(tempo: number) => setTempoDePreparo(tempo)}
+                setGluten={(gluten: boolean) => setGluten(gluten)}
+                setDerivadoLeite={(derivadoLeite: boolean) => setDerivadoLeite(derivadoLeite)}
+            />
             <TouchableOpacity
                 style={styles.filterButton}
                 onPress={() => setModalFilter(true)}>
