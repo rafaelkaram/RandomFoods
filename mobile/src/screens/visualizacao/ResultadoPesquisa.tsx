@@ -29,7 +29,8 @@ const Recipe = ({ route }: { route: any }) => {
             const { gluten } = route.params
             const { categorias } = route.params
             const { tipos } = route.params
-            
+            const { tempoDePreparo } = route.params
+
             const params = 
             { 
                 ids: ingredientes, 
@@ -37,6 +38,7 @@ const Recipe = ({ route }: { route: any }) => {
                 gluten: gluten, 
                 categorias: categorias,
                 tipos: tipos,
+                tempoDePreparo: tempoDePreparo,
             }
 
             api.get('/busca/combinacoes', { params }
