@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, View, } from 'react-native';
 
 import Comment from '../components/Comment';
-import { IComment } from '../constants/interfaces';
+import { IComentario } from '../constants/interfaces';
 
 interface CommentBoxProps {
-  comentarios: IComment[],
+  comentarios: IComentario[],
 
 }
 

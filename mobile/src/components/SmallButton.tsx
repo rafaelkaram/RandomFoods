@@ -12,7 +12,7 @@ const MainButton = (props : any) => {
 }
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.dimmedBackground,
     margin: 5,
     paddingVertical: 12,
     paddingHorizontal: 30,
