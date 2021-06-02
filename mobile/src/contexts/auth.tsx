@@ -46,7 +46,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     }
 
     async function signOut() {
-        AsyncStorage.clear().then(() => {
+        await AsyncStorage.clear().then(() => {
             setUser(null)
             console.log("LogOff");
 

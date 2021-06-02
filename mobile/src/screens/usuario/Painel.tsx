@@ -12,6 +12,7 @@ import { IUsuario, IPainelTipoReceita, IPainelCategorias, IPainelVotos } from '.
 
 import ItalicText from '../../components/ItalicText';
 import BoldText from '../../components/BoldText';
+import RegularText from '../../components/RegularText';
 
 const Painel = () => {
 
@@ -33,9 +34,9 @@ const Painel = () => {
             setUsuario(user);
             setLoad(true)
             console.log("painel logado", usuario);
-        }else{
+        } else {
             console.log("painel nao logado");
-            
+
         }
     }, []);
 
@@ -95,17 +96,32 @@ const Painel = () => {
     }
 
     return (
-        <SafeAreaView style={styles.main}>
-            <ScrollView >
+        <>
+            <ScrollView>
                 <View style={styles.mainContainer}>
-                    <Avatar
-                        size="large"
-                        rounded
-                        title={usuario?.iniciais}
-                        activeOpacity={0.7}
-                        containerStyle={{ backgroundColor: 'lightgrey' }}
-                    />
-                    <BoldText style={styles.name}>{usuario?.nome}</BoldText>
+                    {usuario?.path ?
+                        <Avatar
+                            size="large"
+                            rounded
+                            title={usuario?.iniciais}
+                            source={{
+                                uri: usuario?.path
+                            }}
+                            activeOpacity={0.7}
+                            containerStyle={{ backgroundColor: 'lightgrey' }}
+                        />
+                        :
+                        <Avatar
+                            size="large"
+                            rounded
+                            title={usuario?.iniciais}
+                            activeOpacity={0.7}
+                            containerStyle={{ backgroundColor: 'lightgrey' }}
+                        />}
+                    <View style={styles.nameContainer}>
+                        <BoldText style={styles.name}>{usuario?.nome}</BoldText>
+                        <RegularText style={styles.login}>@{usuario?.login}</RegularText>
+                    </View>
                 </View>
                 <View style={styles.totalRecipes}>
                     <Text style={styles.totalRecipesTitle}>Receitas Cadastradas:</Text>
@@ -179,7 +195,7 @@ const Painel = () => {
                 <View style={{ margin: 10 }}></View>
                 <Button title="Sign Out" onPress={() => handleSignOut()} />
             </ScrollView>
-        </SafeAreaView>
+        </>
     )
 }
 
@@ -187,50 +203,36 @@ const chartHeight = Dimensions.get("window").height * 0.5;
 const chartWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
+    main: {
+        backgroundColor: Colors.background
+    },
+
     mainContainer: {
         margin: 20,
-        marginHorizontal: 15,
         backgroundColor: "white",
         height: 120,
         borderRadius: 15,
         flexDirection: 'row',
         padding: 20,
-        alignItems: 'center'
+        alignItems: 'center',
+        maxWidth: chartWidth,
+    },
 
+    nameContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap', 
+        width: (chartWidth * 0.7),         
     },
-    image: {
-        borderWidth: 1,
-        height: 100,
-        width: 100,
-        textAlign: 'center',
-    },
+
     name: {
         marginLeft: 20,
         fontSize: 18,
     },
-    main: {
-        flex: 1,
-        backgroundColor: Colors.background
-    },
 
-    titleContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        margin: 15,
-    },
-
-    mainTitle: {
-        textAlign: 'left',
-        color: "#f87062",
-        fontFamily: 'Ubuntu_700Bold',
-        padding: 15,
-        fontSize: 24,
-        textShadowColor: 'black',
-        textShadowRadius: 1,
-        textShadowOffset: {
-            width: 1,
-            height: 1
-        },
+    login: {
+        marginLeft: 20,
+        marginTop: 10,
+        fontSize: 14,
     },
 
     totalRecipes: {
