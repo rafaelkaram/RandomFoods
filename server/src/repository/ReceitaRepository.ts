@@ -35,4 +35,12 @@ export class ReceitaRepository extends Repository<Receita> {
 
 		return receitas;
 	}
+
+	async getTempoPreparo(isMin: boolean) {
+		const { tempo }: { tempo: number } = await this.createQueryBuilder('r')
+			.select(isMin ? 'MIN(r.tempo_preparo)' : 'MAX(r.tempo_preparo)', 'tempo')
+			.getRawOne();
+
+		return tempo;
+	}
 }

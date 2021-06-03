@@ -51,7 +51,7 @@ routes.post('/cadastro/imagem-perfil', uploadProfilePic.single('image'), usuario
 routes.get('/busca/tipo-receita', receitaController.typeIndex);
 routes.get('/busca/tipo-ingrediente', ingredienteController.typeIndex);
 routes.get('/busca/categoria', categoriaController.index);
-routes.get('/busca/ingrediente', ingredienteController.index);
+routes.get('/busca/ingredientes', ingredienteController.index);
 routes.get('/busca/receita', receitaController.index);
 routes.get('/busca/usuario', usuarioController.index);
 routes.get('/busca/unidade', unidadeController.index);
@@ -69,6 +69,7 @@ routes.get('/busca/unidade/:id', unidadeController.fetch);
 routes.get('/busca/ingrediente', ingredienteController.findByIds);
 routes.get('/busca/comentario-receita/:idReceita', comentarioController.findByReceita);
 routes.get('/busca/combinacoes', receitaController.findMatches);
+routes.get('/busca/tempo-preparo', receitaController.getTempoPreparo);
 //routes.get('/busca/receita-usuario/:idUsuario', receitaController.findByUser);
 
 // Rotas Dashboard
