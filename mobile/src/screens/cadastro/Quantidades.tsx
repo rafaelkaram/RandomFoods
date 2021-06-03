@@ -8,6 +8,7 @@ import api from '../../services/api';
 
 import { IListaIngredientes, IIngrediente } from '../../constants/interfaces';
 import screens from '../../constants/screens';
+import colors from '../../constants/colors';
 
 import BoldText from '../../components/BoldText';
 import ItalicText from '../../components/ItalicText';
@@ -20,7 +21,7 @@ const Quantidades = ({ route }: { route: any }) => {
     const [ingredientsCart, setIngredientsCart] = useState<IListaIngredientes[]>([]);
     const [load, setLoad] = useState<boolean>(false);
 
-    useEffect(() => { 
+    useEffect(() => {
         if (route.params) {
             const { idIngredientes } = route.params;
             const params = { ids: idIngredientes };
@@ -123,9 +124,9 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 80,
         position: 'absolute',
-        top: (Height - 130),
-        right: 20,
-        backgroundColor: '#e02041',
+        bottom: 10,
+        right: 10,
+        backgroundColor: colors.selectedButton,
         justifyContent: 'center',
     },
     newRecipeImage: {

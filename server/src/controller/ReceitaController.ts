@@ -123,6 +123,16 @@ class ReceitaController {
         return systrace(200, response, tipos);
     }
 
+    async getTempoPreparo(request: Request, response: Response) {
+        const repository = getCustomRepository(ReceitaRepository);
+
+        const min = await repository.getTempoPreparo(true);
+        const max = await repository.getTempoPreparo(false);
+
+
+        return systrace(200, response, [ min, max ]);
+    }
+
     // Métodos internos
     async import(dados: { nome: string, descricao: string, tempoPreparo: number, tipo: string, usuario?: string },
         dadosIngrediente: { nomeIngrediente: string, unidade?: string, quantidade?: number }[],

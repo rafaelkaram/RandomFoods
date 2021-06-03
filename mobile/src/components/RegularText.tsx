@@ -11,7 +11,8 @@ const RegularText = (props : any) => {
 
 const styles = StyleSheet.create({
   fontText: {
-    fontFamily: 'Ubuntu_400Regular'
+    fontFamily: 'Ubuntu_400Regular',
+    color: 'black'
   }
 });
 
