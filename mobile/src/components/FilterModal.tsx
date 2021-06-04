@@ -98,7 +98,7 @@ const FilterModal = (props: {
                                             min={ tempos[0] }
                                             max={ tempos[1] }
                                             sliderLength={ Width * 0.6 }
-                                            minMarkerOverlapDistance={ 5 }
+                                            minMarkerOverlapDistance={ 12 }
                                             onValuesChange={(value) => setTempoDePreparo(value)}
                                             trackStyle={{ height: 10, borderRadius: 5 }}
                                             selectedStyle={{ backgroundColor: colors.opaqueBackground }}
