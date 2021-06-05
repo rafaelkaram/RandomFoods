@@ -1,13 +1,12 @@
-import React, { createContext, useState, useEffect, useContext } from 'react'
-import AsyncStorage from '@react-native-community/async-storage'
-import api from '../services/api'
-import { IUsuario } from './../constants/interfaces'
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
+import { IUsuario } from './../constants/interfaces';
 
 
 interface AuthContextData {
     signed: boolean
     user: IUsuario | null
-    signIn(): Promise<void>
+    signIn(usuario: IUsuario): Promise<void>
     signOut(): void
 }
 
@@ -35,21 +34,19 @@ export const AuthProvider: React.FC = ({ children }) => {
     }, [])
 
     //resolver async
-    async function signIn() {
-        const response = await api.get('/busca/usuario')
-            .then(response => {
-                setUser(response.data[1]);
-                AsyncStorage.setItem('user', JSON.stringify(response.data[1]))
-                console.log("Login");
-
-            })
+    const signIn = async (usuario: IUsuario) => {
+        if (!usuario) {
+            throw 'Deu ruim';
+        } else {
+            AsyncStorage.setItem('user', JSON.stringify(usuario));
+            console.log('Login realizado com sucesso');
+        }
     }
 
-    async function signOut() {
+    const signOut = async () => {
         await AsyncStorage.clear().then(() => {
             setUser(null)
             console.log("LogOff");
-
         })
     }
 
