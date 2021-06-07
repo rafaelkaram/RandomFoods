@@ -358,9 +358,9 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 80,
         position: 'absolute',
-        top: (Height - 100),
-        right: 20,
-        backgroundColor: colors.dimmedBackground,
+        bottom: 10,
+        right: 10,
+        backgroundColor: colors.selectedButton,
         justifyContent: 'center',
     },
 

@@ -44,16 +44,51 @@ class UsuarioController {
         return systrace(200, response, usuarioView.render(usuario, qtdeLogs));
     }
 
+    async findFbLogin(request: Request, response: Response) {
+        const repository = getCustomRepository(UsuarioRepository);
+
+        const { id, name } = request.body;
+
+        try {
+            const usuario: Usuario = await repository.findOneOrFail({ idExterno: id });
+
+            const logNotificacaoController = new LogNotificacaoController();
+            const qtdeLogs = await logNotificacaoController.countNotRead(usuario);
+
+            return systrace(200, response, usuarioView.render(usuario, qtdeLogs));
+        } catch (err) {
+            const dados: string = name.replace(' ', '').toLowerCase();
+            const now: number = Date.now();
+
+            const usuario = new Usuario(dados + now, '', getHash(now.toString()));
+            usuario.idExterno = id;
+            usuario.nome = name;
+            usuario.trocaLogin = true;
+
+            await usuario.save();
+
+            return systrace(200, response, usuarioView.render(usuario, 0));
+        }
+    }
+
     async exist(request: Request, response: Response) {
         const repository = getCustomRepository(UsuarioRepository);
 
-        const { value } = request.body as { value: string };
+        const { login, senha } = request.body as { login: string, senha: string };
 
         try {
-            await repository.findByLoginOrEmail(value ? value.toLowerCase() : '');
-            return syserror(203, response, 'Deu ruim');
-        } catch {
-            return systrace(204, response);
+            const logNotificacaoController = new LogNotificacaoController();
+
+            const usuario: Usuario = await repository.findByLoginOrEmail(login ? login.toLowerCase() : '');
+            const qtdeLogs: number = await logNotificacaoController.countNotRead(usuario);
+
+            if (usuario && usuario.senha === getHash(senha)) {
+                return systrace(200, response, usuarioView.render(usuario, qtdeLogs));
+            }
+            throw 'Login ou senha inválidos.';
+
+        } catch (err) {
+            return syserror(400, response, err);
         }
     }
 

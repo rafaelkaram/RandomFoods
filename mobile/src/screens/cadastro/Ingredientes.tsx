@@ -10,6 +10,7 @@ import api from '../../services/api';
 
 import { IListaIngredientes, ICart } from '../../constants/interfaces';
 import screens from '../../constants/screens';
+import colors from '../../constants/colors';
 
 import BoldText from '../../components/BoldText';
 import Loading from '../../components/Loading';
@@ -330,9 +331,9 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 80,
         position: 'absolute',
-        top: (Height - 130),
-        right: 20,
-        backgroundColor: '#e02041',
+        bottom: 10,
+        right: 10,
+        backgroundColor: colors.selectedButton,
         justifyContent: 'center',
     },
 

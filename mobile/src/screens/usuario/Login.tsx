@@ -9,8 +9,9 @@ import AuthContext from '../../contexts/auth'
 import Config from '../../constants/config';
 import MainButton from '../../components/MainButton';
 import SmallButton from '../../components/SmallButton';
-import BoldText from '../../components/BoldText';
 import screens from './../../constants/screens';
+import api from '../../services/api';
+import { IUsuario } from '../../constants/interfaces';
 
 const facebookLogo = require('../../assets/facebook.png');
 
@@ -48,8 +49,10 @@ export const fbLogin = async () => {
 
 const Login = () => {
     const navigation = useNavigation();
-    const [email, setEmail] = useState('');
+    const [login, setLogin] = useState('');
     const [senha, setSenha] = useState('');
+
+    const { signIn, user } = useContext(AuthContext);
 
     //const history = useHistory();
     const initFacebookLogin = async () => {
@@ -71,29 +74,12 @@ const Login = () => {
 
 
     async function handleLogin(e: any) {
-        /* e.preventDefault();
- 
-         try {
-             const response = await api.post('session',  { email, senha });
- 
-             localStorage.setItem('userId', response.data.id);
-             localStorage.setItem('userEmail', email);
-             localStorage.setItem('userName', response.data.nome);
-             console.log(localStorage.userId)
- 
-             navigation.navigate('Profile');
- 
-             //history.push('/profile');
-         } catch (error) {
-             alert(error.response.data.error);
-         }
- */
-    }
-
-    const { signIn, user } = useContext(AuthContext)
-
-    function handleSignIn() {
-        signIn()
+        const params = { login, senha };
+        await api.post('/validate/usuario', params)
+            .then(response => {
+                const usuario: IUsuario = response.data;
+                signIn(usuario);
+            });
     }
 
     const handleFBLogin = async () => {
@@ -101,8 +87,19 @@ const Login = () => {
 
         if (type && token) {
             if (type === 'success') {
-                // Criar o context pra guardar os dados de login
-                //dispatch({ type: 'FB_LOGIN', token, user });
+                await api.post('/validate/fb-usuario', user)
+                .then(response => {
+                    const usuario: IUsuario = response.data;
+                    usuario.path = user.photoUrl;
+                    if (usuario) {
+                        signIn(usuario);
+                        //navigation.navigate(screens.cadastroIngredientes);
+                    }
+                    else {
+                        Alert.alert(`Falha no Login pelo Facebook: ${ response.data}`);
+                        console.log(response.data);
+                    }
+                });
             }
         } else if (error) {
             console.log('Login falhou!');
@@ -115,9 +112,10 @@ const Login = () => {
                 <View style={styles.container}>
                     {/* <BoldText>{user.login}</BoldText> */}
                     <Input
-                        placeholder="Email"
-                        onChangeText={(value) => setEmail(value)}
-                        value={email}
+                        autoCapitalize='none'
+                        placeholder="Login"
+                        onChangeText={(value) => setLogin(value)}
+                        value={login}
                         inputContainerStyle={{ borderBottomWidth: 0 }}
                         leftIcon={
                             <Ionicons
@@ -128,6 +126,7 @@ const Login = () => {
                         }
                     />
                     <Input
+                        autoCapitalize='none'
                         placeholder="Senha"
                         onChangeText={(value) => setSenha(value)}
                         value={senha}
@@ -152,10 +151,6 @@ const Login = () => {
                     <View style={styles.socialButtonsView}>
                         <MainButton style={styles.facebookButton} onPress={handleFBLogin} image={facebookLogo}>Facebook</MainButton>
                     </View>
-
-                    <Button title="Sign In" onPress={() => handleSignIn()} />
-
-
                 </View>
             </ScrollView>
         </SafeAreaView>

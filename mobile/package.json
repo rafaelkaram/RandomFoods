@@ -18,6 +18,7 @@
   "dependencies": {
     "@expo-google-fonts/oswald": "^0.1.0",
     "@expo-google-fonts/ubuntu": "^0.1.0",
+    "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/checkbox": "^0.5.7",
     "@react-native-community/masked-view": "0.1.10",
@@ -28,7 +29,6 @@
     "@react-navigation/drawer": "^5.12.3",
     "@react-navigation/native": "^5.9.2",
     "@react-navigation/stack": "^5.14.2",
-    "@types/react-native-snap-carousel": "^3.8.3",
     "axios": "^0.21.1",
     "expo": "~40.0.0",
     "expo-app-loading": "^1.0.3",
@@ -61,10 +61,12 @@
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
+    "@types/ptomasroos__react-native-multi-slider": "^2.2.1",
     "@types/react": "^16.9.56",
     "@types/react-dom": "~16.9.8",
     "@types/react-native": "^0.63.40",
     "@types/react-native-elements": "^0.18.0",
+    "@types/react-native-snap-carousel": "^3.8.3",
     "@types/react-router-dom": "^5.1.7",
     "@types/victory": "^33.1.4",
     "concurrently": "^6.0.0",
