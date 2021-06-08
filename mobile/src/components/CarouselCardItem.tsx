@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
-import { View, StyleSheet, Dimensions, Image } from "react-native"
+import React, { useEffect, useState } from 'react'
+import { View, StyleSheet, Dimensions, Image, Modal, Text } from "react-native"
 import { IMidia } from '../constants/interfaces';
 import Carousel from 'react-native-snap-carousel'
 import { Video } from 'expo-av';
 import VideoPlayer from 'expo-video-player'
+import ImageViewer from 'react-native-image-zoom-viewer';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width + 80
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
@@ -13,15 +15,19 @@ const CarouselItems = ({ midias }: { midias: IMidia[] }) => {
     const isCarousel = React.useRef(null);
     const video = React.useRef(null);
     const [status, setStatus] = useState({ isPlaying: false })
+    const [visible, setVisible] = useState(false)
+    const [index, setIndex] = useState(0)
 
     const CarouselCardItem = ({ item, index }: { item: IMidia, index: number }) => {
         if (item.tipo === 'FOTO') {
             return (
                 <View style={styles.container} key={index}>
-                    <Image
-                        source={{ uri: item.path }}
-                        style={styles.image}
-                    />
+                    <TouchableOpacity onPress={() => {setVisible(true); setIndex(index)}} activeOpacity={1}>
+                        <Image
+                            source={{ uri: item.path }}
+                            style={styles.image}
+                        />
+                    </TouchableOpacity>
                 </View>
             )
         } else if (item.tipo === 'VIDEO') {
@@ -52,6 +58,24 @@ const CarouselItems = ({ midias }: { midias: IMidia[] }) => {
         )
 
     }
+    const ImagesZoom = () => {
+        let imgs : { url: string, props: any }[] = []
+        for (var key in midias){
+            imgs.push({url: midias[key].path, props: {}})
+        }
+        return(
+            <Modal visible={visible} transparent={true} >
+                <ImageViewer 
+                    imageUrls={imgs} 
+                    onSwipeDown={() => setVisible(!visible)} 
+                    enableSwipeDown={true} 
+                    index={index}
+                    onChange={() => setIndex(index)}
+                />
+            </Modal>
+        )
+    }
+    
     return (
         <View style={{ alignItems: 'center' }}>
             <Carousel
@@ -65,6 +89,7 @@ const CarouselItems = ({ midias }: { midias: IMidia[] }) => {
                 inactiveSlideShift={0}
                 useScrollView={true}
             />
+            <ImagesZoom />
         </View>
     )
 
