@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
-import fs from 'fs';
+import fs, { lchown } from 'fs';
 import path from 'path';
 
 import { getBoolean, getHash, getPath, moveFile, systrace, syserror, encryptMidia } from '../util/util';
@@ -71,7 +71,7 @@ class UsuarioController {
         }
     }
 
-    async exist(request: Request, response: Response) {
+    async login(request: Request, response: Response) {
         const repository = getCustomRepository(UsuarioRepository);
 
         const { login, senha } = request.body as { login: string, senha: string };
@@ -89,6 +89,22 @@ class UsuarioController {
 
         } catch (err) {
             return syserror(400, response, err);
+        }
+    }
+
+    async exist(request: Request, response: Response) {
+        const repository = getCustomRepository(UsuarioRepository);
+
+        const { login, email } = request.body as { login: string, email: string };
+        console.log({ login, email });
+
+
+        try {
+            if (login) await repository.findOneOrFail({ login: login.toLowerCase() });
+            else if (email) await repository.findOneOrFail({ email: email.toLowerCase() });
+            return syserror(400, response, 'Usuário ou e-mail já cadastrado.');
+        } catch (err) {
+            return systrace(200, response, 'Usuário ou e-mail disponível.');
         }
     }
 

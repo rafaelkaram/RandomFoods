@@ -33,7 +33,7 @@ const InputSignUp = (props: {
                 setTimeout(() => { setErrorMessage('') }, 2000)
                 props.setState('')
             } else {
-                api.post('validate/usuario', { value: value }).then(response => {
+                api.post('validacao', { login: value }).then(response => {
                     props.setState(data)
 
                 }).catch(error => {
@@ -49,10 +49,10 @@ const InputSignUp = (props: {
                 if (reg.test(value) === false) {
                     setErrorMessage('Insira um Email Válido')
                     setTimeout(() => { setErrorMessage('') }, 2000)
-                    props.setState('')
+                    props.setState('');
                 } else {
-                    api.post('validate/usuario', { value: value }).then(response => {
-                        props.setState(data)
+                    api.post('validacao', { email: value }).then(response => {
+                        props.setState(data);
 
                     }).catch(error => {
                         setErrorMessage('Email já cadastrado')

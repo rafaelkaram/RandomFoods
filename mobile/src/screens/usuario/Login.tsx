@@ -85,7 +85,7 @@ const Login = () => {
             login,
             senha
         };
-        await api.post('/validate/usuario', params)
+        await api.post('/login', params)
             .then(response => {
                 setUsuario(response.data);
             }).catch(error => {
@@ -105,7 +105,7 @@ const Login = () => {
 
         if (type && token) {
             if (type === 'success') {
-                await api.post('/validate/fb-usuario', user)
+                await api.post('/fb-login', user)
                     .then(response => {
                         const usuario: IUsuario = response.data;
                         usuario.path = user.photoUrl;
