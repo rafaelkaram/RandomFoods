@@ -40,6 +40,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         } else {
             AsyncStorage.setItem('user', JSON.stringify(usuario));
             console.log('Login realizado com sucesso');
+            setUser(usuario)
         }
     }
 

@@ -34,13 +34,12 @@ const InputSignUp = (props: {
                 props.setState('')
             } else {
                 api.post('validate/usuario', { value: value }).then(response => {
-                    if (response.status === 203) {
-                        setErrorMessage('Usuario já cadastrado')
-                        setTimeout(() => { setErrorMessage('') }, 2000)
-                        props.setState('')
-                    } else if (response.status === 204) {
-                        props.setState(data)
-                    }
+                    props.setState(data)
+
+                }).catch(error => {
+                    setErrorMessage('Usuario já cadastrado')
+                    setTimeout(() => { setErrorMessage('') }, 2000)
+                    props.setState('')
                 })
             }
 
@@ -53,13 +52,12 @@ const InputSignUp = (props: {
                     props.setState('')
                 } else {
                     api.post('validate/usuario', { value: value }).then(response => {
-                        if (response.status === 203) {
-                            setErrorMessage('Email já cadastrado')
-                            setTimeout(() => { setErrorMessage('') }, 2000)
-                            props.setState('')
-                        } else if (response.status === 204) {
-                            props.setState(data)
-                        }
+                        props.setState(data)
+
+                    }).catch(error => {
+                        setErrorMessage('Email já cadastrado')
+                        setTimeout(() => { setErrorMessage('') }, 2000)
+                        props.setState('')
                     })
                 }
 
@@ -98,7 +96,7 @@ const InputSignUp = (props: {
     } else {
         return (
             <Input
-                autoCapitalize={ props.tipo === 'name' ? 'words' : 'none' }
+                autoCapitalize={props.tipo === 'name' ? 'words' : 'none'}
                 onEndEditing={() => { validateField(data) }}
                 placeholder={props.placeholder}
                 errorMessage={errorMessage}

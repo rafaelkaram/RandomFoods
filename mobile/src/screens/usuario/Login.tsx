@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { ScrollView, View, StyleSheet, Alert, Button } from 'react-native';
+import { ScrollView, View, StyleSheet, Alert, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Input } from "react-native-elements";
@@ -51,8 +51,10 @@ const Login = () => {
     const navigation = useNavigation();
     const [login, setLogin] = useState('');
     const [senha, setSenha] = useState('');
+    const [eye, setEye] = useState(false)
+    const [usuario, setUsuario] = useState<IUsuario>()
 
-    const { signIn, user } = useContext(AuthContext);
+    const { signIn, signed, user } = useContext(AuthContext);
 
     //const history = useHistory();
     const initFacebookLogin = async () => {
@@ -67,39 +69,55 @@ const Login = () => {
         initFacebookLogin();
     }, []);
 
+    useEffect(() => {
+        if (usuario) {
+            signIn(usuario)
+        }
+    }, [usuario]);
 
     const handleNavigateCreateUser = () => {
         navigation.navigate(screens.cadastroUsuario);
     }
 
 
-    async function handleLogin(e: any) {
-        const params = { login, senha };
+    async function handleLogin(login: string, senha: string) {
+        const params = {
+            login,
+            senha
+        };
         await api.post('/validate/usuario', params)
             .then(response => {
-                const usuario: IUsuario = response.data;
-                signIn(usuario);
+                setUsuario(response.data);
+            }).catch(error => {
+                Alert.alert(
+                    "Falha no Login",
+                    '\nLogin ou senha incorretos',
+                    [
+                        { text: "OK" }
+                    ]
+                );
+
             });
     }
 
     const handleFBLogin = async () => {
-        const { type, token, user, error } : any = await fbLogin();
+        const { type, token, user, error }: any = await fbLogin();
 
         if (type && token) {
             if (type === 'success') {
                 await api.post('/validate/fb-usuario', user)
-                .then(response => {
-                    const usuario: IUsuario = response.data;
-                    usuario.path = user.photoUrl;
-                    if (usuario) {
-                        signIn(usuario);
-                        //navigation.navigate(screens.cadastroIngredientes);
-                    }
-                    else {
-                        Alert.alert(`Falha no Login pelo Facebook: ${ response.data}`);
-                        console.log(response.data);
-                    }
-                });
+                    .then(response => {
+                        const usuario: IUsuario = response.data;
+                        usuario.path = user.photoUrl;
+                        if (usuario) {
+                            signIn(usuario);
+                            //navigation.navigate(screens.cadastroIngredientes);
+                        }
+                        else {
+                            Alert.alert(`Falha no Login pelo Facebook: ${response.data}`);
+                            console.log(response.data);
+                        }
+                    });
             }
         } else if (error) {
             console.log('Login falhou!');
@@ -110,13 +128,15 @@ const Login = () => {
         <SafeAreaView>
             <ScrollView >
                 <View style={styles.container}>
-                    {/* <BoldText>{user.login}</BoldText> */}
+                    <Image
+                        source={require('./../../assets/login-cadastro.png')}
+                        style={{ width: 296, height: 224, marginBottom: 30, alignSelf: 'center' }}
+                    />
                     <Input
                         autoCapitalize='none'
                         placeholder="Login"
                         onChangeText={(value) => setLogin(value)}
                         value={login}
-                        inputContainerStyle={{ borderBottomWidth: 0 }}
                         leftIcon={
                             <Ionicons
                                 name='person-outline'
@@ -130,8 +150,7 @@ const Login = () => {
                         placeholder="Senha"
                         onChangeText={(value) => setSenha(value)}
                         value={senha}
-                        secureTextEntry={true}
-                        inputContainerStyle={{ borderBottomWidth: 0 }}
+                        secureTextEntry={!eye}
                         leftIcon={
                             <Ionicons
                                 name='lock-closed-outline'
@@ -139,13 +158,18 @@ const Login = () => {
                                 color='black'
                             />
                         }
+                        rightIcon={
+                            <TouchableOpacity onPress={() => { setEye(!eye) }}>
+                                <Ionicons name={eye ? 'eye' : 'eye-off'} size={24} color="black" />
+                            </TouchableOpacity>
+                        }
                     />
                     <View style={styles.buttons}>
                         <View style={styles.singleButt}>
-                            <SmallButton onPress={() => handleLogin}>Entrar</SmallButton>
+                            <SmallButton onPress={() => { handleNavigateCreateUser() }}>Cadastrar</SmallButton>
                         </View>
                         <View style={styles.singleButt}>
-                            <SmallButton onPress={() =>{handleNavigateCreateUser()}}>Cadastrar</SmallButton>
+                            <SmallButton onPress={() => handleLogin(login, senha)}>Entrar</SmallButton>
                         </View>
                     </View>
                     <View style={styles.socialButtonsView}>
