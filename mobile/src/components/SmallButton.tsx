@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
-import Colors from '../constants/colors';
+import colors from '../constants/colors';
 
 const MainButton = (props : any) => {
   return (
@@ -12,15 +12,15 @@ const MainButton = (props : any) => {
 }
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: Colors.dimmedBackground,
+    backgroundColor: colors.dimmedBackground,
     margin: 5,
-    paddingVertical: 12,
-    paddingHorizontal: 30,
+    alignItems: 'center',
+    padding: 12,
     borderRadius: 25
   },
 
   buttonText: {
-    color: Colors.background,
+    color: colors.background,
     fontFamily: 'Ubuntu_400Regular',
     fontSize: 14
   }
