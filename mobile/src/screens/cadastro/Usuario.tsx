@@ -1,17 +1,17 @@
 import React, { useState, useContext } from 'react';
-import { ScrollView, View, StyleSheet, Alert, TouchableOpacity, Image } from 'react-native';
+import { Alert, Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Feather } from '@expo/vector-icons';
 import { IMidiaPicker, IUsuario } from '../../constants/interfaces';
 import SmallButton from '../../components/SmallButton';
-import ItalicText from '../../components/ItalicText';
 import colors from '../../constants/colors';
 import api from '../../services/api';
 import InputSignUp from '../../components/InputSignUp'
 import RegularText from '../../components/RegularText';
 
+const { width, height } = Dimensions.get('window');
 
 const Usuario = () => {
     const navigation = useNavigation();
@@ -86,16 +86,15 @@ const Usuario = () => {
 
     return (
         <SafeAreaView>
-            <ScrollView >
-                <View style={styles.createuserImageContainer}>
+            <ScrollView>
+                <View style={styles.logoContainer}>
                     <Image
-                        style={styles.createUserImage}
+                        style={styles.logoImage}
                         source={require('../../assets/criar-conta.png')}
                     />
-                    {/* <ItalicText style={styles.subTitle}>Dados Gerais</ItalicText> */}
                 </View>
 
-                <View style={styles.inputsContainer}>
+                <View style={styles.container}>
                     <View style={ styles.midiaContainer }>
                     { midia?.uri ?
                         <View style={styles.midiaView}>
@@ -137,23 +136,18 @@ const Usuario = () => {
 }
 
 const styles = StyleSheet.create({
-
-    createuserImageContainer: {
+    logoContainer: {
         alignItems: 'center',
         paddingBottom: 10
     },
 
-    createUserImage: {
-        width: 350,
-        height: 70,
+    logoImage: {
+        width: width - 10,
+        height: (width - 10) / 5,
+        // Utilizar proporção de x por x : 5 para garantir que fique bonito em todos os tamanhos de tela
     },
 
-    subTitle: {
-        margin: 10,
-        textAlign: 'center',
-    },
-
-    inputsContainer: {
+    container: {
         alignContent: 'center',
         margin: 15,
         padding: 20,
@@ -164,16 +158,12 @@ const styles = StyleSheet.create({
 
     buttons: {
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        padding: 10,
+        justifyContent: 'space-between',
+        paddingVertical: 10,
     },
 
     singleButt: {
-        padding: 10,
-    },
-
-    socialButtonsView: {
-        paddingVertical: 10
+        width: '50%'
     },
 
     icons: {

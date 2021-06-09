@@ -2,7 +2,6 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { IUsuario } from './../constants/interfaces';
 
-
 interface AuthContextData {
     signed: boolean
     user: IUsuario | null
@@ -10,13 +9,11 @@ interface AuthContextData {
     signOut(): void
 }
 
-
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
 export const AuthProvider: React.FC = ({ children }) => {
 
     const [user, setUser] = useState<IUsuario | null>(null)
-
 
     useEffect(() => {
         async function loadStoragedData() {
@@ -31,7 +28,7 @@ export const AuthProvider: React.FC = ({ children }) => {
             }
         }
         loadStoragedData()
-    }, [])
+    }, []);
 
     //resolver async
     const signIn = async (usuario: IUsuario) => {
@@ -46,7 +43,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
     const signOut = async () => {
         await AsyncStorage.clear().then(() => {
-            setUser(null)
+            setUser(null);
             console.log("LogOff");
         })
     }
@@ -60,4 +57,4 @@ export const AuthProvider: React.FC = ({ children }) => {
 
 }
 
-export default AuthContext
+export default AuthContext;

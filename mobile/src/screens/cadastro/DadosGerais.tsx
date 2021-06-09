@@ -17,6 +17,8 @@ import ItalicText from '../../components/ItalicText';
 import Loading from '../../components/Loading';
 import colors from '../../constants/colors';
 
+const { width, height } = Dimensions.get('window');
+
 const DadosGerais = () => {
     const navigation = useNavigation();
 
@@ -293,9 +295,6 @@ const DadosGerais = () => {
     );
 }
 
-const Height = Dimensions.get("window").height
-const Width = Dimensions.get("window").width;
-
 const styles = StyleSheet.create({
 
     mainContainer: {
@@ -358,7 +357,7 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 80,
         position: 'absolute',
-        top: (Height - 100),
+        top: (height - 100),
         right: 20,
         backgroundColor: colors.dimmedBackground,
         justifyContent: 'center',

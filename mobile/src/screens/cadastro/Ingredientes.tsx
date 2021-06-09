@@ -18,6 +18,8 @@ import RegularText from '../../components/RegularText';
 import ItalicText from '../../components/ItalicText';
 import fixString from '../../assets/functions/utils';
 
+const { width, height } = Dimensions.get('window');
+
 const Ingredientes = () => {
     const navigation = useNavigation();
 
@@ -110,7 +112,7 @@ const Ingredientes = () => {
                                         <View
                                             style={styles.modalList}
                                             key={ingrediente.id}>
-                                            <View style={{maxWidth: Width*0.7}}>
+                                            <View style={{maxWidth: width*0.7}}>
                                                 <Text style={{ lineHeight: 30 }}>{ingrediente.nome}</Text>
                                             </View>
                                             <TouchableOpacity
@@ -184,10 +186,6 @@ const Ingredientes = () => {
     );
 }
 
-
-const Height = Dimensions.get("window").height
-const Width = Dimensions.get("window").width;
-
 const styles = StyleSheet.create({
 
     mainContainer: {
@@ -239,8 +237,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderColor: '#E5EAFA',
         borderWidth: 3,
-        width: Width*0.9,
-        height: Height * 0.6,
+        width: width * 0.9,
+        height: height * 0.6,
     },
 
     modalX: {

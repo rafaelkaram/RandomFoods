@@ -106,11 +106,7 @@ const Quantidades = ({ route }: { route: any }) => {
     );
 }
 
-const Height = Dimensions.get("window").height
-const Width = Dimensions.get("window").width;
-
 const styles = StyleSheet.create({
-
     ingredientType: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',

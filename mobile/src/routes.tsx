@@ -6,8 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { AuthProvider } from './contexts/auth'
-import AuthContext from './contexts/auth'
+import AuthContext, { AuthProvider } from './contexts/auth';
 
 import Home from './screens/visualizacao/Home';
 import DadosGerais from './screens/cadastro/DadosGerais';
@@ -20,14 +19,13 @@ import Login from './screens/usuario/Login';
 import Painel from './screens/usuario/Painel';
 import Filtro from './screens/visualizacao/Filtro';
 import PassoAPasso from './screens/cadastro/PassoAPasso';
-import Usuario from './screens/cadastro/Usuario'
+import Usuario from './screens/cadastro/Usuario';
 
 import screens from './constants/screens';
 
 const AppStack = createStackNavigator()
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator()
-
 
 const RecipeStack = () => {
     return (
@@ -53,7 +51,6 @@ const HomeStack = () => {
     )
 }
 
-
 const UserStack = () => {
 
     const { signed } = useContext(AuthContext)
@@ -78,8 +75,6 @@ const UserStack = () => {
 
 const Routes = () => {
 
-
-
     return (
         <>
             <NavigationContainer >
@@ -89,10 +84,10 @@ const Routes = () => {
                             options={{
                                 tabBarLabel: 'Home',
                                 tabBarIcon: ({ color, size }) => (
-                                    <MaterialCommunityIcons name="home" color={color} size={size} />
+                                    <MaterialCommunityIcons name='home' color={color} size={size} />
                                 ),
                             }}
-                            name="HomeStack"
+                            name='HomeStack'
                             component={HomeStack} />
 
                         <Tab.Screen
@@ -104,16 +99,16 @@ const Routes = () => {
                                         source={require('../assets/chapeu.png')} />
                                 ),
                             }}
-                            name="NewRecipe"
+                            name='NewRecipe'
                             component={RecipeStack} />
                         <Tab.Screen
                             options={{
                                 tabBarLabel: 'User',
                                 tabBarIcon: ({ color, size }) => (
-                                    <AntDesign name="user" color={color} size={size} />
+                                    <AntDesign name='user' color={color} size={size} />
                                 ),
                             }}
-                            name="User"
+                            name='User'
                             component={UserStack} />
                     </Tab.Navigator>
                 </AuthProvider>

@@ -32,84 +32,92 @@ const Comment = ({ comentarios }: { comentarios: any }) => {
 }
 
 const styles = StyleSheet.create({
-  itemListTitle: {
-    backgroundColor: '#e02041',
+    itemListTitle: {
+        backgroundColor: '#e02041',
 
-    fontSize: 20,
-    textAlign: 'center',
-    fontFamily: 'Ubuntu_700Bold',
+        fontSize: 20,
+        textAlign: 'center',
+        fontFamily: 'Ubuntu_700Bold',
 
-    margin: 3,
-    padding: 10,
-  },
-  container: {
-      flex: 1,
-      backgroundColor: '#F0F0F5'
-  },
-  note: {
-      flexDirection: 'row',
-      padding: 3,
-      margin: 10,
-  },
-  type: {
-      flexDirection: 'row',
-      padding: 3,
-      margin: 10,
-  },
-  ingredientList: {
-      margin: 10,
-      padding: 5,
-      backgroundColor: 'white',
-  },
-  ingredient: {
-      flexDirection: 'row',
-      padding: 3,
-  },
-  itemListDescribe: {
-      marginLeft: 10,
-      marginRight: 10,
-      marginBottom: 10,
-      padding: 5,
-      backgroundColor: 'white',
+        margin: 3,
+        padding: 10,
+    },
 
-  },
-  comments: {
-      margin: 10,
-      padding: 5,
+    container: {
+        flex: 1,
+        backgroundColor: '#F0F0F5'
+    },
 
-  },
-  singleComment: {
-      backgroundColor: 'white',
-      padding: 10,
-      borderRadius: 10,
-  },
-  commentTitle: {
-      justifyContent: 'space-between',
-      flexDirection: 'row',
-      fontFamily: 'Ubuntu_400Regular'
-  },
-  commentUserDate:{
-      flexDirection:'row',
-  },
-  commentUser: {
+    note: {
+        flexDirection: 'row',
+        padding: 3,
+        margin: 10,
+    },
 
-      fontFamily: 'Ubuntu_700Bold'
+    type: {
+        flexDirection: 'row',
+        padding: 3,
+        margin: 10,
+    },
 
-  },
-  commentDate:{
-      color:'#999999',
-      fontFamily: 'Ubuntu_400Regular'
-  },
-  commentHour:{
-      paddingTop:10,
-      alignItems:'flex-end',
+    ingredientList: {
+        margin: 10,
+        padding: 5,
+        backgroundColor: 'white',
+    },
 
-  },
-  identacao: {
-      marginTop: 10,
-      backgroundColor:'red',
+    ingredient: {
+        flexDirection: 'row',
+        padding: 3,
+    },
 
-  },
+    itemListDescribe: {
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 10,
+        padding: 5,
+        backgroundColor: 'white',
+    },
+
+    comments: {
+        margin: 10,
+        padding: 5,
+    },
+
+    singleComment: {
+        backgroundColor: 'white',
+        padding: 10,
+        borderRadius: 10,
+    },
+
+    commentTitle: {
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        fontFamily: 'Ubuntu_400Regular'
+    },
+
+    commentUserDate:{
+        flexDirection:'row',
+    },
+
+    commentUser: {
+        fontFamily: 'Ubuntu_700Bold'
+    },
+
+    commentDate:{
+        color:'#999999',
+        fontFamily: 'Ubuntu_400Regular'
+    },
+
+    commentHour:{
+        paddingTop:10,
+        alignItems:'flex-end',
+    },
+
+    identacao: {
+        marginTop: 10,
+        backgroundColor:'red',
+    },
 });
 
 

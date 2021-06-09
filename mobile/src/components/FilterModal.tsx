@@ -7,6 +7,8 @@ import colors from '../constants/colors';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import ItalicText from './ItalicText';
 
+const { width, height } = Dimensions.get('window');
+
 const FilterModal = (props: {
     modalFilter: boolean,
     categoriasSelecionadas: string[],
@@ -51,7 +53,7 @@ const FilterModal = (props: {
                     >
                         <BoldText style={{ alignSelf: 'center', color: 'white' }}>X</BoldText>
                     </TouchableOpacity>
-                    <View style={{ ...css.modalContainer, width: Width * 0.8, height: 400 }}>
+                    <View style={{ ...css.modalContainer, width: width * 0.8, height: 400 }}>
                         <BoldText style={{ marginVertical: 5, alignSelf: 'center' }}>Filtros Selecionados</BoldText>
                         <ScrollView>
                             <View style={ styles.filter }>
@@ -97,7 +99,7 @@ const FilterModal = (props: {
                                             values={ [tempoDePreparo[0], tempoDePreparo[1]] }
                                             min={ tempos[0] }
                                             max={ tempos[1] }
-                                            sliderLength={ Width * 0.6 }
+                                            sliderLength={ width * 0.6 }
                                             minMarkerOverlapDistance={ 12 }
                                             onValuesChange={(value) => setTempoDePreparo(value)}
                                             trackStyle={{ height: 10, borderRadius: 5 }}
@@ -117,8 +119,6 @@ const FilterModal = (props: {
         </Modal>
     )
 }
-
-const Width = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
     filter: {

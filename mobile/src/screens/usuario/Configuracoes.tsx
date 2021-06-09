@@ -9,6 +9,8 @@ import { IUsuario } from '../../constants/interfaces';
 
 import Loading from '../../components/Loading';
 
+const { width, height } = Dimensions.get('window');
+
 const Configuracoes = () => {
 
     const [ usuario, setUsuario ] = useState<IUsuario>();
@@ -32,11 +34,6 @@ const Configuracoes = () => {
         </SafeAreaView>
     )
 }
-
-const chartHeight = Dimensions.get("window").height * 0.5;
-const chartWidth = Dimensions.get("window").width;
-
-
 
 const styles = StyleSheet.create({
 
@@ -106,8 +103,8 @@ const styles = StyleSheet.create({
     },
 
     typePie: {
-        maxWidth: ((chartWidth / 2) - 20),
-        maxHeight: (chartHeight - 120),
+        maxWidth: ((width / 2) - 20),
+        maxHeight: ((height * 0.5) - 120),
         alignItems: 'center',
         backgroundColor: 'white',
         borderRadius: 15,
@@ -115,8 +112,8 @@ const styles = StyleSheet.create({
     },
 
     categoryPie: {
-        maxWidth: ((chartWidth / 2) - 20),
-        maxHeight: (chartHeight - 120),
+        maxWidth: ((width / 2) - 20),
+        maxHeight: ((height * 0.5) - 120),
         alignItems: 'center',
         backgroundColor: 'white',
         borderRadius: 15
@@ -132,7 +129,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginTop: 10
     }
-
 })
 
 export default Configuracoes;

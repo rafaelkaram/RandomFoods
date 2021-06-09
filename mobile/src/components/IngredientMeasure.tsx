@@ -10,6 +10,8 @@ import { IIngrediente, IUnidade } from '../constants/interfaces';
 import RegularText from '../components/RegularText';
 import BoldText from '../components/BoldText';
 
+const { width, height } = Dimensions.get('window');
+
 const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente: Function }) => {
 
   const [check, setCheck] = useState<boolean>(false);
@@ -83,7 +85,7 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente
                 })
               }
             </Picker>
-            : <View style={{ width: Width / 1.8 }}></View>}
+            : <View style={{ width: width / 1.8 }}></View>}
           <View>
             <Input
               disabled={check}
@@ -112,9 +114,6 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente
 
   );
 }
-
-const Height = Dimensions.get("window").height;
-const Width = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
   item: {
@@ -152,7 +151,7 @@ const styles = StyleSheet.create({
   },
 
   comboBox: {
-    width: Width / 1.8,
+    width: width / 1.8,
     height: 30,
   },
 });

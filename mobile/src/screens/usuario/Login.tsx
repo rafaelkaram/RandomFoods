@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { ScrollView, View, StyleSheet, Alert, TouchableOpacity, Image } from 'react-native';
+import { Alert, Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { Input } from "react-native-elements";
+import { Input } from 'react-native-elements';
 import * as Facebook from 'expo-facebook';
 import { Ionicons } from '@expo/vector-icons';
 import AuthContext from '../../contexts/auth'
@@ -14,6 +14,7 @@ import api from '../../services/api';
 import { IUsuario } from '../../constants/interfaces';
 
 const facebookLogo = require('../../assets/facebook.png');
+const { width, height } = Dimensions.get('window');
 
 export const fbLogin = async () => {
     try {
@@ -56,7 +57,6 @@ const Login = () => {
 
     const { signIn, signed, user } = useContext(AuthContext);
 
-    //const history = useHistory();
     const initFacebookLogin = async () => {
         try {
             await Facebook.initializeAsync({ appId: Config.FB_APP_ID, appName: Config.FB_APP_NAME });
@@ -79,7 +79,6 @@ const Login = () => {
         navigation.navigate(screens.cadastroUsuario);
     }
 
-
     async function handleLogin(login: string, senha: string) {
         const params = {
             login,
@@ -90,10 +89,10 @@ const Login = () => {
                 setUsuario(response.data);
             }).catch(error => {
                 Alert.alert(
-                    "Falha no Login",
+                    'Falha no Login',
                     '\nLogin ou senha incorretos',
                     [
-                        { text: "OK" }
+                        { text: 'OK' }
                     ]
                 );
 
@@ -127,14 +126,16 @@ const Login = () => {
     return (
         <SafeAreaView>
             <ScrollView >
-                <View style={styles.container}>
+                <View style={styles.logoContainer}>
                     <Image
-                        source={require('./../../assets/login-cadastro.png')}
-                        style={{ width: 296, height: 224, marginBottom: 30, alignSelf: 'center' }}
+                        style={styles.logoImage}
+                        source={require('../../assets/acesso-conta.png')}
                     />
+                </View>
+                <View style={styles.container}>
                     <Input
                         autoCapitalize='none'
-                        placeholder="Login"
+                        placeholder='Login'
                         onChangeText={(value) => setLogin(value)}
                         value={login}
                         leftIcon={
@@ -147,7 +148,7 @@ const Login = () => {
                     />
                     <Input
                         autoCapitalize='none'
-                        placeholder="Senha"
+                        placeholder='Senha'
                         onChangeText={(value) => setSenha(value)}
                         value={senha}
                         secureTextEntry={!eye}
@@ -160,7 +161,7 @@ const Login = () => {
                         }
                         rightIcon={
                             <TouchableOpacity onPress={() => { setEye(!eye) }}>
-                                <Ionicons name={eye ? 'eye' : 'eye-off'} size={24} color="black" />
+                                <Ionicons name={eye ? 'eye' : 'eye-off'} size={24} color='black' />
                             </TouchableOpacity>
                         }
                     />
@@ -178,27 +179,39 @@ const Login = () => {
                 </View>
             </ScrollView>
         </SafeAreaView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
+
+    logoContainer: {
+        alignItems: 'center',
+        paddingBottom: 10,
+    },
+
+    logoImage: {
+        width: width - 10,
+        height: (width - 10) / 1.3,
+        // Utilizar proporção de x por x : 1.3 para garantir que fique bonito em todos os tamanhos de tela
+    },
+
     container: {
         alignContent: 'center',
-        margin: 30,
+        margin: 15,
         padding: 20,
         justifyContent: 'center',
         backgroundColor: 'white',
+        borderRadius: 15
     },
 
     buttons: {
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
-
-        padding: 10,
+        justifyContent: 'space-between',
+        paddingVertical: 10,
     },
 
     singleButt: {
-        padding: 10,
+        width: '50%'
     },
 
     socialButtonsView: {
