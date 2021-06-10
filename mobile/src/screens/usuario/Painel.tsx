@@ -40,22 +40,29 @@ const Painel = () => {
         }
     }, []);
 
-    // useEffect(() => {
-    //     api.get(`/dashboard/tipos-receita/${usuario?.id}`)
-    //         .then(response => {
-    //             setRecipeType(response.data)
+    useEffect(() => {
+        if (usuario) {
+            api.get(`/dashboard/tipos-receita/${usuario?.id}`)
+                .then(response => {
+                    setRecipeType(response.data)
 
-    //         })
-    //     api.get(`/dashboard/categorias/${usuario?.id}`)
-    //         .then(response => {
-    //             setRecipeCategory(response.data)
-    //         })
+                })
+            api.get(`/dashboard/categorias/${usuario?.id}`)
+                .then(response => {
+                    setRecipeCategory(response.data)
+                })
 
-    //     api.get(`/dashboard/avaliacoes/${usuario?.id}`)
-    //         .then(response => {
-    //             setTopVotedRecipe(response.data)
-    //         })
-    // }, [usuario]);
+            api.get(`/dashboard/avaliacoes/${usuario?.id}`)
+                .then(response => {
+                    setTopVotedRecipe(response.data)
+                })
+        } else {
+            setRecipeType([])
+            setRecipeCategory([])
+            setTopVotedRecipe([])
+        }
+
+    }, [usuario]);
 
     const pieTypeData = recipeType.map((item) => {
         return (
@@ -118,7 +125,7 @@ const Painel = () => {
                             activeOpacity={0.7}
                             containerStyle={{ backgroundColor: 'lightgrey' }}
                         />}
-                    <View style={styles.nameContainer}>
+                    <View style={usuario!?.nome.length > 10 ? styles.nameContainer : null}>
                         <BoldText style={styles.name}>{usuario?.nome}</BoldText>
                         <RegularText style={styles.login}>@{usuario?.login}</RegularText>
                     </View>
@@ -220,8 +227,8 @@ const styles = StyleSheet.create({
 
     nameContainer: {
         flexDirection: 'row',
-        flexWrap: 'wrap', 
-        width: (chartWidth * 0.7),         
+        flexWrap: 'wrap',
+        width: (chartWidth * 0.7),
     },
 
     name: {

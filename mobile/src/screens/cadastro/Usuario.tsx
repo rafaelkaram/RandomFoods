@@ -1,15 +1,17 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Alert, Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
-import { Feather } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { IMidiaPicker, IUsuario } from '../../constants/interfaces';
 import SmallButton from '../../components/SmallButton';
 import colors from '../../constants/colors';
 import api from '../../services/api';
 import InputSignUp from '../../components/InputSignUp'
 import RegularText from '../../components/RegularText';
+import AuthContext from '../../contexts/auth'
+import Loading from '../../components/Loading';
 
 const { width, height } = Dimensions.get('window');
 
@@ -21,9 +23,20 @@ const Usuario = () => {
     const [password, setPassword] = useState('');
     const [user, setUser] = useState<IUsuario>()
     const [midia, setMidia] = useState<IMidiaPicker>();
+    const [load, setLoad] = useState(true)
+
+    const { signIn, signed } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (user) {
+            signIn(user)
+        }
+    }, [user]);
 
 
     const handleSubmit = async () => {
+
+        setLoad(false)
 
         const usuario = {
             nome: name,
@@ -54,16 +67,12 @@ const Usuario = () => {
                 type: 'image/png',
                 uri: midia.uri
             } as any);
-            console.log(data);
 
             await api.post('cadastro/usuario', data).then(response => {
                 console.log({ msg: 'Recebemos resposta!', response: response.data })
                 setUser(response.data)
             });
-            console.log(user);
-
         }
-
     }
 
     const handleAddMidia = async () => {
@@ -84,35 +93,40 @@ const Usuario = () => {
         setMidia({} as IMidiaPicker);
     }
 
+    if (!load) {
+        return <Loading />
+    }
+
     return (
         <SafeAreaView>
             <ScrollView>
                 <View style={styles.logoContainer}>
                     <Image
                         style={styles.logoImage}
-                        source={require('../../assets/criar-conta.png')}
+                        source={require('../../assets/cadastro-conta.png')}
                     />
                 </View>
 
                 <View style={styles.container}>
-                    <View style={ styles.midiaContainer }>
-                    { midia?.uri ?
-                        <View style={styles.midiaView}>
-                            <Image
-                                source={{ uri: midia?.uri }}
-                                style={styles.midia}
-                            />
-                            <TouchableOpacity style={styles.midiaRemove} onPress={() => handleRemoveMidia()} >
-                                {/* <Feather name='minus' size={16} color={colors.dimmedBackground} /> */}
-                                <RegularText style={{ color: colors.dimmedBackground }}>X</RegularText>
-                            </TouchableOpacity>
+                    <View style={styles.midiaContainer}>
+                        {midia?.uri ?
+                            <View style={styles.midiaView}>
+                                <Image
+                                    source={{ uri: midia?.uri }}
+                                    style={styles.midia}
+                                />
+                                <TouchableOpacity style={styles.midiaRemove} onPress={() => handleRemoveMidia()} >
+                                    <RegularText style={{ color: colors.dimmedBackground }}>X</RegularText>
+                                </TouchableOpacity>
 
-                        </View>
-                        :
-                        <TouchableOpacity style={styles.midiaInput} onPress={handleAddMidia} >
-                            <Feather name='plus' size={24} color={colors.dimmedBackground} />
-                        </TouchableOpacity>
-                    }
+                            </View>
+                            :
+                            <TouchableOpacity style={styles.midiaInput} onPress={handleAddMidia} >
+                                <Image source={require('./../../assets/user-foto.png')} style={styles.midiaIcon} />
+                                <AntDesign style={styles.editIcon} name="edit" size={30} color="black" />
+                                <RegularText style={{ bottom: 20 }}>Escolha sua foto</RegularText>
+                            </TouchableOpacity>
+                        }
                     </View>
 
                     <InputSignUp tipo='username' placeholder='Username' icon='person-outline' security={false} setState={setUsername} ></InputSignUp>
@@ -128,7 +142,6 @@ const Usuario = () => {
                             <SmallButton onPress={() => { handleSubmit() }}>Cadastrar</SmallButton>
                         </View>
                     </View>
-
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -143,8 +156,8 @@ const styles = StyleSheet.create({
 
     logoImage: {
         width: width - 10,
-        height: (width - 10) / 5,
-        // Utilizar proporção de x por x : 5 para garantir que fique bonito em todos os tamanhos de tela
+        height: (width - 10) / 1.3,
+        // Utilizar proporção de x por x : 1.3 para garantir que fique bonito em todos os tamanhos de tela
     },
 
     container: {
@@ -176,9 +189,9 @@ const styles = StyleSheet.create({
     },
 
     midia: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
+        width: 150,
+        height: 150,
+        borderRadius: 75,
         borderWidth: 1,
         borderColor: colors.dimmedBackground,
         justifyContent: 'center',
@@ -187,19 +200,22 @@ const styles = StyleSheet.create({
     },
 
     midiaInput: {
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-        borderStyle: 'dashed',
-        borderColor: colors.dimmedBackground,
-        borderWidth: 1,
-        borderRadius: 40,
-        height: 80,
-        width: 80,
         justifyContent: 'center',
         alignItems: 'center',
     },
 
     midiaView: {
         position: 'relative'
+    },
+
+    midiaIcon: {
+        width: 150,
+        height: 150
+    },
+
+    editIcon: {
+        left: 50,
+        bottom: 25
     },
 
     midiaRemove: {

@@ -12,6 +12,7 @@ import SmallButton from '../../components/SmallButton';
 import screens from './../../constants/screens';
 import api from '../../services/api';
 import { IUsuario } from '../../constants/interfaces';
+import Loading from '../../components/Loading';
 
 const facebookLogo = require('../../assets/facebook.png');
 const { width, height } = Dimensions.get('window');
@@ -54,6 +55,7 @@ const Login = () => {
     const [senha, setSenha] = useState('');
     const [eye, setEye] = useState(false)
     const [usuario, setUsuario] = useState<IUsuario>()
+    const [load, setLoad] = useState(true)
 
     const { signIn, signed, user } = useContext(AuthContext);
 
@@ -109,7 +111,7 @@ const Login = () => {
                         const usuario: IUsuario = response.data;
                         usuario.path = user.photoUrl;
                         if (usuario) {
-                            signIn(usuario);
+                            setUsuario(usuario);
                             //navigation.navigate(screens.cadastroIngredientes);
                         }
                         else {
@@ -121,6 +123,10 @@ const Login = () => {
         } else if (error) {
             console.log('Login falhou!');
         }
+    }
+
+    if (!load) {
+        return <Loading />
     }
 
     return (
