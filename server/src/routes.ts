@@ -85,7 +85,7 @@ routes.post('/remove/receita/:id', receitaController.remove);
 //routes.post('/autenticar', usuarioController.validate);
 routes.post('/validacao', usuarioController.exist);
 routes.post('/login', usuarioController.login);
-routes.post('/fb-login', usuarioController.findFbLogin);
+routes.post('/fb-login', usuarioController.fbLogin);
 routes.get('/folder-name/:id', fileImportController.getFolderPath);
 routes.get('/atualiza-pasta', fileImportController.getNewFolderPath);
 

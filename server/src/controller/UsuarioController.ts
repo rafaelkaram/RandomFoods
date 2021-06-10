@@ -44,7 +44,7 @@ class UsuarioController {
         return systrace(200, response, usuarioView.render(usuario, qtdeLogs));
     }
 
-    async findFbLogin(request: Request, response: Response) {
+    async fbLogin(request: Request, response: Response) {
         const repository = getCustomRepository(UsuarioRepository);
 
         const { id, name } = request.body;
@@ -60,7 +60,7 @@ class UsuarioController {
             const dados: string = name.replace(' ', '').toLowerCase();
             const now: number = Date.now();
 
-            const usuario = new Usuario(dados + now, '', getHash(now.toString()));
+            const usuario = new Usuario(dados + now, dados + now, getHash(now.toString()));
             usuario.idExterno = id;
             usuario.nome = name;
             usuario.trocaLogin = true;
@@ -82,6 +82,7 @@ class UsuarioController {
             const usuario: Usuario = await repository.findByLoginOrEmail(login ? login.toLowerCase() : '');
             const qtdeLogs: number = await logNotificacaoController.countNotRead(usuario);
 
+            if (usuario.idExterno) throw 'Login ou senha inválidos.';
             if (usuario && usuario.senha === getHash(senha)) {
                 return systrace(200, response, usuarioView.render(usuario, qtdeLogs));
             }
