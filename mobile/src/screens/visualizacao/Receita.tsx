@@ -62,7 +62,7 @@ function SelectedRecipe({ route }: { route: any }) {
             return (<Text>Vamos comentar galera!</Text>);
         } else {
             return (
-                <View style={styles.comments} >
+                <View>
                     { comentarios.map(comment => {
                         return (
                             <View key={comment.id}>
@@ -110,15 +110,14 @@ function SelectedRecipe({ route }: { route: any }) {
         }
     }
 
-    const ShowSubComment = ({ sub }: { sub: any }) => {
+    const ShowSubComment = ({ sub }: { sub: number }) => {
         const childComments = comments.filter(obj => obj.comentarioPai === sub);
-        if (childComments) {
+        if (childComments && childComments.length > 0) {
             return (
                 <View style={styles.identacao}>
                     <ShowComments comentarios={childComments} />
                 </View>
             );
-
         }
         return (<></>);
     }
@@ -248,7 +247,9 @@ function SelectedRecipe({ route }: { route: any }) {
                     {
                         loadComentario ?
                             <Loading/> :
-                            <ShowComments comentarios={ comments.filter(comentario => (comentario.comentarioPai === null)) } />
+                            <View style={styles.comments}>
+                                <ShowComments comentarios={ comments.filter(comentario => (comentario.comentarioPai === undefined)) } />
+                            </View>
                     }
                     {
                         (newC) &&
@@ -361,6 +362,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 15,
         borderRadius: 10,
+        margin: 5
     },
 
     commentTitle: {
@@ -382,8 +384,9 @@ const styles = StyleSheet.create({
     },
 
     identacao: {
-        marginTop: 10,
-        //backgroundColor:'red',
+        margin: 2,
+        marginTop: -5,
+        marginLeft: 15
     },
 
     rating: {

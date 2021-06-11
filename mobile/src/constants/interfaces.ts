@@ -1,7 +1,7 @@
 interface IComentario {
   id: number,
   conteudo: string,
-  comentarioPai: number,
+  comentarioPai: number | undefined,
   data: Date,
   usuario: IUsuarioSimples,
   idReceita: number

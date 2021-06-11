@@ -27,7 +27,6 @@ class ComentarioController {
             idReceita: number,
             idUsuario: number
         };
-        console.log({ body: request.body });
 
         try {
             const usuarioController = new UsuarioController();
@@ -72,10 +71,10 @@ class ComentarioController {
         const comentarios = await repository.findByReceita(parseInt(idReceita));
 
         if (!comentarios) {
-            return response.status(400).json({ error: 'Comentarios não encontrado!' });
+            syserror(400, response, { error: 'Comentarios não encontrado!' });
         }
 
-        return response.status(200).json(comentarioView.renderMany(comentarios));
+        systrace(200, response, comentarioView.renderMany(comentarios));
     }
 
     // Métodos internos

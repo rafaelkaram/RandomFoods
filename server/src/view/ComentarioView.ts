@@ -4,12 +4,10 @@ import usuarioView from "./UsuarioView";
 
 export default {
     render(comentario: Comentario) {
-        const idPai = comentario.comentarioPai ? comentario.comentarioPai.id : null;
-
         return {
             id: comentario.id,
             conteudo: comentario.valor,
-            comentarioPai: comentario.comentarioPai,
+            comentarioPai: comentario.comentarioPai?.id,
             data: Date,
             usuario: usuarioView.renderSimple(comentario.usuario),
         };
