@@ -30,10 +30,9 @@ function SelectedRecipe({ route }: { route: any }) {
     const idRecipe = route.params.id;
     const [recipe, setRecipe] = useState<IReceita>();
     const [comments, setComments] = useState<IComentario[]>([]);
-    const [etapas, setEtapas] = useState<string[]>([])
-    const [midias, setMidias] = useState<IMidia[]>([])
-    const [newC, setNewC] = useState(false)
-    const [newResposta, setNewResposta] = useState(false)
+    const [etapas, setEtapas] = useState<string[]>([]);
+    const [midias, setMidias] = useState<IMidia[]>([]);
+    const [newC, setNewC] = useState(false);
 
     const [idCommentPai, setIdCommentpai] = useState<number | null>(null)
     const [favorita, setFavorita] = useState(false)
@@ -92,12 +91,10 @@ function SelectedRecipe({ route }: { route: any }) {
                                     { user &&
                                         <TouchableOpacity style={styles.commentBut}
                                             onPress={() => {
-                                                if (newC == true) {
-                                                    setIdCommentpai(comment.id);
-                                                }
-                                                setNewC(!newC)
-                                            }
-                                            }>
+                                                setIdCommentpai(comment.id);
+                                                setNewC(!newC);
+                                            }}
+                                        >
                                             <MaterialCommunityIcons name="comment" size={20} color="black" />
                                         </TouchableOpacity>
                                     }
@@ -239,7 +236,7 @@ function SelectedRecipe({ route }: { route: any }) {
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.buttonComentar}
                                 onPress={() => {
-                                    if (newC) setIdCommentpai(null);
+                                    setIdCommentpai(null);
                                     setNewC(!newC)
                                 }}
                             >
