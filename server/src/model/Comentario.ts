@@ -40,8 +40,10 @@ export class Comentario extends BaseEntity {
   marcas: Marca[];
 
   @OneToOne(() => LogNotificacao)
+  @JoinColumn({ name: 'id' })
   log: LogNotificacao;
 
   @OneToOne(() => LogNotificacao, { nullable: true })
+  @JoinColumn({ name: 'id' })
   logResposta: LogNotificacao;
 }

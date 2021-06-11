@@ -1,52 +1,37 @@
 
 import React, { useState } from 'react';
-import {
-    KeyboardAvoidingView,
-    StyleSheet,
-    TextInput,
-    Text,
-    View, TouchableOpacity
-} from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, TextInput, View, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import colors from '../constants/colors';
 
 
 const InputComment = (props: {
-    resposta: boolean
     idPai: number | null
     idReceita: any
     submit: Function
     setNew: Function
 }) => {
-    const [newComment, setNewComment] = useState('')
-    const resposta = props.resposta
-    var idPai = props.idPai
-    const idReceita = props.idReceita
-    const submit = props.submit
-    const setNew = props.setNew
+    const [newComment, setNewComment] = useState('');
+    const idPai = props.idPai;
+    const idReceita = props.idReceita;
+    const submit = props.submit;
+    const setNew = props.setNew;
 
-    // if (idPai = 0){
-    //     idPai = null
-    // }else{
-    //      idPai = props.idPai
-    // }
     return (
         <View >
             <KeyboardAvoidingView
                 behavior='position'
             >
                 <View style={styles.container}>
-                    {/* Comment input field */}
                     <TextInput
                         placeholder="Adicione seu comentário.."
                         multiline
-                        autoFocus={true} // focus and show the keyboard
+                        autoFocus={true}
                         style={styles.input}
                         value={newComment}
-                        onChangeText={(value) => setNewComment(value)} // handle input changes
-                    // onSubmitEditing={this.onSubmitEditing} // handle submit event
+                        onChangeText={(value) => setNewComment(value)}
                     />
-                 
+
                     <TouchableOpacity
                         style={styles.button}
                         onPress={() => {
@@ -55,9 +40,9 @@ const InputComment = (props: {
                                 setNewComment('')
                                 setNew()
                             }
-                           
+
                         }}>
-                    
+
                         <TouchableOpacity
                         >
                             <Feather style={[styles.text, !newComment ? styles.inactive : []]} name="send" size={24} color={colors.dimmedBackground} />
@@ -98,7 +83,6 @@ const styles = StyleSheet.create({
     text: {
         color: colors.dimmedBackground,
         fontWeight: 'bold',
-        //fontFamily: 'Avenir',
         textAlign: 'center',
         fontSize: 15,
     },

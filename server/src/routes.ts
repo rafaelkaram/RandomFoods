@@ -41,9 +41,9 @@ routes.post('/importacao/:nome', uploadFiles.array('files'), fileImportControlle
 routes.post('/cadastro/receita', uploadMidia.array('midias'), receitaController.create);
 routes.post('/cadastro/midia', uploadMidia.array('midias'), midiaController.create);
 routes.post('/cadastro/usuario', uploadProfilePic.single('image'), usuarioController.create);
+routes.post('/cadastro/comentario', comentarioController.create);
 /*
 routes.post('/cadastro/avaliacao', avaliacaoController.create);
-routes.post('/cadastro/comentario', comentarioController.create);
 routes.post('/cadastro/imagem-perfil', uploadProfilePic.single('image'), usuarioController.uploadImage);
 */
 // Rotas de busca (buscar todos)

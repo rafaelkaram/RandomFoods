@@ -1,26 +1,24 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { Text, View, ScrollView, StyleSheet, Dimensions, KeyboardAvoidingView } from 'react-native';
-import { Rating, Avatar, Icon, Input } from 'react-native-elements';
+import { Alert, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Rating, Avatar, Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo, AntDesign, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import moment from 'moment';
 import CarouselItems, { SLIDER_WIDTH, ITEM_WIDTH } from '../../components/CarouselCardItem'
 
-import "moment/min/locales";
+import 'moment/min/locales';
 
-import api from '../../services/api'
+import api from '../../services/api';
+import AuthContext from './../../contexts/auth';
 
-import { IUsuario, IUsuarioSimples, IComentarioSend, IComentario, IMidia, IReceita } from '../../constants/interfaces';
+import { IUsuario, IComentario, IMidia, IReceita } from '../../constants/interfaces';
 import colors from '../../constants/colors';
 
-import AuthContext from './../../contexts/auth'
-import RegularText from '../../components/RegularText';
-import Category from '../../components/Category';
 import BoldText from '../../components/BoldText';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import Category from '../../components/Category';
 import InputComment from '../../components/InputComment';
-
+import Loading from '../../components/Loading';
+import RegularText from '../../components/RegularText';
 
 const { height, width } = Dimensions.get('window');
 const numberGrid = 3;
@@ -30,13 +28,8 @@ moment.locale('pt-br');
 function SelectedRecipe({ route }: { route: any }) {
 
     const idRecipe = route.params.id;
-    const [usuario, setUsuario] = useState<IUsuario>();
-    const [idUser, setIdUser] = useState<number|null>(null);
-    const [userAtivo, setUserAtivo] = useState(false);
-   // const [infoUsuario, setInfoUsuario] = useState<IUsuarioSimples>();
     const [recipe, setRecipe] = useState<IReceita>();
     const [comments, setComments] = useState<IComentario[]>([]);
-    const [comentarioSend, setComentarioSend] = useState<IComentarioSend>();
     const [etapas, setEtapas] = useState<string[]>([])
     const [midias, setMidias] = useState<IMidia[]>([])
     const [newC, setNewC] = useState(false)
@@ -45,44 +38,31 @@ function SelectedRecipe({ route }: { route: any }) {
     const [idCommentPai, setIdCommentpai] = useState<number | null>(null)
     const [favorita, setFavorita] = useState(false)
 
+    const [loadComentario, setLoadComentario] = useState<boolean>(false);
 
-    const { user } = useContext(AuthContext)
+    const { user }: { user: IUsuario | null } = useContext(AuthContext);
 
     useEffect(() => {
-        if (user) {
-            setUsuario(user);
-            setIdUser(user.id);
-           // setInfoUsuario({ id: user.id, login: user.login, nome: user.nome, iniciais: user.iniciais, perfil: user.perfil, path: user.path, ativo: user.ativo })
-            console.log("logado", usuario);
-            //console.log(infoUsuario)
-        } else {
-            console.log(" nao logado");
-
-        }
-
         api.get(`/busca/receita/${idRecipe}`)
             .then(response => {
                 setRecipe(response.data);
                 setEtapas(response.data?.descricao.split('\\n'))
                 setMidias(response.data?.midias)
             }
-            );
+        );
         api.get(`busca/comentario-receita/${idRecipe}`)
             .then(response => {
-                //console.log(response.data)
                 setComments(response.data);
             }
-            );
+        );
 
     }, []);
 
     const ShowComments = ({ comentarios }: { comentarios: any[] }) => {
-        //console.log(comentarios)
         if (!comentarios) {
             return (<Text>Vamos comentar galera!</Text>);
         } else {
             return (
-
                 <View style={styles.comments} >
                     { comentarios.map(comment => {
                         return (
@@ -97,7 +77,7 @@ function SelectedRecipe({ route }: { route: any }) {
                                                 {(!comment.usuario.ativo)&&
                                                     <BoldText style={{color:'lightgrey'}}>Usuário Inativo</BoldText>
                                                 }
-                                                
+
                                                 <RegularText style={styles.commentDate}> - {moment(comment.data).startOf('day').fromNow()}</RegularText>
                                             </View>
                                             {/* <Rating imageSize={10} readonly startingValue={Number(comment?.avaliacao)} /> */}
@@ -109,17 +89,18 @@ function SelectedRecipe({ route }: { route: any }) {
                                     {/* <View style={styles.commentHour}>
                                         <Text>{moment(comment.data).format('HH:mm')}</Text>
                                     </View> */}
-                                    <TouchableOpacity style={styles.commentBut}
-                                        onPress={() => {
-                                            if (newC == true) {
-                                                setIdCommentpai(comment.id)
-                                                setNewResposta(true)
+                                    { user &&
+                                        <TouchableOpacity style={styles.commentBut}
+                                            onPress={() => {
+                                                if (newC == true) {
+                                                    setIdCommentpai(comment.id);
+                                                }
+                                                setNewC(!newC)
                                             }
-                                            setNewC(!newC)
-                                        }
-                                        }>
-                                        <MaterialCommunityIcons name="comment" size={20} color="black" />
-                                    </TouchableOpacity>
+                                            }>
+                                            <MaterialCommunityIcons name="comment" size={20} color="black" />
+                                        </TouchableOpacity>
+                                    }
 
                                 </View>
                                 <ShowSubComment sub={comment.id} />
@@ -146,14 +127,22 @@ function SelectedRecipe({ route }: { route: any }) {
     }
 
     const submitComment = async (idReceita: number, idPai: number, conteudo: string) => {
-        const comentarioPai = idPai
-        const user = idUser
-        setComentarioSend({conteudo:conteudo,comentarioPai:comentarioPai,idUsuario:user!,idReceita:idReceita})
-        //const user:IUsuarioSimples = infoUsuario
-        console.log('chegou!')
-        //console.log(idPai)
-        //await setComments([...comments, { id: comments.length + 1, data: new Date(), conteudo: conteudo, comentarioPai: comentarioPai, usuario: user, idReceita: idReceita }])
-        //console.log(comments)
+        setLoadComentario(true);
+        api.post('cadastro/comentario', { conteudo, idPai, idReceita, idUsuario: user?.id })
+            .then(response => {
+                setComments(response.data);
+                setLoadComentario(false);
+            }).catch(error => {
+                Alert.alert(
+                    'Falha no resgistro de comentário',
+                    '\nArruma o texto depois',
+                    [
+                        { text: 'OK' }
+                    ]
+                );
+                setLoadComentario(false);
+            }
+        );
     }
 
     const setNew = () => {
@@ -166,7 +155,6 @@ function SelectedRecipe({ route }: { route: any }) {
                 <View style={styles.container}>
                     <View style={styles.itemListTitle}>
                         <BoldText style={styles.titleText}>{recipe?.receita}</BoldText>
-
                     </View>
                     <CarouselItems midias={midias} />
                     <View style={styles.autor}>
@@ -241,40 +229,41 @@ function SelectedRecipe({ route }: { route: any }) {
                             )
                         })}
                     </View>
-                    <View style={styles.buttonActions}>
-                        <TouchableOpacity style={favorita ? styles.buttonFavTrue : styles.buttonFavFalse}
-                            onPress={() => {
-                                setFavorita(!favorita)
-                            }}>
-                            <AntDesign name="heart" size={20} color="white" />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.buttonComentar}
-                            onPress={() => {
-                                if (newC == true) {
-                                    setIdCommentpai(0)
-                                    setNewResposta(false)
-                                }
-                                setNewC(!newC)
-                            }}>
-                            <BoldText style={{ color: 'white', fontSize: 16 }}>Comentar</BoldText>
-                            <MaterialCommunityIcons name="comment" size={20} color="white" style={{ marginLeft: 10 }} />
-                        </TouchableOpacity>
-                    </View>
-                    <ShowComments comentarios={comments.filter(comentario => (comentario.comentarioPai === null))} />
-
-
-                    {(newC) &&
-                        <InputComment
-                            resposta={newResposta}
-                            idPai={idCommentPai}
-                            idReceita={recipe?.id}
-                            submit={(idReceita: number, idPai: number, conteudo: string) => { submitComment(idReceita, idPai, conteudo) }}
-                            setNew={() => setNew()} />
-
+                    { user &&
+                        <View style={styles.buttonActions}>
+                            <TouchableOpacity style={favorita ? styles.buttonFavTrue : styles.buttonFavFalse}
+                                onPress={() => {
+                                    setFavorita(!favorita)
+                                }}>
+                                <AntDesign name="heart" size={20} color="white" />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.buttonComentar}
+                                onPress={() => {
+                                    if (newC) setIdCommentpai(null);
+                                    setNewC(!newC)
+                                }}
+                            >
+                                <BoldText style={{ color: 'white', fontSize: 16 }}>Comentar</BoldText>
+                                <MaterialCommunityIcons name="comment" size={20} color="white" style={{ marginLeft: 10 }} />
+                            </TouchableOpacity>
+                        </View>
+                    }
+                    {
+                        loadComentario ?
+                            <Loading/> :
+                            <ShowComments comentarios={ comments.filter(comentario => (comentario.comentarioPai === null)) } />
+                    }
+                    {
+                        (newC) &&
+                            <InputComment
+                                idPai={idCommentPai}
+                                idReceita={recipe?.id}
+                                submit={(idReceita: number, idPai: number, conteudo: string) => submitComment(idReceita, idPai, conteudo) }
+                                setNew={() => setNew()}
+                            />
                     }
 
                 </View>
-
             </ScrollView>
         </SafeAreaView>
     );
@@ -292,6 +281,7 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center'
     },
+
     autor: {
         margin: 10,
         padding: 10,
@@ -300,6 +290,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 15,
     },
+
     autorName: {
         marginLeft: 15,
     },
@@ -353,7 +344,6 @@ const styles = StyleSheet.create({
         height: itemWidth - 40,
         borderRadius: 20,
         textAlign: 'center',
-
     },
 
     itemListDescribe: {
@@ -417,6 +407,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         borderRadius: 15,
     },
+
     commentInput: {
         borderBottomWidth: 0,
         borderRadius: 10,
@@ -426,11 +417,12 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         padding: 15
     },
+
     commentBox: {
         flexDirection: 'row',
         alignItems: 'center',
-
     },
+
     buttonComentar: {
         backgroundColor: colors.dimmedBackground,
         flexDirection: 'row',
@@ -439,6 +431,7 @@ const styles = StyleSheet.create({
         margin: 10,
         padding: 10,
     },
+
     buttonFavTrue: {
         backgroundColor: colors.dimmedBackground,
         flexDirection: 'row',
@@ -447,6 +440,7 @@ const styles = StyleSheet.create({
         margin: 10,
         padding: 10,
     },
+
     buttonFavFalse: {
         backgroundColor: 'lightgrey',
         flexDirection: 'row',
@@ -455,10 +449,10 @@ const styles = StyleSheet.create({
         margin: 10,
         padding: 10,
     },
+
     buttonActions: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
-
     }
 });
 
