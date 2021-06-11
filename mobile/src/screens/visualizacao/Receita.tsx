@@ -384,7 +384,6 @@ const styles = StyleSheet.create({
     },
 
     identacao: {
-        margin: 2,
         marginTop: -5,
         marginLeft: 15
     },
