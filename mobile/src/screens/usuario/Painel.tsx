@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Text, ScrollView, TouchableOpacity, View, StyleSheet, Dimensions, Button } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { VictoryPie, VictoryLegend } from 'victory-native';
 import { DataTable } from 'react-native-paper';
 import { Avatar } from "react-native-elements";
@@ -8,7 +7,7 @@ import AuthContext from './../../contexts/auth'
 import api from '../../services/api'
 import Colors from '../../constants/colors';
 import Loading from '../../components/Loading';
-import { IUsuario, IPainelTipoReceita, IPainelCategorias, IPainelVotos } from '../../constants/interfaces';
+import { IPainelTipoReceita, IPainelCategorias, IPainelVotos } from '../../constants/interfaces';
 
 import ItalicText from '../../components/ItalicText';
 import BoldText from '../../components/BoldText';
@@ -16,7 +15,6 @@ import RegularText from '../../components/RegularText';
 
 const Painel = () => {
 
-    const [usuario, setUsuario] = useState<IUsuario>();;
     const [recipeType, setRecipeType] = useState<IPainelTipoReceita[]>([]);
     const [recipeCategory, setRecipeCategory] = useState<IPainelCategorias[]>([]);
     const [topVotedRecipe, setTopVotedRecipe] = useState<IPainelVotos[]>([]);
@@ -28,31 +26,19 @@ const Painel = () => {
         signOut()
     }
 
-
     useEffect(() => {
         if (user) {
-            setUsuario(user);
-            setLoad(true)
-            console.log("painel logado", usuario);
-        } else {
-            console.log("painel nao logado");
-
-        }
-    }, []);
-
-    useEffect(() => {
-        if (usuario) {
-            api.get(`/dashboard/tipos-receita/${usuario?.id}`)
+            api.get(`/dashboard/tipos-receita/${user?.id}`)
                 .then(response => {
                     setRecipeType(response.data)
 
                 })
-            api.get(`/dashboard/categorias/${usuario?.id}`)
+            api.get(`/dashboard/categorias/${user?.id}`)
                 .then(response => {
                     setRecipeCategory(response.data)
                 })
 
-            api.get(`/dashboard/avaliacoes/${usuario?.id}`)
+            api.get(`/dashboard/avaliacoes/${user?.id}`)
                 .then(response => {
                     setTopVotedRecipe(response.data)
                 })
@@ -61,8 +47,8 @@ const Painel = () => {
             setRecipeCategory([])
             setTopVotedRecipe([])
         }
-
-    }, [usuario]);
+        setLoad(true)
+    }, [user]);
 
     const pieTypeData = recipeType.map((item) => {
         return (
@@ -106,13 +92,13 @@ const Painel = () => {
         <>
             <ScrollView>
                 <View style={styles.mainContainer}>
-                    {usuario?.path ?
+                    {user?.path ?
                         <Avatar
                             size="large"
                             rounded
-                            title={usuario?.iniciais}
+                            title={user?.iniciais}
                             source={{
-                                uri: usuario?.path
+                                uri: user?.path
                             }}
                             activeOpacity={0.7}
                             containerStyle={{ backgroundColor: 'lightgrey' }}
@@ -121,13 +107,13 @@ const Painel = () => {
                         <Avatar
                             size="large"
                             rounded
-                            title={usuario?.iniciais}
+                            title={user?.iniciais}
                             activeOpacity={0.7}
                             containerStyle={{ backgroundColor: 'lightgrey' }}
                         />}
-                    <View style={usuario!?.nome.length > 10 ? styles.nameContainer : null}>
-                        <BoldText style={styles.name}>{usuario?.nome}</BoldText>
-                        <RegularText style={styles.login}>@{usuario?.login}</RegularText>
+                    <View style={user!?.nome.length > 10 ? styles.nameContainer : null}>
+                        <BoldText style={styles.name}>{user?.nome}</BoldText>
+                        <RegularText style={styles.login}>@{user?.login}</RegularText>
                     </View>
                 </View>
                 <View style={styles.totalRecipes}>
