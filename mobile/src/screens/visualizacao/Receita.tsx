@@ -38,6 +38,7 @@ function SelectedRecipe({ route }: { route: any }) {
     const [favorita, setFavorita] = useState(false)
 
     const [loadComentario, setLoadComentario] = useState<boolean>(false);
+    const [rating, setRating] = useState<number>(0)
 
     const { user }: { user: IUsuario | null } = useContext(AuthContext);
 
@@ -47,6 +48,7 @@ function SelectedRecipe({ route }: { route: any }) {
                 setRecipe(response.data);
                 setEtapas(response.data?.descricao.split('\\n'))
                 setMidias(response.data?.midias)
+                setRating(response.data?.nota)
             }
         );
         api.get(`busca/comentario-receita/${idRecipe}`)
@@ -145,6 +147,10 @@ function SelectedRecipe({ route }: { route: any }) {
         setNewC(!newC)
     }
 
+    const sendRating = (r: number) => {
+        setRating(r)
+    }
+
     return (
         <SafeAreaView>
             <ScrollView>
@@ -160,6 +166,9 @@ function SelectedRecipe({ route }: { route: any }) {
                             title={recipe?.usuario.iniciais}
                             activeOpacity={0.7}
                             containerStyle={{ backgroundColor: 'lightgrey' }}
+                            source={{
+                                uri: recipe?.usuario.path
+                            }}
                         />
                         <Text style={styles.autorName}>{recipe?.usuario.nome}</Text>
                     </View>
@@ -169,8 +178,10 @@ function SelectedRecipe({ route }: { route: any }) {
                             <BoldText>Nota: </BoldText>
                             <Rating
                                 imageSize={20}
-                                readonly
-                                startingValue={recipe?.nota}
+                                readonly={user ? false : true}
+                                fractions={0}
+                                startingValue={rating}
+                                onFinishRating={(r) => { sendRating(r) }}
                             />
                         </View>
                     </View>

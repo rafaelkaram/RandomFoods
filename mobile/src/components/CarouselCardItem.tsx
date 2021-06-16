@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, Dimensions, Image, Modal, Text } from "react-native"
+import { View, StyleSheet, Dimensions, Image, Modal, Text, TouchableOpacity, BackHandler } from "react-native"
 import { IMidia } from '../constants/interfaces';
 import Carousel from 'react-native-snap-carousel'
 import { Video } from 'expo-av';
-import VideoPlayer from 'expo-video-player'
 import ImageViewer from 'react-native-image-zoom-viewer';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { AntDesign } from '@expo/vector-icons';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width + 80
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
@@ -14,7 +13,7 @@ const CarouselItems = ({ midias }: { midias: IMidia[] }) => {
 
     const isCarousel = React.useRef(null);
     const video = React.useRef(null);
-    const [status, setStatus] = useState({ isPlaying: false })
+    const [status, setStatus] = React.useState({ isPlaying: false });
     const [visible, setVisible] = useState(false)
     const [index, setIndex] = useState(0)
 
@@ -22,7 +21,7 @@ const CarouselItems = ({ midias }: { midias: IMidia[] }) => {
         if (item.tipo === 'FOTO') {
             return (
                 <View style={styles.container} key={index}>
-                    <TouchableOpacity onPress={() => {setVisible(true); setIndex(index)}} activeOpacity={1}>
+                    <TouchableOpacity onPress={() => { setVisible(true); setIndex(index) }} activeOpacity={1}>
                         <Image
                             source={{ uri: item.path }}
                             style={styles.image}
@@ -33,18 +32,17 @@ const CarouselItems = ({ midias }: { midias: IMidia[] }) => {
         } else if (item.tipo === 'VIDEO') {
             return (
                 <View key={index}>
-                    <VideoPlayer
-                        videoProps={{
-                            shouldPlay: true,
-                            resizeMode: Video.RESIZE_MODE_CONTAIN,
-                            source: {
-                                uri: item.path,
-                            },
+                    <Video
+                        ref={video}
+                        style={styles.video}
+                        source={{
+                            uri: item.path,
                         }}
-                        width={ITEM_WIDTH}
-                        height={300}
-                        inFullscreen={true}
-                        showFullscreenButton={false}
+                        useNativeControls
+                        resizeMode="contain"
+                        isLooping
+                        onPlaybackStatusUpdate={() => setStatus({ isPlaying: !status.isPlaying })}
+
                     />
                 </View>)
         }
@@ -59,23 +57,43 @@ const CarouselItems = ({ midias }: { midias: IMidia[] }) => {
 
     }
     const ImagesZoom = () => {
-        let imgs : { url: string, props: any }[] = []
-        for (var key in midias){
-            imgs.push({url: midias[key].path, props: {}})
+        let imgs: { url: string, props: any }[] = []
+        for (var key in midias) {
+            if (midias[key].tipo === 'FOTO')
+                imgs.push({ url: midias[key].path, props: {} })
         }
-        return(
-            <Modal visible={visible} transparent={true} >
-                <ImageViewer 
-                    imageUrls={imgs} 
-                    onSwipeDown={() => setVisible(!visible)} 
-                    enableSwipeDown={true} 
+        return (
+            <Modal
+                visible={visible}
+                transparent={true}
+                onRequestClose={() => setVisible(!visible)}
+            >
+                <TouchableOpacity style={styles.close}
+                    onPress={() => setVisible(!visible)}
+                >
+                    <AntDesign name="close" size={20} color="white" />
+                </TouchableOpacity>
+                <ImageViewer
+                    imageUrls={imgs}
+                    onSwipeDown={() => setVisible(!visible)}
+                    enableSwipeDown={true}
                     index={index}
                     onChange={() => setIndex(index)}
                 />
-            </Modal>
+            </Modal >
         )
     }
-    
+
+    function videoStatus(ind: number) {
+        if (midias[ind].tipo === "VIDEO") {
+            setStatus({ isPlaying: true })
+            video.current?.playAsync()
+        } else {
+            setStatus({ isPlaying: false })
+            video.current?.pauseAsync()
+        }
+    }
+
     return (
         <View style={{ alignItems: 'center' }}>
             <Carousel
@@ -88,6 +106,7 @@ const CarouselItems = ({ midias }: { midias: IMidia[] }) => {
                 itemWidth={ITEM_WIDTH}
                 inactiveSlideShift={0}
                 useScrollView={true}
+                onSnapToItem={(ind) => { videoStatus(ind) }}
             />
             <ImagesZoom />
         </View>
@@ -132,6 +151,12 @@ const styles = StyleSheet.create({
         width: ITEM_WIDTH,
         height: 300,
     },
+    close: {
+        position: 'absolute',
+        top: 5,
+        right: 5,
+        zIndex: 999,
+    }
 })
 
 export default CarouselItems
