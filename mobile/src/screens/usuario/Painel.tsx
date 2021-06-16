@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Text, ScrollView, TouchableOpacity, View, StyleSheet, Dimensions, Button } from 'react-native';
 import { VictoryPie, VictoryLegend } from 'victory-native';
+import { useNavigation } from '@react-navigation/native';
 import { DataTable } from 'react-native-paper';
 import { Avatar } from "react-native-elements";
 import AuthContext from './../../contexts/auth'
@@ -12,9 +13,10 @@ import { IPainelTipoReceita, IPainelCategorias, IPainelVotos } from '../../const
 import ItalicText from '../../components/ItalicText';
 import BoldText from '../../components/BoldText';
 import RegularText from '../../components/RegularText';
+import screens from '../../constants/screens';
 
 const Painel = () => {
-
+    const navigation = useNavigation();
     const [recipeType, setRecipeType] = useState<IPainelTipoReceita[]>([]);
     const [recipeCategory, setRecipeCategory] = useState<IPainelCategorias[]>([]);
     const [topVotedRecipe, setTopVotedRecipe] = useState<IPainelVotos[]>([]);
@@ -24,6 +26,10 @@ const Painel = () => {
 
     function handleSignOut() {
         signOut()
+    }
+
+    const handleNavigateToPerfil = () => {
+        navigation.navigate(screens.perfil);
     }
 
     useEffect(() => {
@@ -186,6 +192,7 @@ const Painel = () => {
                     </View>
                 </View>
                 <View style={{ margin: 10 }}></View>
+                <Button title="Perfil" onPress={() => handleNavigateToPerfil()} />
                 <Button title="Sign Out" onPress={() => handleSignOut()} />
             </ScrollView>
         </>

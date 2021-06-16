@@ -9,6 +9,7 @@ export default {
   home: 'Home',
   login: 'Login',
   painel: 'Painel de Controle',
+  perfil: 'Perfil',
   receita: 'Visualizar Receita',
   resultadoPesquisa: 'Resultado Pesquisa',
   notificacoes: 'Notificação'

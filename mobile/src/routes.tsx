@@ -17,6 +17,7 @@ import ResultadoPesquisa from './screens/visualizacao/ResultadoPesquisa';
 import Receita from './screens/visualizacao/Receita';
 import Login from './screens/usuario/Login';
 import Painel from './screens/usuario/Painel';
+import Perfil from './screens/usuario/Perfil';
 import Filtro from './screens/visualizacao/Filtro';
 import PassoAPasso from './screens/cadastro/PassoAPasso';
 import Usuario from './screens/cadastro/Usuario';
@@ -66,6 +67,8 @@ const UserStack = () => {
         return (
             <AppStack.Navigator>
                 <AppStack.Screen name={screens.painel} component={Painel} />
+                <AppStack.Screen name={screens.perfil} component={Perfil} />
+                <AppStack.Screen name={screens.receita} component={Receita} />
                 <AppStack.Screen name={screens.configuracoes} component={Configuracoes} />
             </AppStack.Navigator>
 
