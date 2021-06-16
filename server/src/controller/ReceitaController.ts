@@ -271,6 +271,34 @@ class ReceitaController {
         }
     }
 
+    async findByUsuario(request: Request, response: Response) {
+        const repository = getCustomRepository(ReceitaRepository);
+        const { id } = request.params as { id: string };
+
+        const usuarioId = parseInt(id);
+
+        try {
+            const receitas: any[] = [];
+
+            const usuarioController = new UsuarioController();
+            const usuario: Usuario = await usuarioController.find(usuarioId);
+
+            const list = await repository.find({
+                select: [ 'id' ],
+                where: [ { usuario } ]
+            });
+            await Promise.all(list?.map(async item => {
+                const receita = await ReceitaController.buildReceita(item.id);
+                receitas.push(receita);
+            }));
+
+            return systrace(200, response, { receitas });
+
+        } catch (e) {
+            syserror(400, response, e);
+        }
+    }
+
     async remove(request: Request, response: Response) {
         const repository = getCustomRepository(ReceitaRepository);
         const { id } = request.params;

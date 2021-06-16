@@ -70,7 +70,7 @@ routes.get('/busca/ingrediente', ingredienteController.findByIds);
 routes.get('/busca/comentario-receita/:idReceita', comentarioController.findByReceita);
 routes.get('/busca/combinacoes', receitaController.findMatches);
 routes.get('/busca/tempo-preparo', receitaController.getTempoPreparo);
-//routes.get('/busca/receita-usuario/:idUsuario', receitaController.findByUser);
+routes.get('/busca/receita-usuario/:id', receitaController.findByUsuario);
 
 // Rotas Dashboard
 routes.get('/dashboard/avaliacoes/:id', avaliacaoController.findVoted);
