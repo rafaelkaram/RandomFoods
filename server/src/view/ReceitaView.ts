@@ -36,6 +36,10 @@ export default {
     render(receita: Receita, ingredienteList: ReceitaIngrediente[], avaliacao: { nota: number, qtdeNotas: number}, qtdeLogs: number) {
 		if (receita && ingredienteList) {
 
+		const categorias = receita.categorias.map(categoria => {
+			return categoria.nome;
+		});
+
 			return {
 				id: receita.id,
 				receita: receita.nome,
@@ -47,7 +51,7 @@ export default {
 				nota: avaliacao.nota,
 				qtdeNotas: avaliacao.qtdeNotas,
 				ingredientes: ingredienteView.renderMany(ingredienteList),
-				categorias: receita.categorias,
+				categorias,
 				midias: midiaView.renderMany(receita.midias, receita.id)
 			};
 
