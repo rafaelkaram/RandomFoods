@@ -14,6 +14,7 @@ import ItalicText from '../../components/ItalicText';
 import BoldText from '../../components/BoldText';
 import RegularText from '../../components/RegularText';
 import screens from '../../constants/screens';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Painel = () => {
     const navigation = useNavigation();
@@ -28,8 +29,8 @@ const Painel = () => {
         signOut()
     }
 
-    const handleNavigateToPerfil = () => {
-        navigation.navigate(screens.perfil);
+    const handleNavigateToPerfil = (id: number | undefined) => {
+        navigation.navigate(screens.perfil, { id: id });
     }
 
     useEffect(() => {
@@ -95,107 +96,109 @@ const Painel = () => {
     }
 
     return (
-        <>
-            <ScrollView>
-                <View style={styles.mainContainer}>
-                    {user?.path ?
-                        <Avatar
-                            size="large"
-                            rounded
-                            title={user?.iniciais}
-                            source={{
-                                uri: user?.path
-                            }}
-                            activeOpacity={0.7}
-                            containerStyle={{ backgroundColor: 'lightgrey' }}
-                        />
-                        :
-                        <Avatar
-                            size="large"
-                            rounded
-                            title={user?.iniciais}
-                            activeOpacity={0.7}
-                            containerStyle={{ backgroundColor: 'lightgrey' }}
-                        />}
-                    <View style={user!?.nome.length > 10 ? styles.nameContainer : null}>
-                        <BoldText style={styles.name}>{user?.nome}</BoldText>
-                        <RegularText style={styles.login}>@{user?.login}</RegularText>
+            <SafeAreaView style={{flex:1}}>
+                <ScrollView>
+                    <View style={styles.mainContainer}>
+                        {user?.path ?
+                            <Avatar
+                                size="large"
+                                rounded
+                                title={user?.iniciais}
+                                source={{
+                                    uri: user?.path
+                                }}
+                                activeOpacity={0.7}
+                                containerStyle={{ backgroundColor: 'lightgrey' }}
+                            />
+                            :
+                            <Avatar
+                                size="large"
+                                rounded
+                                title={user?.iniciais}
+                                activeOpacity={0.7}
+                                containerStyle={{ backgroundColor: 'lightgrey' }}
+                            />}
+                        <View style={user!?.nome.length > 10 ? styles.nameContainer : null}>
+                            <BoldText style={styles.name}>{user?.nome}</BoldText>
+                            <RegularText style={styles.login}>@{user?.login}</RegularText>
+                        </View>
                     </View>
-                </View>
-                <View style={styles.totalRecipes}>
-                    <Text style={styles.totalRecipesTitle}>Receitas Cadastradas:</Text>
-                    <Text style={styles.totalRecipesText}>{totalRecipes}</Text>
-                </View>
-                <View style={styles.pieContainer}>
-                    <View style={styles.typePie}>
-                        <ItalicText style={styles.chartsTitle}>{`Receitas\npor Tipo`}</ItalicText>
-                        <VictoryPie
-                            height={((chartHeight / 2) - 50)}
-                            width={(chartWidth / 2)}
-                            colorScale={["orange", "#e02041"]}
-                            labels={({ datum }) => `${datum.y}`}
-                            data={pieTypeData}
-                            innerRadius={30}
-                            style={{ labels: { fontSize: 15 } }}
-                        />
-                        <VictoryLegend x={140}
-                            gutter={20}
-                            colorScale={["orange", "#e02041"]}
-                            data={pieTypeLegend}
-                            style={{ labels: { fontSize: 15 } }}
-                        />
-                    </View>
-
-                    <View style={styles.categoryPie}>
-                        <ItalicText style={styles.chartsTitle}>{`Receitas\npor Categoria`}</ItalicText>
-
-                        <VictoryPie
-                            height={((chartHeight / 2) - 50)}
-                            width={(chartWidth / 2)}
-                            colorScale={["#10a377", "#62e399", "#3f9665", "#29e379", "#99ffc5"]}
-                            labels={({ datum }) => `${datum.y}`}
-                            data={pieCategoryData}
-                            innerRadius={30}
-                            style={{ labels: { fontSize: 15 } }}
-                        />
-                        <ScrollView>
-                            <VictoryLegend x={10}
-                                colorScale={["#10a377", "#62e399", "#3f9665", "#29e379", "#99ffc5"]}
-                                data={pieCategoryLegend}
+                    <TouchableOpacity style={styles.totalRecipes}
+                        onPress={() => {
+                            handleNavigateToPerfil(user?.id)
+                        }}>
+                        <Text style={styles.totalRecipesTitle}>Receitas Cadastradas:</Text>
+                        <Text style={styles.totalRecipesText}>{totalRecipes}</Text>
+                    </TouchableOpacity>
+                    <View style={styles.pieContainer}>
+                        <View style={styles.typePie}>
+                            <ItalicText style={styles.chartsTitle}>{`Receitas\npor Tipo`}</ItalicText>
+                            <VictoryPie
+                                height={((chartHeight / 2) - 50)}
+                                width={(chartWidth / 2)}
+                                colorScale={["orange", "#e02041"]}
+                                labels={({ datum }) => `${datum.y}`}
+                                data={pieTypeData}
+                                innerRadius={30}
                                 style={{ labels: { fontSize: 15 } }}
                             />
-                        </ScrollView>
+                            <VictoryLegend x={140}
+                                gutter={20}
+                                colorScale={["orange", "#e02041"]}
+                                data={pieTypeLegend}
+                                style={{ labels: { fontSize: 15 } }}
+                            />
+                        </View>
+
+                        <View style={styles.categoryPie}>
+                            <ItalicText style={styles.chartsTitle}>{`Receitas\npor Categoria`}</ItalicText>
+
+                            <VictoryPie
+                                height={((chartHeight / 2) - 50)}
+                                width={(chartWidth / 2)}
+                                colorScale={["#10a377", "#62e399", "#3f9665", "#29e379", "#99ffc5"]}
+                                labels={({ datum }) => `${datum.y}`}
+                                data={pieCategoryData}
+                                innerRadius={30}
+                                style={{ labels: { fontSize: 15 } }}
+                            />
+                            <ScrollView>
+                                <VictoryLegend x={10}
+                                    colorScale={["#10a377", "#62e399", "#3f9665", "#29e379", "#99ffc5"]}
+                                    data={pieCategoryLegend}
+                                    style={{ labels: { fontSize: 15 } }}
+                                />
+                            </ScrollView>
+                        </View>
                     </View>
-                </View>
-                <View>
-                    { }
-                    <Text style={styles.tableTitle}>Top receitas mais votadas</Text>
-                    <View style={styles.topVotedTable}>
-                        <DataTable>
-                            <DataTable.Header>
-                                <DataTable.Title style={{ flexBasis: 30 }} >Receita</DataTable.Title>
-                                <DataTable.Title numeric>Nota</DataTable.Title>
-                                <DataTable.Title style={{ flexBasis: 10 }} numeric>Nº de Notas</DataTable.Title>
-                            </DataTable.Header>
-                            {topVotedRecipe.map(item => {
-                                return (
-                                    <TouchableOpacity key={item.id}>
-                                        <DataTable.Row >
-                                            <DataTable.Cell style={{ flexBasis: 30 }}>{item.nome}</DataTable.Cell>
-                                            <DataTable.Cell numeric>{item.nota}</DataTable.Cell>
-                                            <DataTable.Cell numeric>{item.num_notas}</DataTable.Cell>
-                                        </DataTable.Row>
-                                    </TouchableOpacity>
-                                )
-                            })}
-                        </DataTable>
+                    <View>
+                        { }
+                        <Text style={styles.tableTitle}>Top receitas mais votadas</Text>
+                        <View style={styles.topVotedTable}>
+                            <DataTable>
+                                <DataTable.Header>
+                                    <DataTable.Title style={{ flexBasis: 30 }} >Receita</DataTable.Title>
+                                    <DataTable.Title numeric>Nota</DataTable.Title>
+                                    <DataTable.Title style={{ flexBasis: 10 }} numeric>Nº de Notas</DataTable.Title>
+                                </DataTable.Header>
+                                {topVotedRecipe.map(item => {
+                                    return (
+                                        <TouchableOpacity key={item.id}>
+                                            <DataTable.Row >
+                                                <DataTable.Cell style={{ flexBasis: 30 }}>{item.nome}</DataTable.Cell>
+                                                <DataTable.Cell numeric>{item.nota}</DataTable.Cell>
+                                                <DataTable.Cell numeric>{item.num_notas}</DataTable.Cell>
+                                            </DataTable.Row>
+                                        </TouchableOpacity>
+                                    )
+                                })}
+                            </DataTable>
+                        </View>
                     </View>
-                </View>
-                <View style={{ margin: 10 }}></View>
-                <Button title="Perfil" onPress={() => handleNavigateToPerfil()} />
-                <Button title="Sign Out" onPress={() => handleSignOut()} />
-            </ScrollView>
-        </>
+                    <View style={{ margin: 10 }}></View>
+                    <Button title="Sign Out" onPress={() => handleSignOut()} />
+                </ScrollView>
+            </SafeAreaView>
     )
 }
 

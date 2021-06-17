@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import { Alert, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Rating, Avatar, Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import { Entypo, AntDesign, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import moment from 'moment';
 import CarouselItems, { SLIDER_WIDTH, ITEM_WIDTH } from '../../components/CarouselCardItem'
@@ -11,7 +12,7 @@ import 'moment/min/locales';
 import api from '../../services/api';
 import AuthContext from './../../contexts/auth';
 
-import { IUsuario, IComentario, IMidia, IReceita } from '../../constants/interfaces';
+import { IUsuario, IComentario, IMidia, IReceita, IUsuarioSimples } from '../../constants/interfaces';
 import colors from '../../constants/colors';
 
 import BoldText from '../../components/BoldText';
@@ -19,6 +20,7 @@ import Category from '../../components/Category';
 import InputComment from '../../components/InputComment';
 import Loading from '../../components/Loading';
 import RegularText from '../../components/RegularText';
+import screens from '../../constants/screens';
 
 const { height, width } = Dimensions.get('window');
 const numberGrid = 3;
@@ -26,6 +28,8 @@ const itemWidth = width / numberGrid;
 moment.locale('pt-br');
 
 function SelectedRecipe({ route }: { route: any }) {
+
+    const navigation = useNavigation();
 
     const idRecipe = route.params.id;
     const [recipe, setRecipe] = useState<IReceita>();
@@ -39,6 +43,8 @@ function SelectedRecipe({ route }: { route: any }) {
 
     const [loadComentario, setLoadComentario] = useState<boolean>(false);
     const [rating, setRating] = useState<number>(0)
+
+    
 
     const { user }: { user: IUsuario | null } = useContext(AuthContext);
 
@@ -59,6 +65,10 @@ function SelectedRecipe({ route }: { route: any }) {
 
     }, []);
 
+    const handleNavigateToPerfil = (id: number | undefined) => {
+        navigation.navigate(screens.perfil, { id: id });
+    }
+
     const ShowComments = ({ comentarios }: { comentarios: any[] }) => {
         if (!comentarios) {
             return (<Text>Vamos comentar galera!</Text>);
@@ -73,7 +83,12 @@ function SelectedRecipe({ route }: { route: any }) {
                                         <View style={styles.commentTitle}>
                                             <View style={styles.commentUserDate}>
                                                 {(comment.usuario.ativo)&&
-                                                    <BoldText>{comment.usuario.nome}</BoldText>
+                                                    <TouchableOpacity
+                                                    onPress={() => {
+                                                        handleNavigateToPerfil(comment.usuario.id)
+                                                    }}>
+                                                        <BoldText>{comment.usuario.nome}</BoldText>
+                                                    </TouchableOpacity>
                                                 }
                                                 {(!comment.usuario.ativo)&&
                                                     <BoldText style={{color:'lightgrey'}}>Usuário Inativo</BoldText>
@@ -159,7 +174,13 @@ function SelectedRecipe({ route }: { route: any }) {
                         <BoldText style={styles.titleText}>{recipe?.receita}</BoldText>
                     </View>
                     <CarouselItems midias={midias} />
-                    <View style={styles.autor}>
+                    <TouchableOpacity 
+                        style={styles.autor}
+                        onPress={() => {
+                            //console.log(recipe?.usuario.id)
+                            handleNavigateToPerfil(recipe?.usuario.id)
+                        }}
+                        >
                         <Avatar
                             size="small"
                             rounded
@@ -171,7 +192,20 @@ function SelectedRecipe({ route }: { route: any }) {
                             }}
                         />
                         <Text style={styles.autorName}>{recipe?.usuario.nome}</Text>
-                    </View>
+                    </TouchableOpacity>
+                    {/* <View style={styles.autor}>
+                        <Avatar
+                            size="small"
+                            rounded
+                            title={recipe?.usuario.iniciais}
+                            activeOpacity={0.7}
+                            containerStyle={{ backgroundColor: 'lightgrey' }}
+                            source={{
+                                uri: recipe?.usuario.path
+                            }}
+                        />
+                        <Text style={styles.autorName}>{recipe?.usuario.nome}</Text>
+                    </View> */}
 
                     <View style={styles.rating}>
                         <View style={styles.note}>

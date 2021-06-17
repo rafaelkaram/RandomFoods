@@ -8,7 +8,7 @@ import AuthContext from './../../contexts/auth'
 import api from '../../services/api'
 import Colors from '../../constants/colors';
 import Loading from '../../components/Loading';
-import { IPainelTipoReceita, IPainelCategorias, IPainelVotos, IReceitaSimples } from '../../constants/interfaces';
+import { IPainelTipoReceita, IPainelCategorias, IPainelVotos, IReceitaSimples, IUsuarioSimples } from '../../constants/interfaces';
 
 import ItalicText from '../../components/ItalicText';
 import BoldText from '../../components/BoldText';
@@ -16,24 +16,35 @@ import RegularText from '../../components/RegularText';
 import RecipeList from '../../components/RecipeList';
 import screens from '../../constants/screens';
 import colors from '../../constants/colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const Perfil = () => {
+const Perfil = ({ route }: { route: any }) => {
     const navigation = useNavigation();
     const [recipeType, setRecipeType] = useState<IPainelTipoReceita[]>([]);
     const [recipesUser, setRecipesUser] = useState<IReceitaSimples[]>([]);
+    const [user, setUser] = useState<IUsuarioSimples>()
     const [title, setTitle] = useState('');
     const [load, setLoad] = useState<boolean>(false)
 
-    const { user, signOut } = useContext(AuthContext)
+    const idUser = route.params.id
+    //const { user, signOut } = useContext(AuthContext)
 
-    function handleSignOut() {
-        signOut()
-    }
+    // function handleSignOut() {
+    //     signOut()
+    // }
 
     const handleNavigateToRecipe = (id: number) => {
-        navigation.navigate(screens.receita, { id: id });
+        navigation.navigate(screens.receita2, { id: id });
     }
 
+
+    useEffect(() => {
+        api.get(`/busca/usuario/${idUser}`)
+                .then(response => {   
+                console.log(response.data)               
+                    setUser(response.data)                            
+                })
+    }, []);
 
     useEffect(() => {
         if (user) {        
@@ -53,7 +64,8 @@ const Perfil = () => {
 
         }
         setLoad(true)
-    }, []);
+    }, [user]);
+
 
     const pieTypeData = recipeType.map((item) => {
         return (
@@ -68,8 +80,10 @@ const Perfil = () => {
         return <Loading />
     }
     
+    
     return (
-        <>
+        
+        <SafeAreaView style={{flex:1}}>
             <ScrollView>
                 <View style={styles.mainContainer}>
                     {user?.path ?
@@ -110,9 +124,10 @@ const Perfil = () => {
                     
                 </ScrollView>
                
-                <Button title="Sign Out" onPress={() => handleSignOut()} />
+                {/* <Button title="Sign Out" onPress={() => handleSignOut()} /> */}
             </ScrollView>
-        </>
+            </SafeAreaView>
+        
     )
 }
 
@@ -120,12 +135,14 @@ const chartHeight = Dimensions.get("window").height * 0.5;
 const chartWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
+   
     main: {
         backgroundColor: Colors.background
     },
 
     body: {
         backgroundColor: colors.background,
+        marginTop:10,
     },
 
     mainContainer: {

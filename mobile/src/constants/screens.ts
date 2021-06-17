@@ -11,6 +11,7 @@ export default {
   painel: 'Painel de Controle',
   perfil: 'Perfil',
   receita: 'Visualizar Receita',
+  receita2: 'Visualizar Receita2',
   resultadoPesquisa: 'Resultado Pesquisa',
   notificacoes: 'Notificação'
 }
