@@ -15,38 +15,38 @@ const itemWidth = width / numberGrid;
 const itemHeight = height / numberGrid;
 
 const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navegar: Function }) => {
-  const titulo = props.titulo;
-  const receitas = props.receitas;
-  const navegar = props.navegar;
-  
-  return (
-    <View>
-      <ItalicText style={styles.subTitle}>{titulo}</ItalicText>
-      <View style={styles.columns}>
-          {receitas.map(item => {
-              return (
-                  <View style={styles.itemList} key={item.id}>
-                      <TouchableOpacity
-                          onPress={() => navegar(item.id)}>
-                          { item.foto ? (
-                              <Avatar
-                                  size="large"
-                                  source={{ uri: item.foto }}
-                                  activeOpacity={0.7}
-                                  containerStyle={styles.itemListImage}
-                                  rounded
-                              />
-                            ) : ( <Text style={styles.itemListImage}>{ item.receita }</Text> )
-                          }
-                          <BoldText style={styles.itemListTitle}>{ item.receita }</BoldText>
-                          <Rating imageSize={20} readonly startingValue={Number(item.nota)} />
-                      </TouchableOpacity>
-                  </View>
-              )
-          })}
-      </View>
-    </View>
-  );
+    const titulo = props.titulo;
+    const receitas = props.receitas;
+    const navegar = props.navegar;
+
+    return (
+        <View>
+            <ItalicText style={styles.subTitle}>{titulo}</ItalicText>
+            <View style={styles.columns}>
+                {receitas.map(item => {
+                    return (
+                        <View style={styles.itemList} key={item.id}>
+                            <TouchableOpacity
+                                onPress={() => navegar(item.id)}>
+                                {item.foto ? (
+                                    <Avatar
+                                        size="large"
+                                        source={{ uri: item.foto }}
+                                        activeOpacity={0.7}
+                                        containerStyle={styles.itemListImage}
+                                        rounded
+                                    />
+                                ) : (<Text style={styles.itemListImage}>{item.receita}</Text>)
+                                }
+                                <BoldText style={styles.itemListTitle}>{item.receita}</BoldText>
+                                <Rating imageSize={20} readonly startingValue={Number(item.nota)} />
+                            </TouchableOpacity>
+                        </View>
+                    )
+                })}
+            </View>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
 
     },
 
-    
+
     subTitle: {
         marginBottom: 10,
         textAlign: 'center',
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     },
 
     itemListImage: {
-        height: itemHeight - 135,
+        height: itemHeight * 0.45,
         width: '100%',
         borderRadius: 20,
         textAlign: 'center',

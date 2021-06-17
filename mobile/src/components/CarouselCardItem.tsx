@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, Dimensions, Image, Modal, Text, TouchableOpacity, BackHandler } from "react-native"
+import { View, StyleSheet, Dimensions, Image, Modal, TouchableOpacity } from "react-native"
 import { IMidia } from '../constants/interfaces';
 import Carousel from 'react-native-snap-carousel'
 import { Video } from 'expo-av';
