@@ -121,6 +121,16 @@ const Painel = () => {
                         <View style={user!?.nome.length > 10 ? styles.nameContainer : null}>
                             <BoldText style={styles.name}>{user?.nome}</BoldText>
                             <RegularText style={styles.login}>@{user?.login}</RegularText>
+                            <View style={styles.segContainer}>
+                                <View style={styles.seg}>
+                                    <RegularText style={styles.numberSeg}>0</RegularText>
+                                    <BoldText style={styles.textSeg}>Seguidores</BoldText>
+                                </View>
+                                <View style={styles.seg}>
+                                    <RegularText style={styles.numberSeg}>0</RegularText>
+                                    <BoldText style={styles.textSeg}>Seguindo</BoldText>
+                                </View>
+                            </View>
                         </View>
                     </View>
                     <TouchableOpacity style={styles.totalRecipes}
@@ -235,6 +245,23 @@ const styles = StyleSheet.create({
     login: {
         marginLeft: 20,
         marginTop: 10,
+        fontSize: 14,
+    },
+    segContainer: {
+        flexDirection:'row', 
+        marginLeft:10,
+    },
+    textSeg: {
+        marginLeft: 20,
+        fontSize: 14,
+    },
+    seg:{
+        alignItems:'center',
+    },
+    numberSeg:{
+        marginLeft: 20,
+        marginTop: 10,
+        marginBottom:3,
         fontSize: 14,
     },
 
