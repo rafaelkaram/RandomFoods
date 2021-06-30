@@ -49,9 +49,9 @@ const HomeStack = () => {
             <AppStack.Screen name={screens.home} component={Home} />
             <AppStack.Screen name={screens.filtro} component={Filtro} />
             <AppStack.Screen name={screens.resultadoPesquisa} component={ResultadoPesquisa} />
-            <AppStack.Screen name={screens.receita} component={Receita} />  
-            <AppStack.Screen name={screens.perfil} component={Perfil} /> 
-            <AppStack.Screen name={screens.receita2} component={Receita2} />            
+            <AppStack.Screen name={screens.receita} component={Receita} />
+            <AppStack.Screen name={screens.perfil} component={Perfil} />
+            <AppStack.Screen name={screens.receita2} component={Receita2} />
         </AppStack.Navigator>
     )
 }
@@ -75,13 +75,11 @@ const UserStack = () => {
                 <AppStack.Screen name={screens.receita} component={Receita} />
                 <AppStack.Screen name={screens.configuracoes} component={Configuracoes} />
             </AppStack.Navigator>
-
         )
     }
 }
 
 const Routes = () => {
-
     return (
         <>
             <NavigationContainer >
@@ -95,8 +93,8 @@ const Routes = () => {
                                 ),
                             }}
                             name='HomeStack'
-                            component={HomeStack} />
-
+                            component={HomeStack}
+                        />
                         <Tab.Screen
                             options={{
                                 tabBarLabel: 'NewRecipe',
@@ -107,7 +105,8 @@ const Routes = () => {
                                 ),
                             }}
                             name='NewRecipe'
-                            component={RecipeStack} />
+                            component={RecipeStack}
+                        />
                         <Tab.Screen
                             options={{
                                 tabBarLabel: 'User',
@@ -116,7 +115,8 @@ const Routes = () => {
                                 ),
                             }}
                             name='User'
-                            component={UserStack} />
+                            component={UserStack}
+                        />
                     </Tab.Navigator>
                 </AuthProvider>
             </NavigationContainer>
@@ -124,4 +124,4 @@ const Routes = () => {
     )
 }
 
-export default Routes
+export default Routes;

@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import screens from '../../constants/screens';
-import api from './../../services/api'
 import AuthContext from '../../contexts/auth';
 
 Notifications.setNotificationHandler({
@@ -15,10 +14,11 @@ Notifications.setNotificationHandler({
         shouldSetBadge: true,
     }),
 });
-async function schedulePushNotification() {
+
+const schedulePushNotification = async () => {
     await Notifications.scheduleNotificationAsync({
         content: {
-            title: "Notificação",
+            title: 'Notificação',
             body: 'Local',
             data: { data: 'goes here' },
         },
@@ -26,7 +26,7 @@ async function schedulePushNotification() {
     });
 }
 
-async function registerForPushNotificationsAsync() {
+const registerForPushNotificationsAsync = async () => {
     let token;
     if (Constants.isDevice) {
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -71,7 +71,7 @@ const Home = () => {
 
         notificationListener.current = Notifications.addNotificationReceivedListener((notification: any) => {
             setNotification(notification);
-            console.log("recebido");
+            console.log('recebido');
 
         });
 
@@ -89,20 +89,18 @@ const Home = () => {
 
 
     const {signed, signIn, signOut} = useContext(AuthContext)
-    
-    function handleSignIn(){
-        signIn()
+
+    const handleSignIn = () => {
+        signIn();
     }
 
-    function handleSignOut(){
+    const handleSignOut = () =>{
         signOut()
     }
-
 
     const handleNavigateToSearchRecipe = () => {
         navigation.navigate(screens.filtro);
     }
-
 
     const sendPushNotification = () => {
         let response = fetch('https://exp.host/--/api/v2/push/send', {
@@ -124,19 +122,18 @@ const Home = () => {
         <SafeAreaView style={{ alignItems: 'center', justifyContent: 'space-around' }}>
             <ScrollView>
                 <Button
-                    title="Pesquisar Receitas"
-                    onPress={handleNavigateToSearchRecipe}
+                    title='Pesquisar Receitas'
+                    onPress={ handleNavigateToSearchRecipe }
                 />
-
-                <View style={{marginTop: 100}}>
-                    <Text>Your expo push token: {expoPushToken}</Text>
-                    <Button title="Notificação Local" onPress={async () => { await schedulePushNotification() }} />
-                    <View style={{margin: 10}}></View>
-                    <Button title="Push Notification" onPress={() => sendPushNotification()} />
-                    <View style={{margin: 10}}></View>
-                    <Button title="Sign In" onPress={() => handleSignIn()} />
-                    <View style={{margin: 10}}></View>
-                    <Button title="Sign Out" onPress={() => handleSignOut()} />
+                <View style={{ marginTop: 100 }}>
+                    <Text>Your expo push token: { expoPushToken }</Text>
+                    <Button title='Notificação Local' onPress={ async () => { await schedulePushNotification() }} />
+                    <View style={{ margin: 10 }}></View>
+                    <Button title='Push Notification' onPress={() => sendPushNotification()} />
+                    <View style={{ margin: 10 }}></View>
+                    <Button title='Sign In' onPress={() => handleSignIn()} />
+                    <View style={{ margin: 10 }}></View>
+                    <Button title='Sign Out' onPress={() => handleSignOut()} />
                 </View>
             </ScrollView>
         </SafeAreaView>

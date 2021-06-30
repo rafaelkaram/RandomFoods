@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Dimensions, View, Image, TouchableOpacity } from 'react-native';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
 
 import api from '../../services/api';
 
-import { IListaIngredientes, IIngrediente } from '../../constants/interfaces';
+import componentStyles from '../../styles/components/RecipeList';
+import globalStyles from '../../styles/Global';
+import styles from '../../styles/screens/Quantidade';
 import screens from '../../constants/screens';
-import colors from '../../constants/colors';
+import { IListaIngredientes, IIngrediente } from '../../constants/interfaces';
 
-import BoldText from '../../components/BoldText';
-import ItalicText from '../../components/ItalicText';
 import IngredientMeasure from '../../components/IngredientMeasure';
 import Loading from '../../components/Loading';
 
@@ -40,12 +40,10 @@ const Quantidades = ({ route }: { route: any }) => {
     }
 
     const handleNavigateToSteps = () => {
-
         navigation.navigate(screens.cadastroPassos);
     }
 
     const removeIngredient = (id: number) => {
-
         const newCart: IListaIngredientes[] = [];
 
         ingredientsCart.map(carrinho => {
@@ -65,28 +63,26 @@ const Quantidades = ({ route }: { route: any }) => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <Image
-                style={styles.newRecipeImage}
-                source={require('../../assets/nova-receita.png')}
+                style={ globalStyles.recipeImage }
+                source={ require('../../assets/nova-receita.png') }
             />
-            <ItalicText style={styles.subTitle}>Selecione as quantidades</ItalicText>
+            <Text style={[ globalStyles.subTitleText, globalStyles.subTitle ]}>Selecione as quantidades</Text>
             <ScrollView>
                 {ingredientsCart.map(tipos => {
                     return (
-                        <View key={tipos.nome}>
-                            <View style={styles.ingredientType}>
-                                <BoldText style={{ paddingTop: 15, fontSize: 18 }}>{tipos.nome}</BoldText>
+                        <View key={ tipos.nome }>
+                            <View style={ styles.ingredientType }>
+                                <Text style={{ ...globalStyles.boldText, paddingTop: 15, fontSize: 18 }}>{ tipos.nome }</Text>
                                 <Image
                                     style={{ width: 50, height: 50 }}
-                                    source={{
-                                        uri: tipos.url
-                                    }}
+                                    source={{ uri: tipos.url }}
                                 />
                             </View>
                             { tipos.ingredientes.map(ingrediente => {
                                 return <IngredientMeasure
-                                            key={ingrediente.id}
-                                            ingrediente={ingrediente}
-                                            removeIngrediente={(id: number) => removeIngredient(id)}
+                                            key={ ingrediente.id }
+                                            ingrediente={ ingrediente }
+                                            removeIngrediente={ (id: number) => removeIngredient(id) }
                                         />
                             })}
                         </View>
@@ -94,48 +90,14 @@ const Quantidades = ({ route }: { route: any }) => {
                 })}
                 <View style={{ height: 80 }}></View>
             </ScrollView>
-
             <TouchableOpacity
-                style={styles.arrow}
-                onPress={handleNavigateToSteps}
+                style={ globalStyles.arrow }
+                onPress={ handleNavigateToSteps }
             >
-                <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
+                <AntDesign style={{ alignSelf: 'center' }} name='arrowright' size={24} color='white' />
             </TouchableOpacity>
-
         </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    ingredientType: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        margin: 10,
-        marginHorizontal: 100
-
-    },
-
-    arrow: {
-        width: 60,
-        height: 60,
-        borderRadius: 80,
-        position: 'absolute',
-        bottom: 10,
-        right: 10,
-        backgroundColor: colors.selectedButton,
-        justifyContent: 'center',
-    },
-    newRecipeImage: {
-        width: 320,
-        height: 70,
-        marginHorizontal: 10,
-        alignSelf: 'center'
-    },
-    subTitle: {
-        marginBottom: 10,
-        textAlign: 'center',
-    },
-
-})
 
 export default Quantidades;

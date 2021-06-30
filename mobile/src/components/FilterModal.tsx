@@ -1,13 +1,12 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal, Dimensions, Image } from 'react-native';
+import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { BlurView } from 'expo-blur';
-import BoldText from './BoldText';
-import RegularText from './RegularText';
-import colors from '../constants/colors';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import ItalicText from './ItalicText';
 
-const { width, height } = Dimensions.get('window');
+import { WIDTH } from '../constants/dimensions';
+import colors from '../constants/colors';
+import styles from '../styles/components/FilterModal';
+import globalStyles from '../styles/Global';
 
 const FilterModal = (props: {
     modalFilter: boolean,
@@ -38,36 +37,36 @@ const FilterModal = (props: {
 
     return (
         <Modal
-            animationType="none"
-            transparent={true}
-            visible={modalFilter}
+            animationType='none'
+            transparent={ true }
+            visible={ modalFilter }
             onRequestClose={() => {
                 setModalFilter(!modalFilter);
             }}
         >
-            <BlurView intensity={200} style={[StyleSheet.absoluteFill, css.nonBlurredContent]}>
-                <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center' }}>
+            <BlurView intensity={200} style={[ StyleSheet.absoluteFill, css.nonBlurredContent ]}>
+                <View style={ styles.filterContainer}>
                     <TouchableOpacity
-                        style={ css.modalX}
+                        style={ css.modalX }
                         onPress={() => setModalFilter(!modalFilter)}
                     >
-                        <BoldText style={{ alignSelf: 'center', color: 'white' }}>X</BoldText>
+                        <Text style={ styles.filterClose }>X</Text>
                     </TouchableOpacity>
-                    <View style={{ ...css.modalContainer, width: width * 0.8, height: 400 }}>
-                        <BoldText style={{ marginVertical: 5, alignSelf: 'center' }}>Filtros Selecionados</BoldText>
+                    <View style={{ ...css.modalContainer, width: WIDTH * 0.8, height: 400 }}>
+                        <Text style={ styles.filterTitle }>Filtros Selecionados</Text>
                         <ScrollView>
                             <View style={ styles.filter }>
                                 <View>
-                                    <ItalicText style={ css.filterListTitle }>Categorias</ItalicText>
+                                    <Text style={[ globalStyles.subTitleText, css.filterListTitle ]}>Categorias</Text>
                                     <View style={{ ...css.modalFilter, justifyContent: 'flex-start', paddingHorizontal: 0 }}>
                                         { categorias.map((categoria, index) => {
                                             return (
                                                 <View key={index}>
                                                     <TouchableOpacity
-                                                        style={categoriasSelecionadas.includes(categoria) ? css.filterBoxSelected : css.filterBox }
+                                                        style={ categoriasSelecionadas.includes(categoria) ? css.filterBoxSelected : css.filterBox }
                                                         onPress={() => { filterCategory(categoria) }}
                                                     >
-                                                        <RegularText style={ categoriasSelecionadas.includes(categoria) && css.filterNameSelected }>{categoria}</RegularText>
+                                                        <Text style={[ globalStyles.regularText, categoriasSelecionadas.includes(categoria) && css.filterNameSelected ]}>{categoria}</Text>
                                                     </TouchableOpacity>
                                                 </View>
                                             )
@@ -75,16 +74,16 @@ const FilterModal = (props: {
                                     </View>
                                 </View>
                                 <View>
-                                    <ItalicText style={ css.filterListTitle }>Tipos</ItalicText>
+                                    <Text style={[ globalStyles.subTitleText, css.filterListTitle ]}>Tipos</Text>
                                     <View style={{ ...css.modalFilter, justifyContent: 'flex-start', paddingHorizontal: 0 }}>
                                         { tipos.map((tipo, index) => {
                                             return (
-                                                <View key={index}>
+                                                <View key={ index }>
                                                     <TouchableOpacity
-                                                        style={tiposSelecionados.includes(tipo) ? css.filterBoxSelected : css.filterBox}
+                                                        style={ tiposSelecionados.includes(tipo) ? css.filterBoxSelected : css.filterBox }
                                                         onPress={() => { filterType(tipo) }}
                                                     >
-                                                        <RegularText style={ tiposSelecionados.includes(tipo) && css.filterNameSelected }>{tipo}</RegularText>
+                                                        <Text style={[ globalStyles.regularText, tiposSelecionados.includes(tipo) && css.filterNameSelected ]}>{ tipo }</Text>
                                                     </TouchableOpacity>
                                                 </View>
                                             )
@@ -92,18 +91,18 @@ const FilterModal = (props: {
                                     </View>
                                 </View>
                                 <View>
-                                    <ItalicText style={ css.filterListTitle }>Tempo de Preparo</ItalicText>
+                                    <Text style={[ globalStyles.subTitleText, css.filterListTitle ]}>Tempo de Preparo</Text>
                                     <View style={{ alignItems: 'center' }}>
                                         <MultiSlider
                                             customMarker={() => { return (<Image source={require('../../assets/chapeuSlider.png')} style={{ width: 30, height: 30 }} />) }}
                                             values={ [tempoDePreparo[0], tempoDePreparo[1]] }
                                             min={ tempos[0] }
                                             max={ tempos[1] }
-                                            sliderLength={ width * 0.6 }
+                                            sliderLength={ WIDTH * 0.6 }
                                             minMarkerOverlapDistance={ 12 }
                                             onValuesChange={(value) => setTempoDePreparo(value)}
                                             trackStyle={{ height: 10, borderRadius: 5 }}
-                                            selectedStyle={{ backgroundColor: colors.opaqueBackground }}
+                                            selectedStyle={{ backgroundColor: colors.translucidPrimary }}
                                             unselectedStyle={{ backgroundColor: colors.button }}
                                         />
                                     </View>
@@ -119,12 +118,5 @@ const FilterModal = (props: {
         </Modal>
     )
 }
-
-const styles = StyleSheet.create({
-    filter: {
-        margin: 10,
-        marginTop: 0,
-    },
-})
 
 export default FilterModal;
