@@ -8,7 +8,7 @@ export default {
             id: comentario.id,
             conteudo: comentario.valor,
             comentarioPai: comentario.comentarioPai?.id,
-            data: comentario.data,
+            data: comentario.data.toLocaleString(),
             usuario: usuarioView.renderSimple(comentario.usuario),
         };
     },

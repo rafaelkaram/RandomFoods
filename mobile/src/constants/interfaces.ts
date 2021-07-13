@@ -14,6 +14,14 @@ interface IComentarioSend {
   idReceita: number
 }
 
+interface IComentarioProps {
+  comentario: IComentario,
+  lista: IComentario[],
+  isLogado: boolean,
+  setNew: Function,
+  setIdPai: Function,
+}
+
 interface IIngrediente {
   id: number,
   nome: string,
@@ -154,6 +162,7 @@ interface IPassoReceita2 {
 export {
   IComentario,
   IComentarioSend,
+  IComentarioProps,
   IIngrediente,
   IMidia,
   IReceita,

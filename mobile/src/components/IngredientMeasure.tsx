@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Dimensions } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
-import { Input } from 'react-native-elements';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { AntDesign, Feather } from '@expo/vector-icons';
+import { Input } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
+import CheckBox from '@react-native-community/checkbox';
 
 import { IIngrediente, IUnidade } from '../constants/interfaces';
-
-import RegularText from '../components/RegularText';
-import BoldText from '../components/BoldText';
-
-const { width, height } = Dimensions.get('window');
+import { WIDTH } from '../constants/dimensions';
+import styles from '../styles/components/IngredientMeasure';
+import globalStyles from '../styles/Global';
 
 const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente: Function }) => {
 
@@ -19,7 +17,7 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente
   const [medida, setMedida] = useState<IUnidade>();
 
   const ingrediente = props.ingrediente;
-  const removeIngrediente = props.removeIngrediente
+  const removeIngrediente = props.removeIngrediente;
   const unidades = ingrediente.unidades;
 
   const rgx = /^[0-9]*[.,]?[0-9]*$/;
@@ -27,9 +25,9 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente
   const inputValueValidator = (value: string) => {
 
     if (!value.match(rgx) || Number(value) > 1000) {
-      setQuantidade(quantidade)
+      setQuantidade(quantidade);
     } else
-      setQuantidade(value.toString())
+      setQuantidade(value.toString());
   }
 
   const handleInputValue = (signal: boolean) => {
@@ -38,122 +36,78 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, removeIngrediente
     const value = medida.incremento;
 
     let novoValor = 0
-    if (signal) {
+    if (signal)
       novoValor = (Number(quantidade) + value) >= 0 && (Number(quantidade) + value) <= 1000 ? (Number(quantidade) + value) : 1000;
-      setQuantidade(novoValor.toString())
-
-    } else {
+    else
       novoValor = (Number(quantidade) - value) >= 0 ? (Number(quantidade) - value) : 0;
-      setQuantidade(novoValor.toString())
-    }
+    setQuantidade(novoValor.toString());
   }
 
   return (
     <View
-      key={ingrediente.id}
-      style={styles.item}
+      key={ ingrediente.id }
+      style={ styles.item }
     >
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <BoldText style={{ fontSize: 16 }}>{ingrediente.nome}</BoldText>
+        <Text style={{ ...globalStyles.boldText, fontSize: 16 }}>{ ingrediente.nome }</Text>
         {ingrediente.semMedida === true ?
-          <View style={styles.checkBox}>
-            <RegularText style={{ fontSize: 12, marginTop: 5 }}>Sem medida?</RegularText>
+          <View style={ styles.checkBox }>
+            <Text style={{ ...globalStyles.regularText, fontSize: 12, marginTop: 5 }}>Sem medida?</Text>
             <CheckBox
-              disabled={false}
-              value={check}
+              disabled={ false }
+              value={ check }
               style={{ height: 25 }}
-              onValueChange={(newValue) => setCheck(newValue)}
+              onValueChange={ (newValue) => setCheck(newValue) }
             />
           </View>
           : null}
-        <TouchableOpacity onPress={() => removeIngrediente(ingrediente.id)}>
-          <Feather name="trash-2" size={24} color="black" />
+        <TouchableOpacity onPress={ () => removeIngrediente(ingrediente.id) }>
+          <Feather name='trash-2' size={24} color='black' />
         </TouchableOpacity>
       </View>
       {!check ?
-        <View style={styles.campos}>
+        <View style={ styles.campos }>
           {!(ingrediente.tipoUnidade === 'UNIDADE') && unidades ?
             <Picker
-              enabled={!check}
+              enabled={ !check }
               selectedValue={ medida?.nome }
-              style={styles.comboBox}
-              onValueChange={ (itemValue, itemPosition) => setMedida(unidades[itemPosition-1])}
+              style={ styles.comboBox }
+              onValueChange={ (itemValue, itemPosition) => setMedida(unidades[itemPosition - 1])}
             >
               <Picker.Item fontFamily='Ubuntu_400Regular' label={ 'Selecione uma unidade' } value={ '' } />
               { unidades?.map(item => {
-                  return <Picker.Item fontFamily='Ubuntu_400Regular' key={item.id} label={item.nome} value={ item.nome } />
+                  return <Picker.Item fontFamily='Ubuntu_400Regular' key={ item.id } label={ item.nome } value={ item.nome } />
                 })
               }
             </Picker>
-            : <View style={{ width: width / 1.8 }}></View>}
+            : <View style={{ width: WIDTH / 1.8 }}></View>}
           <View>
             <Input
-              disabled={check}
-              placeholder="Qtd"
-              onChangeText={(value) => inputValueValidator(value)}
-              value={quantidade}
+              disabled={ check }
+              placeholder='Qtd'
+              onChangeText={ (value) => inputValueValidator(value) }
+              value={ quantidade }
               inputContainerStyle={{ marginTop: 10, borderRadius: 3, borderWidth: 1, width: 50, height: 30, backgroundColor: 'white' }}
-              keyboardType={'numeric'}
+              keyboardType={ 'numeric' }
             ></Input>
           </View>
-          <View style={styles.plusMinusContainer}>
-            <TouchableOpacity onPress={() => handleInputValue(true)} disabled={check}>
-              <AntDesign style={styles.plus} name="pluscircleo" size={24} color={check ? 'gray' : 'black'} />
+          <View style={ styles.plusMinusContainer }>
+            <TouchableOpacity onPress={() => handleInputValue(true)} disabled={ check }>
+              <AntDesign style={ styles.plus } name='pluscircleo' size={24} color={check ? 'gray' : 'black'} />
             </TouchableOpacity>
-            <TouchableOpacity disabled={check} onPress={() => handleInputValue(false)}>
-              <AntDesign name="minuscircleo" size={24} color={check ? 'gray' : 'black'} />
+            <TouchableOpacity disabled={ check } onPress={() => handleInputValue(false)}>
+              <AntDesign name='minuscircleo' size={24} color={check ? 'gray' : 'black'} />
             </TouchableOpacity>
           </View>
         </View>
         :
         <View style={{ height: 75 }}>
-          <RegularText style={styles.toTaste}>Ingrediente a Gosto</RegularText>
+          <Text style={[ globalStyles.regularText, styles.toTaste ]}>Ingrediente a Gosto</Text>
         </View>
       }
     </View >
 
   );
 }
-
-const styles = StyleSheet.create({
-  item: {
-    padding: 10,
-    backgroundColor: 'white',
-    margin: 10,
-    borderRadius: 10,
-  },
-
-  checkBox: {
-    flexDirection: 'row',
-    marginLeft: 20,
-  },
-
-  toTaste: {
-    fontSize: 16,
-    alignSelf: 'center',
-    paddingTop: 30
-  },
-
-  plusMinusContainer: {
-    flexDirection: 'column',
-    paddingBottom: 10
-  },
-
-  plus: {
-    paddingBottom: 15
-  },
-
-  campos: {
-    marginTop: 15,
-    flexDirection: "row",
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-
-  comboBox: {
-    width: width / 1.8,
-    height: 30,
-  },
-});
 
 export default IngredientMeasure;

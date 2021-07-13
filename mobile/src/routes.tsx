@@ -97,7 +97,6 @@ const UserStack = () => {
 }
 
 const Routes = () => {
-
     return (
         <>
             <NavigationContainer >
@@ -111,8 +110,8 @@ const Routes = () => {
                                 ),
                             }}
                             name='HomeStack'
-                            component={HomeStack} />
-
+                            component={HomeStack}
+                        />
                         <Tab.Screen
                             options={{
                                 tabBarLabel: 'NewRecipe',
@@ -123,7 +122,8 @@ const Routes = () => {
                                 ),
                             }}
                             name='NewRecipe'
-                            component={RecipeStack} />
+                            component={RecipeStack}
+                        />
                         <Tab.Screen
                             options={{
                                 tabBarLabel: 'User',
@@ -132,7 +132,8 @@ const Routes = () => {
                                 ),
                             }}
                             name='User'
-                            component={UserStack} />
+                            component={UserStack}
+                        />
                     </Tab.Navigator>
                 </AuthProvider>
             </NavigationContainer>
@@ -140,4 +141,4 @@ const Routes = () => {
     )
 }
 
-export default Routes
+export default Routes;

@@ -1,21 +1,24 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Alert, Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Input } from 'react-native-elements';
 import * as Facebook from 'expo-facebook';
 import { Ionicons } from '@expo/vector-icons';
-import AuthContext from '../../contexts/auth'
-import Config from '../../constants/config';
+import AuthContext from '../../contexts/auth';
+
+import api from '../../services/api';
+
+import { IUsuario } from '../../constants/interfaces';
+import config from '../../constants/config';
+import screens from './../../constants/screens';
+import styles from '../../styles/screens/Login';
+
+import Loading from '../../components/Loading';
 import MainButton from '../../components/MainButton';
 import SmallButton from '../../components/SmallButton';
-import screens from './../../constants/screens';
-import api from '../../services/api';
-import { IUsuario } from '../../constants/interfaces';
-import Loading from '../../components/Loading';
 
 const facebookLogo = require('../../assets/facebook.png');
-const { width, height } = Dimensions.get('window');
 
 export const fbLogin = async () => {
     try {
@@ -53,15 +56,15 @@ const Login = () => {
     const navigation = useNavigation();
     const [login, setLogin] = useState('');
     const [senha, setSenha] = useState('');
-    const [eye, setEye] = useState(false)
-    const [usuario, setUsuario] = useState<IUsuario>()
-    const [load, setLoad] = useState(true)
+    const [eye, setEye] = useState(false);
+    const [usuario, setUsuario] = useState<IUsuario>();
+    const [load, setLoad] = useState(true);
 
     const { signIn, signed, user } = useContext(AuthContext);
 
     const initFacebookLogin = async () => {
         try {
-            await Facebook.initializeAsync({ appId: Config.FB_APP_ID, appName: Config.FB_APP_NAME });
+            await Facebook.initializeAsync({ appId: config.FB_APP_ID, appName: config.FB_APP_NAME });
         } catch (e) {
             console.log(e);
         }
@@ -93,9 +96,7 @@ const Login = () => {
                 Alert.alert(
                     'Falha no Login',
                     '\nLogin ou senha incorretos',
-                    [
-                        { text: 'OK' }
-                    ]
+                    [ { text: 'OK' } ]
                 );
 
             });
@@ -103,7 +104,6 @@ const Login = () => {
 
     const handleFBLogin = async () => {
         const { type, token, user, error }: any = await fbLogin();
-
         if (type && token) {
             if (type === 'success') {
                 await api.post('/fb-login', user)
@@ -132,18 +132,18 @@ const Login = () => {
     return (
         <SafeAreaView>
             <ScrollView >
-                <View style={styles.logoContainer}>
+                <View style={ styles.logoContainer }>
                     <Image
-                        style={styles.logoImage}
-                        source={require('../../assets/acesso-conta.png')}
+                        style={ styles.logoImage }
+                        source={ require('../../assets/acesso-conta.png') }
                     />
                 </View>
-                <View style={styles.container}>
+                <View style={ styles.container }>
                     <Input
                         autoCapitalize='none'
                         placeholder='Login'
-                        onChangeText={(value) => setLogin(value)}
-                        value={login}
+                        onChangeText={ (value) => setLogin(value) }
+                        value={ login }
                         leftIcon={
                             <Ionicons
                                 name='person-outline'
@@ -155,9 +155,9 @@ const Login = () => {
                     <Input
                         autoCapitalize='none'
                         placeholder='Senha'
-                        onChangeText={(value) => setSenha(value)}
-                        value={senha}
-                        secureTextEntry={!eye}
+                        onChangeText={ (value) => setSenha(value) }
+                        value={ senha }
+                        secureTextEntry={ !eye }
                         leftIcon={
                             <Ionicons
                                 name='lock-closed-outline'
@@ -167,67 +167,25 @@ const Login = () => {
                         }
                         rightIcon={
                             <TouchableOpacity onPress={() => { setEye(!eye) }}>
-                                <Ionicons name={eye ? 'eye' : 'eye-off'} size={24} color='black' />
+                                <Ionicons name={ eye ? 'eye' : 'eye-off' } size={24} color='black' />
                             </TouchableOpacity>
                         }
                     />
-                    <View style={styles.buttons}>
-                        <View style={styles.singleButt}>
-                            <SmallButton onPress={() => { handleNavigateCreateUser() }}>Cadastrar</SmallButton>
+                    <View style={ styles.buttons }>
+                        <View style={ styles.singleButt }>
+                            <SmallButton onPress={ () => { handleNavigateCreateUser()} }>Cadastrar</SmallButton>
                         </View>
-                        <View style={styles.singleButt}>
-                            <SmallButton onPress={() => handleLogin(login, senha)}>Entrar</SmallButton>
+                        <View style={ styles.singleButt }>
+                            <SmallButton onPress={ () => handleLogin(login, senha) }>Entrar</SmallButton>
                         </View>
                     </View>
-                    <View style={styles.socialButtonsView}>
-                        <MainButton style={styles.facebookButton} onPress={handleFBLogin} image={facebookLogo}>Facebook</MainButton>
+                    <View style={ styles.socialButtonsView }>
+                        <MainButton style={ styles.facebookButton } onPress={ handleFBLogin } image={ facebookLogo }>Facebook</MainButton>
                     </View>
                 </View>
             </ScrollView>
         </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-
-    logoContainer: {
-        alignItems: 'center',
-        paddingBottom: 10,
-    },
-
-    logoImage: {
-        width: width - 10,
-        height: (width - 10) / 1.3,
-        // Utilizar proporção de x por x : 1.3 para garantir que fique bonito em todos os tamanhos de tela
-    },
-
-    container: {
-        alignContent: 'center',
-        margin: 15,
-        padding: 20,
-        justifyContent: 'center',
-        backgroundColor: 'white',
-        borderRadius: 15
-    },
-
-    buttons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingVertical: 10,
-    },
-
-    singleButt: {
-        width: '50%'
-    },
-
-    socialButtonsView: {
-        paddingVertical: 10
-    },
-
-    facebookButton: {
-        backgroundColor: '#3B5998'
-    },
-
-})
 
 export default Login;

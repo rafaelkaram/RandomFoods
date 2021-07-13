@@ -52,7 +52,6 @@ class ComentarioController {
             await log.save();
 
             const comentarios = await repository.findByReceita(idReceita);
-            console.log(comentarios);
 
             if (!comentarios) {
                 syserror(400, response, { error: 'Comentarios não encontrado!' });

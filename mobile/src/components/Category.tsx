@@ -1,31 +1,15 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Text, View } from 'react-native';
 
-import RegularText from './RegularText';
+import styles from '../styles/components/Category';
+import globalStyles from '../styles/Global';
 
 const Category = (props: { nome: string }) => {
     return (
-        <View style={ styles.container }>
-            <RegularText style={ styles.text }>{ props.nome }</RegularText>
+        <View style={ styles.categoryContainer }>
+            <Text style={[ globalStyles.regularText, styles.categoryText ]}>{ props.nome }</Text>
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#e02041',
-        //width:100,
-        margin: 5,
-        padding: 8,
-        borderRadius: 5,
-
-    },
-
-    text: {
-        color: 'white',
-        fontSize: 15,
-        textAlign: 'center'
-    }
-})
 
 export default Category;
