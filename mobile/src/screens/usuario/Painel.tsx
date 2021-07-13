@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Text, ScrollView, TouchableOpacity, View, StyleSheet, Dimensions, Button } from 'react-native';
 import { VictoryPie, VictoryLegend } from 'victory-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation , DrawerActions } from '@react-navigation/native';
 import { DataTable } from 'react-native-paper';
 import { Avatar } from "react-native-elements";
 import AuthContext from './../../contexts/auth'
@@ -9,15 +9,19 @@ import api from '../../services/api'
 import Colors from '../../constants/colors';
 import Loading from '../../components/Loading';
 import { IPainelTipoReceita, IPainelCategorias, IPainelVotos } from '../../constants/interfaces';
+import { Ionicons } from '@expo/vector-icons'; 
 
 import ItalicText from '../../components/ItalicText';
 import BoldText from '../../components/BoldText';
 import RegularText from '../../components/RegularText';
 import screens from '../../constants/screens';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Props } from 'react-native-image-zoom-viewer/built/image-viewer.type';
+import { NavigationContainer } from '@react-navigation/native';
 
 const Painel = () => {
     const navigation = useNavigation();
+   
     const [recipeType, setRecipeType] = useState<IPainelTipoReceita[]>([]);
     const [recipeCategory, setRecipeCategory] = useState<IPainelCategorias[]>([]);
     const [topVotedRecipe, setTopVotedRecipe] = useState<IPainelVotos[]>([]);
@@ -98,6 +102,12 @@ const Painel = () => {
     return (
             <SafeAreaView style={{flex:1}}>
                 <ScrollView>
+                <TouchableOpacity style={styles.iconMenu}
+                onPress={() => {
+                    navigation.dispatch(DrawerActions.openDrawer())
+                }}>  
+                    <Ionicons name="menu" size={30} color="black" />
+                </TouchableOpacity> 
                     <View style={styles.mainContainer}>
                         {user?.path ?
                             <Avatar
@@ -219,6 +229,12 @@ const styles = StyleSheet.create({
     main: {
         backgroundColor: Colors.background
     },
+    iconMenu:{
+        flex:1,
+        alignItems:'flex-end',
+        marginHorizontal:15,
+        marginTop:10,
+        },
 
     mainContainer: {
         margin: 20,

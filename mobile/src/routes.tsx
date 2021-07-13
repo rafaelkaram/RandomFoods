@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
-import { Image } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AuthContext, { AuthProvider } from './contexts/auth';
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 import Home from './screens/visualizacao/Home';
 import DadosGerais from './screens/cadastro/DadosGerais';
@@ -25,10 +26,13 @@ import Usuario from './screens/cadastro/Usuario';
 
 import screens from './constants/screens';
 
+import DrawerMenu from './components/DrawerMenu';
+
 const AppStack = createStackNavigator()
-const NestedStack = createStackNavigator()
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator()
 const Drawer = createDrawerNavigator()
+
+
 
 const RecipeStack = () => {
     return (
@@ -49,11 +53,26 @@ const HomeStack = () => {
             <AppStack.Screen name={screens.home} component={Home} />
             <AppStack.Screen name={screens.filtro} component={Filtro} />
             <AppStack.Screen name={screens.resultadoPesquisa} component={ResultadoPesquisa} />
-            <AppStack.Screen name={screens.receita} component={Receita} />  
-            <AppStack.Screen name={screens.perfil} component={Perfil} /> 
-            <AppStack.Screen name={screens.receita2} component={Receita2} />            
+            <AppStack.Screen name={screens.receita} component={Receita} />
+            <AppStack.Screen name={screens.perfil} component={Perfil} />
+            <AppStack.Screen name={screens.receita2} component={Receita2} />
         </AppStack.Navigator>
     )
+}
+
+
+
+const UserDrawerStack = () => {
+
+    return (
+        <AppStack.Navigator headerMode={'none'}>
+            <AppStack.Screen name={screens.painel} component={Painel} />
+            <AppStack.Screen name={screens.perfil} component={Perfil} />
+            <AppStack.Screen name={screens.receita} component={Receita} />
+            <AppStack.Screen name={screens.configuracoes} component={Configuracoes} />
+        </AppStack.Navigator>
+    )
+
 }
 
 const UserStack = () => {
@@ -69,12 +88,9 @@ const UserStack = () => {
         )
     } else {
         return (
-            <AppStack.Navigator headerMode={'none'}>
-                <AppStack.Screen name={screens.painel} component={Painel} />
-                <AppStack.Screen name={screens.perfil} component={Perfil} />
-                <AppStack.Screen name={screens.receita} component={Receita} />
-                <AppStack.Screen name={screens.configuracoes} component={Configuracoes} />
-            </AppStack.Navigator>
+            <Drawer.Navigator drawerPosition='right' drawerContent={props => <DrawerMenu {...props} />} >
+                <Drawer.Screen name='Perfil' component={UserDrawerStack} />
+            </Drawer.Navigator>
 
         )
     }

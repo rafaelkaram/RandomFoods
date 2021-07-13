@@ -8,6 +8,7 @@ export default {
   filtro: 'Filtro de Pesquisa',
   home: 'Home',
   login: 'Login',
+  logout: 'Logout',
   painel: 'Painel de Controle',
   perfil: 'Perfil',
   receita: 'Visualizar Receita',
