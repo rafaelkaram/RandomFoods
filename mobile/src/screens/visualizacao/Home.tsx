@@ -1,11 +1,17 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
-import { View, ScrollView, Button, Platform, Text } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, ScrollView, Dimensions, Platform, Image, StyleSheet, Text, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import screens from '../../constants/screens';
 import AuthContext from '../../contexts/auth';
+import { IReceitaSimples } from './../../constants/interfaces'
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import globalStyles from '../../styles/Global';
+import colors from './../../constants/colors'
+import api from './../../services/api'
+
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -65,6 +71,8 @@ const Home = () => {
     const responseListener = useRef<any>();
     const navigation = useNavigation();
 
+    const [receitas, setReceitas] = useState<IReceitaSimples[]>([])
+
 
     useEffect(() => {
         registerForPushNotificationsAsync().then((token: any) => setExpoPushToken(token));
@@ -88,56 +96,125 @@ const Home = () => {
     }, []);
 
 
-    const {signed, signIn, signOut} = useContext(AuthContext)
-
-    const handleSignIn = () => {
-        signIn();
-    }
-
-    const handleSignOut = () =>{
-        signOut()
-    }
+    useEffect(() => {
+        api.get('/busca/receita').then(response => {
+            setReceitas(response.data)
+        })
+    }, []);
 
     const handleNavigateToSearchRecipe = () => {
         navigation.navigate(screens.filtro);
     }
 
-    const sendPushNotification = () => {
-        let response = fetch('https://exp.host/--/api/v2/push/send', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                to: expoPushToken,
-                sound: 'default',
-                title: 'Push',
-                body: 'notification'
-            })
-        })
+
+    const handleNavigateToRecipe = (id: number) => {
+        navigation.navigate(screens.receita, { id: id });
     }
 
+
+
     return (
-        <SafeAreaView style={{ alignItems: 'center', justifyContent: 'space-around' }}>
+        <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
                 <Button
-                    title='Pesquisar Receitas'
-                    onPress={ handleNavigateToSearchRecipe }
+                    title="Pesquisar Receitas"
+                    onPress={handleNavigateToSearchRecipe}
                 />
-                <View style={{ marginTop: 100 }}>
-                    <Text>Your expo push token: { expoPushToken }</Text>
-                    <Button title='Notificação Local' onPress={ async () => { await schedulePushNotification() }} />
-                    <View style={{ margin: 10 }}></View>
-                    <Button title='Push Notification' onPress={() => sendPushNotification()} />
-                    <View style={{ margin: 10 }}></View>
-                    <Button title='Sign In' onPress={() => handleSignIn()} />
-                    <View style={{ margin: 10 }}></View>
-                    <Button title='Sign Out' onPress={() => handleSignOut()} />
+                {/*
+                <View style={{marginTop: 100}}>
+                    <Text>Your expo push token: {expoPushToken}</Text>
+                    <Button title="Notificação Local" onPress={async () => { await schedulePushNotification() }} />
+                    <View style={{margin: 10}}></View>
+                    <Button title="Push Notification" onPress={() => sendPushNotification()} />
+                    <View style={{margin: 10}}></View>
+                    <Button title="Sign In" onPress={() => handleSignIn()} />
+                    <View style={{margin: 10}}></View>
+                    <Button title="Sign Out" onPress={() => handleSignOut()} />
+                </View> */}
+
+                <View>
+
+                    <Image
+                        source={require('../../assets/random-foods-comprido.png')}
+                        style={{ width: Width - 20, height: 87 }}
+                    />
+
+                    {receitas.map((receita, index) => {
+
+                        return (
+                            <TouchableOpacity
+                                onPress={() => { handleNavigateToRecipe(receita.id) }}
+                                style={styles.main} key={receita.id}>
+
+                                <View>
+                                    <Image
+                                        source={{ uri: receita.foto }}
+                                        style={styles.image}
+                                    />
+                                </View>
+
+                                <View style={{ width: Width - 140 }}>
+
+                                    <View style={styles.textContainer}>
+                                        <Text>{receita.receita}</Text>
+                                        <Text style={ [globalStyles.regularText, {fontSize: 10, margin: 5} ]  } >@{receita.usuario.login}</Text>
+                                    </View>
+
+                                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                        {
+                                            receita.categorias.length > 0 ?
+
+                                                receita.categorias.map((categoria, index) => {
+
+                                                    return (
+                                                      
+                                                            <Image
+                                                                key={index}
+                                                                // source={require('./../../assets/VEGANA.png')}
+                                                                source={{uri:`http://192.168.100.5:3333/uploads/midia/categoria/${categoria}.png`}}
+                                                                style={{ width: 40, height: 40 }}
+                                                            />
+                                                            
+                                                    )
+                                                }) : null
+                                        }
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        )
+                    })}
                 </View>
             </ScrollView>
         </SafeAreaView>
     )
 }
+
+const Height = Dimensions.get("window").height;
+const Width = Dimensions.get("window").width;
+
+
+const styles = StyleSheet.create({
+    main: {
+        flexDirection: 'row',
+        margin: 10,
+        padding: 10,
+        backgroundColor: 'white',
+        borderRadius: 20,
+    },
+
+    textContainer: {
+        padding: 5,
+        marginVertical: 10
+
+    },
+
+    image: {
+        width: 100,
+        height: 100,
+        borderRadius: 50
+    }
+
+})
+
 
 export default Home;
