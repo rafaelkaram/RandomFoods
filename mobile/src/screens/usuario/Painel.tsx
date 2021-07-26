@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Button, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { VictoryPie, VictoryLegend } from 'victory-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation , DrawerActions } from '@react-navigation/native';
 import { DataTable } from 'react-native-paper';
 
 import AuthContext from './../../contexts/auth';
@@ -22,6 +22,7 @@ import UserHeader from '../../components/UserHeader';
 
 const Painel = () => {
     const navigation = useNavigation();
+   
     const [recipeType, setRecipeType] = useState<IPainelTipoReceita[]>([]);
     const [recipeCategory, setRecipeCategory] = useState<IPainelCategorias[]>([]);
     const [topVotedRecipe, setTopVotedRecipe] = useState<IPainelVotos[]>([]);
