@@ -45,17 +45,17 @@ const Painel = () => {
             navigation.navigate(screens.login);
         }
         setLoad(true);
-    }, [ user ]);
+    }, [user]);
 
     const pieTypeData = recipeType.map((item) => {
         return { x: item.tipo, y: Number(item.count) }
     });
 
     const pieCategoryData = recipeCategory.map((item) => {
-        if (item.nome_categoria == null)
+        if (item.categoria == null)
             return { x: 'Sem Categoria', y: Number(item.count) }
         else
-            return { x: item.nome_categoria, y: Number(item.count) }
+            return { x: item.categoria, y: Number(item.count) }
     });
 
     const pieTypeLegend = recipeType.map((item) => {
@@ -63,10 +63,10 @@ const Painel = () => {
     });
 
     const pieCategoryLegend = recipeCategory.map((item) => {
-        if (item.nome_categoria == null)
+        if (item.categoria == null)
             return { name: 'Sem Categoria' }
         else
-            return { name: item.nome_categoria }
+            return { name: item.categoria }
     });
 
     const totalRecipes: number = pieTypeData.reduce(function (a, b) { return a + b.y }, 0);
@@ -76,72 +76,76 @@ const Painel = () => {
     }
 
     return (
-        <SafeAreaView style={{ flex:1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
                 <UserHeader
-                    usuario={ user }
-                    totalReceitas={ totalRecipes }
-                    isPainel={ true }
+                    usuario={user}
+                    totalReceitas={totalRecipes}
+                    isPainel={true}
                 />
-                <View style={ styles.pieContainer }>
-                    <View style={ styles.typePie }>
-                        <Text style={[ globalStyles.subTitleText, styles.chartsTitle ]}>{`Receitas\npor Tipo`}</Text>
-                        <VictoryPie
-                            height={ ((HEIGHT / 2) - 50) }
-                            width={ (WIDTH / 2) }
-                            colorScale={[ 'orange', colors.primary ]}
-                            labels={ ({ datum }) => `${datum.y}` }
-                            data={ pieTypeData }
-                            innerRadius={30}
-                            style={{ labels: { fontSize: 15 } }}
-                        />
-                        <VictoryLegend
-                            x={ 140 }
-                            gutter={ 20 }
-                            colorScale={[ 'orange', colors.primary ]}
-                            data={ pieTypeLegend }
-                            style={{ labels: { fontSize: 15 } }}
-                        />
-                    </View>
-
-                    <View style={ styles.categoryPie }>
-                        <Text style={[ globalStyles.subTitleText, styles.chartsTitle ]}>{`Receitas\npor Categoria`}</Text>
-
-                        <VictoryPie
-                            height={ ((HEIGHT / 2) - 50) }
-                            width={ (WIDTH / 2) }
-                            colorScale={[ dashboardColors.first, dashboardColors.second, dashboardColors.third, dashboardColors.fourth, dashboardColors.fifth ]}
-                            labels={ ({ datum }) => `${datum.y}` }
-                            data={ pieCategoryData }
-                            innerRadius={30}
-                            style={{ labels: { fontSize: 15 } }}
-                        />
-                        <ScrollView>
-                            <VictoryLegend x={10}
-                                colorScale={[ dashboardColors.first, dashboardColors.second, dashboardColors.third, dashboardColors.fourth, dashboardColors.fifth ]}
-                                data={ pieCategoryLegend }
+                <View style={styles.pieContainer}>
+                    <View style={styles.typePie}>
+                        <Text style={[globalStyles.subTitleText, styles.chartsTitle]}>{`Receitas\npor Tipo`}</Text>
+                        <View style={{ position: 'absolute', padding: 10 }}>
+                            <VictoryPie
+                                height={((HEIGHT / 2) - 180)}
+                                width={(WIDTH / 2)}
+                                colorScale={['orange', colors.primary]}
+                                labels={({ datum }) => `${datum.y}`}
+                                data={pieTypeData}
+                                innerRadius={30}
                                 style={{ labels: { fontSize: 15 } }}
                             />
-                        </ScrollView>
+                        </View>
+                        <View style={{ position: 'absolute', top: 180, left: 10 }}>
+                            <VictoryLegend
+                                colorScale={['orange', colors.primary]}
+                                data={pieTypeLegend}
+                                style={{ labels: { fontSize: 15 } }}
+                            />
+                        </View>
+                    </View>
+
+                    <View style={styles.categoryPie}>
+                        <Text style={[globalStyles.subTitleText, styles.chartsTitle]}>{`Receitas\npor Categoria`}</Text>
+                        <View style={{ position: 'absolute', padding: 10 }}>
+                            <VictoryPie
+                                height={((HEIGHT / 2) - 180)}
+                                width={(WIDTH / 2)}
+                                colorScale={[dashboardColors.first, dashboardColors.second, dashboardColors.third, dashboardColors.fourth, dashboardColors.fifth]}
+                                labels={({ datum }) => `${datum.y}`}
+                                data={pieCategoryData}
+                                innerRadius={30}
+                                style={{ labels: { fontSize: 15 } }}
+                            />
+                        </View>
+                        <View style={{ position: 'absolute', top: 180, left: 10 }}>
+                            <VictoryLegend
+                                colorScale={[dashboardColors.first, dashboardColors.second, dashboardColors.third, dashboardColors.fourth, dashboardColors.fifth]}
+                                data={pieCategoryLegend}
+                                style={{ labels: { fontSize: 15 } }}
+                            />
+                        </View>
+
                     </View>
                 </View>
                 <View>
                     { }
-                    <Text style={ styles.tableTitle }>Top receitas mais votadas</Text>
-                    <View style={ styles.topVotedTable }>
+                    <Text style={styles.tableTitle}>Top receitas mais votadas</Text>
+                    <View style={styles.topVotedTable}>
                         <DataTable>
                             <DataTable.Header>
                                 <DataTable.Title style={{ flexBasis: 30 }} >Receita</DataTable.Title>
                                 <DataTable.Title numeric>Nota</DataTable.Title>
                                 <DataTable.Title style={{ flexBasis: 10 }} numeric>Nº de Notas</DataTable.Title>
                             </DataTable.Header>
-                            { topVotedRecipe.map(item => {
+                            {topVotedRecipe.map(item => {
                                 return (
-                                    <TouchableOpacity key={ item.id }>
+                                    <TouchableOpacity key={item.id}>
                                         <DataTable.Row >
-                                            <DataTable.Cell style={{ flexBasis: 30 }}>{ item.nome }</DataTable.Cell>
-                                            <DataTable.Cell numeric>{ item.nota }</DataTable.Cell>
-                                            <DataTable.Cell numeric>{ item.num_notas }</DataTable.Cell>
+                                            <DataTable.Cell style={{ flexBasis: 30 }}>{item.nome}</DataTable.Cell>
+                                            <DataTable.Cell numeric>{item.nota}</DataTable.Cell>
+                                            <DataTable.Cell numeric>{item.num_notas}</DataTable.Cell>
                                         </DataTable.Row>
                                     </TouchableOpacity>
                                 )

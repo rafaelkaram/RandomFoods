@@ -9,7 +9,13 @@ export default StyleSheet.create({
         maxWidth: WIDTH
     },
 
-    image: {
+    imageSearch: {
+        width: 320,
+        height: 70,
+        marginHorizontal: 10
+    },
+
+    imageNewRecipe: {
         width: 320,
         height: 60,
         marginHorizontal: 10

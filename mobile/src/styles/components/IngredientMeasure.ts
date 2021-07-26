@@ -38,7 +38,7 @@ export default StyleSheet.create({
     },
 
     comboBox: {
-        width: WIDTH / 1.8,
-        height: 30,
+        minWidth: 260,
+        height: 30, 
     },
 });

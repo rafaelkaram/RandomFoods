@@ -218,7 +218,7 @@ const DadosGerais = () => {
                         </TouchableOpacity>
                         <View>
                             <Input
-                                placeholder="Tempo de preparo"
+                                placeholder="0"
                                 keyboardType="numeric"
                                 onChangeText={ (value) => inputValueValidator(value, true) }
                                 value={ minutos }
@@ -244,7 +244,7 @@ const DadosGerais = () => {
                         </TouchableOpacity>
                         <View>
                             <Input
-                                placeholder="Quantidade de porções"
+                                placeholder="0"
                                 onChangeText={ (value) => inputValueValidator(value, false) }
                                 keyboardType="numeric"
                                 value={ porcoes }

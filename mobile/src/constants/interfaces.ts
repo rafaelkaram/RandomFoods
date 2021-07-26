@@ -131,7 +131,7 @@ interface IMidiaPicker {
 }
 
 interface IPainelCategorias {
-  nome_categoria: string,
+  categoria: string,
   count: number,
 }
 

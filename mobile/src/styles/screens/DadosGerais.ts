@@ -20,7 +20,7 @@ export default StyleSheet.create({
 
     comboBox: {
         margin: 20,
-        width: 180,
+        minWidth: 130,
         height: 40,
         borderWidth: 1
     },

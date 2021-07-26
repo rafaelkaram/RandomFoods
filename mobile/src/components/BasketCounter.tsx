@@ -17,7 +17,7 @@ const BasketCounter = ({
     return (
         <View style={ styles.container }>
             <Image
-                style={ styles.image }
+                style={ isCadastro ? styles.imageSearch : styles.imageNewRecipe }
                 source={ isCadastro ? require('../assets/nova-receita.png') : require('../assets/pesquisar-receitas.png') }
             />
             <TouchableOpacity

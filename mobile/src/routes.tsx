@@ -97,7 +97,7 @@ const Routes = () => {
                         />
                         <Tab.Screen
                             options={{
-                                tabBarLabel: 'NewRecipe',
+                                tabBarLabel: 'Nova Receita',
                                 tabBarIcon: () => (
                                     <Image
                                         style={{ width: 32, height: 25 }}
@@ -109,7 +109,7 @@ const Routes = () => {
                         />
                         <Tab.Screen
                             options={{
-                                tabBarLabel: 'User',
+                                tabBarLabel: 'Perfil',
                                 tabBarIcon: ({ color, size }) => (
                                     <AntDesign name='user' color={color} size={size} />
                                 ),

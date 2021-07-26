@@ -47,12 +47,12 @@ const FilterModal = (props: {
             <BlurView intensity={200} style={[ StyleSheet.absoluteFill, css.nonBlurredContent ]}>
                 <View style={ styles.filterContainer}>
                     <TouchableOpacity
-                        style={ css.modalX }
+                        style={ globalStyles.modalX }
                         onPress={() => setModalFilter(!modalFilter)}
                     >
                         <Text style={ styles.filterClose }>X</Text>
                     </TouchableOpacity>
-                    <View style={{ ...css.modalContainer, width: WIDTH * 0.8, height: 400 }}>
+                    <View style={{ ...globalStyles.modalContainer, width: WIDTH * 0.8, height: 400 }}>
                         <Text style={ styles.filterTitle }>Filtros Selecionados</Text>
                         <ScrollView>
                             <View style={ styles.filter }>

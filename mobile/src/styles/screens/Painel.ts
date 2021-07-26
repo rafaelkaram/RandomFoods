@@ -25,8 +25,8 @@ export default StyleSheet.create({
     },
 
     typePie: {
-        maxWidth: ((WIDTH / 2) - 20),
-        maxHeight: ((HEIGHT / 2) - 120),
+        minWidth: ((WIDTH / 2) - 20),
+        minHeight: ((HEIGHT / 2) - 120),
         alignItems: 'center',
         backgroundColor: 'white',
         borderRadius: 15,
@@ -34,9 +34,10 @@ export default StyleSheet.create({
     },
 
     categoryPie: {
-        maxWidth: ((WIDTH / 2) - 20),
-        maxHeight: ((HEIGHT / 2) - 120),
+        minWidth: ((WIDTH / 2) - 20),
+        minHeight: ((HEIGHT / 2) - 120),
         alignItems: 'center',
+        alignContent: 'center',
         backgroundColor: 'white',
         borderRadius: 15
     },

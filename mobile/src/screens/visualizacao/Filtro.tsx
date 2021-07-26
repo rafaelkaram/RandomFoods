@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { AntDesign, Feather, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-
+import { WIDTH } from '../../constants/dimensions';
 import api from '../../services/api';
 
 import { IListaIngredientes, ICart, IIngrediente } from '../../constants/interfaces';
@@ -186,7 +186,7 @@ const Filtro = () => {
                         >
                             <Text style={{ ...globalStyles.boldText, alignSelf: 'center', color: 'white' }}>X</Text>
                         </TouchableOpacity>
-                        <View style={ globalStyles.container }>
+                        <View style={{ ...globalStyles.modalContainer, width: WIDTH * 0.8, height: 400 } }>
                             <Text style={{ ...globalStyles.boldText, marginBottom: 10 }}>Ingredientes Selecionados</Text>
                             <ScrollView>
                                 { ingredientsCart.map(ingrediente => {

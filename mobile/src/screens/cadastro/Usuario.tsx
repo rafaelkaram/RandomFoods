@@ -38,7 +38,6 @@ const Usuario = () => {
 
 
     const handleSubmit = async () => {
-        setLoad(false);
 
         const usuario = {
             nome: name,
@@ -55,6 +54,8 @@ const Usuario = () => {
             );
         } else {
 
+            setLoad(false);
+            
             const data = new FormData();
 
             data.append('nome', usuario.nome);
