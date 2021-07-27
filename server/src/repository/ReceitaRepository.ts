@@ -11,6 +11,7 @@ export class ReceitaRepository extends Repository<Receita> {
 			.select('r.tipo', 'tipo')
 			.addSelect('COUNT(r.*)', 'count')
 			.where('r.usuario.id = :id', { id })
+			.andWhere('r.ativa = :ativa', { ativa: true })
 			.groupBy('r.tipo')
 			.getRawMany();
 
@@ -21,6 +22,7 @@ export class ReceitaRepository extends Repository<Receita> {
 		const receita: Receita = await this.createQueryBuilder('r')
 			.where('r.usuario = :usuario', { usuario })
 			.andWhere('r.nome = :nome', { nome })
+			.andWhere('r.ativa = :ativa', { ativa: true })
 			.getOneOrFail();
 
 		return receita;
@@ -31,6 +33,7 @@ export class ReceitaRepository extends Repository<Receita> {
 			//.innerJoin('r.ingrediente', 'ingrediente')
 			.leftJoin('r.midias', 'midias')
 			.where('r.id in ( :...ids )', { ids })
+			.andWhere('r.ativa = :ativa', { ativa: true })
 			.getMany();
 
 		return receitas;
@@ -39,6 +42,7 @@ export class ReceitaRepository extends Repository<Receita> {
 	async getTempoPreparo(isMin: boolean) {
 		const { tempo }: { tempo: number } = await this.createQueryBuilder('r')
 			.select(isMin ? 'MIN(r.tempo_preparo)' : 'MAX(r.tempo_preparo)', 'tempo')
+			.where('r.ativa = :ativa', { ativa: true })
 			.getRawOne();
 
 		return tempo;

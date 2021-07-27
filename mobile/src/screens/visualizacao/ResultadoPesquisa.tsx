@@ -21,7 +21,7 @@ const Recipe = ({ route }: { route: any }) => {
     const [matchesPerfeitos, setMatchesPerfeitos] = useState<IReceitaSimples[]>([])
     const [matchesParciais, setMatchesParciais] = useState<IReceitaSimples[]>([])
     const [receitas, setReceitas] = useState<IReceitaSimples[]>([])
-    const [orderBy, setOrderBy] = useState<number>()
+    const [orderBy, setOrderBy] = useState<number>(0)
     const [load, setLoad] = useState(false)
 
     useEffect(() => {
@@ -76,35 +76,33 @@ const Recipe = ({ route }: { route: any }) => {
         return <Loading />
     }
 
-    function orderArray(value: any){
-        if (value === 1) {
-            const newArrayParciais = matchesParciais;
-            const newArrayPerfeitas = matchesPerfeitos;
-            newArrayParciais.sort((a, b) => b.tempoPreparo - a.tempoPreparo);
-            newArrayPerfeitas.sort((a, b) => b.tempoPreparo - a.tempoPreparo);
-            setMatchesParciais(newArrayParciais);
-            setMatchesPerfeitos(newArrayPerfeitas);
-        } else if (value === 2) {
-            const newArrayParciais = matchesParciais;
-            const newArrayPerfeitas = matchesPerfeitos;
-            newArrayParciais.sort((a, b) => a.tempoPreparo - b.tempoPreparo);
-            newArrayPerfeitas.sort((a, b) => a.tempoPreparo - b.tempoPreparo);
-            setMatchesParciais(newArrayParciais);
-            setMatchesPerfeitos(newArrayPerfeitas);
-        } else {
-            const newArrayParciais = matchesParciais;
-            const newArrayPerfeitas = matchesPerfeitos;
-            newArrayParciais.sort((a, b) => a.id - b.id);
-            newArrayPerfeitas.sort((a, b) => a.id - b.id);
-            setMatchesParciais(newArrayParciais);
-            setMatchesPerfeitos(newArrayPerfeitas);
+    function orderArray(value: any) {
+        const newArrayParciais = matchesParciais
+        const newArrayPerfeitas = matchesPerfeitos
+        switch (value) {
+            case 1: {
+                newArrayParciais.sort((a, b) => b.tempoPreparo - a.tempoPreparo)
+                newArrayPerfeitas.sort((a, b) => b.tempoPreparo - a.tempoPreparo)
+                break
+            }
+            case 2: {
+                newArrayParciais.sort((a, b) => a.tempoPreparo - b.tempoPreparo)
+                newArrayPerfeitas.sort((a, b) => a.tempoPreparo - b.tempoPreparo)
+                break
+            }
+            default:{
+                newArrayParciais.sort((a, b) => a.id - b.id)
+                newArrayPerfeitas.sort((a, b) => a.id - b.id)
+            }
         }
+        setMatchesParciais(newArrayParciais)
+        setMatchesPerfeitos(newArrayPerfeitas)
     }
 
     return (
         <SafeAreaView>
             <ScrollView style={ globalStyles.background }>
-                { matchesParciais.length > 0 || matchesPerfeitos.length > 0 && (
+                { (matchesParciais.length > 0 || matchesPerfeitos.length > 0) && (
                     <Picker
                         selectedValue={ orderBy }
                         mode='dropdown'

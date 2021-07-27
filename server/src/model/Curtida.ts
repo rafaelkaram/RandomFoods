@@ -3,9 +3,9 @@ import { LogNotificacao } from './LogNotificacao';
 import { Receita } from './Receita';
 import { Usuario } from './Usuario';
 
-@Entity('favorito')
+@Entity('curtida')
 @Unique([ 'usuario', 'receita' ])
-export class Favorito extends BaseEntity {
+export class Curtida extends BaseEntity {
   constructor(usuario: Usuario, receita: Receita, log: LogNotificacao) {
     super();
     this.usuario = usuario;
@@ -16,11 +16,11 @@ export class Favorito extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Usuario, usuario => usuario.favoritos)
+  @ManyToOne(() => Usuario, usuario => usuario.curtidas)
   @JoinColumn({ name: 'usuario_id' })
   usuario: Usuario;
 
-  @ManyToOne(() => Receita, receita => receita.favoritos)
+  @ManyToOne(() => Receita, receita => receita.curtidas)
   @JoinColumn({ name: 'receita_id' })
   receita: Receita;
 

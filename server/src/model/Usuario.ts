@@ -1,7 +1,7 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Avaliacao } from './Avaliacao';
 import { Comentario } from './Comentario';
-import { Favorito } from './Favorito';
+import { Curtida } from './Curtida';
 import { LogNotificacao } from './LogNotificacao';
 import { Marca } from './Marca';
 import { Receita } from './Receita';
@@ -63,7 +63,7 @@ export class Usuario extends BaseEntity {
   notificarComentario: boolean;
 
   @Column({ name: 'notificar_favorito', default: true })
-  notificarFavorito: boolean;
+  notificarCurtida: boolean;
 
   @Column({ name: 'notificar_resposta', default: true })
   notificarResposta: boolean;
@@ -91,9 +91,9 @@ export class Usuario extends BaseEntity {
   @JoinColumn({ name: 'usuario_id' })
   comentarios: Comentario[];
 
-  @OneToMany(() => Favorito, favorito => favorito.usuario, { cascade: ['insert', 'update'], nullable: true })
+  @OneToMany(() => Curtida, curtida => curtida.usuario, { cascade: ['insert', 'update'], nullable: true })
   @JoinColumn({ name: 'usuario_id' })
-  favoritos: Favorito[];
+  curtidas: Curtida[];
 
   @OneToMany(() => Marca, marca => marca.usuario, { cascade: ['insert', 'update'], nullable: true })
   @JoinColumn({ name: 'usuario_id' })
