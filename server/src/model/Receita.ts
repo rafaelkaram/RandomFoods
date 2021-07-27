@@ -2,7 +2,7 @@ import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, On
 import { Avaliacao } from './Avaliacao';
 import { Categoria } from './Categoria';
 import { Comentario } from './Comentario';
-import { Favorito } from './Favorito';
+import { Curtida } from './Curtida';
 import { LogNotificacao } from './LogNotificacao';
 import { Midia } from './Midia';
 import { ReceitaIngrediente } from './ReceitaIngrediente';
@@ -16,13 +16,14 @@ export enum Tipo {
 @Entity('receita')
 @Unique([ 'usuario', 'nome' ])
 export class Receita extends BaseEntity {
-  constructor(nome: string, descricao: string, tempoPreparo: number, tipo: Tipo, usuario: Usuario) {
+  constructor(nome: string, descricao: string, tempoPreparo: number, porcoes: number, tipo: Tipo, usuario: Usuario) {
     super();
     this.nome = nome;
     this.descricao = descricao;
     this.tempoPreparo = tempoPreparo;
     this.tipo = tipo;
     this.usuario = usuario;
+    this.porcoes = porcoes;
   }
 
   @PrimaryGeneratedColumn()
@@ -33,6 +34,9 @@ export class Receita extends BaseEntity {
 
   @Column()
   descricao: string;
+
+  @Column()
+  porcoes: number;
 
   @Column({ name: 'tempo_preparo' })
   tempoPreparo: number;
@@ -70,9 +74,9 @@ export class Receita extends BaseEntity {
   @JoinColumn({ name: 'receita_id' })
   midias: Midia[];
 
-  @OneToMany(() => Favorito, favorito => favorito.receita, { cascade: ['insert', 'update'], nullable: true })
+  @OneToMany(() => Curtida, curtida => curtida.receita, { cascade: ['insert', 'update'], nullable: true })
   @JoinColumn({ name: 'receita_id' })
-  favoritos: Favorito[];
+  curtidas: Curtida[];
 
   @OneToMany(() => LogNotificacao, logNotificacao => logNotificacao.receita, { cascade: ['insert', 'update'], nullable: true })
   @JoinColumn({ name: 'receita_id' })

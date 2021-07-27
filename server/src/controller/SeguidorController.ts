@@ -8,9 +8,74 @@ import UsuarioController from './UsuarioController';
 import { Seguidor } from '../model/Seguidor';
 import { LogNotificacao } from '../model/LogNotificacao';
 import { Usuario } from '../model/Usuario';
-import { getBoolean } from '../util/util';
+import { getBoolean, syserror, systrace } from '../util/util';
 
 class SeguidorController {
+    // Métodos das rotas
+    async index(request: Request, response: Response) {
+        const repository: SeguidorRepository = getCustomRepository(SeguidorRepository);
+
+        const midias: Seguidor[] = await repository.findAll();
+
+        return response.status(200).json(midias);
+    }
+
+    async create(request: Request, response: Response) {
+        const repository = getCustomRepository(SeguidorRepository);
+
+        const { idSeguidor, idUsuario } = request.body as {
+            idSeguidor: number,
+            idUsuario: number
+        };
+
+        try {
+            const usuarioController = new UsuarioController();
+
+            const usuarioSeguidor: Usuario = await usuarioController.find(idSeguidor);
+            const usuario: Usuario         = await usuarioController.find(idUsuario);
+
+            const log: LogNotificacao = new LogNotificacao(usuario);
+            await log.save();
+
+            const seguidor: Seguidor = new Seguidor(usuario, usuarioSeguidor, log);
+
+            console.log(seguidor);
+            await seguidor.save();
+
+            log.seguidor = seguidor;
+            await log.save();
+
+            systrace(201, response);
+        } catch (err) {
+            syserror(400, response, { error: err });
+        }
+    }
+
+    async findByUsuario(request: Request, response: Response) {
+        const repository = getCustomRepository(SeguidorRepository);
+
+        const { idUsuario } = request.params;
+
+        const seguidores = await repository.findByUsuario(parseInt(idUsuario));
+
+        if (!seguidores) {
+            syserror(400, response, { error: 'Seguidores não encontrados!' });
+        }
+
+        systrace(200, response, seguidores);
+    }
+
+    async remove(request: Request, response: Response) {
+        const repository = getCustomRepository(SeguidorRepository);
+        const { id } = request.params;
+
+        const seguidor = await repository.findOneOrFail({ id: parseInt(id) });
+        seguidor.remove();
+        seguidor.save();
+
+        return systrace(204, response);
+    }
+
     // Métodos internos
     async import(dados: any) {
         const {

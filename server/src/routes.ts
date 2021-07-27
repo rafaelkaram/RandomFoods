@@ -8,22 +8,26 @@ import uploadProfilePicConfig   from './config/uploadProfilePic';
 import AvaliacaoController      from './controller/AvaliacaoController';
 import CategoriaController      from './controller/CategoriaController';
 import ComentarioController     from './controller/ComentarioController';
+import CurtidaController        from './controller/CuritdaController';
 import FileImportController     from './controller/FileImportController';
 import IngredienteController    from './controller/IngredienteController';
 import LogNotificacaoController from './controller/LogNotificacaoController';
 import MidiaController          from './controller/MidiaController';
 import ReceitaController        from './controller/ReceitaController';
+import SeguidorController       from './controller/SeguidorController';
 import UnidadeController        from './controller/UnidadeController';
 import UsuarioController        from './controller/UsuarioController';
 
 const avaliacaoController       = new AvaliacaoController();
 const categoriaController       = new CategoriaController();
 const comentarioController      = new ComentarioController();
+const curtidaController         = new CurtidaController();
 const fileImportController      = new FileImportController();
 const ingredienteController     = new IngredienteController();
 const logNotificacaoController  = new LogNotificacaoController();
 const midiaController           = new MidiaController();
 const receitaController         = new ReceitaController();
+const seguidorController        = new SeguidorController();
 const unidadeController         = new UnidadeController();
 const usuarioController         = new UsuarioController();
 
@@ -42,8 +46,9 @@ routes.post('/cadastro/receita', uploadMidia.array('midias'), receitaController.
 routes.post('/cadastro/midia', uploadMidia.array('midias'), midiaController.create);
 routes.post('/cadastro/usuario', uploadProfilePic.single('image'), usuarioController.create);
 routes.post('/cadastro/comentario', comentarioController.create);
+routes.post('/cadastro/curtida', curtidaController.create);
+routes.post('/cadastro/seguidor', seguidorController.create);
 /*
-routes.post('/cadastro/avaliacao', avaliacaoController.create);
 routes.post('/cadastro/imagem-perfil', uploadProfilePic.single('image'), usuarioController.uploadImage);
 */
 // Rotas de busca (buscar todos)
@@ -55,6 +60,7 @@ routes.get('/busca/ingredientes', ingredienteController.index);
 routes.get('/busca/receita', receitaController.index);
 routes.get('/busca/usuario', usuarioController.index);
 routes.get('/busca/unidade', unidadeController.index);
+routes.get('/busca/seguidores', seguidorController.index);
 
 // Rotas de busca (buscar único)
 routes.get('/busca/receita/:id', receitaController.fetch);
@@ -71,6 +77,7 @@ routes.get('/busca/comentario-receita/:idReceita', comentarioController.findByRe
 routes.get('/busca/combinacoes', receitaController.findMatches);
 routes.get('/busca/tempo-preparo', receitaController.getTempoPreparo);
 routes.get('/busca/receita-usuario/:id', receitaController.findByUsuario);
+routes.get('/busca/seguidores/:id', seguidorController.findByUsuario);
 
 // Rotas Dashboard
 routes.get('/dashboard/avaliacoes/:id', avaliacaoController.findVoted);
@@ -80,6 +87,7 @@ routes.get('/dashboard/tipos-receita/:id', receitaController.countTypeByUserId);
 // Rotas de remoção
 routes.post('/remove/usuario/:id', usuarioController.remove);
 routes.post('/remove/receita/:id', receitaController.remove);
+routes.post('/remove/seguidor/:id', seguidorController.remove);
 
 // Demais rotas
 //routes.post('/autenticar', usuarioController.validate);

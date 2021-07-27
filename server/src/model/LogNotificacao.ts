@@ -1,7 +1,7 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Avaliacao } from './Avaliacao';
 import { Comentario } from './Comentario';
-import { Favorito } from './Favorito';
+import { Curtida } from './Curtida';
 import { Marca } from './Marca';
 import { Receita } from './Receita';
 import { Seguidor } from './Seguidor';
@@ -46,9 +46,9 @@ export class LogNotificacao extends BaseEntity {
   @JoinColumn({ name: 'avaliacao_id' })
   avaliacao: Avaliacao;
 
-  @OneToOne(() => Favorito, favorito => favorito.log, { nullable: true })
-  @JoinColumn({ name: 'favorito_id' })
-  favorito: Favorito;
+  @OneToOne(() => Curtida, curtida => curtida.log, { nullable: true })
+  @JoinColumn({ name: 'curtida_id' })
+  curtida: Curtida;
 
   @OneToOne(() => Comentario, comentario => comentario.logResposta, { nullable: true })
   @JoinColumn({ name: 'resposta_id' })

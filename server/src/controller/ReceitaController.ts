@@ -39,9 +39,7 @@ class ReceitaController {
 
         const receitas = await repository.find({
             relations: [ 'usuario', 'midias', 'categorias' ],
-            order: {
-                dataCadastro: 'ASC'
-            }
+            order: { dataCadastro: 'ASC' }
         });
 
         const avaliacaoController = new AvaliacaoController();
@@ -59,7 +57,24 @@ class ReceitaController {
     }
 
     async create(request: Request, response: Response) {
-        const { teste, nome, tempoPreparo, descricao, tipo, usuarioId } = request.body as { teste?: string, nome: string, tempoPreparo: string, descricao: string, tipo: Tipo, usuarioId: string };
+        const {
+            teste,
+            nome,
+            tempoPreparo,
+            porcoes,
+            descricao,
+            tipo,
+            usuarioId
+        } = request.body as {
+            teste?: string,
+            nome: string,
+            tempoPreparo: string,
+            porcoes: string,
+            descricao: string,
+            tipo: Tipo,
+            usuarioId: string
+        };
+
         const arquivos = request.files as Express.Multer.File[];
 
         if (teste === 'sim') return systrace(200, response, 'Recebi as info bro, deu boa');
@@ -67,7 +82,7 @@ class ReceitaController {
         const usuarioController = new UsuarioController();
 
         const usuario: Usuario = await usuarioController.find(parseInt(usuarioId));
-        const receita: Receita = new Receita(nome, descricao, parseInt(tempoPreparo), tipo, usuario);
+        const receita: Receita = new Receita(nome, descricao, parseInt(tempoPreparo), parseInt(porcoes), tipo, usuario);
 
         await receita.save();
 
@@ -134,13 +149,14 @@ class ReceitaController {
     }
 
     // Métodos internos
-    async import(dados: { nome: string, descricao: string, tempoPreparo: number, tipo: string, usuario?: string },
+    async import(dados: { nome: string, descricao: string, tempoPreparo: number, porcoes: number, tipo: string, usuario?: string },
         dadosIngrediente: { nomeIngrediente: string, unidade?: string, quantidade?: number }[],
         dadosCategoria: { categoria: string }[]) {
 
         const nome: string = dados.nome.trim();
         const descricao: string = dados.descricao.trim();
         const tempoPreparo: number = dados.tempoPreparo ? dados.tempoPreparo : 0;
+        const porcoes: number = dados.porcoes ? dados.porcoes : 1;
         const tipo: Tipo = <Tipo> dados.tipo.trim().toUpperCase();
         const usuario: string | undefined = dados.usuario?.trim().toLowerCase();
 
@@ -150,7 +166,7 @@ class ReceitaController {
         const usuarioController = new UsuarioController();
 
         const usuarioReceita = await usuarioController.findByLoginOrEmail(usuario);
-        const receita = new Receita(nome, descricao, tempoPreparo, tipo, usuarioReceita);
+        const receita = new Receita(nome, descricao, tempoPreparo, porcoes, tipo, usuarioReceita);
 
         await receita.save();
 
