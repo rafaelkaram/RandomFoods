@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
+import { systrace, syserror } from '../util/util';
 
 import { CurtidaRepository } from '../repository/CurtidaRepository';
 
@@ -10,7 +11,6 @@ import { Curtida } from '../model/Curtida';
 import { LogNotificacao } from '../model/LogNotificacao';
 import { Receita } from '../model/Receita';
 import { Usuario } from '../model/Usuario';
-import { systrace, syserror } from '../util/util';
 
 class CurtidaController {
     // Métodos das rotas
@@ -40,7 +40,7 @@ class CurtidaController {
             log.curtida = curtida;
             await log.save();
 
-            systrace(201, response);
+            systrace(204, response);
         } catch (err) {
             syserror(400, response, { error: err });
         }

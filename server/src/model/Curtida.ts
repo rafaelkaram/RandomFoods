@@ -25,5 +25,6 @@ export class Curtida extends BaseEntity {
   receita: Receita;
 
   @OneToOne(() => LogNotificacao)
+  @JoinColumn({ name: 'id' })
   log: LogNotificacao;
 }
