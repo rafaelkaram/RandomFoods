@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, Dimensions, Platform, Image, StyleSheet, Text, Button } from 'react-native';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { View, ScrollView, RefreshControl, Platform, Image, StyleSheet, Text, Button, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
@@ -70,9 +70,14 @@ const Home = () => {
     const notificationListener = useRef<any>();
     const responseListener = useRef<any>();
     const navigation = useNavigation();
-
+    const [refreshing, setRefreshing] = useState(false);
     const [receitas, setReceitas] = useState<IReceitaSimples[]>([])
 
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => setRefreshing(false), 2000);
+      }, []);
 
     useEffect(() => {
         registerForPushNotificationsAsync().then((token: any) => setExpoPushToken(token));
@@ -100,7 +105,7 @@ const Home = () => {
         api.get('/busca/receita').then(response => {
             setReceitas(response.data)
         })
-    }, []);
+    }, [refreshing]);
 
     const handleNavigateToSearchRecipe = () => {
         navigation.navigate(screens.filtro);
@@ -115,7 +120,12 @@ const Home = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />}>
                 <Button
                     title="Pesquisar Receitas"
                     onPress={handleNavigateToSearchRecipe}
@@ -157,7 +167,7 @@ const Home = () => {
 
                                     <View style={styles.textContainer}>
                                         <Text>{receita.receita}</Text>
-                                        <Text style={ [globalStyles.regularText, {fontSize: 10, margin: 5} ]  } >@{receita.usuario.login}</Text>
+                                        <Text style={[globalStyles.regularText, { fontSize: 10, margin: 5 }]} >@{receita.usuario.login}</Text>
                                     </View>
 
                                     <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
@@ -167,14 +177,14 @@ const Home = () => {
                                                 receita.categorias.map((categoria, index) => {
 
                                                     return (
-                                                      
-                                                            <Image
-                                                                key={index}
-                                                                // source={require('./../../assets/VEGANA.png')}
-                                                                source={{uri:`http://192.168.100.5:3333/uploads/midia/categoria/${categoria}.png`}}
-                                                                style={{ width: 40, height: 40 }}
-                                                            />
-                                                            
+
+                                                        <Image
+                                                            key={index}
+                                                            // source={require('./../../assets/VEGANA.png')}
+                                                            source={{ uri: `http://192.168.100.5:3333/uploads/midia/categoria/${categoria}.png` }}
+                                                            style={{ width: 40, height: 40 }}
+                                                        />
+
                                                     )
                                                 }) : null
                                         }
