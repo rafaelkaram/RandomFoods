@@ -3,13 +3,6 @@ import { StyleSheet } from "react-native";
 import { WIDTH, HEIGHT } from '../../constants/dimensions';
 
 export default StyleSheet.create({
-    recipeListSubTitle: {
-        marginBottom: 10,
-        textAlign: 'center',
-        fontSize: 20,
-        margin: 3,
-    },
-
     recipeListColumns: {
         flexDirection: 'row',
         flexWrap: 'wrap',
@@ -39,4 +32,9 @@ export default StyleSheet.create({
         fontSize: 15,
         textAlign: 'center',
     },
+
+    likeHeart: {
+        margin: 5,
+    },
+
 });

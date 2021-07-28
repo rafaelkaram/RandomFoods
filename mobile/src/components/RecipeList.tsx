@@ -1,10 +1,14 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { Avatar, Rating } from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
+import colors from "../../src/constants/colors";
+
+import { AntDesign } from '@expo/vector-icons';
 
 import { IReceitaSimples } from '../constants/interfaces';
 import styles from '../styles/components/RecipeList';
 import globalStyles from '../styles/Global';
+
 
 const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navegar: Function }) => {
     const titulo = props.titulo;
@@ -13,7 +17,7 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
 
     return (
         <View>
-            <Text style={[ globalStyles.subTitleText, styles.recipeListSubTitle ]}>{titulo}</Text>
+            <Text style={[ globalStyles.subTitleText, globalStyles.recipeListSubTitle ]}>{titulo}</Text>
             <View style={ styles.recipeListColumns }>
                 { receitas.map(item => {
                     return (
@@ -31,7 +35,7 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                                 ) : (<Text style={ styles.recipeListImage }>{ item.receita }</Text>)
                                 }
                                 <Text style={[ globalStyles.boldText, styles.recipeListTitle ]}>{item.receita}</Text>
-                                <Rating imageSize={20} readonly startingValue={Number(item.nota)} />
+                                <AntDesign style={styles.likeHeart} name='heart' size={20} color={colors.primary}/>
                             </TouchableOpacity>
                         </View>
                     )

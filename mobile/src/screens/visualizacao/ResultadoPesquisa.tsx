@@ -122,11 +122,14 @@ const Recipe = ({ route }: { route: any }) => {
                         { matchesPerfeitos.length > 0 &&
                             <RecipeList titulo='Receitas Perfeitas para suas escolhas' receitas={ matchesPerfeitos } navegar={ (id: number) => handleNavigateToRecipe(id) } />
                         }
-                        { matchesParciais.length > 0 &&
+                        { matchesParciais.length > 0 && matchesPerfeitos.length > 0 &&
                             <RecipeList titulo='Outras Receitas com suas escolhas' receitas={ matchesParciais } navegar={ (id: number) => handleNavigateToRecipe(id) } />
                         }
+                        { matchesParciais.length > 0 && matchesPerfeitos.length === 0 &&
+                            <RecipeList titulo='Não encontramos receitas perfeitas para suas escolhas, mas sugerimos essas' receitas={ matchesParciais } navegar={ (id: number) => handleNavigateToRecipe(id) } />
+                        }
                         { matchesParciais.length === 0 && matchesPerfeitos.length === 0 &&
-                            <Text style={[ globalStyles.subTitleText, globalStyles.subTitle ]}>Não encontramos receitas com os ingredientes selecionados</Text>
+                            <Text style={[ globalStyles.subTitleText, globalStyles.recipeListSubTitle ]}>Não encontramos receitas com os ingredientes selecionados</Text>
                         }
                     </View>
                 ) : <RecipeList titulo='Receitas' receitas={ receitas } navegar={ (id: number) => handleNavigateToRecipe(id) } />

@@ -22,6 +22,11 @@ interface IComentarioProps {
   setIdPai: Function,
 }
 
+interface ICurtidaSimples {
+  id: number,
+  usuario: IUsuarioSimples
+}
+
 interface IIngrediente {
   id: number,
   nome: string,
@@ -163,6 +168,7 @@ export {
   IComentario,
   IComentarioSend,
   IComentarioProps,
+  ICurtidaSimples,
   IIngrediente,
   IMidia,
   IReceita,

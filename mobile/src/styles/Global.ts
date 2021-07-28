@@ -51,6 +51,13 @@ export default StyleSheet.create({
         textAlign: 'center',
     },
 
+    recipeListSubTitle: {
+        marginBottom: 10,
+        textAlign: 'center',
+        fontSize: 20,
+        margin: 3,
+    },
+
     recipeImage: {
         width: 320,
         height: 70,

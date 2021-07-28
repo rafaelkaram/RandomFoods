@@ -87,6 +87,7 @@ routes.get('/dashboard/tipos-receita/:id', receitaController.countTypeByUserId);
 // Rotas de remoção
 routes.post('/remove/usuario/:id', usuarioController.remove);
 routes.post('/remove/receita/:id', receitaController.remove);
+routes.post('/remove/curtida/:id', curtidaController.remove);
 routes.post('/remove/seguidor/:id', seguidorController.remove);
 
 // Demais rotas

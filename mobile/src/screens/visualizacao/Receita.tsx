@@ -14,7 +14,13 @@ import AuthContext from './../../contexts/auth';
 import styles from '../../styles/screens/Receita';
 import globalStyles from '../../styles/Global';
 import screens from '../../constants/screens';
-import { IUsuario, IComentario, IMidia, IReceita } from '../../constants/interfaces';
+import {
+    IUsuario,
+    IComentario,
+    ICurtidaSimples,
+    IMidia,
+    IReceita
+} from '../../constants/interfaces';
 
 import Loading from '../../components/Loading';
 import Comment from '../../components/Comment';
@@ -33,13 +39,13 @@ function Receita({ route }: { route: any }) {
     const [comentarios, setComentarios] = useState<IComentario[]>([]);
     const [etapas, setEtapas] = useState<string[]>([]);
     const [midias, setMidias] = useState<IMidia[]>([]);
-    const [newC, setNewC] = useState(false);
+    const [curtidas, setCurtidas] = useState<ICurtidaSimples[]>([]);
 
-    const [idComentarioPai, setIdComentarioPai] = useState<number | null>(null)
-    const [favorita, setFavorita] = useState(false)
+    const [idComentarioPai, setIdComentarioPai] = useState<number | null>(null);
 
+    const [newC, setNewC] = useState<boolean>(false);
+    const [isCurtida, setIsCurtida] = useState<boolean>(false);
     const [loadComentario, setLoadComentario] = useState<boolean>(false);
-    const [rating, setRating] = useState<number>(0)
 
     const { user }: { user: IUsuario | null } = useContext(AuthContext);
 
@@ -47,18 +53,59 @@ function Receita({ route }: { route: any }) {
         api.get(`/busca/receita/${idRecipe}`)
             .then(response => {
                 setRecipe(response.data);
-                setEtapas(response.data?.descricao.split('\\n'))
-                setMidias(response.data?.midias)
-                setRating(response.data?.nota)
+                setEtapas(response.data?.descricao.split('\\n'));
+                setMidias(response.data?.midias);
+                setCurtidas(response.data?.curtidas);
             }
-        );
+            );
         api.get(`busca/comentario-receita/${idRecipe}`)
             .then(response => {
                 setComentarios(response.data);
             }
-        );
+            );
 
     }, []);
+
+    useEffect(() => {
+        const curtida: ICurtidaSimples[] = curtidas.filter(curtida2 => (curtida2.usuario.id === user?.id));
+        if (curtida && curtida.length > 0)
+            setIsCurtida(true);
+    }, [curtidas]);
+
+    const curtirReceita = () => {
+        if (!isCurtida) {
+            api.post('cadastro/curtida', { idUsuario: user?.id, idReceita: recipe?.id })
+                .then(response => {
+                    setIsCurtida(true);
+                }).catch(error => {
+                    Alert.alert(
+                        'Falha no resgistro de curtida',
+                        '\nFalha no resgistro de curtida',
+                        [
+                            { text: 'OK' }
+                        ]
+                    );
+                    setIsCurtida(false);
+                }
+                );
+        } else {
+            const curtida: ICurtidaSimples = curtidas.filter(curtida2 => (curtida2.usuario.id === user?.id))[0];
+            api.post(`remove/curtida/${curtida.id}`)
+                .then(response => {
+                    setIsCurtida(false);
+                }).catch(error => {
+                    Alert.alert(
+                        'Falha no resgistro de curtida',
+                        '\nFalha no resgistro de curtida',
+                        [
+                            { text: 'OK' }
+                        ]
+                    );
+                    setIsCurtida(true);
+                }
+                );
+        }
+    }
 
     const handleNavigateToPerfil = (id: number | undefined) => {
         navigation.navigate(screens.perfil, { id: id });
@@ -80,58 +127,42 @@ function Receita({ route }: { route: any }) {
                 );
                 setLoadComentario(false);
             }
-        );
+            );
     }
 
     const setNew = () => {
         setNewC(!newC)
     }
 
-    const sendRating = (r: number) => {
-        setRating(r)
-    }
-
     if (!recipe) {
         return (
-            <Loading/>
+            <Loading />
         )
     }
 
     return (
         <SafeAreaView>
             <ScrollView>
-                <View style={ styles.container }>
-                    <View style={ styles.itemListTitle }>
-                        <Text style={[ globalStyles.boldText, styles.titleText ]}>{ recipe.receita }</Text>
+                <View style={styles.container}>
+                    <View style={styles.itemListTitle}>
+                        <Text style={[globalStyles.boldText, styles.titleText]}>{recipe.receita}</Text>
                     </View>
-                    <CarouselItems midias={ midias } />
+                    <CarouselItems midias={midias} />
                     <TouchableOpacity
-                        style={ styles.autor }
+                        style={styles.autor}
                         onPress={() => { handleNavigateToPerfil(recipe.usuario.id) }}
                     >
                         <Avatar
                             size='small'
                             rounded
-                            title={ recipe.usuario.iniciais }
+                            title={recipe.usuario.iniciais}
                             activeOpacity={0.7}
                             containerStyle={{ backgroundColor: 'lightgrey' }}
                             source={{ uri: recipe.usuario.path }}
                         />
-                        <Text style={ styles.autorName }>{ recipe.usuario.nome }</Text>
+                        <Text style={styles.autorName}>{recipe.usuario.nome}</Text>
                     </TouchableOpacity>
-                    <View style={ styles.rating }>
-                        <View style={ styles.note }>
-                            <Text style={ globalStyles.boldText }>Nota: </Text>
-                            <Rating
-                                imageSize={20}
-                                readonly={ !user }
-                                fractions={0}
-                                startingValue={ rating }
-                                onFinishRating={(r) => { sendRating(r) }}
-                            />
-                        </View>
-                    </View>
-                    <View style={ styles.time }>
+                    <View style={styles.time}>
                         <View style={{ alignSelf: 'center', marginRight: 10 }}>
                             <Icon
                                 name='clock'
@@ -140,37 +171,37 @@ function Receita({ route }: { route: any }) {
                             />
                         </View>
                         <View>
-                            <Text style={ globalStyles.boldText }>Tempo de Preparo:  </Text>
+                            <Text style={globalStyles.boldText}>Tempo de Preparo:  </Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ marginLeft: 5 }}>{ recipe.tempoPreparo } Minutos</Text>
+                                <Text style={{ marginLeft: 5 }}>{recipe.tempoPreparo} Minutos</Text>
                             </View>
                         </View>
                     </View>
 
-                    <View style={ styles.category }>
-                        { recipe.categorias.map(category => {
+                    <View style={styles.category}>
+                        {recipe.categorias.map(category => {
                             return (
-                                <Category key={ category } nome={ category } />
+                                <Category key={category} nome={category} />
                             )
                         })}
 
                     </View>
-                    <View style={ styles.ingredientList }>
-                        <Text style={ globalStyles.boldText }>Ingredientes:</Text>
+                    <View style={styles.ingredientList}>
+                        <Text style={globalStyles.boldText}>Ingredientes:</Text>
 
-                        { recipe.ingredientes.map(ingredient => {
+                        {recipe.ingredientes.map(ingredient => {
                             return (
-                                <View style={ styles.ingredient } key={ ingredient.id }>
+                                <View style={styles.ingredient} key={ingredient.id}>
                                     <Entypo name='dot-single' size={15} color='black' />
-                                    <Text style={ globalStyles.regularText }>{ ingredient.nome }</Text>
-                                    <Text style={ globalStyles.regularText }>: { ingredient.medida }</Text>
+                                    <Text style={globalStyles.regularText}>{ingredient.nome}</Text>
+                                    <Text style={globalStyles.regularText}>: {ingredient.medida}</Text>
                                 </View>
                             )
                         })}
                     </View>
 
-                    <View style={ styles.itemListDescribe }>
-                        <Text style={ globalStyles.boldText }>Preparo:</Text>
+                    <View style={styles.itemListDescribe}>
+                        <Text style={globalStyles.boldText}>Preparo:</Text>
                         {etapas.map((etapa, index) => {
                             return (
                                 <View key={index} style={{ margin: 10 }}>
@@ -181,39 +212,39 @@ function Receita({ route }: { route: any }) {
                             )
                         })}
                     </View>
-                    { user &&
-                        <View style={ styles.buttonActions }>
-                            <TouchableOpacity style={ favorita ? styles.buttonFavTrue : styles.buttonFavFalse }
-                                onPress={() => { setFavorita(!favorita) }}
+                    {user &&
+                        <View style={styles.buttonActions}>
+                            <TouchableOpacity style={isCurtida ? styles.buttonFavTrue : styles.buttonFavFalse}
+                                onPress={() => { curtirReceita() }}
                             >
                                 <AntDesign name='heart' size={20} color='white' />
                             </TouchableOpacity>
-                            <TouchableOpacity style={ styles.buttonComentar }
+                            <TouchableOpacity style={styles.buttonComentar}
                                 onPress={() => {
                                     setIdComentarioPai(null);
                                     setNewC(!newC)
                                 }}
                             >
-                                <Text style={{ ...globalStyles.boldText , color: 'white', fontSize: 16 }}>Comentar</Text>
+                                <Text style={{ ...globalStyles.boldText, color: 'white', fontSize: 16 }}>Comentar</Text>
                                 <MaterialCommunityIcons name='comment' size={20} color='white' style={{ marginLeft: 10 }} />
                             </TouchableOpacity>
                         </View>
                     }
                     {
                         loadComentario ?
-                            <Loading/> :
-                            <View style={ styles.comentarios }>
+                            <Loading /> :
+                            <View style={styles.comentarios}>
                                 {
                                     comentarios.filter(comentario2 => (!comentario2.comentarioPai)).map(comentario => {
                                         return (
-                                        <Comment
-                                            key={ comentario.id }
-                                            comentario={ comentario }
-                                            lista={ comentarios }
-                                            isLogado={ user ? true : false }
-                                            setNew={ setNew }
-                                            setIdPai={ setIdComentarioPai }
-                                        />
+                                            <Comment
+                                                key={comentario.id}
+                                                comentario={comentario}
+                                                lista={comentarios}
+                                                isLogado={user ? true : false}
+                                                setNew={setNew}
+                                                setIdPai={setIdComentarioPai}
+                                            />
                                         )
                                     })
                                 }
@@ -221,12 +252,12 @@ function Receita({ route }: { route: any }) {
                     }
                     {
                         (newC) &&
-                            <InputComment
-                                idPai={ idComentarioPai }
-                                idReceita={ recipe.id }
-                                submit={ (idReceita: number, idPai: number, conteudo: string) => submitComentario(idReceita, idPai, conteudo) }
-                                setNew={ () => setNew() }
-                            />
+                        <InputComment
+                            idPai={idComentarioPai}
+                            idReceita={recipe.id}
+                            submit={(idReceita: number, idPai: number, conteudo: string) => submitComentario(idReceita, idPai, conteudo)}
+                            setNew={() => setNew()}
+                        />
                     }
                 </View>
             </ScrollView>

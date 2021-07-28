@@ -4,7 +4,7 @@ export class CreateFavorito1619148919615 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(new Table({
-            name: 'favorito',
+            name: 'curtida',
             columns: [
                 {
                     name: 'id',
@@ -24,7 +24,7 @@ export class CreateFavorito1619148919615 implements MigrationInterface {
             ],
             foreignKeys: [
                 {
-                    name: 'favoritoUsuario',
+                    name: 'curtidaUsuario',
                     columnNames: [ 'usuario_id' ],
                     referencedTableName: 'usuario',
                     referencedColumnNames: [ 'id' ],
@@ -32,7 +32,7 @@ export class CreateFavorito1619148919615 implements MigrationInterface {
                     onDelete: 'CASCADE'
                 },
                 {
-                    name: 'favoritoReceita',
+                    name: 'curtidaReceita',
                     columnNames: [ 'receita_id' ],
                     referencedTableName: 'receita',
                     referencedColumnNames: [ 'id' ],
@@ -42,7 +42,7 @@ export class CreateFavorito1619148919615 implements MigrationInterface {
             ],
             uniques: [
                 {
-                    name: 'favUsuarioReceita',
+                    name: 'curUsuarioReceita',
                     columnNames: [ 'usuario_id', 'receita_id' ]
                 }
             ]
@@ -50,7 +50,7 @@ export class CreateFavorito1619148919615 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('favorito');
+        await queryRunner.dropTable('curtida');
     }
 
 }
