@@ -14,7 +14,13 @@ import AuthContext from './../../contexts/auth';
 import styles from '../../styles/screens/Receita';
 import globalStyles from '../../styles/Global';
 import screens from '../../constants/screens';
-import { IUsuario, IComentario, IMidia, IReceita } from '../../constants/interfaces';
+import {
+    IUsuario,
+    IComentario,
+    ICurtidaSimples,
+    IMidia,
+    IReceita
+} from '../../constants/interfaces';
 
 import Loading from '../../components/Loading';
 import Comment from '../../components/Comment';
@@ -33,13 +39,14 @@ function Receita({ route }: { route: any }) {
     const [comentarios, setComentarios] = useState<IComentario[]>([]);
     const [etapas, setEtapas] = useState<string[]>([]);
     const [midias, setMidias] = useState<IMidia[]>([]);
-    const [newC, setNewC] = useState(false);
+    const [curtidas, setCurtidas] = useState<ICurtidaSimples[]>([]);
 
-    const [idComentarioPai, setIdComentarioPai] = useState<number | null>(null)
-    const [favorita, setFavorita] = useState(false)
+    const [rating, setRating] = useState<number>(0);
+    const [idComentarioPai, setIdComentarioPai] = useState<number | null>(null);
 
+    const [newC, setNewC] = useState<boolean>(false);
+    const [isCurtida, setIsCurtida] = useState<boolean>(false);
     const [loadComentario, setLoadComentario] = useState<boolean>(false);
-    const [rating, setRating] = useState<number>(0)
 
     const { user }: { user: IUsuario | null } = useContext(AuthContext);
 
@@ -47,9 +54,10 @@ function Receita({ route }: { route: any }) {
         api.get(`/busca/receita/${idRecipe}`)
             .then(response => {
                 setRecipe(response.data);
-                setEtapas(response.data?.descricao.split('\\n'))
-                setMidias(response.data?.midias)
-                setRating(response.data?.nota)
+                setEtapas(response.data?.descricao.split('\\n'));
+                setMidias(response.data?.midias);
+                setRating(response.data?.nota);
+                setCurtidas(response.data?.curtidas);
             }
         );
         api.get(`busca/comentario-receita/${idRecipe}`)
@@ -59,6 +67,12 @@ function Receita({ route }: { route: any }) {
         );
 
     }, []);
+
+    useEffect(() => {
+        const curtida: ICurtidaSimples[] = curtidas.filter(curtida2 => !(curtida2.usuario.id === user?.id));
+        if (curtida && curtida.length > 0)
+            setIsCurtida(true);
+    }, [curtidas]);
 
     const handleNavigateToPerfil = (id: number | undefined) => {
         navigation.navigate(screens.perfil, { id: id });
@@ -127,7 +141,7 @@ function Receita({ route }: { route: any }) {
                                 readonly={ !user }
                                 fractions={0}
                                 startingValue={ rating }
-                                onFinishRating={(r) => { sendRating(r) }}
+                                onFinishRating={(r: number) => { sendRating(r) }}
                             />
                         </View>
                     </View>
@@ -183,8 +197,8 @@ function Receita({ route }: { route: any }) {
                     </View>
                     { user &&
                         <View style={ styles.buttonActions }>
-                            <TouchableOpacity style={ favorita ? styles.buttonFavTrue : styles.buttonFavFalse }
-                                onPress={() => { setFavorita(!favorita) }}
+                            <TouchableOpacity style={ isCurtida ? styles.buttonFavTrue : styles.buttonFavFalse }
+                                onPress={() => { setIsCurtida(!isCurtida) }}
                             >
                                 <AntDesign name='heart' size={20} color='white' />
                             </TouchableOpacity>

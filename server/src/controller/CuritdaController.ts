@@ -45,6 +45,18 @@ class CurtidaController {
             syserror(400, response, { error: err });
         }
     }
+
+    async remove(request: Request, response: Response) {
+        const repository = getCustomRepository(CurtidaRepository);
+        const { id } = request.params;
+
+        const curtida = await repository.findOneOrFail({ id: parseInt(id) });
+        curtida.remove();
+        curtida.save();
+
+        return systrace(204, response);
+    }
+
     // Métodos internos
     async import(dados: any) {
         const {
@@ -74,6 +86,19 @@ class CurtidaController {
         log.curtida = curtida;
 
         await log.save();
+    }
+
+    async find(receita: Receita): Promise<Curtida[]> {
+        const repository = getCustomRepository(CurtidaRepository);
+
+        const curtidas = await repository.find({
+            relations: [ 'usuario' ],
+            where: {
+                receita,
+            }
+        });
+
+        return curtidas;
     }
 }
 

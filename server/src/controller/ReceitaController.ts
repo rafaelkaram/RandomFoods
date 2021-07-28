@@ -6,6 +6,7 @@ import path from 'path';
 import { ReceitaRepository } from '../repository/ReceitaRepository';
 
 import AvaliacaoController from './AvaliacaoController';
+import CurtidaController from './CuritdaController';
 import IngredienteController from './IngredienteController';
 import LogNotificacaoController from './LogNotificacaoController';
 import MedidaController from './MedidaController';
@@ -23,6 +24,7 @@ import {
     systrace
 } from '../util/util';
 import { Categoria, Tipo as TipoCategoria } from '../model/Categoria';
+import { Curtida } from '../model/Curtida';
 import { Ingrediente } from '../model/Ingrediente';
 import { Medida } from '../model/Medida';
 import { Midia, Tipo as TipoMidia } from '../model/Midia';
@@ -221,6 +223,7 @@ class ReceitaController {
             const receitaIngredienteController = new ReceitaIngredienteController();
             const avaliacaoController = new AvaliacaoController();
             const logController = new LogNotificacaoController();
+            const curtidaController = new CurtidaController();
 
             const receita = await repository.findOne({
                 relations: ['usuario', 'categorias', 'midias'],
@@ -239,10 +242,12 @@ class ReceitaController {
                 return response.status(400).json({ error: 'Nenhum ingrediente para a receita.' });
             }
 
+            const curtidas: Curtida[] = await curtidaController.find(receita);
+
             const avaliacao: { nota: number, qtdeNotas: number } = await avaliacaoController.countVotes(parseInt(id));
             const qtdeLogs: number = await logController.countNotRead(receita.usuario);
 
-            return response.status(200).json(receitaView.render(receita, ingredientes, avaliacao, qtdeLogs));
+            return response.status(200).json(receitaView.render(receita, ingredientes, curtidas, avaliacao, qtdeLogs));
 
         } catch (e) {
             console.error(e);
