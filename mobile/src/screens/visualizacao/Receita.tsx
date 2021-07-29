@@ -242,7 +242,7 @@ function Receita({ route }: { route: any }) {
                     {
                         loadComentario ?
                             <Loading /> :
-                            <View style={styles.comentarios}>
+                            <View>
                                 {
                                     comentarios.filter(comentario2 => (!comentario2.comentarioPai)).map(comentario => {
                                         return (

@@ -1,6 +1,12 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
+
+    comments: {
+        margin: 5,
+        padding: 5,
+    },
+
     commentContainer: {
         backgroundColor: 'white',
         padding: 10,
@@ -32,6 +38,13 @@ export default StyleSheet.create({
     },
 
     commentButton: {
-
+        paddingTop: 10,
+        alignItems: 'flex-end',
     },
+
+    ident: {
+        marginTop: 5,
+        marginLeft: 15,
+    },
+
 });
