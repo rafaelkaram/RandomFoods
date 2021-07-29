@@ -96,7 +96,7 @@ const InputSignUp = (props: {
                 placeholder={ props.placeholder }
                 errorMessage={ errorMessage }
                 autoCompleteType={ props.tipo }
-                onChangeText={ (value) => setData(value) }
+                onChangeText={ props.tipo === 'name' ? (value) => setData(value) : (value) => setData(value.replace(/\s/g, '')) }
                 value={ data }
                 leftIcon={
                     <Ionicons name={ props.icon } style={{ paddingRight: 10 }} size={24} color='black' />

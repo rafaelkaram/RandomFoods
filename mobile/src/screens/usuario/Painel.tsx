@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Button, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
+import { Button, ScrollView, Text, TouchableOpacity, View, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { VictoryPie, VictoryLegend } from 'victory-native';
-import { useNavigation , DrawerActions } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { DataTable } from 'react-native-paper';
 
 import AuthContext from './../../contexts/auth';
@@ -22,11 +22,12 @@ import UserHeader from '../../components/UserHeader';
 
 const Painel = () => {
     const navigation = useNavigation();
-   
+
     const [recipeType, setRecipeType] = useState<IPainelTipoReceita[]>([]);
     const [recipeCategory, setRecipeCategory] = useState<IPainelCategorias[]>([]);
     const [topVotedRecipe, setTopVotedRecipe] = useState<IPainelVotos[]>([]);
     const [load, setLoad] = useState<boolean>(false);
+    const [refreshing, setRefreshing] = useState(false);
 
     const { user, signOut } = useContext(AuthContext);
 
@@ -46,7 +47,7 @@ const Painel = () => {
             navigation.navigate(screens.login);
         }
         setLoad(true);
-    }, [user]);
+    }, [user, refreshing]);
 
     const pieTypeData = recipeType.map((item) => {
         return { x: item.tipo, y: Number(item.count) }
@@ -72,18 +73,30 @@ const Painel = () => {
 
     const totalRecipes: number = pieTypeData.reduce(function (a, b) { return a + b.y }, 0);
 
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => setRefreshing(false), 2000);
+    }, []);
+
     if (!load || !user) {
         return <Loading />
     }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />}
+            >
                 <UserHeader
                     usuario={user}
                     totalReceitas={totalRecipes}
                     isPainel={true}
                 />
+
                 <View style={styles.pieContainer}>
                     <View style={styles.typePie}>
                         <Text style={[globalStyles.subTitleText, styles.chartsTitle]}>{`Receitas\npor Tipo`}</Text>

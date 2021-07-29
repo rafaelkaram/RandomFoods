@@ -1,39 +1,67 @@
 import { StyleSheet } from 'react-native';
 
+import colors from '../../constants/colors';
+
 import { WIDTH } from '../../constants/dimensions';
 
 export default StyleSheet.create({
     container: {
         margin: 20,
         backgroundColor: 'white',
-        height: 120,
+        height: 130,
         borderRadius: 15,
         flexDirection: 'row',
-        padding: 20,
         alignItems: 'center',
-        maxWidth: WIDTH- 65,
+        maxWidth: WIDTH,
     },
 
     nameContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        width: ((WIDTH-60) * 0.7),
+        width: (WIDTH * 0.7),
     },
 
     name: {
-        marginLeft: 20,
-        fontSize: 16,
+        fontSize: 18,
     },
 
     login: {
-        marginLeft: 20,
         marginTop: 10,
+        marginRight: 10,
         fontSize: 14,
     },
 
+    following : {
+        color: 'white'
+    },
+
+    filterBoxSelected: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: colors.primary,
+        borderRadius: 15,
+        height: 30,
+        paddingHorizontal: 10,
+        margin: 5,
+        width: 115
+    },
+
+    filterBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: colors.button,
+        borderRadius: 15,
+        height: 30,
+        paddingHorizontal: 10,
+        margin: 5,
+        width: 115
+    },
+
     segContainer: {
-        flexDirection:'row',
-        marginLeft:10,
+        flexDirection: 'row',
+        marginLeft: 10,
     },
 
     textSeg: {
@@ -41,14 +69,14 @@ export default StyleSheet.create({
         fontSize: 14,
     },
 
-    seg:{
-        alignItems:'center',
+    seg: {
+        alignItems: 'center',
     },
 
-    numberSeg:{
+    numberSeg: {
         marginLeft: 20,
         marginTop: 10,
-        marginBottom:3,
+        marginBottom: 3,
         fontSize: 14,
     },
 
