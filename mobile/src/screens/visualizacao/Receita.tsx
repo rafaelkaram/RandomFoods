@@ -152,14 +152,23 @@ function Receita({ route }: { route: any }) {
                         style={styles.autor}
                         onPress={() => { handleNavigateToPerfil(recipe.usuario.id) }}
                     >
+                    {recipe.usuario.path ? (
+                        <Avatar
+                            size='small'
+                            rounded
+                            activeOpacity={0.7}
+                            containerStyle={{ backgroundColor: 'lightgrey' }}
+                            source={{ uri: recipe.usuario.path }}
+                        />)
+                    :
                         <Avatar
                             size='small'
                             rounded
                             title={recipe.usuario.iniciais}
                             activeOpacity={0.7}
                             containerStyle={{ backgroundColor: 'lightgrey' }}
-                            source={{ uri: recipe.usuario.path }}
                         />
+                    }
                         <Text style={styles.autorName}>{recipe.usuario.nome}</Text>
                     </TouchableOpacity>
                     <View style={styles.time}>
