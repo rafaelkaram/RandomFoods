@@ -33,8 +33,29 @@ export default StyleSheet.create({
         textAlign: 'center',
     },
 
-    likeHeart: {
-        margin: 5,
+    main: {
+        flexDirection: 'row',
+        margin: 10,
+        padding: 10,
+        backgroundColor: 'white',
+        borderRadius: 20,
+    },
+
+    textContainer: {
+        padding: 5,
+        marginVertical: 10
+
+    },
+
+    image: {
+        width: 100,
+        height: 100,
+        borderRadius: 50
+    },
+
+    likeComment: {
+        flexDirection: 'row', 
+        alignItems: 'center',
     },
 
 });

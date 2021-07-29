@@ -12,7 +12,7 @@ import globalStyles from '../styles/Global';
 
 const Comment = ({ comentario, lista, isLogado, setNew, setIdPai } : IComentarioProps) => {
     return (
-        <View>
+        <View style={ styles.comments }>
             <View style={ styles.commentContainer }>
                 <View>
                     <View style={ styles.commentTitle }>
@@ -42,7 +42,7 @@ const Comment = ({ comentario, lista, isLogado, setNew, setIdPai } : IComentario
                 lista.filter(subComentario => (subComentario.comentarioPai === comentario.id)).map(subComentario => {
                     return (
                         <SubComment
-                            key={ comentario.id }
+                            key={ subComentario.id }
                             comentario={ subComentario }
                             lista={ lista }
                             isLogado={ isLogado }
