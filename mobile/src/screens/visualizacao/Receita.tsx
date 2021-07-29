@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState, useContext, useCallback } from 'react'
+import { Alert, ScrollView, Text, TouchableOpacity, View, RefreshControl } from 'react-native';
 import { Rating, Avatar, Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -40,7 +40,7 @@ function Receita({ route }: { route: any }) {
     const [etapas, setEtapas] = useState<string[]>([]);
     const [midias, setMidias] = useState<IMidia[]>([]);
     const [curtidas, setCurtidas] = useState<ICurtidaSimples[]>([]);
-
+    const [refreshing, setRefreshing] = useState(false);
     const [idComentarioPai, setIdComentarioPai] = useState<number | null>(null);
 
     const [newC, setNewC] = useState<boolean>(false);
@@ -64,7 +64,7 @@ function Receita({ route }: { route: any }) {
             }
             );
 
-    }, []);
+    }, [refreshing]);
 
     useEffect(() => {
         const curtida: ICurtidaSimples[] = curtidas.filter(curtida2 => (curtida2.usuario.id === user?.id));
@@ -134,6 +134,11 @@ function Receita({ route }: { route: any }) {
         setNewC(!newC)
     }
 
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => setRefreshing(false), 2000);
+    }, []);
+
     if (!recipe) {
         return (
             <Loading />
@@ -142,7 +147,13 @@ function Receita({ route }: { route: any }) {
 
     return (
         <SafeAreaView>
-            <ScrollView>
+            <ScrollView
+             refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                />}
+            >
                 <View style={styles.container}>
                     <View style={styles.itemListTitle}>
                         <Text style={[globalStyles.boldText, styles.titleText]}>{recipe.receita}</Text>

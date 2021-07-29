@@ -74,10 +74,26 @@ const Home = () => {
     const [receitas, setReceitas] = useState<IReceitaSimples[]>([])
 
 
+    const sendPushNotification = () => {
+        let response = fetch('https://exp.host/--/api/v2/push/send', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                to: 'ExponentPushToken[vIrbrrNuUq7P8LJrMwQtCr]',
+                sound: 'default',
+                title: 'Push',
+                body: 'notification'
+            })
+        })
+    }
+
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         setTimeout(() => setRefreshing(false), 2000);
-      }, []);
+    }, []);
 
     useEffect(() => {
         registerForPushNotificationsAsync().then((token: any) => setExpoPushToken(token));
@@ -130,17 +146,14 @@ const Home = () => {
                     title="Pesquisar Receitas"
                     onPress={handleNavigateToSearchRecipe}
                 />
-                {/*
-                <View style={{marginTop: 100}}>
+
+                <View style={{ marginTop: 100 }}>
                     <Text>Your expo push token: {expoPushToken}</Text>
                     <Button title="Notificação Local" onPress={async () => { await schedulePushNotification() }} />
-                    <View style={{margin: 10}}></View>
+                    <View style={{ margin: 10 }}></View>
                     <Button title="Push Notification" onPress={() => sendPushNotification()} />
-                    <View style={{margin: 10}}></View>
-                    <Button title="Sign In" onPress={() => handleSignIn()} />
-                    <View style={{margin: 10}}></View>
-                    <Button title="Sign Out" onPress={() => handleSignOut()} />
-                </View> */}
+                    <View style={{ margin: 10 }}></View>
+                </View>
 
                 <View>
 

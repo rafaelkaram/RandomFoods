@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { ScrollView, Text, View, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Picker } from '@react-native-picker/picker';
@@ -23,6 +23,7 @@ const Recipe = ({ route }: { route: any }) => {
     const [receitas, setReceitas] = useState<IReceitaSimples[]>([])
     const [orderBy, setOrderBy] = useState<number>(0)
     const [load, setLoad] = useState(false)
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         if (route.params) {
@@ -63,7 +64,7 @@ const Recipe = ({ route }: { route: any }) => {
             })
         }
 
-    }, [])
+    }, [refreshing])
 
     useEffect(() => {
     }, [orderBy])
@@ -71,6 +72,11 @@ const Recipe = ({ route }: { route: any }) => {
     const handleNavigateToRecipe = (id: number) => {
         navigation.navigate(screens.receita, { id: id });
     }
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => setRefreshing(false), 2000);
+    }, []);
 
     if (!load) {
         return <Loading />
@@ -90,7 +96,7 @@ const Recipe = ({ route }: { route: any }) => {
                 newArrayPerfeitas.sort((a, b) => a.tempoPreparo - b.tempoPreparo)
                 break
             }
-            default:{
+            default: {
                 newArrayParciais.sort((a, b) => a.id - b.id)
                 newArrayPerfeitas.sort((a, b) => a.id - b.id)
             }
@@ -101,38 +107,45 @@ const Recipe = ({ route }: { route: any }) => {
 
     return (
         <SafeAreaView>
-            <ScrollView style={ globalStyles.background }>
-                { (matchesParciais.length > 0 || matchesPerfeitos.length > 0) && (
+            <ScrollView
+                style={globalStyles.background}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />}
+            >
+                {(matchesParciais.length > 0 || matchesPerfeitos.length > 0) && (
                     <Picker
-                        selectedValue={ orderBy }
+                        selectedValue={orderBy}
                         mode='dropdown'
-                        style={ styles.comboBox }
-                        onValueChange={ (itemPosition) =>{
+                        style={styles.comboBox}
+                        onValueChange={(itemPosition) => {
                             orderArray(itemPosition)
                             setOrderBy(itemPosition)
                         }}
                     >
-                        <Picker.Item label={ 'Ordenar Por' } value={0} />
-                        <Picker.Item key={1} label={ 'Maior Tempo' } value={1} />
-                        <Picker.Item key={2} label={ 'Menor Tempo' } value={2} />
+                        <Picker.Item label={'Ordenar Por'} value={0} />
+                        <Picker.Item key={1} label={'Maior Tempo'} value={1} />
+                        <Picker.Item key={2} label={'Menor Tempo'} value={2} />
                     </Picker>
                 )}
-                { receitas.length === 0 ? (
+                {receitas.length === 0 ? (
                     <View>
-                        { matchesPerfeitos.length > 0 &&
-                            <RecipeList titulo='Receitas Perfeitas para suas escolhas' receitas={ matchesPerfeitos } navegar={ (id: number) => handleNavigateToRecipe(id) } />
+                        {matchesPerfeitos.length > 0 &&
+                            <RecipeList titulo='Receitas Perfeitas para suas escolhas' receitas={matchesPerfeitos} navegar={(id: number) => handleNavigateToRecipe(id)} />
                         }
-                        { matchesParciais.length > 0 && matchesPerfeitos.length > 0 &&
-                            <RecipeList titulo='Outras Receitas com suas escolhas' receitas={ matchesParciais } navegar={ (id: number) => handleNavigateToRecipe(id) } />
+                        {matchesParciais.length > 0 && matchesPerfeitos.length > 0 &&
+                            <RecipeList titulo='Outras Receitas com suas escolhas' receitas={matchesParciais} navegar={(id: number) => handleNavigateToRecipe(id)} />
                         }
-                        { matchesParciais.length > 0 && matchesPerfeitos.length === 0 &&
-                            <RecipeList titulo='Não encontramos receitas perfeitas para suas escolhas, mas sugerimos essas' receitas={ matchesParciais } navegar={ (id: number) => handleNavigateToRecipe(id) } />
+                        {matchesParciais.length > 0 && matchesPerfeitos.length === 0 &&
+                            <RecipeList titulo='Não encontramos receitas perfeitas para suas escolhas, mas sugerimos essas' receitas={matchesParciais} navegar={(id: number) => handleNavigateToRecipe(id)} />
                         }
-                        { matchesParciais.length === 0 && matchesPerfeitos.length === 0 &&
-                            <Text style={[ globalStyles.subTitleText, globalStyles.recipeListSubTitle ]}>Não encontramos receitas com os ingredientes selecionados</Text>
+                        {matchesParciais.length === 0 && matchesPerfeitos.length === 0 &&
+                            <Text style={[globalStyles.subTitleText, globalStyles.recipeListSubTitle]}>Não encontramos receitas com os ingredientes selecionados</Text>
                         }
                     </View>
-                ) : <RecipeList titulo='Receitas' receitas={ receitas } navegar={ (id: number) => handleNavigateToRecipe(id) } />
+                ) : <RecipeList titulo='Receitas' receitas={receitas} navegar={(id: number) => handleNavigateToRecipe(id)} />
                 }
             </ScrollView>
         </SafeAreaView>
