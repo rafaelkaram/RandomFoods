@@ -7,6 +7,7 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerI
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AuthContext, { AuthProvider } from './contexts/auth';
+import AuthFilter, { AuthProviderFilter } from './contexts/authFilter';
 import { MaterialIcons } from '@expo/vector-icons'; 
 
 import Home from './screens/visualizacao/Home';
@@ -49,6 +50,7 @@ const RecipeStack = () => {
 
 const HomeStack = () => {
     return (
+        <AuthProviderFilter>
         <AppStack.Navigator headerMode={'none'}>
             <AppStack.Screen name={screens.home} component={Home} />
             <AppStack.Screen name={screens.filtro} component={Filtro} />
@@ -57,6 +59,7 @@ const HomeStack = () => {
             <AppStack.Screen name={screens.perfil} component={Perfil} />
             <AppStack.Screen name={screens.receita2} component={Receita2} />
         </AppStack.Navigator>
+        </AuthProviderFilter>
     )
 }
 

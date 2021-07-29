@@ -48,7 +48,7 @@ export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente>
 				const subQuery = qb.subQuery()
 				.select('r2.id')
 				.from(Receita, 'r2')
-				.where(' r2.tempoPreparo = :tempoPreparo ');
+				.where(' r2.tempoPreparo <= :tempoPreparo ');
 
 				const sub = subQuery.getQuery();
 

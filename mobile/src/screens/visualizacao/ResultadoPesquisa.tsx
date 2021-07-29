@@ -40,7 +40,7 @@ const Recipe = ({ route }: { route: any }) => {
                 gluten: gluten,
                 categorias: categorias,
                 tipos: tipos,
-                tempoDePreparo: tempoDePreparo,
+                tempoPreparo: tempoDePreparo[1],
             }
 
             api.get('/busca/combinacoes', { params }

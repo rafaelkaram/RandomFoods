@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Input } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,10 +17,13 @@ import screens from '../../constants/screens';
 import BasketCounter from '../../components/BasketCounter';
 import FilterModal from '../../components/FilterModal';
 import Loading from '../../components/Loading';
+import AuthFilter from '../../contexts/authFilter';
 
 
 const Filtro = () => {
     const navigation = useNavigation();
+
+    const { saveFilter, derivadoLeiteS, glutenS, categoriasS, tiposS } = useContext(AuthFilter)
 
     const [ingredientsCart, setIngredientsCart] = useState<ICart[]>([]);
     const [ingredientTypes, setIngredientTypes] = useState<IListaIngredientes[]>([]);
@@ -59,6 +62,12 @@ const Filtro = () => {
                 setTempoDePreparo(response.data)
                 setBaseTempoPreparo(response.data)
             });
+        
+        setDerivadoLeite(derivadoLeiteS)
+        setGluten(glutenS)
+        setCategoriasSelecionadas(categoriasS)
+        setTiposSelecionados(tiposS)
+
         setLoad(true);
     }, []);
 
@@ -77,7 +86,8 @@ const Filtro = () => {
 
 
     const handleNavigateToRecipe = () => {
-        if (ingredientsCart.length > 0)
+        if (ingredientsCart.length > 0){
+            saveFilter(derivadoLeite, gluten, categoriasSelecionadas, tiposSelecionados);
             navigation.navigate(screens.resultadoPesquisa,
                 {
                     ingredientes: selectedItems,
@@ -88,6 +98,7 @@ const Filtro = () => {
                     tempoDePreparo: tempoDePreparo,
                 }
             )
+        }
     }
 
     const handleSelectItem = (id: number, nome: string) => {

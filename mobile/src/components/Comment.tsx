@@ -24,9 +24,9 @@ const Comment = ({ comentario, lista, isLogado, setNew, setIdPai } : IComentario
                 </View>
 
                 <Text style={ globalStyles.regularText }>{ comentario.conteudo }</Text>
-                <View style={ styles.commentHour }>
+                {/* <View style={ styles.commentHour }>
                     <Text>{ moment(comentario.data).format('HH:mm') }</Text>
-                </View>
+                </View> */}
                 { isLogado &&
                     <TouchableOpacity style={ styles.commentButton }
                         onPress={() => {
