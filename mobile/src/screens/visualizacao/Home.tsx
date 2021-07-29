@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, ScrollView, RefreshControl, Platform, Image, StyleSheet, Text, Button, Dimensions } from 'react-native';
+import { View, ScrollView, RefreshControl, Platform, Image, Text, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
@@ -11,6 +11,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import globalStyles from '../../styles/Global';
 import colors from './../../constants/colors'
 import api from './../../services/api'
+import RecipeList from '../../components/RecipeList';
+import { WIDTH } from '../../constants/dimensions';
 
 
 Notifications.setNotificationHandler({
@@ -146,85 +148,15 @@ const Home = () => {
 
                     <Image
                         source={require('../../assets/random-foods-comprido.png')}
-                        style={{ width: Width - 20, height: 87 }}
+                        style={{ width: WIDTH - 20, height: 87 }}
                     />
 
-                    {receitas.map((receita, index) => {
+                    <RecipeList titulo='' receitas={ receitas } navegar={ (id: number) => handleNavigateToRecipe(id) } />
 
-                        return (
-                            <TouchableOpacity
-                                onPress={() => { handleNavigateToRecipe(receita.id) }}
-                                style={styles.main} key={receita.id}>
-
-                                <View>
-                                    <Image
-                                        source={{ uri: receita.foto }}
-                                        style={styles.image}
-                                    />
-                                </View>
-
-                                <View style={{ width: Width - 140 }}>
-
-                                    <View style={styles.textContainer}>
-                                        <Text>{receita.receita}</Text>
-                                        <Text style={[globalStyles.regularText, { fontSize: 10, margin: 5 }]} >@{receita.usuario.login}</Text>
-                                    </View>
-
-                                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                                        {
-                                            receita.categorias.length > 0 ?
-
-                                                receita.categorias.map((categoria, index) => {
-
-                                                    return (
-
-                                                        <Image
-                                                            key={index}
-                                                            // source={require('./../../assets/VEGANA.png')}
-                                                            source={{ uri: `http://192.168.100.5:3333/uploads/midia/categoria/${categoria}.png` }}
-                                                            style={{ width: 40, height: 40 }}
-                                                        />
-
-                                                    )
-                                                }) : null
-                                        }
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                        )
-                    })}
                 </View>
             </ScrollView>
         </SafeAreaView>
     )
 }
-
-const Height = Dimensions.get("window").height;
-const Width = Dimensions.get("window").width;
-
-
-const styles = StyleSheet.create({
-    main: {
-        flexDirection: 'row',
-        margin: 10,
-        padding: 10,
-        backgroundColor: 'white',
-        borderRadius: 20,
-    },
-
-    textContainer: {
-        padding: 5,
-        marginVertical: 10
-
-    },
-
-    image: {
-        width: 100,
-        height: 100,
-        borderRadius: 50
-    }
-
-})
-
 
 export default Home;
