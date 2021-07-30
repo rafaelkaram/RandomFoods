@@ -18,6 +18,8 @@ export class SeguidorRepository extends Repository<Seguidor> {
 
   async findByUsuario(id: Number): Promise<Seguidor[]> {
     const seguidor: Seguidor[] = await this.createQueryBuilder('s')
+	  .innerJoinAndSelect('s.seguidor', 'se')
+	  .select(['se.id', 'se.nome',  's.id'])
       .where('s.usuario = :id', { id })
 	  .getMany();
 
