@@ -27,5 +27,6 @@ export class Seguidor extends BaseEntity {
   seguidor: Usuario;
 
   @OneToOne(() => LogNotificacao)
+  @JoinColumn({ name: 'id' })
   log: LogNotificacao;
 }

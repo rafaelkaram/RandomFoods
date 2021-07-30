@@ -16,10 +16,10 @@ export class SeguidorRepository extends Repository<Seguidor> {
 		return seguidores;
 	}
 
-  async findByUsuario(id: Number): Promise<Seguidor> {
-    const seguidor: Seguidor = await this.createQueryBuilder('s.')
+  async findByUsuario(id: Number): Promise<Seguidor[]> {
+    const seguidor: Seguidor[] = await this.createQueryBuilder('s')
       .where('s.usuario = :id', { id })
-      .getOneOrFail();
+	  .getMany();
 
     return seguidor;
   }

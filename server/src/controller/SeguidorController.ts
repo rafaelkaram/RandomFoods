@@ -54,9 +54,9 @@ class SeguidorController {
     async findByUsuario(request: Request, response: Response) {
         const repository = getCustomRepository(SeguidorRepository);
 
-        const { idUsuario } = request.params;
+        const { id } = request.params;
 
-        const seguidores = await repository.findByUsuario(parseInt(idUsuario));
+        const seguidores = await repository.findByUsuario(parseInt(id));
 
         if (!seguidores) {
             syserror(400, response, { error: 'Seguidores não encontrados!' });
