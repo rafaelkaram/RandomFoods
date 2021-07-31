@@ -32,6 +32,7 @@ export default StyleSheet.create({
         borderRadius: 15,
         width: 30,
         height: 30,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignSelf: 'center'
     },
 });

@@ -8,7 +8,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AuthContext, { AuthProvider } from './contexts/auth';
 import AuthFilter, { AuthProviderFilter } from './contexts/authFilter';
-import { MaterialIcons } from '@expo/vector-icons'; 
+import { Ionicons } from '@expo/vector-icons';
 
 import Home from './screens/visualizacao/Home';
 import DadosGerais from './screens/cadastro/DadosGerais';
@@ -51,18 +51,30 @@ const RecipeStack = () => {
 const HomeStack = () => {
     return (
         <AuthProviderFilter>
-        <AppStack.Navigator headerMode={'none'}>
-            <AppStack.Screen name={screens.home} component={Home} />
-            <AppStack.Screen name={screens.filtro} component={Filtro} />
-            <AppStack.Screen name={screens.resultadoPesquisa} component={ResultadoPesquisa} />
-            <AppStack.Screen name={screens.receita} component={Receita} />
-            <AppStack.Screen name={screens.perfil} component={Perfil} />
-            <AppStack.Screen name={screens.receita2} component={Receita2} />
-        </AppStack.Navigator>
+            <AppStack.Navigator headerMode={'none'}>
+                <AppStack.Screen name={screens.home} component={Home} />
+                <AppStack.Screen name={screens.resultadoPesquisa} component={ResultadoPesquisa} />
+                <AppStack.Screen name={screens.receita} component={Receita} />
+                <AppStack.Screen name={screens.perfil} component={Perfil} />
+                <AppStack.Screen name={screens.receita2} component={Receita2} />
+            </AppStack.Navigator>
         </AuthProviderFilter>
     )
 }
 
+const PesquisaStack = () => {
+    return (
+        <AuthProviderFilter>
+            <AppStack.Navigator headerMode={'none'}>
+                <AppStack.Screen name={screens.filtro} component={Filtro} />
+                <AppStack.Screen name={screens.resultadoPesquisa} component={ResultadoPesquisa} />
+                <AppStack.Screen name={screens.receita} component={Receita} />
+                <AppStack.Screen name={screens.perfil} component={Perfil} />
+                <AppStack.Screen name={screens.receita2} component={Receita2} />
+            </AppStack.Navigator>
+        </AuthProviderFilter>
+    )
+}
 
 
 const UserDrawerStack = () => {
@@ -92,7 +104,11 @@ const UserStack = () => {
     } else {
         return (
             <Drawer.Navigator drawerPosition='right' drawerContent={props => <DrawerMenu {...props} />} >
-                <Drawer.Screen name='Perfil' component={UserDrawerStack} />
+                <Drawer.Screen name='Perfil' component={UserDrawerStack} options={{
+                    drawerIcon: () => <Ionicons name='person-outline' size={24} color='black' />,
+                    drawerLabel: () => <Text style={{ color: 'black', right: 20 }}>Perfil</Text>
+                }} />
+                <Drawer.Screen name='Nova Receita' component={RecipeStack} />
             </Drawer.Navigator>
 
         )
@@ -117,15 +133,15 @@ const Routes = () => {
                         />
                         <Tab.Screen
                             options={{
-                                tabBarLabel: 'Nova Receita',
+                                tabBarLabel: 'Pesquisar Receitas',
                                 tabBarIcon: () => (
                                     <Image
                                         style={{ width: 32, height: 25 }}
                                         source={require('../assets/chapeu.png')} />
                                 ),
                             }}
-                            name='NewRecipe'
-                            component={RecipeStack}
+                            name='Search'
+                            component={PesquisaStack}
                         />
                         <Tab.Screen
                             options={{

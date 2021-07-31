@@ -3,7 +3,7 @@ import { Alert, Image, Platform, ScrollView, Text, TouchableOpacity, View } from
 import { Input } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, DrawerActions } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import { AntDesign, Feather, Ionicons } from '@expo/vector-icons';
 
@@ -38,13 +38,13 @@ const DadosGerais = () => {
                 setTipos(response.data);
                 setLoad(true);
             });
-        ( async () => {
+        (async () => {
             if (Platform.OS !== 'web') {
                 const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
                 if (status !== 'granted')
                     Alert.alert('Permissão',
                         'É necessário dar permissão para poder adicionar fotos e vídeos',
-                        [ { text: 'OK', onPress: () => console.log('Os maluco concordou!') } ]
+                        [{ text: 'OK', onPress: () => console.log('Os maluco concordou!') }]
                     );
             }
         })();
@@ -58,7 +58,7 @@ const DadosGerais = () => {
         Alert.alert(
             "Nome da Receita",
             "Adicione um nome a sua receita",
-            [ { text: "OK", onPress: () => console.log("OK Pressed") } ]
+            [{ text: "OK", onPress: () => console.log("OK Pressed") }]
         );
     }
 
@@ -72,13 +72,17 @@ const DadosGerais = () => {
 
         if (!result.cancelled) {
             const midia: IMidiaPicker = result as IMidiaPicker;
-            setMidias([ ...midias, midia ]);
+            setMidias([...midias, midia]);
         }
     }
 
+    const toggleDrawer = () => {
+        navigation.dispatch(DrawerActions.openDrawer());
+    };
+
     const handleRemoveMidia = async (id: number) => {
         const midiaList = midias.filter((midia: IMidiaPicker, index: number) => index !== id);
-        setMidias([ ...midiaList ]);
+        setMidias([...midiaList]);
     }
 
     const handleNavigateToIngredients = async () => {
@@ -149,70 +153,74 @@ const DadosGerais = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
-                <View style={ styles.newRecipeImageContainer }>
+                <View style={styles.newRecipeImageContainer}>
                     <Image
-                        style={ globalStyles.recipeImage }
-                        source={ require('../../assets/nova-receita.png') }
+                        style={globalStyles.recipeImage}
+                        source={require('../../assets/nova-receita.png')}
                     />
-                    <Text style={[ globalStyles.subTitleText, globalStyles.subTitle ]}>Dados Gerais</Text>
+                    <Text style={[globalStyles.subTitleText, globalStyles.subTitle]}>Dados Gerais</Text>
+
                 </View>
+                <TouchableOpacity style={{ position: 'absolute', right: 10, top: 20 }} onPress={() => toggleDrawer()}>
+                    <Feather name="menu" size={30} color="black" />
+                </TouchableOpacity>
                 <View style={{ ...globalStyles.container, minHeight: 130, }}>
-                    <Text style={[ globalStyles.boldText, styles.textContainer ]}>Nome da receita</Text>
+                    <Text style={[globalStyles.boldText, styles.textContainer]}>Nome da receita</Text>
                     <Input
                         placeholder='Insira o nome da receita'
-                        onChangeText={ (value) => setNomeReceita(value) }
-                        value={ nomeReceita }
+                        onChangeText={(value) => setNomeReceita(value)}
+                        value={nomeReceita}
                         inputContainerStyle={{ borderBottomWidth: 0, marginTop: 10 }}
                     />
                 </View>
                 <View style={{ ...globalStyles.container, minHeight: 130, }} >
-                    <Text style={[ globalStyles.boldText, styles.textContainer ]}>Midias da receita</Text>
-                    <View style={ styles.midiaContainer }>
-                        { midias.map((midia, index) => {
+                    <Text style={[globalStyles.boldText, styles.textContainer]}>Midias da receita</Text>
+                    <View style={styles.midiaContainer}>
+                        {midias.map((midia, index) => {
                             return (
-                                <View style={ styles.midiaView } key={ index } >
+                                <View style={styles.midiaView} key={index} >
                                     <Image
                                         source={{ uri: midia.uri }}
-                                        style={ styles.midia }
+                                        style={styles.midia}
                                     />
-                                    <TouchableOpacity style={ styles.midiaRemove } onPress={ () => handleRemoveMidia(index) } >
-                                        <Feather name='minus' size={16} color={ colors.primary } />
+                                    <TouchableOpacity style={styles.midiaRemove} onPress={() => handleRemoveMidia(index)} >
+                                        <Feather name='minus' size={16} color={colors.primary} />
                                     </TouchableOpacity>
-                                    { midia.type === 'video' &&
-                                        <View style={ styles.playIcon } >
-                                            <Ionicons name='play' size={20} color={ colors.primary } />
+                                    {midia.type === 'video' &&
+                                        <View style={styles.playIcon} >
+                                            <Ionicons name='play' size={20} color={colors.primary} />
                                         </View>
                                     }
                                 </View>
                             );
                         })}
-                        <TouchableOpacity style={ styles.midiaInput } onPress={ handleAddMidia } >
-                            <Feather name='plus' size={24} color={ colors.primary } />
+                        <TouchableOpacity style={styles.midiaInput} onPress={handleAddMidia} >
+                            <Feather name='plus' size={24} color={colors.primary} />
                         </TouchableOpacity>
                     </View>
                 </View>
                 <View style={{ ...globalStyles.container, minHeight: 130, }}>
-                    <Text style={[ globalStyles.boldText, styles.textContainer ]}>Tipo de receita</Text>
+                    <Text style={[globalStyles.boldText, styles.textContainer]}>Tipo de receita</Text>
                     <Picker
-                        selectedValue={ tipoReceita }
-                        style={ styles.comboBox }
+                        selectedValue={tipoReceita}
+                        style={styles.comboBox}
                         mode='dropdown'
-                        onValueChange={ (itemValue) => setTipoReceita(itemValue) }
+                        onValueChange={(itemValue) => setTipoReceita(itemValue)}
                     >
-                        <Picker.Item label={ 'Selecione um tipo' } value={''} />
-                        { tipos.map(item => {
+                        <Picker.Item label={'Selecione um tipo'} value={''} />
+                        {tipos.map(item => {
                             return (
-                                <Picker.Item key={ item } label={ item } value={ item } />
+                                <Picker.Item key={item} label={item} value={item} />
 
                             )
                         })}
                     </Picker>
                 </View>
                 <View style={{ ...globalStyles.container, minHeight: 130, }}>
-                    <Text style={[ globalStyles.boldText, styles.textContainer ]}>Tempo de preparo (Minutos)</Text>
-                    <View style={ styles.dadosDisplay }>
+                    <Text style={[globalStyles.boldText, styles.textContainer]}>Tempo de preparo (Minutos)</Text>
+                    <View style={styles.dadosDisplay}>
                         <TouchableOpacity
-                            onPress={ () => handleInputValue(true, false) }>
+                            onPress={() => handleInputValue(true, false)}>
                             <AntDesign name="minuscircleo" size={24} color='black' />
 
                         </TouchableOpacity>
@@ -220,14 +228,14 @@ const DadosGerais = () => {
                             <Input
                                 placeholder="0"
                                 keyboardType="numeric"
-                                onChangeText={ (value) => inputValueValidator(value, true) }
-                                value={ minutos }
+                                onChangeText={(value) => inputValueValidator(value, true)}
+                                value={minutos}
                                 style={{ textAlign: 'center' }}
                                 inputContainerStyle={{ borderWidth: 1, marginTop: 20, marginLeft: 10, marginRight: 10, width: 50, borderRadius: 10 }}
                             />
                         </View>
                         <TouchableOpacity
-                            onPress={ () => handleInputValue(true, true) }
+                            onPress={() => handleInputValue(true, true)}
                         >
                             <AntDesign name="pluscircleo" size={24} color='black' />
                         </TouchableOpacity>
@@ -235,34 +243,34 @@ const DadosGerais = () => {
 
                 </View>
                 <View style={{ ...globalStyles.container, minHeight: 130, }}>
-                    <Text style={[ globalStyles.boldText, styles.textContainer ]}>Quantidade de porções</Text>
-                    <View style={ styles.dadosDisplay }>
+                    <Text style={[globalStyles.boldText, styles.textContainer]}>Quantidade de porções</Text>
+                    <View style={styles.dadosDisplay}>
                         <TouchableOpacity
-                            onPress={ () => handleInputValue(false, false) }>
+                            onPress={() => handleInputValue(false, false)}>
                             <AntDesign name="minuscircleo" size={24} color='black' />
 
                         </TouchableOpacity>
                         <View>
                             <Input
                                 placeholder="0"
-                                onChangeText={ (value) => inputValueValidator(value, false) }
+                                onChangeText={(value) => inputValueValidator(value, false)}
                                 keyboardType="numeric"
-                                value={ porcoes }
+                                value={porcoes}
                                 style={{ textAlign: 'center' }}
                                 inputContainerStyle={{ borderWidth: 1, marginTop: 20, marginLeft: 10, marginRight: 10, width: 50, borderRadius: 10 }}
                             />
                         </View>
                         <TouchableOpacity
-                            onPress={ () => handleInputValue(false, true) }
-                            onLongPress={ () => handleInputValue(false, true) }>
+                            onPress={() => handleInputValue(false, true)}
+                            onLongPress={() => handleInputValue(false, true)}>
                             <AntDesign name="pluscircleo" size={24} color='black' />
                         </TouchableOpacity>
                     </View>
                 </View>
             </ScrollView>
             <TouchableOpacity
-                style={ globalStyles.arrow }
-                onPress={ handleNavigateToIngredients }
+                style={globalStyles.arrow}
+                onPress={handleNavigateToIngredients}
             >
                 <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
             </TouchableOpacity>

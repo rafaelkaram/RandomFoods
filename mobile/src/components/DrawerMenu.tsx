@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import { StyleSheet, View, ScrollView, SafeAreaView, TouchableOpacity ,Image, Text } from 'react-native';
 import { createDrawerNavigator, DrawerContentScrollView ,DrawerItemList,DrawerItem} from '@react-navigation/drawer';
 import AuthContext from '../contexts/auth'
-import { MaterialIcons } from '@expo/vector-icons'; 
+import { MaterialIcons, Ionicons } from '@expo/vector-icons'; 
 
 
 
@@ -14,14 +14,14 @@ function DrawerMenu(props: any) {
     }
     return (
         <DrawerContentScrollView {...props}>
+           
             <DrawerItemList {...props} />
             <DrawerItem label={() => 
-            <View>
+            <View style={{flexDirection: 'row'}}>
                 <MaterialIcons name="logout" size={24} color="black" />
-                <Text style={{ color: 'white' }}>Logout</Text>
+                <Text style={{marginLeft: 10}}>Logout</Text>
             </View>
         }
-                style={{ backgroundColor: 'red' }}
                 onPress={() => {
                     handleSignOut()
                     alert('Você foi desconectado')

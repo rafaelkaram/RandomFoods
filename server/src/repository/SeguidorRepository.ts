@@ -21,7 +21,7 @@ export class SeguidorRepository extends Repository<Seguidor> {
 	  .innerJoinAndSelect('s.seguidor', 'se')
 	  .select(['se.id', 'se.nome',  's.id'])
       .where('s.usuario = :id', { id })
-	  .getMany();
+      .getMany();
 
     return seguidor;
   }

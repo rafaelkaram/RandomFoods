@@ -4,7 +4,8 @@ import colors from '../../constants/colors';
 
 export default StyleSheet.create({
     newRecipeImageContainer: {
-        alignItems: 'center'
+        marginHorizontal: 10,
+        alignSelf: 'flex-start'
     },
 
     dadosDisplay: {

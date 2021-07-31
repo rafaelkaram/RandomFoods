@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { ScrollView, RefreshControl } from 'react-native';
+import { Alert, ScrollView, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import api from '../../services/api';
 
-import { IPainelTipoReceita, IReceitaSimples, IUsuarioSimples } from '../../constants/interfaces';
+import { ISeguidoresSimples, IReceitaSimples, IUsuarioSimples } from '../../constants/interfaces';
 import screens from '../../constants/screens';
 import colors from '../../constants/colors';
 
@@ -16,12 +16,12 @@ import UserHeaderFollow from '../../components/UserHeaderFollow';
 
 const Perfil = ({ route }: { route: any }) => {
     const navigation = useNavigation();
-    const [recipeType, setRecipeType] = useState<IPainelTipoReceita[]>([]);
     const [recipesUser, setRecipesUser] = useState<IReceitaSimples[]>([]);
     const [usuario, setUsuario] = useState<IUsuarioSimples>();
     const [title, setTitle] = useState('');
     const [load, setLoad] = useState<boolean>(false);
-    const [seguindo, setSeguindo] = useState<boolean>(true);
+    const [seguindo, setSeguindo] = useState<boolean>(false);
+    const [seguidores, setSeguidores] = useState<ISeguidoresSimples[]>([]);
     const [refreshing, setRefreshing] = useState(false);
 
     const idUser = route.params.id;
@@ -35,9 +35,17 @@ const Perfil = ({ route }: { route: any }) => {
     useEffect(() => {
         api.get(`/busca/usuario/${idUser}`)
             .then(response => {
-                console.log(response.data)
+                // console.log(response.data)
                 setUsuario(response.data)
             });
+
+        api.get(`/busca/seguidores/${idUser}`)
+            .then(response => {
+                // console.log(response.data)
+                setSeguidores(response.data)
+            });
+        console.log(seguidores)
+
     }, [refreshing]);
 
     useEffect(() => {
@@ -45,19 +53,51 @@ const Perfil = ({ route }: { route: any }) => {
             api.get(`/busca/receita-usuario/${usuario?.id}`)
                 .then(response => { setRecipesUser(response.data.receitas) });
 
-            api.get(`/dashboard/tipos-receita/${usuario?.id}`)
-                .then(response => { setRecipeType(response.data) });
-
             setTitle(`Receitas de ${usuario?.nome}`);
         }
         setLoad(true);
     }, [usuario]);
 
-    const pieTypeData = recipeType.map((item) => {
-        return { x: item.tipo, y: Number(item.count) }
-    });
+    useEffect(() => {
+        const seguidor: ISeguidoresSimples[] = seguidores.filter(seguidor2 => (seguidor2.seguidor.id === user?.id));
+        if (seguidor && seguidor.length > 0)
+            setSeguindo(true);
+    }, [seguidores]);
 
-    const totalRecipes: number = pieTypeData.reduce(function (a, b) { return a + b.y }, 0)
+    const seguirUsuario = () => {
+        if (!seguindo) {
+            api.post('cadastro/seguidor', { idSeguidor: user?.id, idUsuario: usuario?.id })
+                .then(response => {
+                    setSeguindo(true);
+                }).catch(error => {
+                    Alert.alert(
+                        'Falha no resgistro de seguidor',
+                        '\nFalha no resgistro de seguidor',
+                        [
+                            { text: 'OK' }
+                        ]
+                    );
+                    setSeguindo(false);
+                }
+                );
+        } else {
+            const seguidor: ISeguidoresSimples[] = seguidores.filter(seguidor2 => (seguidor2.seguidor.id === user?.id));
+            api.post(`remove/seguidor/${seguidor[0].id}`)
+                .then(response => {
+                    setSeguindo(false);
+                }).catch(error => {
+                    Alert.alert(
+                        'Falha na remoção de seguidor',
+                        '\nFalha na remoção de seguidor',
+                        [
+                            { text: 'OK' }
+                        ]
+                    );
+                    setSeguindo(true);
+                }
+                );
+        }
+    }
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -80,15 +120,16 @@ const Perfil = ({ route }: { route: any }) => {
                 {usuario?.id != user?.id ?
                     <UserHeaderFollow
                         usuario={usuario}
-                        totalReceitas={totalRecipes}
+                        totalReceitas={recipesUser.length}
                         isPainel={false}
+                        seguidores={seguidores.length}
                         seguidor={seguindo}
-                        setSeguindo={setSeguindo}
+                        seguirUsuario={seguirUsuario}
                     />
                     :
                     <UserHeader
                         usuario={usuario}
-                        totalReceitas={totalRecipes}
+                        totalReceitas={recipesUser.length}
                         isPainel={false}
                     />
                 }

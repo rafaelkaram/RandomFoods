@@ -138,33 +138,32 @@ const Home = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            <Image
+                source={require('../../assets/random-foods-comprido.png')}
+                style={{ width: WIDTH - 20, height: 85, marginBottom: 20 }}
+            />
             <ScrollView
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
                         onRefresh={onRefresh}
                     />}>
-                <Button
+                {/* <Button
                     title="Pesquisar Receitas"
                     onPress={handleNavigateToSearchRecipe}
-                />
+                /> */}
 
-                <View style={{ marginTop: 100 }}>
+                {/* <View style={{ marginTop: 100 }}>
                     <Text>Your expo push token: {expoPushToken}</Text>
                     <Button title="Notificação Local" onPress={async () => { await schedulePushNotification() }} />
                     <View style={{ margin: 10 }}></View>
                     <Button title="Push Notification" onPress={() => sendPushNotification()} />
                     <View style={{ margin: 10 }}></View>
-                </View>
+                </View> */}
 
                 <View>
 
-                    <Image
-                        source={require('../../assets/random-foods-comprido.png')}
-                        style={{ width: WIDTH - 20, height: 87 }}
-                    />
-
-                    <RecipeList titulo='' receitas={ receitas } navegar={ (id: number) => handleNavigateToRecipe(id) } />
+                    <RecipeList titulo='' receitas={receitas} navegar={(id: number) => handleNavigateToRecipe(id)} />
 
                 </View>
             </ScrollView>

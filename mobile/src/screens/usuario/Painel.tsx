@@ -167,8 +167,6 @@ const Painel = () => {
                         </DataTable>
                     </View>
                 </View>
-                <View style={{ margin: 10 }}></View>
-                <Button title='Sign Out' onPress={() => handleSignOut()} />
             </ScrollView>
         </SafeAreaView>
     )

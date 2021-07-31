@@ -56,13 +56,24 @@ export default StyleSheet.create({
         alignItems: 'center',
         marginHorizontal: 15,
         backgroundColor: 'white',
-        borderRadius: 20
+        borderRadius: 20,
+        justifyContent: 'space-between'
+    },
+
+    totalAndNewRecipes: {
+        alignItems: 'center',
+        marginHorizontal: 15,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        width:(WIDTH/2)-30,
+        justifyContent: 'space-between'
     },
 
     totalRecipesTitle: {
         fontFamily: 'Oswald_300Light',
         fontSize: 20,
         margin: 5,
+        textAlign: 'center',
     },
 
     totalRecipesText: {

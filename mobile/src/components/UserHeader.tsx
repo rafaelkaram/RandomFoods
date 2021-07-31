@@ -2,13 +2,12 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 import { Avatar } from 'react-native-elements';
-import { Feather } from '@expo/vector-icons';
+import { Feather, Ionicons } from '@expo/vector-icons';
 
 import styles from '../styles/components/UserHeader';
 import globalStyles from '../styles/Global';
 import screens from '../constants/screens';
 import { IUsuarioSimples } from '../constants/interfaces';
-import { WIDTH } from '../constants/dimensions';
 
 const UserHeader = ({
     usuario,
@@ -22,12 +21,15 @@ const UserHeader = ({
     const navigation = useNavigation();
 
     const toggleDrawer = () => {
-        //Props to open/close the drawer
         navigation.dispatch(DrawerActions.openDrawer());
     };
 
     const handleNavigateToPerfil = (id: number) => {
         navigation.navigate(screens.perfil, { id: id });
+    }
+
+    const handleNavigateToNovaReceita = () => {
+        navigation.dispatch(DrawerActions.jumpTo('Nova Receita'));
     }
 
     return (
@@ -66,17 +68,27 @@ const UserHeader = ({
                     </View>
                 </View>
             </View>
-            <TouchableOpacity style={{ position: 'absolute', right: 10, top: 20}} onPress={() => toggleDrawer()}>
-                    <Feather name="menu" size={30} color="black" />
-                </TouchableOpacity>
+            <TouchableOpacity style={{ position: 'absolute', right: 10, top: 20 }} onPress={() => toggleDrawer()}>
+                <Feather name="menu" size={30} color="black" />
+            </TouchableOpacity>
             {isPainel ?
-                <TouchableOpacity
-                    style={styles.totalRecipes}
-                    onPress={() => { handleNavigateToPerfil(usuario.id) }}
-                >
-                    <Text style={styles.totalRecipesTitle}>Receitas Cadastradas:</Text>
-                    <Text style={styles.totalRecipesText}>{totalReceitas}</Text>
-                </TouchableOpacity>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <TouchableOpacity
+                        style={styles.totalAndNewRecipes}
+                        onPress={() => { handleNavigateToPerfil(usuario.id) }}
+                    >
+                        <Text style={styles.totalRecipesTitle}>Receitas Cadastradas:</Text>
+                        <Text style={styles.totalRecipesText}>{totalReceitas}</Text>
+
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => handleNavigateToNovaReceita()}
+                        style={styles.totalAndNewRecipes}>
+                        <Text style={styles.totalRecipesTitle}>Criar Nova Receita</Text>
+                        <Ionicons name="add-circle-outline" size={35} color="black" />
+                    </TouchableOpacity>
+
+                </View>
                 :
                 <View style={styles.totalRecipes}>
                     <Text style={styles.totalRecipesTitle}>Receitas Cadastradas:</Text>

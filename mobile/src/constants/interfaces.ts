@@ -101,7 +101,7 @@ interface IUsuarioSimples {
   login: string,
   nome: string,
   iniciais: string,
-  perfil:string,
+  perfil: string,
   path: string,
   ativo: boolean
 }
@@ -164,6 +164,14 @@ interface IPassoReceita2 {
   edit: boolean
 }
 
+interface ISeguidoresSimples {
+  id: number,
+  seguidor: {
+    id: number,
+    nome: string
+  }
+}
+
 export {
   IComentario,
   IComentarioSend,
@@ -184,5 +192,6 @@ export {
   IPainelTipoReceita,
   IPainelVotos,
   IPassoReceita,
-  IPassoReceita2
+  IPassoReceita2,
+  ISeguidoresSimples
 }

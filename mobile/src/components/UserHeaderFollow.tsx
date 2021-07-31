@@ -12,14 +12,16 @@ const UserHeader = ({
     usuario,
     totalReceitas,
     isPainel,
+    seguidores,
     seguidor,
-    setSeguindo
+    seguirUsuario
 }: {
     usuario: IUsuarioSimples,
     totalReceitas: number,
     isPainel: boolean,
+    seguidores: number,
     seguidor: boolean,
-    setSeguindo: Function
+    seguirUsuario: Function
 }) => {
     const navigation = useNavigation();
 
@@ -52,12 +54,12 @@ const UserHeader = ({
                         />}
                     {
                         seguidor ?
-                            <TouchableOpacity onPress={() => setSeguindo(!seguidor)} style={[{ alignItems: 'center' }, styles.filterBoxSelected]}>
+                            <TouchableOpacity onPress={() => seguirUsuario()} style={[{ alignItems: 'center' }, styles.filterBoxSelected]}>
                                 <Text style={[{ marginRight: 5 }, globalStyles.regularText, styles.following]}>Seguindo</Text>
                                 <SimpleLineIcons name="user-following" size={18} color={'white'} />
                             </TouchableOpacity>
                             :
-                            <TouchableOpacity onPress={() => setSeguindo(!seguidor)} style={[styles.filterBox]}>
+                            <TouchableOpacity onPress={() => seguirUsuario()} style={[styles.filterBox]}>
                                 <Text style={[{ marginRight: 5 }, globalStyles.regularText]}>Seguir</Text>
                                 <SimpleLineIcons name="user-follow" size={18} color={'black'} />
                             </TouchableOpacity>
@@ -69,7 +71,7 @@ const UserHeader = ({
                     <Text style={[globalStyles.regularText, styles.login]}>@{usuario.login}</Text>
                     <View style={styles.segContainer}>
                         <View style={styles.seg}>
-                            <Text style={[globalStyles.regularText, styles.numberSeg]}>0</Text>
+                            <Text style={[globalStyles.regularText, styles.numberSeg]}>{seguidores}</Text>
                             <Text style={[globalStyles.boldText, styles.textSeg]}>Seguidores</Text>
                         </View>
                         <View style={styles.seg}>
