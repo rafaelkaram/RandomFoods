@@ -9,7 +9,7 @@ import AuthContext from './../../contexts/auth';
 
 import api from '../../services/api';
 
-import { IPainelTipoReceita, IPainelCategorias, IPainelVotos } from '../../constants/interfaces';
+import { IPainelTipoReceita, IPainelCategorias, IPainelVotos,ISeguidoresSimples } from '../../constants/interfaces';
 import { HEIGHT, WIDTH } from '../../constants/dimensions';
 import dashboardColors from '../../constants/dashboardColors';
 import colors from '../../constants/colors';
@@ -26,14 +26,11 @@ const Painel = () => {
     const [recipeType, setRecipeType] = useState<IPainelTipoReceita[]>([]);
     const [recipeCategory, setRecipeCategory] = useState<IPainelCategorias[]>([]);
     const [topVotedRecipe, setTopVotedRecipe] = useState<IPainelVotos[]>([]);
+    const [seguidores, setSeguidores] = useState<ISeguidoresSimples[]>([]);
     const [load, setLoad] = useState<boolean>(false);
     const [refreshing, setRefreshing] = useState(false);
 
-    const { user, signOut } = useContext(AuthContext);
-
-    function handleSignOut() {
-        signOut();
-    }
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         if (user) {
@@ -43,11 +40,19 @@ const Painel = () => {
                 .then(response => { setRecipeCategory(response.data); });
             api.get(`/dashboard/avaliacoes/${user.id}`)
                 .then(response => { setTopVotedRecipe(response.data); });
+
+            api.get(`/busca/seguidores/${user.id}`)
+                .then(response => {
+                    // console.log(response.data)
+                    setSeguidores(response.data)
+                });
         } else {
             navigation.navigate(screens.login);
         }
         setLoad(true);
     }, [user, refreshing]);
+
+
 
     const pieTypeData = recipeType.map((item) => {
         return { x: item.tipo, y: Number(item.count) }
@@ -93,6 +98,7 @@ const Painel = () => {
             >
                 <UserHeader
                     usuario={user}
+                    seguidores={seguidores.length}
                     totalReceitas={totalRecipes}
                     isPainel={true}
                 />

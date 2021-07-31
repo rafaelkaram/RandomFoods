@@ -31,6 +31,12 @@ export default StyleSheet.create({
         fontSize: 14,
     },
 
+    bigLogin: {
+        marginLeft: 20,
+        marginTop: 5,
+        fontSize: 12,
+    },
+
     segContainer: {
         flexDirection:'row',
         marginLeft:10,
@@ -39,6 +45,11 @@ export default StyleSheet.create({
     textSeg: {
         marginLeft: 20,
         fontSize: 14,
+    },
+
+    bigTextSeg: {
+        marginLeft: 20,
+        fontSize: 12,
     },
 
     seg:{
@@ -50,6 +61,13 @@ export default StyleSheet.create({
         marginTop: 10,
         marginBottom:3,
         fontSize: 14,
+    },
+
+    bigNumberSeg:{
+        marginLeft: 20,
+        marginTop: 10,
+        marginBottom:3,
+        fontSize: 12,
     },
 
     totalRecipes: {
@@ -66,7 +84,7 @@ export default StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 20,
         width:(WIDTH/2)-30,
-        justifyContent: 'space-between'
+        justifyContent: 'center'
     },
 
     totalRecipesTitle: {

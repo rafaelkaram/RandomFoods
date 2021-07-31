@@ -44,9 +44,8 @@ const Perfil = ({ route }: { route: any }) => {
                 // console.log(response.data)
                 setSeguidores(response.data)
             });
-        console.log(seguidores)
 
-    }, [refreshing]);
+    }, [refreshing, seguindo]);
 
     useEffect(() => {
         if (user) {
@@ -129,6 +128,7 @@ const Perfil = ({ route }: { route: any }) => {
                     :
                     <UserHeader
                         usuario={usuario}
+                        seguidores={seguidores.length}
                         totalReceitas={recipesUser.length}
                         isPainel={false}
                     />
@@ -138,7 +138,6 @@ const Perfil = ({ route }: { route: any }) => {
                         <RecipeList titulo={title} receitas={recipesUser} navegar={(id: number) => handleNavigateToRecipe(id)} />
                     }
                 </ScrollView>
-                {/* <Button title="Sign Out" onPress={() => handleSignOut()} /> */}
             </ScrollView>
         </SafeAreaView>
     )

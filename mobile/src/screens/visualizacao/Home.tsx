@@ -140,7 +140,7 @@ const Home = () => {
         <SafeAreaView style={{ flex: 1 }}>
             <Image
                 source={require('../../assets/random-foods-comprido.png')}
-                style={{ width: WIDTH - 20, height: 85, marginBottom: 20 }}
+                style={{ width: 385, height: 90, paddingHorizontal: 10, marginBottom: 20, alignSelf: 'center' }}
             />
             <ScrollView
                 refreshControl={

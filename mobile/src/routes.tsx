@@ -108,7 +108,10 @@ const UserStack = () => {
                     drawerIcon: () => <Ionicons name='person-outline' size={24} color='black' />,
                     drawerLabel: () => <Text style={{ color: 'black', right: 20 }}>Perfil</Text>
                 }} />
-                <Drawer.Screen name='Nova Receita' component={RecipeStack} />
+                <Drawer.Screen name='Nova Receita' component={RecipeStack} options={{
+                    drawerIcon: () => <Image style={{width: 26, height: 26, right: 1}} source={require('./assets/new-recipe-icon.png')} />,
+                    drawerLabel: () => <Text style={{ color: 'black', right: 20 }}>Nova Receita</Text>
+                }} />
             </Drawer.Navigator>
 
         )

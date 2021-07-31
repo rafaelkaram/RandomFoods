@@ -71,7 +71,7 @@ const UserHeader = ({
                     <Text style={[globalStyles.regularText, styles.login]}>@{usuario.login}</Text>
                     <View style={styles.segContainer}>
                         <View style={styles.seg}>
-                            <Text style={[globalStyles.regularText, styles.numberSeg]}>{seguidores}</Text>
+                            <Text style={[globalStyles.regularText, styles.numberSeg]}>{seguidores ? seguidores : 0}</Text>
                             <Text style={[globalStyles.boldText, styles.textSeg]}>Seguidores</Text>
                         </View>
                         <View style={styles.seg}>

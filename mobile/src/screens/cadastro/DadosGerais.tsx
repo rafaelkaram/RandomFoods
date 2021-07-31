@@ -158,7 +158,7 @@ const DadosGerais = () => {
                         style={globalStyles.recipeImage}
                         source={require('../../assets/nova-receita.png')}
                     />
-                    <Text style={[globalStyles.subTitleText, globalStyles.subTitle]}>Dados Gerais</Text>
+                    <Text style={[globalStyles.subTitleText, globalStyles.subTitle, {marginTop: 10}]}>Dados Gerais</Text>
 
                 </View>
                 <TouchableOpacity style={{ position: 'absolute', right: 10, top: 20 }} onPress={() => toggleDrawer()}>

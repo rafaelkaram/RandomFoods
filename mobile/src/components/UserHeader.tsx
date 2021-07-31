@@ -11,13 +11,16 @@ import { IUsuarioSimples } from '../constants/interfaces';
 
 const UserHeader = ({
     usuario,
+    seguidores,
     totalReceitas,
     isPainel
 }: {
     usuario: IUsuarioSimples,
+    seguidores: number,
     totalReceitas: number,
     isPainel: boolean
 }) => {
+    
     const navigation = useNavigation();
 
     const toggleDrawer = () => {
@@ -55,15 +58,15 @@ const UserHeader = ({
 
                 <View style={usuario.nome.length > 10 ? styles.nameContainer : null}>
                     <Text style={[globalStyles.boldText, styles.name]}>{usuario.nome}</Text>
-                    <Text style={[globalStyles.regularText, styles.login]}>@{usuario.login}</Text>
+                    <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigLogin] : [globalStyles.regularText, styles.login] }>@{usuario.login}</Text>
                     <View style={styles.segContainer}>
                         <View style={styles.seg}>
-                            <Text style={[globalStyles.regularText, styles.numberSeg]}>0</Text>
-                            <Text style={[globalStyles.boldText, styles.textSeg]}>Seguidores</Text>
+                            <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigNumberSeg] : [globalStyles.regularText, styles.numberSeg]}>{seguidores ? seguidores : 0}</Text>
+                            <Text style={usuario.nome.length > 10 ? [globalStyles.boldText, styles.bigTextSeg] : [globalStyles.boldText, styles.textSeg]}>Seguidores</Text>
                         </View>
                         <View style={styles.seg}>
-                            <Text style={[globalStyles.regularText, styles.numberSeg]}>0</Text>
-                            <Text style={[globalStyles.boldText, styles.textSeg]}>Seguindo</Text>
+                            <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigNumberSeg] : [globalStyles.regularText, styles.numberSeg]}>0</Text>
+                            <Text style={usuario.nome.length > 10 ? [globalStyles.boldText, styles.bigTextSeg] : [globalStyles.boldText, styles.textSeg]}>Seguindo</Text>
                         </View>
                     </View>
                 </View>
