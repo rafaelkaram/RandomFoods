@@ -23,7 +23,7 @@ import AuthFilter from '../../contexts/authFilter';
 const Filtro = () => {
     const navigation = useNavigation();
 
-    const { saveFilter, derivadoLeiteS, glutenS, categoriasS, tiposS } = useContext(AuthFilter)
+    const { saveFilter, derivadoLeiteContext, glutenContext, categoriasContext, tiposContext } = useContext(AuthFilter)
 
     const [ingredientsCart, setIngredientsCart] = useState<ICart[]>([]);
     const [ingredientTypes, setIngredientTypes] = useState<IListaIngredientes[]>([]);
@@ -63,10 +63,10 @@ const Filtro = () => {
                 setBaseTempoPreparo(response.data)
             });
         
-        setDerivadoLeite(derivadoLeiteS)
-        setGluten(glutenS)
-        setCategoriasSelecionadas(categoriasS)
-        setTiposSelecionados(tiposS)
+        setDerivadoLeite(derivadoLeiteContext)
+        setGluten(glutenContext)
+        setCategoriasSelecionadas(categoriasContext)
+        setTiposSelecionados(tiposContext)
 
         setLoad(true);
     }, []);

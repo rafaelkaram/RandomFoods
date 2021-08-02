@@ -7,7 +7,8 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerI
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AuthContext, { AuthProvider } from './contexts/auth';
-import AuthFilter, { AuthProviderFilter } from './contexts/authFilter';
+import { AuthProviderFilter } from './contexts/authFilter';
+import { AuthProviderReceita } from './contexts/authReceita';
 import { Ionicons } from '@expo/vector-icons';
 
 import Home from './screens/visualizacao/Home';
@@ -50,29 +51,25 @@ const RecipeStack = () => {
 
 const HomeStack = () => {
     return (
-        <AuthProviderFilter>
-            <AppStack.Navigator headerMode={'none'}>
-                <AppStack.Screen name={screens.home} component={Home} />
-                <AppStack.Screen name={screens.resultadoPesquisa} component={ResultadoPesquisa} />
-                <AppStack.Screen name={screens.receita} component={Receita} />
-                <AppStack.Screen name={screens.perfil} component={Perfil} />
-                <AppStack.Screen name={screens.receita2} component={Receita2} />
-            </AppStack.Navigator>
-        </AuthProviderFilter>
+        <AppStack.Navigator headerMode={'none'}>
+            <AppStack.Screen name={screens.home} component={Home} />
+            <AppStack.Screen name={screens.resultadoPesquisa} component={ResultadoPesquisa} />
+            <AppStack.Screen name={screens.receita} component={Receita} />
+            <AppStack.Screen name={screens.perfil} component={Perfil} />
+            <AppStack.Screen name={screens.receita2} component={Receita2} />
+        </AppStack.Navigator>
     )
 }
 
 const PesquisaStack = () => {
     return (
-        <AuthProviderFilter>
-            <AppStack.Navigator headerMode={'none'}>
-                <AppStack.Screen name={screens.filtro} component={Filtro} />
-                <AppStack.Screen name={screens.resultadoPesquisa} component={ResultadoPesquisa} />
-                <AppStack.Screen name={screens.receita} component={Receita} />
-                <AppStack.Screen name={screens.perfil} component={Perfil} />
-                <AppStack.Screen name={screens.receita2} component={Receita2} />
-            </AppStack.Navigator>
-        </AuthProviderFilter>
+        <AppStack.Navigator headerMode={'none'}>
+            <AppStack.Screen name={screens.filtro} component={Filtro} />
+            <AppStack.Screen name={screens.resultadoPesquisa} component={ResultadoPesquisa} />
+            <AppStack.Screen name={screens.receita} component={Receita} />
+            <AppStack.Screen name={screens.perfil} component={Perfil} />
+            <AppStack.Screen name={screens.receita2} component={Receita2} />
+        </AppStack.Navigator>
     )
 }
 
@@ -103,16 +100,18 @@ const UserStack = () => {
         )
     } else {
         return (
-            <Drawer.Navigator drawerPosition='right' drawerContent={props => <DrawerMenu {...props} />} >
-                <Drawer.Screen name='Perfil' component={UserDrawerStack} options={{
-                    drawerIcon: () => <Ionicons name='person-outline' size={24} color='black' />,
-                    drawerLabel: () => <Text style={{ color: 'black', right: 20 }}>Perfil</Text>
-                }} />
-                <Drawer.Screen name='Nova Receita' component={RecipeStack} options={{
-                    drawerIcon: () => <Image style={{width: 26, height: 26, right: 1}} source={require('./assets/new-recipe-icon.png')} />,
-                    drawerLabel: () => <Text style={{ color: 'black', right: 20 }}>Nova Receita</Text>
-                }} />
-            </Drawer.Navigator>
+            <AuthProviderReceita>
+                <Drawer.Navigator drawerPosition='right' drawerContent={props => <DrawerMenu {...props} />} >
+                    <Drawer.Screen name='Perfil' component={UserDrawerStack} options={{
+                        drawerIcon: () => <Ionicons name='person-outline' size={24} color='black' />,
+                        drawerLabel: () => <Text style={{ color: 'black', right: 20 }}>Perfil</Text>
+                    }} />
+                    <Drawer.Screen name='Nova Receita' component={RecipeStack} options={{
+                        drawerIcon: () => <Image style={{ width: 26, height: 26, right: 1 }} source={require('./assets/new-recipe-icon.png')} />,
+                        drawerLabel: () => <Text style={{ color: 'black', right: 20 }}>Nova Receita</Text>
+                    }} />
+                </Drawer.Navigator>
+            </AuthProviderReceita>
 
         )
     }
@@ -123,40 +122,42 @@ const Routes = () => {
         <>
             <NavigationContainer >
                 <AuthProvider>
-                    <Tab.Navigator>
-                        <Tab.Screen
-                            options={{
-                                tabBarLabel: 'Home',
-                                tabBarIcon: ({ color, size }) => (
-                                    <MaterialCommunityIcons name='home' color={color} size={size} />
-                                ),
-                            }}
-                            name='HomeStack'
-                            component={HomeStack}
-                        />
-                        <Tab.Screen
-                            options={{
-                                tabBarLabel: 'Pesquisar Receitas',
-                                tabBarIcon: () => (
-                                    <Image
-                                        style={{ width: 32, height: 25 }}
-                                        source={require('../assets/chapeu.png')} />
-                                ),
-                            }}
-                            name='Search'
-                            component={PesquisaStack}
-                        />
-                        <Tab.Screen
-                            options={{
-                                tabBarLabel: 'Perfil',
-                                tabBarIcon: ({ color, size }) => (
-                                    <AntDesign name='user' color={color} size={size} />
-                                ),
-                            }}
-                            name='User'
-                            component={UserStack}
-                        />
-                    </Tab.Navigator>
+                    <AuthProviderFilter>
+                        <Tab.Navigator>
+                            <Tab.Screen
+                                options={{
+                                    tabBarLabel: 'Home',
+                                    tabBarIcon: ({ color, size }) => (
+                                        <MaterialCommunityIcons name='home' color={color} size={size} />
+                                    ),
+                                }}
+                                name='HomeStack'
+                                component={HomeStack}
+                            />
+                            <Tab.Screen
+                                options={{
+                                    tabBarLabel: 'Pesquisar Receitas',
+                                    tabBarIcon: () => (
+                                        <Image
+                                            style={{ width: 32, height: 25 }}
+                                            source={require('../assets/chapeu.png')} />
+                                    ),
+                                }}
+                                name='Search'
+                                component={PesquisaStack}
+                            />
+                            <Tab.Screen
+                                options={{
+                                    tabBarLabel: 'Perfil',
+                                    tabBarIcon: ({ color, size }) => (
+                                        <AntDesign name='user' color={color} size={size} />
+                                    ),
+                                }}
+                                name='User'
+                                component={UserStack}
+                            />
+                        </Tab.Navigator>
+                    </AuthProviderFilter>
                 </AuthProvider>
             </NavigationContainer>
         </>

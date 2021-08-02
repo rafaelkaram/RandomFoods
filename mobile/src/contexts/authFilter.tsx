@@ -2,10 +2,10 @@ import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 
 interface AuthContextData {
-    derivadoLeiteS: boolean
-    glutenS: boolean
-    categoriasS: string[]
-    tiposS: string[]
+    derivadoLeiteContext: boolean
+    glutenContext: boolean
+    categoriasContext: string[]
+    tiposContext: string[]
     saveFilter(derivadoLeite: boolean, gluten: boolean, categorias: string[], tipos: string[]): Promise<void>
     deleteFilter(): void
 }
@@ -14,38 +14,38 @@ const AuthFilter = createContext<AuthContextData>({} as AuthContextData)
 
 export const AuthProviderFilter: React.FC = ({ children }) => {
 
-    const [derivadoLeiteS, setDerivadoLeiteS] = useState<boolean>(false);
-    const [glutenS, setGlutenS] = useState<boolean>(false);
-    const [categoriasS, setCategoriasS] = useState<string[]>([])
-    const [tiposS, setTiposS] = useState<string[]>([])
+    const [derivadoLeiteContext, setDerivadoLeiteContext] = useState<boolean>(false);
+    const [glutenContext, setGlutenContext] = useState<boolean>(false);
+    const [categoriasContext, setCategoriasContext] = useState<string[]>([])
+    const [tiposContext, setTiposContext] = useState<string[]>([])
 
     useEffect(() => {
         async function loadStoragedData() {
 
-            const storagedDerivadoLeite = await AsyncStorage.getItem('derivadoLeite')
+            const storageDerivadoLeite = await AsyncStorage.getItem('derivadoLeite')
             const storageGluten = await AsyncStorage.getItem('gluten')
             const storageCategorias = await AsyncStorage.getItem('categorias')
             const storageTipos = await AsyncStorage.getItem('tipos')
 
-            if (storagedDerivadoLeite) {
-                const derivadoL: boolean = JSON.parse(storagedDerivadoLeite)
+            if (storageDerivadoLeite) {
+                const derivadoL: boolean = JSON.parse(storageDerivadoLeite)
                 console.log('Derivado Leite no Storage: ', derivadoL);
-                setDerivadoLeiteS(derivadoL)
+                setDerivadoLeiteContext(derivadoL)
             }
             if (storageGluten) {
                 const glu: boolean = JSON.parse(storageGluten)
                 console.log('Gluten no Storage: ', glu);
-                setGlutenS(glu)
+                setGlutenContext(glu)
             }
             if (storageCategorias) {
                 const cat: string[] = JSON.parse(storageCategorias)
                 console.log('Categorias no Storage: ', cat);
-                setCategoriasS(cat)
+                setCategoriasContext(cat)
             }
             if (storageTipos) {
                 const tip: string[] = JSON.parse(storageTipos)
                 console.log('Tipos no Storage: ', tip);
-                setTiposS(tip)
+                setTiposContext(tip)
             }
         }
         loadStoragedData()
@@ -57,22 +57,22 @@ export const AuthProviderFilter: React.FC = ({ children }) => {
         AsyncStorage.setItem('categorias', JSON.stringify(categorias));
         AsyncStorage.setItem('tipos', JSON.stringify(tipos));
         console.log('Filtros salvos com sucesso');
-        setDerivadoLeiteS(derivadoLeite)
-        setGlutenS(gluten)
-        setCategoriasS(categorias)
-        setTiposS(tipos)
+        setDerivadoLeiteContext(derivadoLeite)
+        setGlutenContext(gluten)
+        setCategoriasContext(categorias)
+        setTiposContext(tipos)
     }
 
     const deleteFilter = async () => {
-        setDerivadoLeiteS(false)
-        setGlutenS(false)
-        setCategoriasS([])
-        setTiposS([])
+        setDerivadoLeiteContext(false)
+        setGlutenContext(false)
+        setCategoriasContext([])
+        setTiposContext([])
         console.log("Deletando Filtros");
     }
 
     return (
-        <AuthFilter.Provider value={{ derivadoLeiteS, glutenS, categoriasS, tiposS, saveFilter, deleteFilter }}>
+        <AuthFilter.Provider value={{ derivadoLeiteContext, glutenContext, categoriasContext, tiposContext, saveFilter, deleteFilter }}>
             {children}
         </AuthFilter.Provider>
 
