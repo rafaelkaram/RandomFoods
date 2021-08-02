@@ -10,6 +10,8 @@ import { LogNotificacao } from '../model/LogNotificacao';
 import { Usuario } from '../model/Usuario';
 import { getBoolean, syserror, systrace } from '../util/util';
 
+import UsuarioView from '../view/UsuarioView';
+
 class SeguidorController {
     // Métodos das rotas
     async index(request: Request, response: Response) {
@@ -62,7 +64,11 @@ class SeguidorController {
             syserror(400, response, { error: 'Seguidores não encontrados!' });
         }
 
-        systrace(200, response, seguidores);
+        const seguidoresArray = seguidores.map(item => {
+            return UsuarioView.renderSimple(item.seguidor);
+        });
+
+        systrace(200, response, seguidoresArray);
     }
 
     async remove(request: Request, response: Response) {
