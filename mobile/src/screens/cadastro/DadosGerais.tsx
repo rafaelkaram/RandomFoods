@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Alert, Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Input } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,8 +17,19 @@ import { IMidiaPicker } from '../../constants/interfaces';
 import Loading from '../../components/Loading';
 import colors from '../../constants/colors';
 
+import AuthReceita from '../../contexts/authReceita';
+
 const DadosGerais = () => {
     const navigation = useNavigation();
+
+    const { 
+        saveDadosGerais, 
+        nomeReceitaContext, 
+        tipoReceitaContext, 
+        minutosContext, 
+        porcoesContext, 
+        midiasContext 
+    } = useContext(AuthReceita)
 
 
     const [load, setLoad] = useState<boolean>(false)
@@ -48,17 +59,22 @@ const DadosGerais = () => {
                     );
             }
         })();
+        setNomeReceita(nomeReceitaContext)
+        setTipoReceita(tipoReceitaContext)
+        setMinutos(minutosContext)
+        setPorcoes(porcoesContext)
+        setMidias(midiasContext)
     }, []);
 
     if (!load) {
         return <Loading />
     }
 
-    const createButtonAlert = () => {
+    const createButtonAlert = (mensagem: string) => {
         Alert.alert(
-            "Nome da Receita",
-            "Adicione um nome a sua receita",
-            [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+            "Dados não preenchidos",
+            mensagem,
+            [ { text: "OK", onPress: () => console.log("OK Pressed") } ]
         );
     }
 
@@ -86,10 +102,19 @@ const DadosGerais = () => {
     }
 
     const handleNavigateToIngredients = async () => {
-        if (!nomeReceita)
-            createButtonAlert();
+        if (
+            !nomeReceita || 
+            !tipoReceita || 
+            !minutos || 
+            !porcoes ||
+            nomeReceita === '' ||
+            tipoReceita === '' ||
+            minutos === '' ||
+            porcoes === ''
+            )
+            createButtonAlert("Preencha todos os dados");
         else {
-            const data = new FormData();
+            /*const data = new FormData();
 
             data.append('teste', 'sim');
             data.append('nome', nomeReceita);
@@ -114,8 +139,9 @@ const DadosGerais = () => {
 
             await api.post('cadastro/receita', data).then(response => {
                 console.log({ msg: 'Recebemos resposta!', response: response.data });
-            });
+            });*/
 
+            saveDadosGerais(nomeReceita, tipoReceita, minutos, porcoes, midias)
             navigation.navigate(screens.cadastroIngredientes);
         }
     }
