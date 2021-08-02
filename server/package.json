@@ -4,11 +4,10 @@
   "description": "Sistema de sugestão de receitas culinárias",
   "main": "src/index.ts",
   "contributors": [
-    "André Vitor Kuduavski <email@email.com>",
+    "André Vitor Kuduavski <andre.kuduavski@ufpr.br>",
     "Carlos Felipe Godinho Silva <cfelipe@ufpr.br>",
-    "Gleidison dos Santos Novais <email@email.com>",
-    "Guilherme Vinicius Valério <email@email.com>",
-    "Rafael Henrique Karam <email@email.com>"
+    "Guilherme Vinicius Valério <guilhermevalerio@ufpr.br>",
+    "Rafael Henrique Karam <rafaelkaram@ufpr.br>"
   ],
   "license": "MIT",
   "scripts": {
