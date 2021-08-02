@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useCallback } from 'react'
 import { Alert, ScrollView, Text, TouchableOpacity, View, RefreshControl } from 'react-native';
 import { Rating, Avatar, Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, TabActions } from '@react-navigation/native';
 import { Entypo, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import moment from 'moment';
 
@@ -108,7 +108,12 @@ function Receita({ route }: { route: any }) {
     }
 
     const handleNavigateToPerfil = (id: number | undefined) => {
-        navigation.navigate(screens.perfil, { id: id });
+        if (recipe?.usuario.id == user?.id) {
+            const jumpToAction = TabActions.jumpTo('User');
+            navigation.dispatch(jumpToAction);
+        } else {
+            navigation.navigate(screens.perfil, { id: id });
+        }
     }
 
     const submitComentario = async (idReceita: number, idPai: number, conteudo: string) => {
@@ -148,11 +153,11 @@ function Receita({ route }: { route: any }) {
     return (
         <SafeAreaView>
             <ScrollView
-             refreshControl={
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                />}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />}
             >
                 <View style={styles.container}>
                     <View style={styles.itemListTitle}>
@@ -163,23 +168,23 @@ function Receita({ route }: { route: any }) {
                         style={styles.autor}
                         onPress={() => { handleNavigateToPerfil(recipe.usuario.id) }}
                     >
-                    {recipe.usuario.path ? (
-                        <Avatar
-                            size='small'
-                            rounded
-                            activeOpacity={0.7}
-                            containerStyle={{ backgroundColor: 'lightgrey' }}
-                            source={{ uri: recipe.usuario.path }}
-                        />)
-                    :
-                        <Avatar
-                            size='small'
-                            rounded
-                            title={recipe.usuario.iniciais}
-                            activeOpacity={0.7}
-                            containerStyle={{ backgroundColor: 'lightgrey' }}
-                        />
-                    }
+                        {recipe.usuario.path ? (
+                            <Avatar
+                                size='small'
+                                rounded
+                                activeOpacity={0.7}
+                                containerStyle={{ backgroundColor: 'lightgrey' }}
+                                source={{ uri: recipe.usuario.path }}
+                            />)
+                            :
+                            <Avatar
+                                size='small'
+                                rounded
+                                title={recipe.usuario.iniciais}
+                                activeOpacity={0.7}
+                                containerStyle={{ backgroundColor: 'lightgrey' }}
+                            />
+                        }
                         <Text style={styles.autorName}>{recipe.usuario.nome}</Text>
                     </TouchableOpacity>
                     <View style={styles.time}>

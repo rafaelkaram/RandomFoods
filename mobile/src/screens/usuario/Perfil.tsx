@@ -49,7 +49,7 @@ const Perfil = ({ route }: { route: any }) => {
 
     useEffect(() => {
         if (user) {
-            api.get(`/busca/receita-usuario/${usuario?.id}`)
+            api.get(`/busca/receita-usuario/${idUser}`)
                 .then(response => { setRecipesUser(response.data.receitas) });
 
             setTitle(`Receitas de ${usuario?.nome}`);
