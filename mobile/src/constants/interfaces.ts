@@ -69,6 +69,11 @@ interface IReceitaSimples {
   numNotas: number,
 }
 
+interface ISeguidor {
+  id: number,
+  usuario: IUsuarioSimples
+}
+
 interface IUnidade {
   id: number,
   nome: string,
@@ -181,6 +186,7 @@ export {
   IMidia,
   IReceita,
   IReceitaSimples,
+  ISeguidor,
   IUnidade,
   IUsuario,
   IUsuarioSimples,

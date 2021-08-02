@@ -65,7 +65,10 @@ class SeguidorController {
         }
 
         const seguidoresArray = seguidores.map(item => {
-            return UsuarioView.renderSimple(item.seguidor);
+            return {
+                id: item.id,
+                usuario: UsuarioView.renderSimple(item.seguidor)
+            }
         });
 
         systrace(200, response, seguidoresArray);
