@@ -35,6 +35,10 @@ const UserHeader = ({
         navigation.dispatch(DrawerActions.jumpTo('Nova Receita'));
     }
 
+    const handleNavigateToSeguidores = (id: number) => {
+        navigation.navigate(screens.seguidores, { id: id });
+    }
+
     return (
         <View>
             <View style={styles.container}>
@@ -60,14 +64,14 @@ const UserHeader = ({
                     <Text style={[globalStyles.boldText, styles.name]}>{usuario.nome}</Text>
                     <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigLogin] : [globalStyles.regularText, styles.login] }>@{usuario.login}</Text>
                     <View style={styles.segContainer}>
-                        <View style={styles.seg}>
+                        <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id)}>
                             <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigNumberSeg] : [globalStyles.regularText, styles.numberSeg]}>{seguidores ? seguidores : 0}</Text>
                             <Text style={usuario.nome.length > 10 ? [globalStyles.boldText, styles.bigTextSeg] : [globalStyles.boldText, styles.textSeg]}>Seguidores</Text>
-                        </View>
-                        <View style={styles.seg}>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id)}>
                             <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigNumberSeg] : [globalStyles.regularText, styles.numberSeg]}>0</Text>
                             <Text style={usuario.nome.length > 10 ? [globalStyles.boldText, styles.bigTextSeg] : [globalStyles.boldText, styles.textSeg]}>Seguindo</Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>

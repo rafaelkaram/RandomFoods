@@ -31,6 +31,10 @@ const UserHeader = ({
         navigation.navigate(screens.perfil, { id: id });
     }
 
+    const handleNavigateToSeguidores = (id: number) => {
+        navigation.navigate(screens.seguidores, { id: id });
+    }
+
     return (
         <View>
             <View style={styles.container}>
@@ -70,14 +74,14 @@ const UserHeader = ({
                     <Text style={[globalStyles.boldText, styles.name]}>{usuario.nome}</Text>
                     <Text style={[globalStyles.regularText, styles.login]}>@{usuario.login}</Text>
                     <View style={styles.segContainer}>
-                        <View style={styles.seg}>
+                        <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id)}>
                             <Text style={[globalStyles.regularText, styles.numberSeg]}>{seguidores ? seguidores : 0}</Text>
                             <Text style={[globalStyles.boldText, styles.textSeg]}>Seguidores</Text>
-                        </View>
-                        <View style={styles.seg}>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id)}>
                             <Text style={[globalStyles.regularText, styles.numberSeg]}>0</Text>
                             <Text style={[globalStyles.boldText, styles.textSeg]}>Seguindo</Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View >
