@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Modal, View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native'
 import { Input } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
@@ -18,8 +18,16 @@ import fixString from '../../assets/functions/utils';
 import Loading from '../../components/Loading';
 import BasketCounter from '../../components/BasketCounter';
 
+import AuthReceita from '../../contexts/authReceita';
+
 const Ingredientes = () => {
     const navigation = useNavigation();
+
+    const {
+        saveIngredientes,
+        ingredientesContext,
+        itemsContext,
+    } = useContext(AuthReceita)
 
     const [ingredientsCart, setIngredientsCart] = useState<ICart[]>([]);
     const [ingredientTypes, setIngredientTypes] = useState<IListaIngredientes[]>([]);
@@ -34,14 +42,19 @@ const Ingredientes = () => {
                 setIngredientTypes(response.data);
                 setLoad(true)
             })
+
+        setIngredientsCart(ingredientesContext)
+        setSelectedItems(itemsContext)
     }, []);
 
     const handleNavigateToMeasures = () => {
         const idIngredientes = ingredientsCart.map(ingrediente => {
             return ingrediente.id;
         })
-        if (ingredientsCart.length > 0)
+        if (ingredientsCart.length > 0){
+            saveIngredientes(ingredientsCart, selectedItems)
             navigation.navigate(screens.cadastroQuantidades, { idIngredientes });
+        }
     }
 
     const handleSelectItem = (id: number, nome: string) => {
@@ -115,6 +128,7 @@ const Ingredientes = () => {
                 onChangeText={ (value) => setnomeIngrediente(value) }
                 value={ nomeIngrediente }
                 inputContainerStyle={{ borderBottomWidth: 0 }}
+                style={ globalStyles.inputIngredient }
             />
             <ScrollView>
                 { ingredientTypes.map(ingredientTypes => {
@@ -135,7 +149,7 @@ const Ingredientes = () => {
                                     {ingredientTypes.ingredientes.filter(ingrediente => fixString(ingrediente.nome.toLowerCase()).match(nomeIngrediente.toLowerCase())).map(ingrediente => {
                                         return (
                                             <TouchableOpacity
-                                                style={selectedItems.includes(ingrediente.id) ? styles.ingredientSelected : styles.ingredient}
+                                                style={selectedItems.includes(ingrediente.id) ? globalStyles.filterBoxSelected : globalStyles.filterBox}
                                                 onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}
                                                 key={ingrediente.id}
                                             >

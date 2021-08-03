@@ -56,14 +56,6 @@ export default StyleSheet.create({
         color: colors.primary
     },
 
-    inputIngredient: {
-        borderWidth: 1,
-        paddingLeft: 5,
-        borderRadius: 10,
-        borderColor: 'gray',
-        marginBottom: -20,
-    },
-
     modalFilter: {
         flexDirection: 'row',
         flexWrap: 'wrap',

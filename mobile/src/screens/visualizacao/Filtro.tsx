@@ -224,7 +224,7 @@ const Filtro = () => {
                 onChangeText={ (value) => setnomeIngrediente(value) }
                 value={ nomeIngrediente }
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                style={ styles.inputIngredient }
+                style={ globalStyles.inputIngredient }
             />
             <FilterModal
                 modalFilter={ modalFilter }

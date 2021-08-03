@@ -35,6 +35,10 @@ const FilterModal = (props: {
     const setModalFilter = props.setModalFilter;
     const setTempoDePreparo = props.setTempoDePreparo;
 
+    function handleTempo (time: number){
+        
+    }
+
     return (
         <Modal
             animationType='none'
@@ -95,11 +99,12 @@ const FilterModal = (props: {
                                     <View style={{ alignItems: 'center' }}>
                                         <MultiSlider
                                             customMarker={() => { return (<Image source={require('../../assets/chapeuSlider.png')} style={{ width: 30, height: 30 }} />) }}
-                                            values={ [tempos[1]] }
+                                            values={ [tempoDePreparo[0]] }
                                             max={ tempos[1] }
                                             sliderLength={ WIDTH * 0.6 }
                                             minMarkerOverlapDistance={ 12 }
                                             onValuesChange={(value) => setTempoDePreparo(value)}
+                                            //onValuesChangeFinish={(value) => setTempoDePreparo(value)}
                                             trackStyle={{ height: 10, borderRadius: 5 }}
                                             selectedStyle={{ backgroundColor: colors.translucidPrimary }}
                                             unselectedStyle={{ backgroundColor: colors.button }}
