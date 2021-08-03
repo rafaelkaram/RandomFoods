@@ -67,7 +67,7 @@ class SeguidorController {
         const seguidoresArray = seguidores.map(item => {
             return {
                 id: item.id,
-                usuario: UsuarioView.renderSimple(item.seguidor)
+                usuario: UsuarioView.renderSimple(item.usuario)
             }
         });
 
