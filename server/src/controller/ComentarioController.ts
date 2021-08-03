@@ -141,6 +141,14 @@ class ComentarioController {
 
         await log.save();
     }
+
+    async count(receita: Receita): Promise<number> {
+        const repository = getCustomRepository(ComentarioRepository);
+
+        const curtidas = await repository.count({ receita });
+
+        return curtidas;
+    }
 }
 
 export default ComentarioController;

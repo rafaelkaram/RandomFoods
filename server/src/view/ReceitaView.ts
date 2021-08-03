@@ -11,7 +11,7 @@ import midiaView from "./MidiaView";
 import usuarioView from "./UsuarioView";
 
 export default {
-    renderSimple(receita: Receita, avaliacao: { nota: number, qtdeNotas: number}, midia?: Midia) {
+    renderSimple(receita: Receita, curtidas: number, comentarios: number, avaliacao: { nota: number, qtdeNotas: number}, midia?: Midia) {
 		const extensao = midia?.tipo === Tipo.FOTO ? '.png' : '.mp4';
 		const filePath = midia?.path + extensao;
 		const folderName = encryptMidia(receita.id.toString());
@@ -31,7 +31,9 @@ export default {
 			usuario: usuarioView.renderSimple(receita.usuario),
 			categorias,
 			nota: avaliacao.nota,
-			numNotas: avaliacao.qtdeNotas
+			numNotas: avaliacao.qtdeNotas,
+			curtidas,
+			comentarios
 		};
     },
 

@@ -8,7 +8,7 @@ import uploadProfilePicConfig   from './config/uploadProfilePic';
 import AvaliacaoController      from './controller/AvaliacaoController';
 import CategoriaController      from './controller/CategoriaController';
 import ComentarioController     from './controller/ComentarioController';
-import CurtidaController        from './controller/CuritdaController';
+import CurtidaController        from './controller/CurtidaController';
 import FileImportController     from './controller/FileImportController';
 import IngredienteController    from './controller/IngredienteController';
 import LogNotificacaoController from './controller/LogNotificacaoController';

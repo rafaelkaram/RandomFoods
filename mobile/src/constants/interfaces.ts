@@ -50,12 +50,13 @@ interface IReceita {
   descricao: string,
   tempoPreparo: number,
   foto?: string,
+  usuario: IUsuarioSimples,
   nota: number,
   numNotas: number,
-  usuario: IUsuarioSimples,
+  curtidas: ICurtidaSimples[],
   ingredientes: IIngredienteReceita[],
   midias?: IMidia[],
-  categorias: string[]
+  categorias: string[],
 }
 
 interface IReceitaSimples {
@@ -67,6 +68,8 @@ interface IReceitaSimples {
   categorias: string[],
   nota: number,
   numNotas: number,
+  curtidas: number,
+  comentarios: number,
 }
 
 interface ISeguidor {
