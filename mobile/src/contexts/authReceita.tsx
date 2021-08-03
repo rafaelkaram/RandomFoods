@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import { IMidiaPicker } from '../constants/interfaces';
+import { IMidiaPicker, ICart } from '../constants/interfaces';
 
 interface AuthContextData {
     nomeReceitaContext: string,
@@ -9,19 +9,25 @@ interface AuthContextData {
     minutosContext: string,
     porcoesContext: string,
     midiasContext: IMidiaPicker[],
-    saveDadosGerais(nomeReceita: string, tipoReceita: string, categorias: string[], minutos: string, porcoes: string, midias: IMidiaPicker[]): Promise<void>
+    ingredientesContext: ICart[],
+    itemsContext: number[],
+    saveDadosGerais(nomeReceita: string, tipoReceita: string, categorias: string[], minutos: string, porcoes: string, midias: IMidiaPicker[]): Promise<void>,
+    saveIngredientes(ingredientes: ICart[], itemsContext: number[]): Promise<void>
 }
 
 
 const AuthReceita = createContext<AuthContextData>({} as AuthContextData)
 
 export const AuthProviderReceita: React.FC = ({ children }) => {
+
     const [nomeReceitaContext, setNomeReceitaContext] = useState<string>('')
     const [tipoReceitaContext, setTipoReceitaContext] = useState<string>('')
     const [categoriasContext, setCategoriasContext] = useState<string[]>([])
     const [minutosContext, setMinutosContext] = useState<string>('')
     const [porcoesContext, setPorcoesContext] = useState<string>('')
-    const [midiasContext, setMidiasContext] = useState<IMidiaPicker[]>([]);
+    const [midiasContext, setMidiasContext] = useState<IMidiaPicker[]>([])
+    const [ingredientesContext, setIngredientesContext] = useState<ICart[]>([])
+    const [itemsContext, setItemsContext] = useState<number[]>([])
 
     useEffect(() => {
         async function loadStoragedData() {
@@ -32,41 +38,55 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
             const storageMinutos = await AsyncStorage.getItem('minutos')
             const storagePorcoes = await AsyncStorage.getItem('porcoes')
             const storageMidias = await AsyncStorage.getItem('midias')
+            const storageIngredientes = await AsyncStorage.getItem('ingredientes')
+            const storageItems = await AsyncStorage.getItem('items')
 
             if (storageNomeReceita){
                 const formatNomeReceita: string = JSON.parse(storageNomeReceita)
-                console.log('setou: ' + formatNomeReceita)
+                console.log('formatNomeReceita: ' + formatNomeReceita)
                 setNomeReceitaContext(formatNomeReceita)
             }
 
             if (storageTipoReceita){
                 const formatTipoReceita: string = JSON.parse(storageTipoReceita)
-                console.log('setou: ' + formatTipoReceita)
+                console.log('formatTipoReceita: ' + formatTipoReceita)
                 setTipoReceitaContext(formatTipoReceita)
             }
 
             if (storageCategorias) {
                 const formatCategorias: string[] = JSON.parse(storageCategorias)
-                console.log('setou: ' + formatCategorias)
+                console.log('formatCategorias: ' + formatCategorias)
                 setCategoriasContext(formatCategorias)
             }
 
             if (storageMinutos){
                 const formatMinutos: string = JSON.parse(storageMinutos)
-                console.log('setou: ' + formatMinutos)
+                console.log('formatMinutos: ' + formatMinutos)
                 setMinutosContext(formatMinutos)
             }
 
             if (storagePorcoes){
                 const formatPorcoes: string = JSON.parse(storagePorcoes)
-                console.log('setou: ' + formatPorcoes)
+                console.log('formatPorcoes: ' + formatPorcoes)
                 setPorcoesContext(formatPorcoes)
             }
 
             if (storageMidias){
                 const formatMidias: IMidiaPicker[] = JSON.parse(storageMidias)
-                console.log('setou: ' + formatMidias)
+                console.log('formatMidias: ' + formatMidias)
                 setMidiasContext(formatMidias)
+            }
+
+            if (storageIngredientes){
+                const formatIngredientes: ICart[] = JSON.parse(storageIngredientes)
+                console.log('formatIngredientes: ' + formatIngredientes)
+                setIngredientesContext(formatIngredientes)
+            }
+
+            if (storageItems){
+                const formatItems: number[] = JSON.parse(storageItems)
+                console.log('formatItems: ' + formatItems)
+                setItemsContext(formatItems)
             }
 
         }
@@ -89,8 +109,27 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
         setMidiasContext(midias)
     }
 
+    const saveIngredientes = async (ingredientes: ICart[], items: number[]) => {
+        AsyncStorage.setItem('ingredientes', JSON.stringify(ingredientes))
+        AsyncStorage.setItem('items', JSON.stringify(items))
+        setIngredientesContext(ingredientes)
+        setItemsContext(items)
+    }
+
     return (
-        <AuthReceita.Provider value={{ nomeReceitaContext, tipoReceitaContext, categoriasContext, minutosContext, porcoesContext, midiasContext, saveDadosGerais }}>
+        <AuthReceita.Provider 
+            value={{ 
+                nomeReceitaContext, 
+                tipoReceitaContext, 
+                categoriasContext, 
+                minutosContext, 
+                porcoesContext, 
+                midiasContext,
+                ingredientesContext,
+                itemsContext,
+                saveDadosGerais,
+                saveIngredientes
+            }}>
             {children}
         </AuthReceita.Provider>
 
