@@ -42,6 +42,17 @@ class CategoriaController {
 
         return categoriaList;
     }
+
+    async findByCategoria(id: number, categoria: string): Promise<number[]> {
+        const repository = getCustomRepository(CategoriaRepository);
+
+        const categorias = await repository.findByCategoryAndUserId(id, categoria);
+
+        const ids = categorias.map(item => item.receita);
+        console.log(ids);
+
+        return ids;
+    }
 }
 
 export default CategoriaController;

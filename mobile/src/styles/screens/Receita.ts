@@ -167,6 +167,16 @@ export default StyleSheet.create({
         padding: 10,
     },
 
+    textLogin: {
+        backgroundColor: colors.primary,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        borderRadius: 10,
+        margin: 10,
+        padding: 10,
+    },
+
+
     buttonFavTrue: {
         backgroundColor: colors.primary,
         flexDirection: 'row',

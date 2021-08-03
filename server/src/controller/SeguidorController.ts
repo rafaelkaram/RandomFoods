@@ -67,6 +67,27 @@ class SeguidorController {
         const seguidoresArray = seguidores.map(item => {
             return {
                 id: item.id,
+                usuario: UsuarioView.renderSimple(item.usuario)
+            }
+        });
+
+        systrace(200, response, seguidoresArray);
+    }
+
+    async findSeguidosByUsuario(request: Request, response: Response) {
+        const repository = getCustomRepository(SeguidorRepository);
+
+        const { id } = request.params;
+
+        const seguidores = await repository.findSeguidorByUsuario(parseInt(id));
+
+        if (!seguidores) {
+            syserror(400, response, { error: 'Seguidores não encontrados!' });
+        }
+
+        const seguidoresArray = seguidores.map(item => {
+            return {
+                id: item.id,
                 usuario: UsuarioView.renderSimple(item.seguidor)
             }
         });

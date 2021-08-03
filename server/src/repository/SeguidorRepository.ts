@@ -16,12 +16,21 @@ export class SeguidorRepository extends Repository<Seguidor> {
 		return seguidores;
 	}
 
-  async findByUsuario(id: Number): Promise<Seguidor[]> {
-    const seguidor: Seguidor[] = await this.createQueryBuilder('s')
-	  .innerJoinAndSelect('s.seguidor', 'se')
-      .where('s.usuario = :id', { id })
-      .getMany();
+	async findByUsuario(id: Number): Promise<Seguidor[]> {
+		const seguidor: Seguidor[] = await this.createQueryBuilder('s')
+			.innerJoinAndSelect('s.usuario', 'u')
+			.where('s.seguidor = :id', { id })
+			.getMany();
 
-    return seguidor;
-  }
+		return seguidor;
+	}
+
+	async findSeguidorByUsuario(id: Number): Promise<Seguidor[]> {
+		const seguidor: Seguidor[] = await this.createQueryBuilder('s')
+			.innerJoinAndSelect('s.seguidor', 'se')
+			.where('s.usuario = :id', { id })
+			.getMany();
+
+		return seguidor;
+	}
 }
