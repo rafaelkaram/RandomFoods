@@ -116,6 +116,11 @@ const Receita = ({ route }: { route: any }) => {
         }
     }
 
+    const handleNavigateToLogin = () => {
+        const jumpToAction = TabActions.jumpTo('User');
+        navigation.dispatch(jumpToAction);
+    }
+
     const submitComentario = async (idReceita: number, idPai: number, conteudo: string) => {
         setLoadComentario(true);
         api.post('cadastro/comentario', { conteudo, idPai, idReceita, idUsuario: user?.id })
@@ -237,7 +242,7 @@ const Receita = ({ route }: { route: any }) => {
                             )
                         })}
                     </View>
-                    {user &&
+                    {user ?
                         <View style={styles.buttonActions}>
                             <TouchableOpacity style={isCurtida ? styles.buttonFavTrue : styles.buttonFavFalse}
                                 onPress={() => { curtirReceita() }}
@@ -254,6 +259,11 @@ const Receita = ({ route }: { route: any }) => {
                                 <MaterialCommunityIcons name='comment' size={20} color='white' style={{ marginLeft: 10 }} />
                             </TouchableOpacity>
                         </View>
+                        :
+                        <TouchableOpacity style={styles.textLogin} onPress={() => handleNavigateToLogin()}>
+                            <Text style={{ ...globalStyles.boldText, color: 'white', fontSize: 16, textAlign: 'center' }}>Gostou da Receita?</Text>
+                            <Text style={{ ...globalStyles.boldText, color: 'white', fontSize: 16, textAlign: 'center' }}>Faça seu login, curta e comente!</Text>
+                        </TouchableOpacity>
                     }
                     {
                         loadComentario ?
