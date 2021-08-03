@@ -63,10 +63,10 @@ const FilterModal = (props: {
                                             return (
                                                 <View key={index}>
                                                     <TouchableOpacity
-                                                        style={ categoriasSelecionadas.includes(categoria) ? css.filterBoxSelected : css.filterBox }
+                                                        style={ categoriasSelecionadas.includes(categoria) ? globalStyles.filterBoxSelected : globalStyles.filterBox }
                                                         onPress={() => { filterCategory(categoria) }}
                                                     >
-                                                        <Text style={[ globalStyles.regularText, categoriasSelecionadas.includes(categoria) && css.filterNameSelected ]}>{categoria}</Text>
+                                                        <Text style={[ globalStyles.regularText, categoriasSelecionadas.includes(categoria) && globalStyles.filterNameSelected ]}>{categoria}</Text>
                                                     </TouchableOpacity>
                                                 </View>
                                             )
@@ -80,10 +80,10 @@ const FilterModal = (props: {
                                             return (
                                                 <View key={ index }>
                                                     <TouchableOpacity
-                                                        style={ tiposSelecionados.includes(tipo) ? css.filterBoxSelected : css.filterBox }
+                                                        style={ tiposSelecionados.includes(tipo) ? globalStyles.filterBoxSelected : globalStyles.filterBox }
                                                         onPress={() => { filterType(tipo) }}
                                                     >
-                                                        <Text style={[ globalStyles.regularText, tiposSelecionados.includes(tipo) && css.filterNameSelected ]}>{ tipo }</Text>
+                                                        <Text style={[ globalStyles.regularText, tiposSelecionados.includes(tipo) && globalStyles.filterNameSelected ]}>{ tipo }</Text>
                                                     </TouchableOpacity>
                                                 </View>
                                             )
@@ -95,8 +95,7 @@ const FilterModal = (props: {
                                     <View style={{ alignItems: 'center' }}>
                                         <MultiSlider
                                             customMarker={() => { return (<Image source={require('../../assets/chapeuSlider.png')} style={{ width: 30, height: 30 }} />) }}
-                                            values={ [tempoDePreparo[0], tempoDePreparo[1]] }
-                                            min={ tempos[0] }
+                                            values={ [tempos[1]] }
                                             max={ tempos[1] }
                                             sliderLength={ WIDTH * 0.6 }
                                             minMarkerOverlapDistance={ 12 }
@@ -107,7 +106,7 @@ const FilterModal = (props: {
                                         />
                                     </View>
                                     <View style={{ paddingHorizontal: 20, marginTop: -10 }}>
-                                        <Text>Entre { tempoDePreparo[0] } min e { tempoDePreparo[1] } min</Text>
+                                        <Text>Até { tempoDePreparo[0] } min</Text>
                                     </View>
                                 </View>
                             </View>

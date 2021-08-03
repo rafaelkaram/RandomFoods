@@ -59,7 +59,7 @@ const Filtro = () => {
             });
         api.get('/busca/tempo-preparo')
             .then(response => {
-                setTempoDePreparo(response.data)
+                setTempoDePreparo([response.data[1], response.data[1]])
                 setBaseTempoPreparo(response.data)
             });
         
@@ -79,7 +79,7 @@ const Filtro = () => {
         let qtde = 0;
         if (categoriasSelecionadas && categoriasSelecionadas.length > 0) qtde++;
         if (tiposSelecionados && tiposSelecionados.length > 0) qtde++;
-        if (tempoDePreparo && !(tempoDePreparo[0] === baseTempoPreparo[0] && tempoDePreparo[1] === baseTempoPreparo[1])) qtde++;
+        if (tempoDePreparo && !(tempoDePreparo[1] === baseTempoPreparo[1])) qtde++;
         setSelectedFiltro(qtde);
 
     }, [categoriasSelecionadas, tiposSelecionados, tempoDePreparo]);
@@ -243,25 +243,25 @@ const Filtro = () => {
             <View style={ styles.modalFilter }>
                 <View style={ styles.filterContainer }>
                     <TouchableOpacity
-                        style={ derivadoLeite ? styles.filterBoxSelected : styles.filterBox }
+                        style={ derivadoLeite ? globalStyles.filterBoxSelected : globalStyles.filterBox }
                         onPress={() => { setDerivadoLeite(!derivadoLeite) }}
                     >
-                        <Text style={[ globalStyles.regularText, derivadoLeite && styles.filterNameSelected ]}>Sem lactose</Text>
+                        <Text style={[ globalStyles.regularText, derivadoLeite && globalStyles.filterNameSelected ]}>Sem lactose</Text>
 
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={ gluten ? styles.filterBoxSelected : styles.filterBox }
+                        style={ gluten ? globalStyles.filterBoxSelected : globalStyles.filterBox }
                         onPress={() => { setGluten(!gluten) }}
                     >
-                        <Text style={[ globalStyles.regularText, gluten && styles.filterNameSelected ]}>Sem glúten</Text>
+                        <Text style={[ globalStyles.regularText, gluten && globalStyles.filterNameSelected ]}>Sem glúten</Text>
                     </TouchableOpacity>
                 </View>
                 <View>
                     <TouchableOpacity
-                        style={ selectedFiltro !== 0 ? styles.filterBoxSelected : styles.filterBox }
+                        style={ selectedFiltro !== 0 ? globalStyles.filterBoxSelected : globalStyles.filterBox }
                         onPress={ () => setModalFilter(true) }
                     >
-                        <Text style={[ globalStyles.regularText, selectedFiltro !== 0 && styles.filterNameSelected ]}>Filtro</Text>
+                        <Text style={[ globalStyles.regularText, selectedFiltro !== 0 && globalStyles.filterNameSelected ]}>Filtro</Text>
                         <View style={{ paddingLeft: 5 }}>
                         { selectedFiltro > 0 ?
                             <View style={ styles.filterBubble }>
@@ -288,11 +288,11 @@ const Filtro = () => {
                                     { ingredientList.ingredientes.map(ingrediente => {
                                         return (
                                             <TouchableOpacity
-                                                style={ selectedItems.includes(ingrediente.id) ? styles.filterBoxSelected : styles.filterBox }
+                                                style={ selectedItems.includes(ingrediente.id) ? globalStyles.filterBoxSelected : globalStyles.filterBox }
                                                 onPress={ () => handleSelectItem(ingrediente.id, ingrediente.nome) }
                                                 key={ ingrediente.id }
                                             >
-                                                <Text style={[ globalStyles.regularText, selectedItems.includes(ingrediente.id) && styles.filterNameSelected ]}>{ ingrediente.nome }</Text>
+                                                <Text style={[ globalStyles.regularText, selectedItems.includes(ingrediente.id) && globalStyles.filterNameSelected ]}>{ ingrediente.nome }</Text>
                                             </TouchableOpacity>
                                         )
                                     })}
