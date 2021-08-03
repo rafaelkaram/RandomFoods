@@ -9,7 +9,7 @@ import AuthContext from './../../contexts/auth';
 
 import api from '../../services/api';
 
-import { IPainelTipoReceita, IPainelCategorias, IPainelVotos,ISeguidor } from '../../constants/interfaces';
+import { IPainelTipoReceita, IPainelCategorias, IPainelVotos, ISeguidor } from '../../constants/interfaces';
 import { HEIGHT, WIDTH } from '../../constants/dimensions';
 import dashboardColors from '../../constants/dashboardColors';
 import colors from '../../constants/colors';
@@ -27,6 +27,7 @@ const Painel = () => {
     const [recipeCategory, setRecipeCategory] = useState<IPainelCategorias[]>([]);
     const [topVotedRecipe, setTopVotedRecipe] = useState<IPainelVotos[]>([]);
     const [seguidores, setSeguidores] = useState<ISeguidor[]>([]);
+    const [seguindo, setSeguindo] = useState<ISeguidor[]>([]);
     const [load, setLoad] = useState<boolean>(false);
     const [refreshing, setRefreshing] = useState(false);
 
@@ -40,12 +41,10 @@ const Painel = () => {
                 .then(response => { setRecipeCategory(response.data); });
             api.get(`/dashboard/avaliacoes/${user.id}`)
                 .then(response => { setTopVotedRecipe(response.data); });
-
             api.get(`/busca/seguidores/${user.id}`)
-                .then(response => {
-                    // console.log(response.data)
-                    setSeguidores(response.data)
-                });
+                .then(response => { setSeguidores(response.data) });
+            api.get(`/busca/seguidos/${user.id}`)
+                .then(response => { setSeguindo(response.data) });
         } else {
             navigation.navigate(screens.login);
         }
@@ -58,23 +57,10 @@ const Painel = () => {
         return { x: item.tipo, y: Number(item.count) }
     });
 
-    const pieCategoryData = recipeCategory.map((item) => {
-        if (item.categoria == null)
-            return { x: 'Sem Categoria', y: Number(item.count) }
-        else
-            return { x: item.categoria, y: Number(item.count) }
-    });
-
     const pieTypeLegend = recipeType.map((item) => {
         return { name: item.tipo }
     });
 
-    const pieCategoryLegend = recipeCategory.map((item) => {
-        if (item.categoria == null)
-            return { name: 'Sem Categoria' }
-        else
-            return { name: item.categoria }
-    });
 
     const totalRecipes: number = pieTypeData.reduce(function (a, b) { return a + b.y }, 0);
 
@@ -82,6 +68,11 @@ const Painel = () => {
         setRefreshing(true);
         setTimeout(() => setRefreshing(false), 2000);
     }, []);
+
+    const handleNavigateToPerfil = (id: number | undefined) => {
+        navigation.navigate(screens.perfil, { id: id });
+
+    }
 
     if (!load || !user) {
         return <Loading />
@@ -99,59 +90,57 @@ const Painel = () => {
                 <UserHeader
                     usuario={user}
                     seguidores={seguidores.length}
+                    seguidos={seguindo.length}
                     totalReceitas={totalRecipes}
                     isPainel={true}
                 />
 
-                <View style={styles.pieContainer}>
-                    <View style={styles.typePie}>
-                        <Text style={[globalStyles.subTitleText, styles.chartsTitle]}>{`Receitas\npor Tipo`}</Text>
-                        <View style={{ position: 'absolute', padding: 10 }}>
-                            <VictoryPie
-                                height={((HEIGHT / 2) - 180)}
-                                width={(WIDTH / 2)}
-                                colorScale={['orange', colors.primary]}
-                                labels={({ datum }) => `${datum.y}`}
-                                data={pieTypeData}
-                                innerRadius={30}
-                                style={{ labels: { fontSize: 15 } }}
-                            />
-                        </View>
-                        <View style={{ position: 'absolute', top: 180, left: 10 }}>
-                            <VictoryLegend
-                                colorScale={['orange', colors.primary]}
-                                data={pieTypeLegend}
-                                style={{ labels: { fontSize: 15 } }}
-                            />
-                        </View>
+                <View style={styles.typePie}>
+                    <Text style={[globalStyles.subTitleText, styles.chartsTitle]}>{` Receitas por Tipo `}</Text>
+                    <View style={{ marginTop: -(HEIGHT / 15) }}>
+                        <VictoryPie
+                            height={((HEIGHT / 2) - 120)}
+                            width={(WIDTH / 2)}
+                            colorScale={['orange', colors.primary]}
+                            labels={({ datum }) => `${datum.y}`}
+                            data={pieTypeData}
+                            innerRadius={30}
+                            style={{ labels: { fontSize: 15 } }}
+                        />
                     </View>
-
-                    <View style={styles.categoryPie}>
-                        <Text style={[globalStyles.subTitleText, styles.chartsTitle]}>{`Receitas\npor Categoria`}</Text>
-                        <View style={{ position: 'absolute', padding: 10 }}>
-                            <VictoryPie
-                                height={((HEIGHT / 2) - 180)}
-                                width={(WIDTH / 2)}
-                                colorScale={[dashboardColors.first, dashboardColors.second, dashboardColors.third, dashboardColors.fourth, dashboardColors.fifth]}
-                                labels={({ datum }) => `${datum.y}`}
-                                data={pieCategoryData}
-                                innerRadius={30}
-                                style={{ labels: { fontSize: 15 } }}
-                            />
-                        </View>
-                        <View style={{ position: 'absolute', top: 180, left: 10 }}>
-                            <VictoryLegend
-                                colorScale={[dashboardColors.first, dashboardColors.second, dashboardColors.third, dashboardColors.fourth, dashboardColors.fifth]}
-                                data={pieCategoryLegend}
-                                style={{ labels: { fontSize: 15 } }}
-                            />
-                        </View>
-
+                    <View style={{ position: 'absolute', top: ((HEIGHT / 2) - 210), left: 10 }}>
+                        <VictoryLegend
+                            colorScale={['orange', colors.primary]}
+                            data={pieTypeLegend}
+                            style={{ labels: { fontSize: 15 } }}
+                        />
                     </View>
                 </View>
+
                 <View>
-                    { }
-                    <Text style={styles.tableTitle}>Top receitas mais votadas</Text>
+                    <Text style={[globalStyles.subTitleText, styles.tableTitle]}>Quantidade de Receitas por Categoria</Text>
+                    <View style={styles.topVotedTable}>
+                        <DataTable>
+                            <DataTable.Header>
+                                <DataTable.Title onPress={() => { }} style={{ flexBasis: 30 }} >Categoria</DataTable.Title>
+                                <DataTable.Title numeric>#Receitas</DataTable.Title>
+                            </DataTable.Header>
+                            {recipeCategory.map((item, index) => {
+                                return (
+                                    <TouchableOpacity key={index}>
+                                        <DataTable.Row >
+                                            <DataTable.Cell style={{ flexBasis: 30 }}>{item.categoria}</DataTable.Cell>
+                                            <DataTable.Cell numeric>{item.count}</DataTable.Cell>
+                                        </DataTable.Row>
+                                    </TouchableOpacity>
+                                )
+                            })}
+                        </DataTable>
+                    </View>
+                </View>
+
+                <View>
+                    <Text style={[globalStyles.subTitleText, styles.tableTitle]}>Top receitas mais votadas</Text>
                     <View style={styles.topVotedTable}>
                         <DataTable>
                             <DataTable.Header>

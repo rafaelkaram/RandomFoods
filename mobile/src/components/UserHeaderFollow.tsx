@@ -13,6 +13,7 @@ const UserHeader = ({
     totalReceitas,
     isPainel,
     seguidores,
+    seguidos,
     seguidor,
     seguirUsuario
 }: {
@@ -20,6 +21,7 @@ const UserHeader = ({
     totalReceitas: number,
     isPainel: boolean,
     seguidores: number,
+    seguidos: number,
     seguidor: boolean,
     seguirUsuario: Function
 }) => {
@@ -79,7 +81,7 @@ const UserHeader = ({
                             <Text style={[globalStyles.boldText, styles.textSeg]}>Seguidores</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id)}>
-                            <Text style={[globalStyles.regularText, styles.numberSeg]}>0</Text>
+                            <Text style={[globalStyles.regularText, styles.numberSeg]}>{seguidos ? seguidos : 0}</Text>
                             <Text style={[globalStyles.boldText, styles.textSeg]}>Seguindo</Text>
                         </TouchableOpacity>
                     </View>

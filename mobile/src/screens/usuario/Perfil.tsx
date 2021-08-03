@@ -20,54 +20,50 @@ const Perfil = ({ route }: { route: any }) => {
     const [usuario, setUsuario] = useState<IUsuarioSimples>();
     const [title, setTitle] = useState('');
     const [load, setLoad] = useState<boolean>(false);
-    const [seguindo, setSeguindo] = useState<boolean>(false);
+    const [seguidor, setSeguidor] = useState<boolean>(false);
     const [seguidores, setSeguidores] = useState<ISeguidor[]>([]);
+    const [seguindo, setSeguindo] = useState<ISeguidor[]>([]);
     const [refreshing, setRefreshing] = useState(false);
 
     const idUser = route.params.id;
 
     const { user } = useContext(AuthContext);
 
+
     const handleNavigateToRecipe = (id: number) => {
         navigation.navigate(screens.receita, { id: id });
     }
 
     useEffect(() => {
+
         api.get(`/busca/usuario/${idUser}`)
-            .then(response => {
-                // console.log(response.data)
-                setUsuario(response.data)
-            });
-
+            .then(response => { setUsuario(response.data) });
         api.get(`/busca/seguidores/${idUser}`)
-            .then(response => {
-                // console.log(response.data)
-                setSeguidores(response.data)
-            });
+            .then(response => { setSeguidores(response.data) });
+        api.get(`/busca/seguidos/${idUser}`)
+            .then(response => { setSeguindo(response.data) });
 
-    }, [refreshing, seguindo]);
+    }, [refreshing, seguidor]);
 
     useEffect(() => {
-        if (user) {
-            api.get(`/busca/receita-usuario/${idUser}`)
-                .then(response => { setRecipesUser(response.data.receitas) });
+        api.get(`/busca/receita-usuario/${idUser}`)
+            .then(response => { setRecipesUser(response.data.receitas) });
 
-            setTitle(`Receitas de ${usuario?.nome}`);
-        }
+        setTitle(`Receitas de ${usuario?.nome}`);
         setLoad(true);
     }, [usuario]);
 
     useEffect(() => {
         const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.usuario.id === user?.id));
         if (seguidor && seguidor.length > 0)
-            setSeguindo(true);
+            setSeguidor(true);
     }, [seguidores]);
 
     const seguirUsuario = () => {
-        if (!seguindo) {
+        if (!seguidor) {
             api.post('cadastro/seguidor', { idSeguidor: user?.id, idUsuario: usuario?.id })
                 .then(response => {
-                    setSeguindo(true);
+                    setSeguidor(true);
                 }).catch(error => {
                     Alert.alert(
                         'Falha no resgistro de seguidor',
@@ -76,14 +72,14 @@ const Perfil = ({ route }: { route: any }) => {
                             { text: 'OK' }
                         ]
                     );
-                    setSeguindo(false);
+                    setSeguidor(false);
                 }
                 );
         } else {
             const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.usuario.id === user?.id));
             api.post(`remove/seguidor/${seguidor[0].id}`)
                 .then(response => {
-                    setSeguindo(false);
+                    setSeguidor(false);
                 }).catch(error => {
                     Alert.alert(
                         'Falha na remoção de seguidor',
@@ -92,7 +88,7 @@ const Perfil = ({ route }: { route: any }) => {
                             { text: 'OK' }
                         ]
                     );
-                    setSeguindo(true);
+                    setSeguidor(true);
                 }
                 );
         }
@@ -122,19 +118,21 @@ const Perfil = ({ route }: { route: any }) => {
                         totalReceitas={recipesUser.length}
                         isPainel={false}
                         seguidores={seguidores.length}
-                        seguidor={seguindo}
+                        seguidos={seguindo.length}
+                        seguidor={seguidor}
                         seguirUsuario={seguirUsuario}
                     />
                     :
                     <UserHeader
                         usuario={usuario}
                         seguidores={seguidores.length}
+                        seguidos={seguidores.length}
                         totalReceitas={recipesUser.length}
                         isPainel={false}
                     />
                 }
                 <ScrollView style={{ backgroundColor: colors.background, marginTop: 10 }}>
-                    { recipesUser.length > 0 &&
+                    {recipesUser.length > 0 &&
                         <RecipeList titulo={title} receitas={recipesUser} navegar={(id: number) => handleNavigateToRecipe(id)} />
                     }
                 </ScrollView>

@@ -12,11 +12,13 @@ import { IUsuarioSimples } from '../constants/interfaces';
 const UserHeader = ({
     usuario,
     seguidores,
+    seguidos,
     totalReceitas,
     isPainel
 }: {
     usuario: IUsuarioSimples,
     seguidores: number,
+    seguidos:number,
     totalReceitas: number,
     isPainel: boolean
 }) => {
@@ -69,7 +71,7 @@ const UserHeader = ({
                             <Text style={usuario.nome.length > 10 ? [globalStyles.boldText, styles.bigTextSeg] : [globalStyles.boldText, styles.textSeg]}>Seguidores</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id)}>
-                            <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigNumberSeg] : [globalStyles.regularText, styles.numberSeg]}>0</Text>
+                            <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigNumberSeg] : [globalStyles.regularText, styles.numberSeg]}>{seguidos ? seguidos : 0}</Text>
                             <Text style={usuario.nome.length > 10 ? [globalStyles.boldText, styles.bigTextSeg] : [globalStyles.boldText, styles.textSeg]}>Seguindo</Text>
                         </TouchableOpacity>
                     </View>
