@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import api from '../../services/api';
 
-import { ISeguidoresSimples, IReceitaSimples, IUsuarioSimples } from '../../constants/interfaces';
+import { ISeguidor, IReceitaSimples, IUsuarioSimples } from '../../constants/interfaces';
 import screens from '../../constants/screens';
 import colors from '../../constants/colors';
 
@@ -21,7 +21,7 @@ const Perfil = ({ route }: { route: any }) => {
     const [title, setTitle] = useState('');
     const [load, setLoad] = useState<boolean>(false);
     const [seguindo, setSeguindo] = useState<boolean>(false);
-    const [seguidores, setSeguidores] = useState<ISeguidoresSimples[]>([]);
+    const [seguidores, setSeguidores] = useState<ISeguidor[]>([]);
     const [refreshing, setRefreshing] = useState(false);
 
     const idUser = route.params.id;
@@ -58,7 +58,7 @@ const Perfil = ({ route }: { route: any }) => {
     }, [usuario]);
 
     useEffect(() => {
-        const seguidor: ISeguidoresSimples[] = seguidores.filter(seguidor2 => (seguidor2.seguidor.id === user?.id));
+        const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.usuario.id === user?.id));
         if (seguidor && seguidor.length > 0)
             setSeguindo(true);
     }, [seguidores]);
@@ -80,7 +80,7 @@ const Perfil = ({ route }: { route: any }) => {
                 }
                 );
         } else {
-            const seguidor: ISeguidoresSimples[] = seguidores.filter(seguidor2 => (seguidor2.seguidor.id === user?.id));
+            const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.usuario.id === user?.id));
             api.post(`remove/seguidor/${seguidor[0].id}`)
                 .then(response => {
                     setSeguindo(false);
