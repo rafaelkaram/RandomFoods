@@ -66,7 +66,6 @@ const PesquisaStack = () => {
             <AppStack.Screen name={screens.resultadoPesquisa} component={ResultadoPesquisa} />
             <AppStack.Screen name={screens.receita} component={Receita} />
             <AppStack.Screen name={screens.perfil} component={Perfil} />
-            <AppStack.Screen name={screens.receita2} component={Receita2} />
         </AppStack.Navigator>
     )
 }
