@@ -18,7 +18,6 @@ import Quantidades from './screens/cadastro/Quantidades';
 import Configuracoes from './screens/usuario/Configuracoes';
 import ResultadoPesquisa from './screens/visualizacao/ResultadoPesquisa';
 import Receita from './screens/visualizacao/Receita';
-import Receita2 from './screens/visualizacao/Receita';
 import Login from './screens/usuario/Login';
 import Painel from './screens/usuario/Painel';
 import Perfil from './screens/usuario/Perfil';
@@ -57,7 +56,6 @@ const HomeStack = () => {
             <AppStack.Screen name={screens.resultadoPesquisa} component={ResultadoPesquisa} />
             <AppStack.Screen name={screens.receita} component={Receita} />
             <AppStack.Screen name={screens.perfil} component={Perfil} />
-            <AppStack.Screen name={screens.receita2} component={Receita2} />
         </AppStack.Navigator>
     )
 }

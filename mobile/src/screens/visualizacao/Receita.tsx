@@ -30,7 +30,7 @@ import InputComment from '../../components/InputComment';
 
 moment.locale('pt-br');
 
-function Receita({ route }: { route: any }) {
+const Receita = ({ route }: { route: any }) => {
 
     const navigation = useNavigation();
 
@@ -64,7 +64,7 @@ function Receita({ route }: { route: any }) {
             }
             );
 
-    }, [refreshing]);
+    }, [refreshing, idRecipe]);
 
     useEffect(() => {
         const curtida: ICurtidaSimples[] = curtidas.filter(curtida2 => (curtida2.usuario.id === user?.id));

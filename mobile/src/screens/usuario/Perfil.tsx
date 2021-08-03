@@ -29,7 +29,7 @@ const Perfil = ({ route }: { route: any }) => {
     const { user } = useContext(AuthContext);
 
     const handleNavigateToRecipe = (id: number) => {
-        navigation.navigate(screens.receita2, { id: id });
+        navigation.navigate(screens.receita, { id: id });
     }
 
     useEffect(() => {
@@ -134,7 +134,7 @@ const Perfil = ({ route }: { route: any }) => {
                     />
                 }
                 <ScrollView style={{ backgroundColor: colors.background, marginTop: 10 }}>
-                    {recipesUser.length > 0 &&
+                    { recipesUser.length > 0 &&
                         <RecipeList titulo={title} receitas={recipesUser} navegar={(id: number) => handleNavigateToRecipe(id)} />
                     }
                 </ScrollView>
