@@ -6,6 +6,7 @@ import path from 'path';
 import { ReceitaRepository } from '../repository/ReceitaRepository';
 
 import AvaliacaoController from './AvaliacaoController';
+import CategoriaController from './CategoriaController';
 import ComentarioController from './ComentarioController';
 import CurtidaController from './CurtidaController';
 import IngredienteController from './IngredienteController';
@@ -319,6 +320,31 @@ class ReceitaController {
             }));
 
             return systrace(200, response, { receitas });
+
+        } catch (e) {
+            syserror(400, response, e);
+        }
+    }
+
+    async findByCategorias(request: Request, response: Response) {
+        const { id, categoria } = request.query as { id: string, categoria: string };
+
+        const idUsuario: number = parseInt(id);
+
+        try {
+            const categoriaController = new CategoriaController();
+
+            const idReceitas: number[] = await categoriaController.findByCategoria(idUsuario, categoria);
+            console.log(idReceitas);
+
+
+            const receitas: any[] = [];
+            await Promise.all(idReceitas.map(async id => {
+                const receita = await ReceitaController.buildReceita(id);
+                receitas.push(receita);
+            }));
+
+            return systrace(200, response, receitas);
 
         } catch (e) {
             syserror(400, response, e);
