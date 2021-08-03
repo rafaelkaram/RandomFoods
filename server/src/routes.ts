@@ -79,6 +79,7 @@ routes.get('/busca/receita-categoria', receitaController.findByCategorias);
 routes.get('/busca/tempo-preparo', receitaController.getTempoPreparo);
 routes.get('/busca/receita-usuario/:id', receitaController.findByUsuario);
 routes.get('/busca/seguidores/:id', seguidorController.findByUsuario);
+routes.get('/busca/seguidos/:id', seguidorController.findSeguidosByUsuario);
 
 // Rotas Dashboard
 routes.get('/dashboard/avaliacoes/:id', avaliacaoController.findVoted);
