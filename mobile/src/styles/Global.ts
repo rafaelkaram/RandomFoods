@@ -125,4 +125,12 @@ export default StyleSheet.create({
         color: 'white'
     },
 
+    inputIngredient: {
+        borderWidth: 1,
+        paddingLeft: 5,
+        borderRadius: 10,
+        borderColor: 'gray',
+        marginBottom: -20,
+    },
+
 });

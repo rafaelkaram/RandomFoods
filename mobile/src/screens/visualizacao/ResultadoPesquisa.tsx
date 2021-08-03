@@ -96,9 +96,19 @@ const Recipe = ({ route }: { route: any }) => {
                 newArrayPerfeitas.sort((a, b) => a.tempoPreparo - b.tempoPreparo)
                 break
             }
+            case 3: {
+                newArrayParciais.sort((a, b) => b.curtidas - a.curtidas)
+                newArrayPerfeitas.sort((a, b) => b.curtidas - a.curtidas)
+                break
+            }
+            case 4: {
+                newArrayParciais.sort((a, b) => b.comentarios - a.comentarios)
+                newArrayPerfeitas.sort((a, b) => b.comentarios - a.comentarios)
+                break
+            }
             default: {
-                newArrayParciais.sort((a, b) => a.id - b.id)
-                newArrayPerfeitas.sort((a, b) => a.id - b.id)
+                newArrayParciais.sort((a, b) => b.id - a.id)
+                newArrayPerfeitas.sort((a, b) => b.id - a.id)
             }
         }
         setMatchesParciais(newArrayParciais)
@@ -128,6 +138,8 @@ const Recipe = ({ route }: { route: any }) => {
                         <Picker.Item label={'Ordenar Por'} value={0} />
                         <Picker.Item key={1} label={'Maior Tempo'} value={1} />
                         <Picker.Item key={2} label={'Menor Tempo'} value={2} />
+                        <Picker.Item key={3} label={'Mais Curtidas'} value={3} />
+                        <Picker.Item key={4} label={'Mais Comentários'} value={4} />
                     </Picker>
                 )}
                 {receitas.length === 0 ? (
