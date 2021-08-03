@@ -33,8 +33,8 @@ const UserHeader = ({
         navigation.navigate(screens.perfil, { id: id });
     }
 
-    const handleNavigateToSeguidores = (id: number) => {
-        navigation.navigate(screens.seguidores, { id: id });
+    const handleNavigateToSeguidores = (id: number, seguidor: boolean) => {
+        navigation.navigate(screens.seguidores, { id: id, seguidor });
     }
 
     return (
@@ -76,11 +76,11 @@ const UserHeader = ({
                     <Text style={[globalStyles.boldText, styles.name]}>{usuario.nome}</Text>
                     <Text style={[globalStyles.regularText, styles.login]}>@{usuario.login}</Text>
                     <View style={styles.segContainer}>
-                        <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id)}>
+                        <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id, true)}>
                             <Text style={[globalStyles.regularText, styles.numberSeg]}>{seguidores ? seguidores : 0}</Text>
                             <Text style={[globalStyles.boldText, styles.textSeg]}>Seguidores</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id)}>
+                        <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id, false)}>
                             <Text style={[globalStyles.regularText, styles.numberSeg]}>{seguidos ? seguidos : 0}</Text>
                             <Text style={[globalStyles.boldText, styles.textSeg]}>Seguindo</Text>
                         </TouchableOpacity>

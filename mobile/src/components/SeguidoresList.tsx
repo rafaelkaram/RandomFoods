@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, TouchableOpacity, View, Image } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
+import { SimpleLineIcons } from '@expo/vector-icons';
 import colors from "../../src/constants/colors";
 
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -14,8 +15,9 @@ import { WIDTH } from '../constants/dimensions';
 
 
 
-const SeguidoresList = (props: { seguidores: ISeguidor[] }) => {
+const SeguidoresList = (props: { seguidores: ISeguidor[] , seguidor: boolean}) => {
     const seguidores = props.seguidores;
+    const seguidor = props.seguidor;
     const navigation = useNavigation();
 
     const handleNavigateToPerfil = (id: number) => {
@@ -30,7 +32,7 @@ const SeguidoresList = (props: { seguidores: ISeguidor[] }) => {
                     return (
                         <TouchableOpacity
                             onPress={() => handleNavigateToPerfil(item.usuario.id)}
-                            style={styles.autor} key={item.id}>
+                            style={styles.seguidor} key={item.id}>
  
                          {item.usuario.path ? (
                             <Avatar
@@ -49,8 +51,19 @@ const SeguidoresList = (props: { seguidores: ISeguidor[] }) => {
                                 containerStyle={{ backgroundColor: 'lightgrey' }}
                             />
                         } 
-                        <Text style={styles.autorName}>{item.usuario.nome}</Text>
-                    </TouchableOpacity>
+                        <View style={styles.container}>
+                            <View>
+                                <Text style={styles.seguidorName}>{item.usuario.nome}</Text>
+                                <Text style={[styles.seguidorUsername,globalStyles.regularText]}>{item.usuario.login}</Text>
+                            </View>
+                            {!seguidor &&
+                            <TouchableOpacity style={[{ alignItems: 'center' }, styles.botaoUnfollow]}>                       
+                                    <SimpleLineIcons name="user-unfollow" size={20} color={'white'} />
+                            </TouchableOpacity>
+                }
+                            
+                        </View>
+                        </TouchableOpacity>
                     )
                 })}
             </View>

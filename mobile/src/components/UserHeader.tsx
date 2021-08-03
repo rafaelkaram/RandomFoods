@@ -37,9 +37,10 @@ const UserHeader = ({
         navigation.dispatch(DrawerActions.jumpTo('Nova Receita'));
     }
 
-    const handleNavigateToSeguidores = (id: number) => {
-        navigation.navigate(screens.seguidores, { id: id });
+    const handleNavigateToSeguidores = (id: number, seguidor: boolean) => {
+        navigation.navigate(screens.seguidores, { id: id, seguidor });
     }
+
 
     return (
         <View>
@@ -66,11 +67,11 @@ const UserHeader = ({
                     <Text style={[globalStyles.boldText, styles.name]}>{usuario.nome}</Text>
                     <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigLogin] : [globalStyles.regularText, styles.login] }>@{usuario.login}</Text>
                     <View style={styles.segContainer}>
-                        <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id)}>
+                        <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id, true)}>
                             <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigNumberSeg] : [globalStyles.regularText, styles.numberSeg]}>{seguidores ? seguidores : 0}</Text>
                             <Text style={usuario.nome.length > 10 ? [globalStyles.boldText, styles.bigTextSeg] : [globalStyles.boldText, styles.textSeg]}>Seguidores</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id)}>
+                        <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id, false)}>
                             <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigNumberSeg] : [globalStyles.regularText, styles.numberSeg]}>{seguidos ? seguidos : 0}</Text>
                             <Text style={usuario.nome.length > 10 ? [globalStyles.boldText, styles.bigTextSeg] : [globalStyles.boldText, styles.textSeg]}>Seguindo</Text>
                         </TouchableOpacity>
