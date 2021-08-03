@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import { IMidiaPicker, ICart } from '../constants/interfaces';
+import { IMidiaPicker, ICart, IIngredienteCadastro } from '../constants/interfaces';
 
 interface AuthContextData {
     nomeReceitaContext: string,
@@ -11,8 +11,10 @@ interface AuthContextData {
     midiasContext: IMidiaPicker[],
     ingredientesContext: ICart[],
     itemsContext: number[],
+    ingredientesQuantidadeContext: IIngredienteCadastro[],
     saveDadosGerais(nomeReceita: string, tipoReceita: string, categorias: string[], minutos: string, porcoes: string, midias: IMidiaPicker[]): Promise<void>,
-    saveIngredientes(ingredientes: ICart[], itemsContext: number[]): Promise<void>
+    saveIngredientes(ingredientes: ICart[], itemsContext: number[]): Promise<void>,
+    saveIngredientesQuantidade(ingredientesQuantidade: IIngredienteCadastro[]): Promise<void>,
 }
 
 
@@ -28,18 +30,25 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
     const [midiasContext, setMidiasContext] = useState<IMidiaPicker[]>([])
     const [ingredientesContext, setIngredientesContext] = useState<ICart[]>([])
     const [itemsContext, setItemsContext] = useState<number[]>([])
+    const [ingredientesQuantidadeContext, setIngredientesQuantidadeContext] = useState<IIngredienteCadastro[]>([])
 
     useEffect(() => {
         async function loadStoragedData() {
 
+            // Dados Gerais
             const storageNomeReceita = await AsyncStorage.getItem('nomeReceita')
             const storageTipoReceita = await AsyncStorage.getItem('tipoReceita')
             const storageCategorias = await AsyncStorage.getItem('categorias')
             const storageMinutos = await AsyncStorage.getItem('minutos')
             const storagePorcoes = await AsyncStorage.getItem('porcoes')
             const storageMidias = await AsyncStorage.getItem('midias')
+
+            // Ingredientes
             const storageIngredientes = await AsyncStorage.getItem('ingredientes')
             const storageItems = await AsyncStorage.getItem('items')
+
+            // Quantidades
+            const storageIngredientesQuantidade = await AsyncStorage.getItem('ingredientesQuantidade')
 
             if (storageNomeReceita){
                 const formatNomeReceita: string = JSON.parse(storageNomeReceita)
@@ -89,6 +98,12 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
                 setItemsContext(formatItems)
             }
 
+            if (storageIngredientesQuantidade){
+                const formatIngredientesQuantidade: IIngredienteCadastro[] = JSON.parse(storageIngredientesQuantidade)
+                console.log('formatIngredientesQuantidade: ' + formatIngredientesQuantidade)
+                setIngredientesQuantidadeContext(formatIngredientesQuantidade)
+            }
+
         }
         loadStoragedData()
     }, [])
@@ -100,7 +115,7 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
         AsyncStorage.setItem('minutos', JSON.stringify(minutos))
         AsyncStorage.setItem('porcoes', JSON.stringify(porcoes))
         AsyncStorage.setItem('midias', JSON.stringify(midias))
-        console.log('dados da receita salvos no storage')
+        console.log('Dados da receita salvos no storage')
         setNomeReceitaContext(nomeReceita)
         setTipoReceitaContext(tipoReceita)
         setCategoriasContext(categorias)
@@ -116,6 +131,11 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
         setItemsContext(items)
     }
 
+    const saveIngredientesQuantidade = async (ingredientesQuantidade: IIngredienteCadastro[]) => {
+        AsyncStorage.setItem('ingredientesQuantidade', JSON.stringify(ingredientesQuantidade))
+        setIngredientesQuantidadeContext(ingredientesQuantidade)
+    }
+
     return (
         <AuthReceita.Provider 
             value={{ 
@@ -127,8 +147,10 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
                 midiasContext,
                 ingredientesContext,
                 itemsContext,
+                ingredientesQuantidadeContext,
                 saveDadosGerais,
-                saveIngredientes
+                saveIngredientes,
+                saveIngredientesQuantidade
             }}>
             {children}
         </AuthReceita.Provider>

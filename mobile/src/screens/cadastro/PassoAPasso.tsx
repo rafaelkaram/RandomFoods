@@ -56,7 +56,7 @@ const PassoAPasso = () => {
             >
                 <BlurView intensity={50} style={[ StyleSheet.absoluteFill, styles.nonBlurredContent ]}>
                     <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center' }}>
-                        <View style={ styles.modalContainer }>
+                        <View style={ globalStyles.modalContainer }>
                             <ScrollView >
                                     <View >
                                         <StepRecipe
@@ -83,6 +83,11 @@ const PassoAPasso = () => {
 
     const setLast = (last: boolean) => {
         setLastFinished(last);
+    }
+
+    
+    const vaiPraAlgumLugar = () => {
+        console.log('opaaa')
     }
 
     const removeStep = (id: number) => {
@@ -148,7 +153,7 @@ const PassoAPasso = () => {
 
                             <BlurView intensity={50} style={[ StyleSheet.absoluteFill, styles.nonBlurredContent ]}>
                                 <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center' }}>
-                                    <View style={ styles.modalContainer }>
+                                    <View style={ globalStyles.modalContainer }>
                                         <ScrollView >
                                             { (step.edit && !step.update) &&
                                                 <View >
@@ -196,6 +201,12 @@ const PassoAPasso = () => {
                     }}
                 />
             </View>
+            <TouchableOpacity
+                style={globalStyles.arrow}
+                onPress={vaiPraAlgumLugar}
+            >
+                <AntDesign style={{ alignSelf: 'center' }} name='arrowright' size={24} color='white' />
+            </TouchableOpacity>
         </SafeAreaView>
     );
 }

@@ -180,6 +180,14 @@ interface ISeguidoresSimples {
   }
 }
 
+interface IIngredienteCadastro {
+  id: number,
+  nome: string,
+  semMedida?: boolean,
+  tipoUnidade?: string,
+  quantidade?: number,
+}
+
 export {
   IComentario,
   IComentarioSend,
@@ -202,5 +210,6 @@ export {
   IPainelVotos,
   IPassoReceita,
   IPassoReceita2,
-  ISeguidoresSimples
+  ISeguidoresSimples,
+  IIngredienteCadastro
 }
