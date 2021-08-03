@@ -164,7 +164,7 @@ class UsuarioController {
             notificarSeguidor,
             notificarAvaliacao,
             notificarComentario,
-            notificarFavorito,
+            notificarCurtida,
             notificarResposta,
             notificarMarca,
         } = dados as {
@@ -178,7 +178,7 @@ class UsuarioController {
             notificarSeguidor?: string,
             notificarAvaliacao?: string,
             notificarComentario?: string,
-            notificarFavorito?: string,
+            notificarCurtida?: string,
             notificarResposta?: string,
             notificarMarca?: string,
         };
@@ -189,7 +189,7 @@ class UsuarioController {
         const seguidor = getBoolean(notificarSeguidor);
         const avaliacao = getBoolean(notificarAvaliacao);
         const comentario = getBoolean(notificarComentario);
-        const favorito = getBoolean(notificarFavorito);
+        const curtida = getBoolean(notificarCurtida);
         const resposta = getBoolean(notificarResposta);
         const marca = getBoolean(notificarMarca);
 
@@ -202,7 +202,7 @@ class UsuarioController {
         if (seguidor !== null) usuario.notificarSeguidor = seguidor;
         if (avaliacao !== null) usuario.notificarAvaliacao = avaliacao;
         if (comentario !== null) usuario.notificarComentario = comentario;
-        if (favorito !== null) usuario.notificarFavorito = favorito;
+        if (curtida !== null) usuario.notificarCurtida = curtida;
         if (resposta !== null) usuario.notificarResposta = resposta;
         if (marca !== null) usuario.notificarMarca = marca;
 

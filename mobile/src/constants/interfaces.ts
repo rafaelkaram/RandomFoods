@@ -95,7 +95,7 @@ interface IUsuario {
   notificarSeguidor: boolean,
   notificarAvaliacao: boolean,
   notificarComentario: boolean,
-  notificarFavorito: boolean,
+  notificarCurtida: boolean,
   notificarResposta: boolean,
   notificarMarca: boolean,
   qtdeLogs: number

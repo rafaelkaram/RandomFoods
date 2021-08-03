@@ -13,6 +13,10 @@ export default {
 		const tam  = nomeCompleto.length - 1;
 		const firstName :string = nomeCompleto[0];
 		const lastName :string = nomeCompleto[tam];
+		const imgName: string = `${ encryptMidia(usuario.id.toString()) }.png`;
+		const existImg: boolean = fs.existsSync(path.join(getPath('usuario'), imgName));
+
+		const imgPath: string = existImg ? `http://${ getLocalIP() }:${ process.env.PORT }/uploads/midia/usuario/${ imgName }` : '';
 
 		return {
 			id: usuario.id,
@@ -20,7 +24,7 @@ export default {
 			nome: usuario.nome,
 			iniciais: firstName[0] + lastName[0],
 			perfil: usuario.perfil,
-			path: `http://${ getLocalIP() }:${ process.env.PORT }/uploads/midia/usuario/${ encryptMidia(usuario.id.toString()) }.png`,
+			path: imgPath,
 			ativo: usuario.ativo
 		};
 	},
@@ -53,7 +57,7 @@ export default {
 			notificarSeguidor: usuario.notificarSeguidor,
 			notificarAvaliacao: usuario.notificarAvaliacao,
 			notificarComentario: usuario.notificarComentario,
-			notificarFavorito: usuario.notificarFavorito,
+			notificarCurtida: usuario.notificarCurtida,
 			notificarResposta: usuario.notificarResposta,
 			notificarMarca: usuario.notificarMarca,
 			qtdeLogs: qtdeLogs
