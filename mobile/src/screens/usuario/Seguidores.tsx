@@ -53,31 +53,15 @@ const Seguidores = ({ route }: { route: any }) => {
             });
         api.get(`/busca/seguidos/${idUser}`)
             .then(response => {
-                //console.log(response.data)
+                console.log(response.data)
                 setSeguidos(response.data)
             });
         setLoad(true);
     }, [refreshing, seguindo]);
 
 
-    const seguirUsuario = () => {
-        if (!seguindo) {
-            api.post('cadastro/seguidor', { idSeguidor: user?.id, idUsuario: usuario?.id })
-                .then(response => {
-                    setSeguindo(true);
-                }).catch(error => {
-                    Alert.alert(
-                        'Falha no resgistro de seguidor',
-                        '\nFalha no resgistro de seguidor',
-                        [
-                            { text: 'OK' }
-                        ]
-                    );
-                    setSeguindo(false);
-                }
-                );
-        } else {
-            const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.usuario.id === user?.id));
+    const deixarSeguir = (id:number) => {
+       
             Alert.alert(
                 'Deixar de seguir',
                 '\nDeseja deixar de seguir?',
@@ -86,7 +70,7 @@ const Seguidores = ({ route }: { route: any }) => {
                     {
                         text: 'OK',
                         onPress: () => {
-                            api.post(`remove/seguidor/${seguidor[0].id}`)
+                            api.post(`remove/seguidor/${id}`)
                             .then(response => {
                                 setSeguindo(false);
                             }).catch(error => {
@@ -99,13 +83,14 @@ const Seguidores = ({ route }: { route: any }) => {
                                 );
                                 setSeguindo(true);
                             }
-                            );}
+                            );
+                        }
 
                      } ]);
                 
            
                 
-        }
+        
     }
 
 // useEffect(() => {
@@ -136,9 +121,9 @@ return (
         >
             <ScrollView style={{ backgroundColor: colors.background, marginTop: 10 }}>
                 {seguidor?
-                    <SeguidoresList seguidores={seguidores} seguidor ={seguidor} />
+                    <SeguidoresList seguidores={seguidores} seguidor ={seguidor}  deixarSeguir={(id:number)=>deixarSeguir(id)} />
                     :
-                    <SeguidoresList seguidores={seguidos} seguidor ={seguidor} />
+                    <SeguidoresList seguidores={seguidos} seguidor ={seguidor} deixarSeguir={(id:number)=>deixarSeguir(id)} />
                 }
                 {/* {seguidores.length > 0 &&
                     <SeguidoresList seguidores={seguidores} seguidor ={seguidor} />
