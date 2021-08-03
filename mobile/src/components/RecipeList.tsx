@@ -40,9 +40,9 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                                     <Text style={[globalStyles.regularText, { fontSize: 10, margin: 5 }]} >@{item.usuario.login}</Text>
                                     <View style={ styles.likeComment }>
                                         <AntDesign style={{margin: 5}} name='heart' size={20} color={colors.primary} />
-                                        <Text style={{margin: 5}}>2k</Text>
+                                        <Text style={{margin: 5}}>{ item.curtidas }</Text>
                                         <MaterialCommunityIcons style={{margin: 5}} name='comment' size={20} color='gray' />
-                                        <Text style={{margin: 5}}>300</Text>
+                                        <Text style={{margin: 5}}>{ item.comentarios }</Text>
                                     </View>
                                 </View>
 

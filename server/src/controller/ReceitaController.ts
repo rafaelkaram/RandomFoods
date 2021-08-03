@@ -6,7 +6,8 @@ import path from 'path';
 import { ReceitaRepository } from '../repository/ReceitaRepository';
 
 import AvaliacaoController from './AvaliacaoController';
-import CurtidaController from './CuritdaController';
+import ComentarioController from './ComentarioController';
+import CurtidaController from './CurtidaController';
 import IngredienteController from './IngredienteController';
 import LogNotificacaoController from './LogNotificacaoController';
 import MedidaController from './MedidaController';
@@ -45,14 +46,18 @@ class ReceitaController {
         });
 
         const avaliacaoController = new AvaliacaoController();
+        const comentarioController = new ComentarioController();
+        const curtidaController = new CurtidaController();
 
         const receitasList = await Promise.all(receitas.map(async receita => {
             const id = receita.id;
+            const comentarios: number = await comentarioController.count(receita);
+            const curtidas: number = await curtidaController.count(receita);
             const avaliacao: { nota: number, qtdeNotas: number } = await avaliacaoController.countVotes(id);
             const midias: Midia[] = receita.midias.filter(midia => midia.thumbnail);
 
             if (receita)
-                return receitaView.renderSimple(receita, avaliacao, midias.length > 0 ? midias[0] : undefined);
+                return receitaView.renderSimple(receita, curtidas, comentarios, avaliacao, midias.length > 0 ? midias[0] : undefined);
         }));
 
         return systrace(200, response, receitasList);
@@ -363,10 +368,14 @@ class ReceitaController {
         });
 
         const avaliacaoController = new AvaliacaoController();
+        const comentarioController = new ComentarioController();
+        const curtidaController = new CurtidaController();
 
+        const comentarios: number = await comentarioController.count(receita);
+        const curtidas: number = await curtidaController.count(receita);
         const midias: Midia[] = receita.midias.filter(midia => midia.thumbnail);
         const avaliacao: { nota: number, qtdeNotas: number } = await avaliacaoController.countVotes(id);
-        const receitaSimples = receitaView.renderSimple(receita, avaliacao, midias.length > 0 ? midias[0] : undefined);
+        const receitaSimples = receitaView.renderSimple(receita, curtidas, comentarios, avaliacao, midias.length > 0 ? midias[0] : undefined);
 
         return receitaSimples;
     }

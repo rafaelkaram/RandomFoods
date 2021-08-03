@@ -100,6 +100,14 @@ class CurtidaController {
 
         return curtidas;
     }
+
+    async count(receita: Receita): Promise<number> {
+        const repository = getCustomRepository(CurtidaRepository);
+
+        const curtidas = await repository.count({ receita });
+
+        return curtidas;
+    }
 }
 
 export default CurtidaController;
