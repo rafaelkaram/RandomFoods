@@ -2,6 +2,7 @@
 ## Membros
   - André Vitor Kuduavski GRR20184595
   - Carlos Felipe Godinho Silva GRR20184630
+  - Gleidison Novais dos Santos GRR20186250
   - Guilherme Vinicius Valério GRR20184636
   - Rafael Henrique Karam GRR20184601
 

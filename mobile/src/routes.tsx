@@ -21,6 +21,7 @@ import Receita from './screens/visualizacao/Receita';
 import Login from './screens/usuario/Login';
 import Painel from './screens/usuario/Painel';
 import Perfil from './screens/usuario/Perfil';
+import Seguidores from './screens/usuario/Seguidores';
 import Filtro from './screens/visualizacao/Filtro';
 import PassoAPasso from './screens/cadastro/PassoAPasso';
 import Usuario from './screens/cadastro/Usuario';
@@ -77,6 +78,7 @@ const UserDrawerStack = () => {
         <AppStack.Navigator headerMode={'none'}>
             <AppStack.Screen name={screens.painel} component={Painel} />
             <AppStack.Screen name={screens.perfil} component={Perfil} />
+            <AppStack.Screen name={screens.seguidores} component={Seguidores} />
             <AppStack.Screen name={screens.receita} component={Receita} />
             <AppStack.Screen name={screens.configuracoes} component={Configuracoes} />
         </AppStack.Navigator>
