@@ -76,5 +76,11 @@ export default StyleSheet.create({
         margin: 0,
         padding: 0,
         left: 7,
-    }
+    },
+
+    categories: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        paddingHorizontal: 5
+    },
 });

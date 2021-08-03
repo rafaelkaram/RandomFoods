@@ -22,13 +22,14 @@ import AuthReceita from '../../contexts/authReceita';
 const DadosGerais = () => {
     const navigation = useNavigation();
 
-    const { 
-        saveDadosGerais, 
-        nomeReceitaContext, 
-        tipoReceitaContext, 
-        minutosContext, 
-        porcoesContext, 
-        midiasContext 
+    const {
+        saveDadosGerais,
+        nomeReceitaContext,
+        tipoReceitaContext,
+        categoriasContext,
+        minutosContext,
+        porcoesContext,
+        midiasContext
     } = useContext(AuthReceita)
 
 
@@ -40,6 +41,8 @@ const DadosGerais = () => {
     const [porcoes, setPorcoes] = useState<string>('');
     const [tipos, setTipos] = useState<string[]>([]);
     const [midias, setMidias] = useState<IMidiaPicker[]>([]);
+    const [categoriasSelecionadas, setCategoriasSelecionadas] = useState<string[]>([])
+    const [categorias, setCategorias] = useState<string[]>([])
     const rgx = /^[0-9]*[.,]?[0-9]*$/;
 
 
@@ -48,6 +51,10 @@ const DadosGerais = () => {
             .then(response => {
                 setTipos(response.data);
                 setLoad(true);
+            });
+        api.get('/busca/categoria')
+            .then(response => {
+                setCategorias(response.data)
             });
         (async () => {
             if (Platform.OS !== 'web') {
@@ -61,6 +68,7 @@ const DadosGerais = () => {
         })();
         setNomeReceita(nomeReceitaContext)
         setTipoReceita(tipoReceitaContext)
+        setCategoriasSelecionadas(categoriasContext)
         setMinutos(minutosContext)
         setPorcoes(porcoesContext)
         setMidias(midiasContext)
@@ -74,7 +82,7 @@ const DadosGerais = () => {
         Alert.alert(
             "Dados não preenchidos",
             mensagem,
-            [ { text: "OK", onPress: () => console.log("OK Pressed") } ]
+            [{ text: "OK", onPress: () => console.log("OK Pressed") }]
         );
     }
 
@@ -103,15 +111,15 @@ const DadosGerais = () => {
 
     const handleNavigateToIngredients = async () => {
         if (
-            !nomeReceita || 
-            !tipoReceita || 
-            !minutos || 
+            !nomeReceita ||
+            !tipoReceita ||
+            !minutos ||
             !porcoes ||
             nomeReceita === '' ||
             tipoReceita === '' ||
             minutos === '' ||
             porcoes === ''
-            )
+        )
             createButtonAlert("Preencha todos os dados");
         else {
             /*const data = new FormData();
@@ -141,7 +149,7 @@ const DadosGerais = () => {
                 console.log({ msg: 'Recebemos resposta!', response: response.data });
             });*/
 
-            saveDadosGerais(nomeReceita, tipoReceita, minutos, porcoes, midias)
+            saveDadosGerais(nomeReceita, tipoReceita, categoriasSelecionadas, minutos, porcoes, midias)
             navigation.navigate(screens.cadastroIngredientes);
         }
     }
@@ -176,6 +184,16 @@ const DadosGerais = () => {
                 setPorcoes(valor.toString());
     }
 
+    const filterCategory = (categoria: string) => {
+        const alreadySelected = categoriasSelecionadas.findIndex(item => item === categoria);
+        if (alreadySelected >= 0) {
+            const filteredItems = categoriasSelecionadas.filter(item => item !== categoria);
+            setCategoriasSelecionadas(filteredItems);
+        } else {
+            setCategoriasSelecionadas([...categoriasSelecionadas, categoria]);
+        }
+    }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
@@ -184,7 +202,7 @@ const DadosGerais = () => {
                         style={globalStyles.recipeImage}
                         source={require('../../assets/nova-receita.png')}
                     />
-                    <Text style={[globalStyles.subTitleText, globalStyles.subTitle, {marginTop: 10}]}>Dados Gerais</Text>
+                    <Text style={[globalStyles.subTitleText, globalStyles.subTitle, { marginTop: 10 }]}>Dados Gerais</Text>
 
                 </View>
                 <TouchableOpacity style={{ position: 'absolute', right: 10, top: 20 }} onPress={() => toggleDrawer()}>
@@ -241,6 +259,23 @@ const DadosGerais = () => {
                             )
                         })}
                     </Picker>
+                </View>
+                <View style={{ ...globalStyles.container, minHeight: 130 }}>
+                    <Text style={[globalStyles.boldText, styles.textContainer]}>Categorias</Text>
+                    <View style={styles.categories}>
+                        {categorias.map((categoria, index) => {
+                            return (
+                                <View key={index}>
+                                    <TouchableOpacity
+                                        style={categoriasSelecionadas.includes(categoria) ? globalStyles.filterBoxSelected : globalStyles.filterBox}
+                                        onPress={() => { filterCategory(categoria) }}
+                                    >
+                                        <Text style={[globalStyles.regularText, categoriasSelecionadas.includes(categoria) && globalStyles.filterNameSelected]}>{categoria}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            )
+                        })}
+                    </View>
                 </View>
                 <View style={{ ...globalStyles.container, minHeight: 130, }}>
                     <Text style={[globalStyles.boldText, styles.textContainer]}>Tempo de preparo (Minutos)</Text>
