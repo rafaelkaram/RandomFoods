@@ -100,4 +100,29 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'flex-end'
     },
+
+    filterBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: colors.button,
+        borderRadius: 15,
+        height: 30,
+        paddingHorizontal: 10,
+        margin: 5,
+    },
+
+    filterBoxSelected: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: colors.primary,
+        borderRadius: 15,
+        height: 30,
+        paddingHorizontal: 10,
+        margin: 5
+    },
+    
+    filterNameSelected: {
+        color: 'white'
+    },
+
 });

@@ -43,26 +43,6 @@ export default StyleSheet.create({
         margin: 10,
     },
 
-    filterBox: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: colors.button,
-        borderRadius: 15,
-        height: 30,
-        paddingHorizontal: 10,
-        margin: 5,
-    },
-
-    filterBoxSelected: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: colors.primary,
-        borderRadius: 15,
-        height: 30,
-        paddingHorizontal: 10,
-        margin: 5
-    },
-
     filterBubble: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -74,10 +54,6 @@ export default StyleSheet.create({
 
     bubbleText: {
         color: colors.primary
-    },
-
-    filterNameSelected: {
-        color: 'white'
     },
 
     inputIngredient: {

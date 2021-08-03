@@ -9,7 +9,7 @@ import AuthContext from './../../contexts/auth';
 
 import api from '../../services/api';
 
-import { IPainelTipoReceita, IPainelCategorias, IPainelVotos,ISeguidoresSimples } from '../../constants/interfaces';
+import { IPainelTipoReceita, IPainelCategorias, IPainelVotos,ISeguidor } from '../../constants/interfaces';
 import { HEIGHT, WIDTH } from '../../constants/dimensions';
 import dashboardColors from '../../constants/dashboardColors';
 import colors from '../../constants/colors';
@@ -26,7 +26,7 @@ const Painel = () => {
     const [recipeType, setRecipeType] = useState<IPainelTipoReceita[]>([]);
     const [recipeCategory, setRecipeCategory] = useState<IPainelCategorias[]>([]);
     const [topVotedRecipe, setTopVotedRecipe] = useState<IPainelVotos[]>([]);
-    const [seguidores, setSeguidores] = useState<ISeguidoresSimples[]>([]);
+    const [seguidores, setSeguidores] = useState<ISeguidor[]>([]);
     const [load, setLoad] = useState<boolean>(false);
     const [refreshing, setRefreshing] = useState(false);
 
