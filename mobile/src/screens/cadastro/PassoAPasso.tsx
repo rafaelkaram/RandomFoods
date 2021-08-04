@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Modal } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { Alert, View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
@@ -8,11 +8,25 @@ import { BlurView } from 'expo-blur';
 
 import styles from '../../styles/screens/PassoAPasso';
 import globalStyles from '../../styles/Global';
-import { IPassoReceita } from '../../constants/interfaces';
+import { IPassoReceita, IReceitaCadastro } from '../../constants/interfaces';
 
 import StepRecipe from '../../components/StepRecipe';
 
+import AuthReceita from '../../contexts/authReceita';
+
 const PassoAPasso = () => {
+    
+    const {
+        nomeReceitaContext,
+        tipoReceitaContext,
+        categoriasContext,
+        minutosContext,
+        porcoesContext,
+        midiasContext,
+        ingredientesQuantidadeContext,
+    } = useContext(AuthReceita)
+
+
     const [id, setId] = useState(1);
     const [steps, setSteps] = useState<IPassoReceita[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
@@ -87,7 +101,36 @@ const PassoAPasso = () => {
 
     
     const vaiPraAlgumLugar = () => {
-        console.log('opaaa')
+        if (steps.length < 1){
+            Alert.alert(
+                "Adicione pelo menos um passo",
+                "",
+                [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+            );
+            return;
+        }
+        let stringSteps: string = '';
+        steps.map(step => {
+            stringSteps += step.id + '. ' + step.descricao + '/n/n'
+        })
+
+        const receitaCadastro: IReceitaCadastro = {
+            nome: nomeReceitaContext,
+            tipo: tipoReceitaContext,
+            categorias: categoriasContext,
+            minutos: Number(minutosContext),
+            porcoes: Number(porcoesContext),
+            midias: midiasContext,
+            ingredientes: ingredientesQuantidadeContext,
+            steps: stringSteps
+        }
+
+        console.log(receitaCadastro)
+        Alert.alert(
+            "Finge que Cadastrou",
+            "Falta só backend",
+            [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+        );
     }
 
     const removeStep = (id: number) => {

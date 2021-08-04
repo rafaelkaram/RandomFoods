@@ -65,6 +65,12 @@ export default StyleSheet.create({
         alignSelf: 'center'
     },
 
+    resultImage: {
+        width: 375,
+        height: 102,
+        alignSelf: 'center'
+    },
+
     arrow: {
         width: 60,
         height: 60,
@@ -120,7 +126,7 @@ export default StyleSheet.create({
         paddingHorizontal: 10,
         margin: 5
     },
-    
+
     filterNameSelected: {
         color: 'white'
     },

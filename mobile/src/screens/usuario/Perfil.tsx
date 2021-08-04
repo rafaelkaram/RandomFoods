@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { Alert, ScrollView, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, TabActions } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import api from '../../services/api';
 
@@ -43,7 +43,8 @@ const Perfil = ({ route }: { route: any }) => {
         api.get(`/busca/seguidos/${idUser}`)
             .then(response => { setSeguindo(response.data) });
 
-    }, [refreshing, seguidor]);
+    }, [refreshing, seguidor, idUser]);
+
 
     useEffect(() => {
         api.get(`/busca/receita-usuario/${idUser}`)
@@ -60,42 +61,50 @@ const Perfil = ({ route }: { route: any }) => {
     }, [seguidores]);
 
     const seguirUsuario = () => {
-        if (!seguidor) {
-            api.post('cadastro/seguidor', { idSeguidor: user?.id, idUsuario: usuario?.id })
-                .then(response => {
-                    setSeguidor(true);
-                }).catch(error => {
-                    Alert.alert(
-                        'Falha no resgistro de seguidor',
-                        '\nFalha no resgistro de seguidor',
-                        [
-                            { text: 'OK' }
-                        ]
-                    );
-                    setSeguidor(false);
-                }
-                );
+
+        if (user == null) {
+            const jumpToAction = TabActions.jumpTo('User');
+            navigation.dispatch(jumpToAction);
         } else {
-            const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.usuario.id === user?.id));
-            api.post(`remove/seguidor/${seguidor[0].id}`)
-                .then(response => {
-                    setSeguidor(false);
-                }).catch(error => {
-                    Alert.alert(
-                        'Falha na remoção de seguidor',
-                        '\nFalha na remoção de seguidor',
-                        [
-                            { text: 'OK' }
-                        ]
+
+            if (!seguidor) {
+                api.post('cadastro/seguidor', { idSeguidor: user?.id, idUsuario: usuario?.id })
+                    .then(response => {
+                        setSeguidor(true);
+                    }).catch(error => {
+                        Alert.alert(
+                            'Falha no resgistro de seguidor',
+                            '\nFalha no resgistro de seguidor',
+                            [
+                                { text: 'OK' }
+                            ]
+                        );
+                        setSeguidor(false);
+                    }
                     );
-                    setSeguidor(true);
-                }
-                );
+            } else {
+                const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.usuario.id === user?.id));
+                api.post(`remove/seguidor/${seguidor[0].id}`)
+                    .then(response => {
+                        setSeguidor(false);
+                    }).catch(error => {
+                        Alert.alert(
+                            'Falha na remoção de seguidor',
+                            '\nFalha na remoção de seguidor',
+                            [
+                                { text: 'OK' }
+                            ]
+                        );
+                        setSeguidor(true);
+                    }
+                    );
+            }
         }
     }
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
+        setLoad(false);
         setTimeout(() => setRefreshing(false), 2000);
     }, []);
 

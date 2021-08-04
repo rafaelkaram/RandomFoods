@@ -46,7 +46,7 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                                     </View>
                                 </View>
 
-                                <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
                                     {
                                         item.categorias.length > 0 ?
 
@@ -56,7 +56,6 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
 
                                                     <Image
                                                         key={index}
-                                                        // source={require('./../../assets/VEGANA.png')}
                                                         source={{ uri: `http://192.168.100.5:3333/uploads/midia/categoria/${categoria}.png` }}
                                                         style={{ width: 40, height: 40 }}
                                                     />

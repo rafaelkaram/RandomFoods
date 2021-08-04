@@ -9,7 +9,7 @@ import AuthContext from '../../contexts/auth';
 import { IReceitaSimples } from './../../constants/interfaces'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import globalStyles from '../../styles/Global';
-import colors from './../../constants/colors'
+import Loading from '../../components/Loading';
 import api from './../../services/api'
 import RecipeList from '../../components/RecipeList';
 import { WIDTH } from '../../constants/dimensions';
@@ -74,7 +74,7 @@ const Home = () => {
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
     const [receitas, setReceitas] = useState<IReceitaSimples[]>([])
-
+    const [load, setLoad] = useState<boolean>(false);
 
     const sendPushNotification = () => {
         let response = fetch('https://exp.host/--/api/v2/push/send', {
@@ -94,6 +94,7 @@ const Home = () => {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
+        setLoad(false);
         setTimeout(() => setRefreshing(false), 2000);
     }, []);
 
@@ -121,21 +122,19 @@ const Home = () => {
 
     useEffect(() => {
         api.get('/busca/receita').then(response => {
-            setReceitas(response.data)
+            setReceitas(response.data);
+            setLoad(true);
         })
     }, [refreshing]);
-
-    const handleNavigateToSearchRecipe = () => {
-        navigation.navigate(screens.filtro);
-    }
 
 
     const handleNavigateToRecipe = (id: number) => {
         navigation.navigate(screens.receita, { id: id });
     }
 
-
-
+    if (!load) {
+        return <Loading />
+    }
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <Image
