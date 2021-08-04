@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, TouchableOpacity, View, Image } from 'react-native';
-import { Avatar } from 'react-native-elements';
+import { Avatar , Icon} from 'react-native-elements';
+import { Feather } from '@expo/vector-icons'; 
 import colors from "../../src/constants/colors";
 
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -43,6 +44,8 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                                         <Text style={{margin: 5}}>{ item.curtidas }</Text>
                                         <MaterialCommunityIcons style={{margin: 5}} name='comment' size={20} color='gray' />
                                         <Text style={{margin: 5}}>{ item.comentarios }</Text>
+                                        <Feather name="clock" style={{margin: 5}} size={20} color="black" />
+                                        <Text style={{margin: 5}}>{ item.tempoPreparo }</Text>
                                     </View>
                                 </View>
 
