@@ -33,6 +33,7 @@ const InputSignUp = (props: {
                 props.setState('');
             } else {
                 api.post('validacao', { login: value }).then(response => {
+                    setData(data.toLowerCase())
                     props.setState(data);
 
                 }).catch(error => {
@@ -50,6 +51,7 @@ const InputSignUp = (props: {
                     props.setState('');
                 } else {
                     api.post('validacao', { email: value }).then(response => {
+                        setData(data.toLowerCase())
                         props.setState(data);
                     }).catch(error => {
                         setErrorMessage('Email já cadastrado');
@@ -72,18 +74,18 @@ const InputSignUp = (props: {
             <Input
                 autoCapitalize='none'
                 onEndEditing={() => { validateField(data) }}
-                placeholder={ props.placeholder }
-                errorMessage={ errorMessage }
-                autoCompleteType={ props.tipo }
-                secureTextEntry={ !eye }
-                onChangeText={ (value) => setData(value) }
-                value={ data }
+                placeholder={props.placeholder}
+                errorMessage={errorMessage}
+                autoCompleteType={props.tipo}
+                secureTextEntry={!eye}
+                onChangeText={(value) => setData(value)}
+                value={data}
                 leftIcon={
-                    <Ionicons name={ props.icon } style={{ paddingRight: 10 }} size={24} color='black' />
+                    <Ionicons name={props.icon} style={{ paddingRight: 10 }} size={24} color='black' />
                 }
                 rightIcon={
                     <TouchableOpacity onPress={() => { setEye(!eye) }}>
-                        <Ionicons name={ eye ? 'eye' : 'eye-off' } size={24} color="black" />
+                        <Ionicons name={eye ? 'eye' : 'eye-off'} size={24} color="black" />
                     </TouchableOpacity>
                 }
             />
@@ -91,15 +93,15 @@ const InputSignUp = (props: {
     } else {
         return (
             <Input
-                autoCapitalize={ props.tipo === 'name' ? 'words' : 'none' }
+                autoCapitalize={props.tipo === 'name' ? 'words' : 'none'}
                 onEndEditing={() => { validateField(data) }}
-                placeholder={ props.placeholder }
-                errorMessage={ errorMessage }
-                autoCompleteType={ props.tipo }
-                onChangeText={ props.tipo === 'name' ? (value) => setData(value) : (value) => setData(value.replace(/\s/g, '')) }
-                value={ data }
+                placeholder={props.placeholder}
+                errorMessage={errorMessage}
+                autoCompleteType={props.tipo}
+                onChangeText={props.tipo === 'name' ? (value) => setData(value) : (value) => setData(value.trim())}
+                value={data}
                 leftIcon={
-                    <Ionicons name={ props.icon } style={{ paddingRight: 10 }} size={24} color='black' />
+                    <Ionicons name={props.icon} style={{ paddingRight: 10 }} size={24} color='black' />
                 }
             />
         );

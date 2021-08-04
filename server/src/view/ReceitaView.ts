@@ -20,7 +20,7 @@ export default {
 			`http://${ getLocalIP() }:${ process.env.PORT }/uploads/midia/receita/receita-padrao.png`;
 
 		const categorias = receita.categorias.map(categoria => {
-			return categoria.nome;
+			return `http://${ getLocalIP() }:${ process.env.PORT }/uploads/midia/categoria/${categoria.nome}.png`;
 		});
 
 		return {
@@ -40,9 +40,9 @@ export default {
     render(receita: Receita, ingredienteList: ReceitaIngrediente[], curtidaList: Curtida[], avaliacao: { nota: number, qtdeNotas: number}, qtdeLogs: number) {
 		if (receita && ingredienteList) {
 			const categorias = receita.categorias.map(categoria => {
-				return categoria.nome;
+				return `http://${ getLocalIP() }:${ process.env.PORT }/uploads/midia/categoria/${categoria.nome}.png`;
 			});
-
+		
 			return {
 				id: receita.id,
 				receita: receita.nome,

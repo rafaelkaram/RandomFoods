@@ -156,63 +156,6 @@ class ReceitaController {
         return systrace(200, response, [ min, max ]);
     }
 
-    // Métodos internos
-    async import(dados: { nome: string, descricao: string, tempoPreparo: number, porcoes: number, tipo: string, usuario?: string },
-        dadosIngrediente: { nomeIngrediente: string, unidade?: string, quantidade?: number }[],
-        dadosCategoria: { categoria: string }[]) {
-
-        const nome: string = dados.nome.trim();
-        const descricao: string = dados.descricao.trim();
-        const tempoPreparo: number = dados.tempoPreparo ? dados.tempoPreparo : 0;
-        const porcoes: number = dados.porcoes ? dados.porcoes : 1;
-        const tipo: Tipo = <Tipo> dados.tipo.trim().toUpperCase();
-        const usuario: string | undefined = dados.usuario?.trim().toLowerCase();
-
-        const ingredienteController = new IngredienteController();
-        const medidaController = new MedidaController();
-        const unidadeController = new UnidadeController();
-        const usuarioController = new UsuarioController();
-
-        const usuarioReceita = await usuarioController.findByLoginOrEmail(usuario);
-        const receita = new Receita(nome, descricao, tempoPreparo, porcoes, tipo, usuarioReceita);
-
-        await receita.save();
-
-        if (dadosCategoria && dadosCategoria.length > 0) {
-            for (let k in dadosCategoria) {
-                const nomeCategoria = <TipoCategoria> dadosCategoria[k].categoria.trim().toUpperCase();
-
-                const categoria = new Categoria(nomeCategoria, receita);
-                await categoria.save();
-            }
-        }
-
-        for (let j in dadosIngrediente) {
-            const dado = dadosIngrediente[j];
-
-            const nomeIngrediente = dado.nomeIngrediente.trim().toLowerCase();
-            const nomeMedida = dado.unidade?.trim().toLowerCase();
-            const quantidade = dado.quantidade;
-
-            const ingrediente: Ingrediente = await ingredienteController.findByName(nomeIngrediente);
-            const receitaIngrediente: ReceitaIngrediente = new ReceitaIngrediente(ingrediente, receita);
-
-            if (!quantidade && !ingrediente.semMedida) {
-                throw Error(`Ingrediente ${ ingrediente.nome } não aceita quantidades nulas`);
-            } else if (nomeMedida) {
-                const medida: Medida = await medidaController.findByType(nomeMedida, ingrediente.tipoUnidade);
-                receitaIngrediente.unidade = await unidadeController.find(medida, ingrediente);
-            } else {
-                const unidades = await unidadeController.findSI2();
-                receitaIngrediente.unidade = unidades[0];
-            }
-
-            if (quantidade) receitaIngrediente.quantidade  = quantidade;
-
-            await receitaIngrediente.save();
-        }
-    }
-
     async typeIndex(request: Request, response: Response) {
 
         const tipos = Object.values(Tipo);
@@ -363,6 +306,62 @@ class ReceitaController {
     }
 
     // Métodos internos
+    async import(dados: { nome: string, descricao: string, tempoPreparo: number, porcoes: number, tipo: string, usuario?: string },
+        dadosIngrediente: { nomeIngrediente: string, unidade?: string, quantidade?: number }[],
+        dadosCategoria: { categoria: string }[]) {
+
+        const nome: string = dados.nome.trim();
+        const descricao: string = dados.descricao.trim();
+        const tempoPreparo: number = dados.tempoPreparo ? dados.tempoPreparo : 0;
+        const porcoes: number = dados.porcoes ? dados.porcoes : 1;
+        const tipo: Tipo = <Tipo> dados.tipo.trim().toUpperCase();
+        const usuario: string | undefined = dados.usuario?.trim().toLowerCase();
+
+        const ingredienteController = new IngredienteController();
+        const medidaController = new MedidaController();
+        const unidadeController = new UnidadeController();
+        const usuarioController = new UsuarioController();
+
+        const usuarioReceita = await usuarioController.findByLoginOrEmail(usuario);
+        const receita = new Receita(nome, descricao, tempoPreparo, porcoes, tipo, usuarioReceita);
+
+        await receita.save();
+
+        if (dadosCategoria && dadosCategoria.length > 0) {
+            for (let k in dadosCategoria) {
+                const nomeCategoria = <TipoCategoria> dadosCategoria[k].categoria.trim().toUpperCase();
+
+                const categoria = new Categoria(nomeCategoria, receita);
+                await categoria.save();
+            }
+        }
+
+        for (let j in dadosIngrediente) {
+            const dado = dadosIngrediente[j];
+
+            const nomeIngrediente = dado.nomeIngrediente.trim().toLowerCase();
+            const nomeMedida = dado.unidade?.trim().toLowerCase();
+            const quantidade = dado.quantidade;
+
+            const ingrediente: Ingrediente = await ingredienteController.findByName(nomeIngrediente);
+            const receitaIngrediente: ReceitaIngrediente = new ReceitaIngrediente(ingrediente, receita);
+
+            if (!quantidade && !ingrediente.semMedida) {
+                throw Error(`Ingrediente ${ ingrediente.nome } não aceita quantidades nulas`);
+            } else if (nomeMedida) {
+                const medida: Medida = await medidaController.findByType(nomeMedida, ingrediente.tipoUnidade);
+                receitaIngrediente.unidade = await unidadeController.find(medida, ingrediente);
+            } else {
+                const unidades = await unidadeController.findSI2();
+                receitaIngrediente.unidade = unidades[0];
+            }
+
+            if (quantidade) receitaIngrediente.quantidade  = quantidade;
+
+            await receitaIngrediente.save();
+        }
+    }
+
     async find(id: number): Promise<Receita> {
         const repository = getCustomRepository(ReceitaRepository);
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, TouchableOpacity, View, Image } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import colors from "../../src/constants/colors";
-
+import Category from '../components/Category';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { IReceitaSimples } from '../constants/interfaces';
@@ -38,11 +38,11 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                                 <View style={styles.textContainer}>
                                     <Text>{item.receita}</Text>
                                     <Text style={[globalStyles.regularText, { fontSize: 10, margin: 5 }]} >@{item.usuario.login}</Text>
-                                    <View style={ styles.likeComment }>
-                                        <AntDesign style={{margin: 5}} name='heart' size={20} color={colors.primary} />
-                                        <Text style={{margin: 5}}>{ item.curtidas }</Text>
-                                        <MaterialCommunityIcons style={{margin: 5}} name='comment' size={20} color='gray' />
-                                        <Text style={{margin: 5}}>{ item.comentarios }</Text>
+                                    <View style={styles.likeComment}>
+                                        <AntDesign style={{ margin: 5 }} name='heart' size={20} color={colors.primary} />
+                                        <Text style={{ margin: 5 }}>{item.curtidas}</Text>
+                                        <MaterialCommunityIcons style={{ margin: 5 }} name='comment' size={20} color='gray' />
+                                        <Text style={{ margin: 5 }}>{item.comentarios}</Text>
                                     </View>
                                 </View>
 
@@ -54,11 +54,7 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
 
                                                 return (
 
-                                                    <Image
-                                                        key={index}
-                                                        source={{ uri: `http://192.168.100.5:3333/uploads/midia/categoria/${categoria}.png` }}
-                                                        style={{ width: 40, height: 40 }}
-                                                    />
+                                                    <Category key={index} nome={categoria} />
 
                                                 )
                                             }) : null
