@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { Alert, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
@@ -10,24 +10,43 @@ import componentStyles from '../../styles/components/RecipeList';
 import globalStyles from '../../styles/Global';
 import styles from '../../styles/screens/Quantidade';
 import screens from '../../constants/screens';
-import { IListaIngredientes, IIngrediente } from '../../constants/interfaces';
+import { IListaIngredientes, IIngrediente, IIngredienteCadastro } from '../../constants/interfaces';
 
 import IngredientMeasure from '../../components/IngredientMeasure';
 import Loading from '../../components/Loading';
 
+import AuthReceita from '../../contexts/authReceita';
+
 const Quantidades = ({ route }: { route: any }) => {
     const navigation = useNavigation();
 
+    const {
+        saveIngredientesQuantidade,
+        ingredientesQuantidadeContext,
+    } = useContext(AuthReceita)
+
     const [ingredientsCart, setIngredientsCart] = useState<IListaIngredientes[]>([]);
     const [load, setLoad] = useState<boolean>(false);
+    const [ingredientes, setIngredientes] = useState<IIngredienteCadastro[]>([])
 
     useEffect(() => {
         if (route.params) {
             const { idIngredientes } = route.params;
+
+            if (ingredientesQuantidadeContext.length > 0) {
+                setIngredientes(ingredientesQuantidadeContext)
+            } else {
+                const newIngrs: IIngredienteCadastro[] = []
+                idIngredientes.map((id: number) => {
+                    newIngrs.push({ id, nome: '' })
+                })
+                setIngredientes(newIngrs)
+            }
             const params = { ids: idIngredientes };
             api.get('/busca/ingrediente', { params })
                 .then(response => {
                     setIngredientsCart(response.data);
+
                     setLoad(true);
                 });
         } else {
@@ -39,8 +58,35 @@ const Quantidades = ({ route }: { route: any }) => {
         return <Loading />
     }
 
+    const createButtonAlert = (mensagem: string) => {
+        Alert.alert(
+            "Dados não preenchidos",
+            mensagem,
+            [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+        );
+    }
+
+    const validaIngreidients = () => {
+        for (var key in ingredientes) {
+            if (!ingredientes[key].semMedida) {
+                if (ingredientes[key].tipoUnidade === '') {
+                    createButtonAlert('Ingrediente ' + ingredientes[key].nome + ' sem unidade')
+                    return false
+                }
+                if (ingredientes[key].quantidade === 0) {
+                    createButtonAlert('Ingrediente ' + ingredientes[key].nome + ' sem quantidade')
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
     const handleNavigateToSteps = () => {
-        navigation.navigate(screens.cadastroPassos);
+        if (validaIngreidients()) {
+            saveIngredientesQuantidade(ingredientes)
+            navigation.navigate(screens.cadastroPassos)
+        }
     }
 
     const removeIngredient = (id: number) => {
@@ -63,27 +109,29 @@ const Quantidades = ({ route }: { route: any }) => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <Image
-                style={ globalStyles.recipeImage }
-                source={ require('../../assets/nova-receita.png') }
+                style={globalStyles.recipeImage}
+                source={require('../../assets/nova-receita.png')}
             />
-            <Text style={[ globalStyles.subTitleText, globalStyles.subTitle ]}>Selecione as quantidades</Text>
+            <Text style={[globalStyles.subTitleText, globalStyles.subTitle]}>Selecione as quantidades</Text>
             <ScrollView>
                 {ingredientsCart.map(tipos => {
                     return (
-                        <View key={ tipos.nome }>
-                            <View style={ styles.ingredientType }>
-                                <Text style={{ ...globalStyles.boldText, paddingTop: 15, fontSize: 18 }}>{ tipos.nome }</Text>
+                        <View key={tipos.nome}>
+                            <View style={styles.ingredientType}>
+                                <Text style={{ ...globalStyles.boldText, paddingTop: 15, fontSize: 18 }}>{tipos.nome}</Text>
                                 <Image
                                     style={{ width: 50, height: 50 }}
                                     source={{ uri: tipos.url }}
                                 />
                             </View>
-                            { tipos.ingredientes.map(ingrediente => {
+                            {tipos.ingredientes.map(ingrediente => {
                                 return <IngredientMeasure
-                                            key={ ingrediente.id }
-                                            ingrediente={ ingrediente }
-                                            removeIngrediente={ (id: number) => removeIngredient(id) }
-                                        />
+                                    key={ingrediente.id}
+                                    ingrediente={ingrediente}
+                                    ingredientesCadastro={ingredientes}
+                                    removeIngrediente={(id: number) => removeIngredient(id)}
+                                    setIngredientes={(ingredientes: IIngredienteCadastro[]) => setIngredientes(ingredientes)}
+                                />
                             })}
                         </View>
                     )
@@ -91,8 +139,8 @@ const Quantidades = ({ route }: { route: any }) => {
                 <View style={{ height: 80 }}></View>
             </ScrollView>
             <TouchableOpacity
-                style={ globalStyles.arrow }
-                onPress={ handleNavigateToSteps }
+                style={globalStyles.arrow}
+                onPress={handleNavigateToSteps}
             >
                 <AntDesign style={{ alignSelf: 'center' }} name='arrowright' size={24} color='white' />
             </TouchableOpacity>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { Alert, ScrollView, RefreshControl, TouchableOpacity , Text} from 'react-native';
-import {  Avatar } from 'react-native-elements';
+import { Alert, ScrollView, RefreshControl, TouchableOpacity, Text } from 'react-native';
+import { Avatar } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
@@ -25,9 +25,11 @@ const Seguidores = ({ route }: { route: any }) => {
     const [load, setLoad] = useState<boolean>(false);
     const [seguindo, setSeguindo] = useState<boolean>(false);
     const [seguidores, setSeguidores] = useState<ISeguidor[]>([]);
+    const [seguidos, setSeguidos] = useState<ISeguidor[]>([]);
     const [refreshing, setRefreshing] = useState(false);
 
     const idUser = route.params.id;
+    const seguidor = route.params.seguidor;
 
     const { user } = useContext(AuthContext);
 
@@ -46,49 +48,91 @@ const Seguidores = ({ route }: { route: any }) => {
 
         api.get(`/busca/seguidores/${idUser}`)
             .then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 setSeguidores(response.data)
             });
-            setLoad(true);
+        api.get(`/busca/seguidos/${idUser}`)
+            .then(response => {
+                console.log(response.data)
+                setSeguidos(response.data)
+            });
+        setLoad(true);
     }, [refreshing, seguindo]);
 
-    
 
-    // useEffect(() => {
-    //     const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.id === user?.id));
-    //     if (seguidor && seguidor.length > 0)
-    //         setSeguindo(true);
-    // }, [seguidores]);
+    const deixarSeguir = (id:number) => {
+       
+            Alert.alert(
+                'Deixar de seguir',
+                '\nDeseja deixar de seguir?',
+                [
+                    { text: 'CANCELAR' },
+                    {
+                        text: 'OK',
+                        onPress: () => {
+                            api.post(`remove/seguidor/${id}`)
+                            .then(response => {
+                                setSeguindo(false);
+                            }).catch(error => {
+                                Alert.alert(
+                                    'Falha na remoção de seguidor',
+                                    '\nFalha na remoção de seguidor',
+                                    [
+                                        { text: 'OK' }
+                                    ]
+                                );
+                                setSeguindo(true);
+                            }
+                            );
+                        }
 
-    
-
-    const onRefresh = useCallback(() => {
-        setRefreshing(true);
-        setTimeout(() => setRefreshing(false), 2000);
-    }, []);
-
-    if (!load || !usuario) {
-        return <Loading />
+                     } ]);
+                
+           
+                
+        
     }
 
-    return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                    />}
-            >
-                 <ScrollView style={{ backgroundColor: colors.background, marginTop: 10 }}>
-                    {seguidores.length > 0 &&
-                        <SeguidoresList seguidores={seguidores} />
-                    }
-                </ScrollView>
-               
+// useEffect(() => {
+//     const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.id === user?.id));
+//     if (seguidor && seguidor.length > 0)
+//         setSeguindo(true);
+// }, [seguidores]);
+
+
+
+const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => setRefreshing(false), 2000);
+}, []);
+
+if (!load || !usuario) {
+    return <Loading />
+}
+
+return (
+    <SafeAreaView style={{ flex: 1 }}>
+        <ScrollView
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                />}
+        >
+            <ScrollView style={{ backgroundColor: colors.background, marginTop: 10 }}>
+                {seguidor?
+                    <SeguidoresList seguidores={seguidores} seguidor ={seguidor}  deixarSeguir={(id:number)=>deixarSeguir(id)} />
+                    :
+                    <SeguidoresList seguidores={seguidos} seguidor ={seguidor} deixarSeguir={(id:number)=>deixarSeguir(id)} />
+                }
+                {/* {seguidores.length > 0 &&
+                    <SeguidoresList seguidores={seguidores} seguidor ={seguidor} />
+                } */}
             </ScrollView>
-        </SafeAreaView>
-    )
+
+        </ScrollView>
+    </SafeAreaView>
+)
 }
 
 export default Seguidores;
