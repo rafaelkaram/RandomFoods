@@ -11,7 +11,6 @@ import api from '../../services/api';
 
 import { IPainelTipoReceita, IPainelCategorias, IPainelVotos, ISeguidor } from '../../constants/interfaces';
 import { HEIGHT, WIDTH } from '../../constants/dimensions';
-import dashboardColors from '../../constants/dashboardColors';
 import colors from '../../constants/colors';
 import screens from '../../constants/screens';
 import globalStyles from '../../styles/Global';
@@ -51,8 +50,6 @@ const Painel = () => {
         setLoad(true);
     }, [user, refreshing]);
 
-
-
     const pieTypeData = recipeType.map((item) => {
         return { x: item.tipo, y: Number(item.count) }
     });
@@ -66,12 +63,12 @@ const Painel = () => {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
+        setLoad(false);
         setTimeout(() => setRefreshing(false), 2000);
     }, []);
 
-    const handleNavigateToPerfil = (id: number | undefined) => {
-        navigation.navigate(screens.perfil, { id: id });
-
+    const handleNavigateToReceitasCategoria = (categoria: string) => {
+        navigation.navigate(screens.receitaCategoria, { id: user?.id, categoria });
     }
 
     if (!load || !user) {
@@ -122,14 +119,14 @@ const Painel = () => {
                     <View style={styles.topVotedTable}>
                         <DataTable>
                             <DataTable.Header>
-                                <DataTable.Title onPress={() => { }} style={{ flexBasis: 30 }} >Categoria</DataTable.Title>
+                                <DataTable.Title style={{ flexBasis: 30 }} >Categoria</DataTable.Title>
                                 <DataTable.Title numeric>#Receitas</DataTable.Title>
                             </DataTable.Header>
                             {recipeCategory.map((item, index) => {
                                 return (
                                     <TouchableOpacity key={index}>
                                         <DataTable.Row >
-                                            <DataTable.Cell style={{ flexBasis: 30 }}>{item.categoria}</DataTable.Cell>
+                                            <DataTable.Cell onPress={() => { handleNavigateToReceitasCategoria(item.categoria) }} style={{ flexBasis: 30 }}>{item.categoria}</DataTable.Cell>
                                             <DataTable.Cell numeric>{item.count}</DataTable.Cell>
                                         </DataTable.Row>
                                     </TouchableOpacity>

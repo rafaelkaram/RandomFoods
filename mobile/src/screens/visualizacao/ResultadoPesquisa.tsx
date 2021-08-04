@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { ScrollView, Text, View, RefreshControl } from 'react-native';
+import { ScrollView, Text, View, RefreshControl, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Picker } from '@react-native-picker/picker';
-
+import { AntDesign } from '@expo/vector-icons';
 import { IReceitaSimples } from '../../constants/interfaces';
 
 import api from '../../services/api';
@@ -75,6 +75,7 @@ const Recipe = ({ route }: { route: any }) => {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
+        setLoad(false);
         setTimeout(() => setRefreshing(false), 2000);
     }, []);
 
@@ -125,22 +126,25 @@ const Recipe = ({ route }: { route: any }) => {
                         onRefresh={onRefresh}
                     />}
             >
+                <Image source={require('./../../assets/resultados.png')} style={globalStyles.resultImage} />
                 {(matchesParciais.length > 0 || matchesPerfeitos.length > 0) && (
-                    <Picker
-                        selectedValue={orderBy}
-                        mode='dropdown'
-                        style={styles.comboBox}
-                        onValueChange={(itemPosition) => {
-                            orderArray(itemPosition)
-                            setOrderBy(itemPosition)
-                        }}
-                    >
-                        <Picker.Item label={'Ordenar Por'} value={0} />
-                        <Picker.Item key={1} label={'Maior Tempo'} value={1} />
-                        <Picker.Item key={2} label={'Menor Tempo'} value={2} />
-                        <Picker.Item key={3} label={'Mais Curtidas'} value={3} />
-                        <Picker.Item key={4} label={'Mais Comentários'} value={4} />
-                    </Picker>
+                    <View style={styles.container}>
+                        <Picker
+                            selectedValue={orderBy}
+                            mode='dropdown'
+                            style={styles.comboBox}
+                            onValueChange={(itemPosition) => {
+                                orderArray(itemPosition)
+                                setOrderBy(itemPosition)
+                            }}
+                        >
+                            <Picker.Item label={'Ordenar Por'} value={0} />
+                            <Picker.Item key={1} label={'Maior Tempo'} value={1} />
+                            <Picker.Item key={2} label={'Menor Tempo'} value={2} />
+                            <Picker.Item key={3} label={'Mais Curtidas'} value={3} />
+                            <Picker.Item key={4} label={'Mais Comentários'} value={4} />
+                        </Picker>
+                    </View>
                 )}
                 {receitas.length === 0 ? (
                     <View>
