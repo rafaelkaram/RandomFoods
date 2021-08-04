@@ -15,5 +15,6 @@ export default {
   receita2: 'Visualizar Receita2',
   resultadoPesquisa: 'Resultado Pesquisa',
   notificacoes: 'Notificação',
-  seguidores: 'Seguidores'
+  seguidores: 'Seguidores',
+  receitaCategoria: 'Receitas da Categoria'  
 }

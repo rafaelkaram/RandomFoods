@@ -7,6 +7,7 @@ import api from '../../services/api';
 import screens from '../../constants/screens';
 import { IReceitaSimples } from '../../constants/interfaces';
 import RecipeList from '../../components/RecipeList';
+import globalStyles from '../../styles/Global';
 
 const ReceitaCategoria = ({ route }: { route: any }) => {
     const navigation = useNavigation();
@@ -42,7 +43,7 @@ const ReceitaCategoria = ({ route }: { route: any }) => {
     }
     return (
         <SafeAreaView>
-            <Image source={require('./../../assets/resultados.png')} style={{ width: 375, height: 102, alignSelf: 'center' }} />
+            <Image source={require('./../../assets/resultados.png')} style={globalStyles.resultImage} />
             <ScrollView
                 refreshControl={
                     <RefreshControl

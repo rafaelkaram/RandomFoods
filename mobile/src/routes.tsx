@@ -25,7 +25,7 @@ import Seguidores from './screens/usuario/Seguidores';
 import Filtro from './screens/visualizacao/Filtro';
 import PassoAPasso from './screens/cadastro/PassoAPasso';
 import Usuario from './screens/cadastro/Usuario';
-
+import ReceitaCategoria from './screens/visualizacao/ReceitaCategoria'
 import screens from './constants/screens';
 
 import DrawerMenu from './components/DrawerMenu';
@@ -56,6 +56,7 @@ const HomeStack = () => {
             <AppStack.Screen name={screens.resultadoPesquisa} component={ResultadoPesquisa} />
             <AppStack.Screen name={screens.receita} component={Receita} />
             <AppStack.Screen name={screens.perfil} component={Perfil} />
+            <AppStack.Screen name={screens.seguidores} component={Seguidores} />
         </AppStack.Navigator>
     )
 }
@@ -67,6 +68,7 @@ const PesquisaStack = () => {
             <AppStack.Screen name={screens.resultadoPesquisa} component={ResultadoPesquisa} />
             <AppStack.Screen name={screens.receita} component={Receita} />
             <AppStack.Screen name={screens.perfil} component={Perfil} />
+            <AppStack.Screen name={screens.seguidores} component={Seguidores} />
         </AppStack.Navigator>
     )
 }
@@ -79,6 +81,7 @@ const UserDrawerStack = () => {
             <AppStack.Screen name={screens.painel} component={Painel} />
             <AppStack.Screen name={screens.perfil} component={Perfil} />
             <AppStack.Screen name={screens.seguidores} component={Seguidores} />
+            <AppStack.Screen name={screens.receitaCategoria} component={ReceitaCategoria} />
             <AppStack.Screen name={screens.receita} component={Receita} />
             <AppStack.Screen name={screens.configuracoes} component={Configuracoes} />
         </AppStack.Navigator>
