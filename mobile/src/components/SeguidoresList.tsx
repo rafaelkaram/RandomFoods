@@ -63,7 +63,7 @@ const SeguidoresList = ({
                                 <Text style={[styles.seguidorUsername, globalStyles.regularText]}>{item.usuario.login}</Text>
                             </View>
                             {!seguidor &&
-                                <TouchableOpacity onPress={() => deixarSeguir(item.id)} style={[{ alignItems: 'center' }, styles.botaoUnfollow]}>
+                                <TouchableOpacity onPress={() => deixarSeguir(item.id, item.usuario.nome)} style={[{ alignItems: 'center' }, styles.botaoUnfollow]}>
                                     <SimpleLineIcons name="user-unfollow" size={20} color={'white'} />
                                 </TouchableOpacity>
                             }
