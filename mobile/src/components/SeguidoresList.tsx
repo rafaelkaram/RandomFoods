@@ -7,7 +7,7 @@ import colors from "../../src/constants/colors";
 
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { ISeguidor } from '../constants/interfaces';
+import { ISeguidor, IUsuario } from '../constants/interfaces';
 import screens from '../constants/screens';
 import styles from '../styles/components/SeguidoresList';
 import globalStyles from '../styles/Global';
@@ -17,12 +17,21 @@ import { WIDTH } from '../constants/dimensions';
 const SeguidoresList = ({
     seguidores,
     seguidor,
-    deixarSeguir
+    deixarSeguir,
+    contextUser,
+    idUser
 }: {
     seguidores: ISeguidor[],
     seguidor: boolean,
-    deixarSeguir: Function
+    deixarSeguir: Function,
+    contextUser:IUsuario | null,
+    idUser: number
 }) => {
+    
+    let verification = false
+    if (contextUser?.id == idUser){
+        verification = true
+    }
 
     const navigation = useNavigation();
 
@@ -62,12 +71,13 @@ const SeguidoresList = ({
                                 <Text style={styles.seguidorName}>{item.usuario.nome}</Text>
                                 <Text style={[styles.seguidorUsername, globalStyles.regularText]}>{item.usuario.login}</Text>
                             </View>
-                            {!seguidor &&
-                                <TouchableOpacity onPress={() => deixarSeguir(item.id)} style={[{ alignItems: 'center' }, styles.botaoUnfollow]}>
+                            {verification && !seguidor &&
+                            
+                                <TouchableOpacity onPress={() => deixarSeguir(item.id, item.usuario.nome)} style={[{ alignItems: 'center' }, styles.botaoUnfollow]}>
                                     <SimpleLineIcons name="user-unfollow" size={20} color={'white'} />
                                 </TouchableOpacity>
-                            }
-
+                            
+                        }
                         </View>
                     </TouchableOpacity>
                 )

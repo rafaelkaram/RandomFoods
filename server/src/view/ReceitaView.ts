@@ -20,7 +20,7 @@ export default {
 			`http://${ getLocalIP() }:${ process.env.PORT }/uploads/midia/receita/receita-padrao.png`;
 
 		const categorias = receita.categorias.map(categoria => {
-			return categoria.nome;
+			return `http://${ getLocalIP() }:${ process.env.PORT }/uploads/midia/categoria/${categoria.nome}.png`;
 		});
 
 		return {

@@ -1,31 +1,36 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { Alert, ScrollView, RefreshControl, TouchableOpacity, Text } from 'react-native';
-import { Avatar } from 'react-native-elements';
+import { Alert, ScrollView, RefreshControl, TouchableOpacity, Text, View } from 'react-native';
+import { Avatar, Input } from 'react-native-elements';
+import { Feather } from '@expo/vector-icons'; 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import api from '../../services/api';
 
-import { ISeguidor, IReceitaSimples, IUsuarioSimples } from '../../constants/interfaces';
+import { ISeguidor, IReceitaSimples, IUsuarioSimples, IUsuario } from '../../constants/interfaces';
 import screens from '../../constants/screens';
 import colors from '../../constants/colors';
 
-import styles from '../../styles/screens/Receita';
+import globalStyles from '../../styles/Global';
+import styles from '../../styles/screens/Seguidores';
+import fixString from '../../assets/functions/utils';
 import Loading from '../../components/Loading';
 import RecipeList from '../../components/RecipeList';
 import UserHeader from '../../components/UserHeader';
 import UserHeaderFollow from '../../components/UserHeaderFollow';
 import SeguidoresList from '../../components/SeguidoresList';
 
+
 const Seguidores = ({ route }: { route: any }) => {
     const navigation = useNavigation();
-    const [recipesUser, setRecipesUser] = useState<IReceitaSimples[]>([]);
     const [usuario, setUsuario] = useState<IUsuarioSimples>();
-    const [title, setTitle] = useState('');
+    const [nomeSeguidor, setNomeSeguidor] = useState<string>('');
     const [load, setLoad] = useState<boolean>(false);
     const [seguindo, setSeguindo] = useState<boolean>(false);
     const [seguidores, setSeguidores] = useState<ISeguidor[]>([]);
     const [seguidos, setSeguidos] = useState<ISeguidor[]>([]);
+    const [seguidoresFilter, setSeguidoresFilter] = useState<ISeguidor[]>([]);
+    const [seguidosFilter, setSeguidosFilter] = useState<ISeguidor[]>([]);
     const [refreshing, setRefreshing] = useState(false);
 
     const idUser = route.params.id;
@@ -50,21 +55,28 @@ const Seguidores = ({ route }: { route: any }) => {
             .then(response => {
                 //console.log(response.data)
                 setSeguidores(response.data)
+                setSeguidoresFilter(response.data)
             });
         api.get(`/busca/seguidos/${idUser}`)
             .then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 setSeguidos(response.data)
+                setSeguidosFilter(response.data)
             });
         setLoad(true);
     }, [refreshing, seguindo]);
 
+    useEffect(() => {
+        filterSeguidores()
+    }, [nomeSeguidor]);
 
-    const deixarSeguir = (id:number) => {
+
+
+    const deixarSeguir = (id:number,name:string) => {
        
             Alert.alert(
                 'Deixar de seguir',
-                '\nDeseja deixar de seguir?',
+                '\nDeseja deixar de seguir '+name+' ?',
                 [
                     { text: 'CANCELAR' },
                     {
@@ -87,11 +99,27 @@ const Seguidores = ({ route }: { route: any }) => {
                         }
 
                      } ]);
-                
-           
-                
         
     }
+
+     const filterSeguidores = () => {
+        let list: ISeguidor[] = [];
+        if (nomeSeguidor !== '') {
+            if (seguidor){
+               list = seguidores.filter(user=>fixString(user.usuario.login.toLowerCase()).match(nomeSeguidor.toLowerCase()));
+               setSeguidoresFilter(list)
+            }else{
+                list = seguidos.filter(user=>fixString(user.usuario.login.toLowerCase()).match(nomeSeguidor.toLowerCase()));
+                setSeguidosFilter(list)
+            }
+    }else{
+        if (seguidor){
+            setSeguidoresFilter(seguidores)
+         }else{
+             setSeguidosFilter(seguidos)
+         }
+    }
+}
 
 // useEffect(() => {
 //     const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.id === user?.id));
@@ -119,11 +147,21 @@ return (
                     onRefresh={onRefresh}
                 />}
         >
+          
+           
+             <Input
+                placeholder='Pesquisar'
+                onChangeText={ (value) => setNomeSeguidor(value) }
+                value={ nomeSeguidor }
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                style={ styles.inputPesquisa }  
+            />
+        
             <ScrollView style={{ backgroundColor: colors.background, marginTop: 10 }}>
                 {seguidor?
-                    <SeguidoresList seguidores={seguidores} seguidor ={seguidor}  deixarSeguir={(id:number)=>deixarSeguir(id)} />
+                    <SeguidoresList seguidores={seguidoresFilter} seguidor ={seguidor}  deixarSeguir={(id:number, name:string)=>deixarSeguir(id,name)} contextUser = {user} idUser = {idUser}/>
                     :
-                    <SeguidoresList seguidores={seguidos} seguidor ={seguidor} deixarSeguir={(id:number)=>deixarSeguir(id)} />
+                    <SeguidoresList seguidores={seguidosFilter} seguidor ={seguidor} deixarSeguir={(id:number,name:string)=>deixarSeguir(id, name)} contextUser={user} idUser={idUser} />
                 }
                 {/* {seguidores.length > 0 &&
                     <SeguidoresList seguidores={seguidores} seguidor ={seguidor} />

@@ -40,6 +40,13 @@ export default StyleSheet.create({
        flexDirection:"row" ,
        justifyContent:"space-between",
     },
+    inputPesquisa:{
+        borderWidth: 1,
+        paddingLeft: 5,
+        borderRadius: 10,
+        borderColor: 'gray',
+        marginBottom: -20,
+    }
 
 
 });

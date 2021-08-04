@@ -131,12 +131,13 @@ export default StyleSheet.create({
         color: 'white'
     },
 
-    inputIngredient: {
+    inputPesquisa: {
         borderWidth: 1,
         paddingLeft: 5,
         borderRadius: 10,
         borderColor: 'gray',
         marginBottom: -20,
+        backgroundColor:'white',
     },
 
 });
