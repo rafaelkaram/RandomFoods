@@ -1,9 +1,9 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
-import 'moment/min/locales';
+//import 'moment/min/locales';
 
 import SubComment from './SubComment';
 import { IComentarioProps } from '../constants/interfaces';
@@ -11,6 +11,7 @@ import styles from '../styles/components/Comment';
 import globalStyles from '../styles/Global';
 
 const Comment = ({ comentario, lista, isLogado, setNew, setIdPai } : IComentarioProps) => {
+    moment.tz.setDefault("America/Sao_paulo");
     return (
         <View style={ styles.comments }>
             <View style={ styles.commentContainer }>
@@ -18,7 +19,7 @@ const Comment = ({ comentario, lista, isLogado, setNew, setIdPai } : IComentario
                     <View style={ styles.commentTitle }>
                         <View style={ styles.dataContainer }>
                             <Text style={ styles.commentUser }>{ comentario.usuario.nome }</Text>
-                            <Text style={ styles.commentDate }> - { moment(comentario.data).startOf('day').fromNow() }</Text>
+                            <Text style={ styles.commentDate }> - { moment(comentario.data).startOf('second').fromNow() }</Text>
                         </View>
                     </View>
                 </View>
