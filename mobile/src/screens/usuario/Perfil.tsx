@@ -102,6 +102,41 @@ const Perfil = ({ route }: { route: any }) => {
         }
     }
 
+    const deletarReceita = (idReceita:number, name:string) => {
+        Alert.alert(
+            'Remover receita',
+            '\nDeseja remover a receita '+name+' ?',
+            [
+                { text: 'CANCELAR' },
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        api.post(`remove/receita/${idReceita}`)
+                        .then(response => {
+                            Alert.alert(
+                                'Remoção',
+                                '\nReceita removida com sucesso',
+                                [
+                                    { text: 'OK' }
+                                ]
+                            );
+                        }).catch(error => {
+                            Alert.alert(
+                                'Falha',
+                                '\nFalha na remoção da receita',
+                                [
+                                    { text: 'OK' }
+                                ]
+                            );
+                           
+                        }
+                        );
+                    }
+
+                 } ]);
+        
+    }
+
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         setLoad(false);
@@ -142,7 +177,7 @@ const Perfil = ({ route }: { route: any }) => {
                 }
                 <ScrollView style={{ backgroundColor: colors.background, marginTop: 10 }}>
                     {recipesUser.length > 0 &&
-                        <RecipeList titulo={title} receitas={recipesUser} navegar={(id: number) => handleNavigateToRecipe(id)} />
+                        <RecipeList titulo={title} receitas={recipesUser} navegar={(id: number) => handleNavigateToRecipe(id)} idUser={idUser} deletarReceita={(idReceita: number,name:string) => deletarReceita(idReceita,name)} />
                     }
                 </ScrollView>
             </ScrollView>

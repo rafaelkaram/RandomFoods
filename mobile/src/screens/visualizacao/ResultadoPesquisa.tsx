@@ -149,10 +149,10 @@ const Recipe = ({ route }: { route: any }) => {
                 {receitas.length === 0 ? (
                     <View>
                         {matchesPerfeitos.length > 0 &&
-                            <RecipeList titulo='Receitas Perfeitas para suas escolhas' receitas={matchesPerfeitos} navegar={(id: number) => handleNavigateToRecipe(id)} />
+                            <RecipeList titulo='Receitas Perfeitas para suas escolhas' receitas={matchesPerfeitos} navegar={(id: number) => handleNavigateToRecipe(id)}  />
                         }
                         {matchesParciais.length > 0 && matchesPerfeitos.length > 0 &&
-                            <RecipeList titulo='Outras Receitas com suas escolhas' receitas={matchesParciais} navegar={(id: number) => handleNavigateToRecipe(id)} />
+                            <RecipeList titulo='Outras Receitas com suas escolhas' receitas={matchesParciais} navegar={(id: number) => handleNavigateToRecipe(id)}  />
                         }
                         {matchesParciais.length > 0 && matchesPerfeitos.length === 0 &&
                             <RecipeList titulo='Não encontramos receitas perfeitas para suas escolhas, mas sugerimos essas' receitas={matchesParciais} navegar={(id: number) => handleNavigateToRecipe(id)} />

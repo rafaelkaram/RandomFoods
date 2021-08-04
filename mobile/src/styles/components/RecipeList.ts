@@ -43,7 +43,10 @@ export default StyleSheet.create({
 
     textContainer: {
         padding: 5,
-        marginVertical: 10
+        marginVertical: 10,
+        flexDirection:'row',
+        justifyContent:'space-between',
+        
 
     },
 

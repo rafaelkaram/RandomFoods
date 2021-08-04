@@ -162,7 +162,7 @@ const Home = () => {
 
                 <View>
 
-                    <RecipeList titulo='' receitas={receitas} navegar={(id: number) => handleNavigateToRecipe(id)} />
+                    <RecipeList titulo='' receitas={receitas} navegar={(id: number) => handleNavigateToRecipe(id)}  contextUser={null} idUser={null}/>
 
                 </View>
             </ScrollView>

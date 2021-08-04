@@ -1,21 +1,33 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import { Text, TouchableOpacity, View, Image } from 'react-native';
-import { Avatar , Icon} from 'react-native-elements';
-import { Feather } from '@expo/vector-icons'; 
+import { Avatar, Icon } from 'react-native-elements';
+import { Feather } from '@expo/vector-icons';
 import colors from "../../src/constants/colors";
+import AuthContext from '../contexts/auth';
 
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { IReceitaSimples } from '../constants/interfaces';
+import { IReceitaSimples, IUsuario } from '../constants/interfaces';
 import styles from '../styles/components/RecipeList';
 import globalStyles from '../styles/Global';
 import { WIDTH } from '../constants/dimensions';
 
 
-const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navegar: Function }) => {
+const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navegar: Function, idUser?: number, deletarReceita?:Function }) => {
     const titulo = props.titulo;
     const receitas = props.receitas;
     const navegar = props.navegar;
+    const deletarReceita = props.deletarReceita;
+   
+    const idUser = props.idUser;
+    const { user } = useContext(AuthContext);
+    let validar = false
+    if (idUser){
+        if (user?.id == idUser) {
+            validar = true
+        }
+    }
+    
 
     return (
         <View>
@@ -37,16 +49,27 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                             <View style={{ width: WIDTH - 140 }}>
 
                                 <View style={styles.textContainer}>
-                                    <Text>{item.receita}</Text>
-                                    <Text style={[globalStyles.regularText, { fontSize: 10, margin: 5 }]} >@{item.usuario.login}</Text>
-                                    <View style={ styles.likeComment }>
-                                        <AntDesign style={{margin: 5}} name='heart' size={20} color={colors.primary} />
-                                        <Text style={{margin: 5}}>{ item.curtidas }</Text>
-                                        <MaterialCommunityIcons style={{margin: 5}} name='comment' size={20} color='gray' />
-                                        <Text style={{margin: 5}}>{ item.comentarios }</Text>
-                                        <Feather name="clock" style={{margin: 5}} size={20} color="black" />
-                                        <Text style={{margin: 5}}>{ item.tempoPreparo }</Text>
+                                    <View>
+                                        <Text>{item.receita}</Text>
+                                        <Text style={[globalStyles.regularText, { fontSize: 10, margin: 5 }]} >@{item.usuario.login}</Text>
+                                        <View style={styles.likeComment}>
+                                            <AntDesign style={{ margin: 5 }} name='heart' size={20} color={colors.primary} />
+                                            <Text style={{ margin: 5 }}>{item.curtidas}</Text>
+                                            <MaterialCommunityIcons style={{ margin: 5 }} name='comment' size={20} color='gray' />
+                                            <Text style={{ margin: 5 }}>{item.comentarios}</Text>
+                                            <Feather name="clock" style={{ margin: 5 }} size={20} color="black" />
+                                            <Text style={{ margin: 5 }}>{item.tempoPreparo}</Text>
+                                        </View>
                                     </View>
+                                    <View>
+                                        {validar && deletarReceita &&
+                                            <TouchableOpacity  onPress={() => deletarReceita(item.id, item.receita)}>
+                                                <AntDesign name="close" size={24} color="red" />
+                                            </TouchableOpacity>
+                                        }
+
+                                    </View>
+
                                 </View>
 
                                 <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
