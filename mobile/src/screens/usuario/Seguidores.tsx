@@ -20,9 +20,9 @@ import UserHeader from '../../components/UserHeader';
 import UserHeaderFollow from '../../components/UserHeaderFollow';
 import SeguidoresList from '../../components/SeguidoresList';
 
+
 const Seguidores = ({ route }: { route: any }) => {
     const navigation = useNavigation();
-    const [recipesUser, setRecipesUser] = useState<IReceitaSimples[]>([]);
     const [usuario, setUsuario] = useState<IUsuarioSimples>();
     const [nomeSeguidor, setNomeSeguidor] = useState<string>('');
     const [load, setLoad] = useState<boolean>(false);
@@ -159,9 +159,9 @@ return (
         
             <ScrollView style={{ backgroundColor: colors.background, marginTop: 10 }}>
                 {seguidor?
-                    <SeguidoresList seguidores={seguidoresFilter} seguidor ={seguidor}  deixarSeguir={(id:number, name:string)=>deixarSeguir(id,name)} />
+                    <SeguidoresList seguidores={seguidoresFilter} seguidor ={seguidor}  deixarSeguir={(id:number, name:string)=>deixarSeguir(id,name)} contextUser = {user} idUser = {idUser}/>
                     :
-                    <SeguidoresList seguidores={seguidosFilter} seguidor ={seguidor} deixarSeguir={(id:number,name:string)=>deixarSeguir(id, name)} />
+                    <SeguidoresList seguidores={seguidosFilter} seguidor ={seguidor} deixarSeguir={(id:number,name:string)=>deixarSeguir(id, name)} contextUser={user} idUser={idUser} />
                 }
                 {/* {seguidores.length > 0 &&
                     <SeguidoresList seguidores={seguidores} seguidor ={seguidor} />
