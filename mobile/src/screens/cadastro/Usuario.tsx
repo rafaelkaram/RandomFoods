@@ -59,8 +59,8 @@ const Usuario = () => {
             const data = new FormData();
 
             data.append('nome', usuario.nome);
-            data.append('login', usuario.login);
-            data.append('email', usuario.email);
+            data.append('login', usuario.login.toLowerCase());
+            data.append('email', usuario.email.toLowerCase());
             data.append('senha', usuario.senha);
 
             if (midia) data.append('image', {
@@ -130,7 +130,7 @@ const Usuario = () => {
                         }
                     </View>
 
-                    <InputSignUp tipo='username' placeholder='Username' icon='person-outline' security={ false } setState={ setUsername } ></InputSignUp>
+                    <InputSignUp tipo='username' placeholder='username' icon='person-outline' security={ false } setState={ setUsername } ></InputSignUp>
                     <InputSignUp tipo='email' placeholder='Email' icon='mail-outline' security={ false } setState={ setEmail } ></InputSignUp>
                     <InputSignUp tipo='name' placeholder='Nome' icon='person-outline' security={ false } setState={ setName } ></InputSignUp>
                     <InputSignUp tipo='password' placeholder='Senha' icon='lock-closed-outline' security={ true } setState={ setPassword } ></InputSignUp>

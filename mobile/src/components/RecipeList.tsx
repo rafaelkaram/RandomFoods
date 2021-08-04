@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import colors from "../../src/constants/colors";
 import AuthContext from '../contexts/auth';
 
+import Category from '../components/Category';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { IReceitaSimples, IUsuario } from '../constants/interfaces';
@@ -80,11 +81,7 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
 
                                                 return (
 
-                                                    <Image
-                                                        key={index}
-                                                        source={{ uri: `http://192.168.100.5:3333/uploads/midia/categoria/${categoria}.png` }}
-                                                        style={{ width: 40, height: 40 }}
-                                                    />
+                                                    <Category key={index} nome={categoria} />
 
                                                 )
                                             }) : null

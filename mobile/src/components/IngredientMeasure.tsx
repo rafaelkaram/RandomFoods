@@ -16,7 +16,6 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, ingredientesCadas
   const [quantidade, setQuantidade] = useState<string>('')
   const [medida, setMedida] = useState<IUnidade>()
   const [nomeUnidade, setNomeUnidade] = useState<string>('')
-  const [ingredienteC, setIngredienteC] = useState<IIngredienteCadastro>()
 
   const ingrediente = props.ingrediente;
   const ingredientesCadastro = props.ingredientesCadastro;
@@ -33,6 +32,11 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, ingredientesCadas
       setNomeUnidade(unid)
       if (ingredientesCadastro[i]?.semMedida)
         setCheck(true)
+
+      if (unid !== '' && ingrediente.unidades){
+        const index = ingrediente.unidades?.findIndex((u) => {return  u.nome === unid})
+        setMedida(ingrediente.unidades[index])
+      }
     }
   }, [])
 
@@ -51,7 +55,7 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, ingredientesCadas
         quantidadeLet = 0
       } else {
         semMedida = false
-        tipoUnidade = nomeUnidade
+        tipoUnidade = medida?.nome ?? ''
         quantidadeLet = Number(quantidade)
       }
 
@@ -85,6 +89,11 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, ingredientesCadas
     setQuantidade(novoValor.toString());
   }
 
+  const handleMedida = (m: IUnidade) => {
+    setMedida(m)
+    setNomeUnidade(m.nome)
+  }
+
   return (
     <View
       key={ingrediente.id}
@@ -114,7 +123,7 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, ingredientesCadas
               enabled={!check}
               selectedValue={nomeUnidade}
               style={styles.comboBox}
-              onValueChange={(itemValue, itemPosition) => setNomeUnidade(unidades[itemPosition - 1].nome)}
+              onValueChange={(itemValue, itemPosition) => handleMedida(unidades[itemPosition - 1])}
             >
               <Picker.Item fontFamily='Ubuntu_400Regular' label={'Selecione uma unidade'} value={''} />
               {unidades?.map(item => {

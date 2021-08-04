@@ -1,13 +1,16 @@
 import { StyleSheet } from "react-native";
 
-import { colors } from "react-native-elements";
+import colors from "./../../constants/colors";
 
 export default StyleSheet.create({
     categoryContainer: {
-        backgroundColor: colors.primary,
+        backgroundColor: 'white',
         margin: 5,
-        padding: 8,
+        marginLeft: 10,
+        paddingHorizontal: 5,
         borderRadius: 5,
+        flexDirection: 'row',
+        alignSelf: 'flex-end'
     },
 
     categoryText: {
