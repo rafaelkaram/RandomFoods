@@ -36,6 +36,7 @@ import { ReceitaIngrediente } from '../model/ReceitaIngrediente';
 import { Usuario } from '../model/Usuario';
 
 import receitaView from '../view/ReceitaView';
+import { CategoriaRepository } from '../repository/CategoriaRepository';
 
 class ReceitaController {
     // Métodos das rotas
@@ -207,22 +208,23 @@ class ReceitaController {
     }
 
     async findMatches(request: Request, response: Response) {
-        const { ids, tempoPreparo, derivadoLeite, gluten } = request.query as { ids: string[], tempoPreparo: string, derivadoLeite: string, gluten: string };
+        const { ids, tempoPreparo, derivadoLeite, gluten, categorias, porcoes, tipo } = request.query as { ids: string[], tempoPreparo: string, derivadoLeite: string, gluten: string, categorias: string[], porcoes: string, tipo: string[] };
 
         const rIController = new ReceitaIngredienteController();
 
         const glutenBoolean: boolean = getBoolean2(gluten && <string> gluten);
         const derivadoLeiteBoolean: boolean = getBoolean2(derivadoLeite && <string> derivadoLeite);
         const tempo: number = tempoPreparo ? parseInt(tempoPreparo) : 0;
+        const qtdePorcoes: number = porcoes ? parseInt(porcoes) : 0;
 
         const ids2: number[] = ids?.map((id: string) => {
             return parseInt(id);
         });
 
         try {
-            console.log({ tempoPreparo: tempo, gluten: glutenBoolean, derivadoLeite: derivadoLeiteBoolean, ids: ids2 });
+            console.log({ tempoPreparo: tempo, gluten: glutenBoolean, derivadoLeite: derivadoLeiteBoolean, ids: ids2, categorias, porcoes: qtdePorcoes, tipo });
 
-            const { perfect, partial } = await rIController.findMatches({ tempoPreparo: tempo, gluten: glutenBoolean, derivadoLeite: derivadoLeiteBoolean, ids: ids2 });
+            const { perfect, partial } = await rIController.findMatches({ tempoPreparo: tempo, gluten: glutenBoolean, derivadoLeite: derivadoLeiteBoolean, ids: ids2, categorias, porcoes: qtdePorcoes, tipo });
             const matchesPerfeitos: any[] = [];
             const matchesParciais: any[] = [];
 
