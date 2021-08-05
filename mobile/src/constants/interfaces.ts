@@ -182,21 +182,28 @@ interface ISeguidoresSimples {
 
 interface IIngredienteCadastro {
   id: number,
-  nome: string,
+  nomeIngrediente: string,
   semMedida?: boolean,
-  tipoUnidade?: string,
+  unidade?: string,
   quantidade?: number,
 }
 
 interface IReceitaCadastro {
+  idUsuario: number,
   nome: string,
   tipo: string,
   categorias: string[],
-  minutos: number,
+  tempoPreparo: number,
   porcoes: number,
-  midias: IMidiaPicker[],
-  ingredientes: IIngredienteCadastro[],
-  steps: string,
+  ingredientes: IIngredienteCadastro2[],
+  descricao: string,
+}
+
+interface IIngredienteCadastro2 {
+  id: number,
+  semMedida?: boolean,
+  unidade?: string,
+  quantidade?: number,
 }
 
 export {
@@ -223,5 +230,6 @@ export {
   IPassoReceita2,
   ISeguidoresSimples,
   IIngredienteCadastro,
+  IIngredienteCadastro2,
   IReceitaCadastro,
 }

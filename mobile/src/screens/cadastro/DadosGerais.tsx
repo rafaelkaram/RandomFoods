@@ -122,33 +122,6 @@ const DadosGerais = () => {
         )
             createButtonAlert("Preencha todos os dados");
         else {
-            /*const data = new FormData();
-
-            data.append('teste', 'sim');
-            data.append('nome', nomeReceita);
-            data.append('descricao', `Serve ${porcoes} porção(ões)\n\n`);
-            data.append('tipo', tipoReceita);
-            data.append('tempoPreparo', tempoPreparo);
-
-            midias?.forEach((midia, index) => {
-                if (midia.type === 'image')
-                    data.append('midias', {
-                        name: `image_${index}.png`,
-                        type: 'image/png',
-                        uri: midia.uri
-                    } as any);
-                if (midia.type === 'video')
-                    data.append('midias', {
-                        name: `video_${index}.mp4`,
-                        type: 'video/mp4',
-                        uri: midia.uri
-                    } as any);
-            });
-
-            await api.post('cadastro/receita', data).then(response => {
-                console.log({ msg: 'Recebemos resposta!', response: response.data });
-            });*/
-
             saveDadosGerais(nomeReceita, tipoReceita, categoriasSelecionadas, minutos, porcoes, midias)
             navigation.navigate(screens.cadastroIngredientes);
         }

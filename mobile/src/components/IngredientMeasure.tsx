@@ -27,7 +27,7 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, ingredientesCadas
     if (ingredientesCadastro.length > 0) {
       const i = ingredientesCadastro.findIndex((ingr) => { return ingr.id == ingrediente.id })
       const qtde = ingredientesCadastro[i]?.quantidade?.toString() ?? ''
-      const unid = ingredientesCadastro[i]?.tipoUnidade ?? ''
+      const unid = ingredientesCadastro[i]?.unidade ?? ''
       setQuantidade(qtde)
       setNomeUnidade(unid)
       if (ingredientesCadastro[i]?.semMedida)
@@ -47,7 +47,7 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, ingredientesCadas
       let tipoUnidade: string
       let quantidadeLet: number
 
-      const nome = ingrediente.nome
+      const nomeIngrediente = ingrediente.nome
 
       if (check) {
         semMedida = true
@@ -61,7 +61,7 @@ const IngredientMeasure = (props: { ingrediente: IIngrediente, ingredientesCadas
 
       const index = newIngrs.findIndex((ingr) => { return ingr.id == ingrediente.id })
       newIngrs.splice(index, 1)
-      newIngrs.push({ id: ingrediente.id, nome, semMedida, tipoUnidade, quantidade: quantidadeLet })
+      newIngrs.push({ id: ingrediente.id, nomeIngrediente, semMedida, unidade: tipoUnidade, quantidade: quantidadeLet })
       setIngredientes(newIngrs)
     }
   }, [check, quantidade, medida])

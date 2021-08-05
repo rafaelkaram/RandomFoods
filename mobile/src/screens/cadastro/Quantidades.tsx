@@ -38,7 +38,7 @@ const Quantidades = ({ route }: { route: any }) => {
             } else {
                 const newIngrs: IIngredienteCadastro[] = []
                 idIngredientes.map((id: number) => {
-                    newIngrs.push({ id, nome: '' })
+                    newIngrs.push({ id, nomeIngrediente: '' })
                 })
                 setIngredientes(newIngrs)
             }
@@ -69,12 +69,12 @@ const Quantidades = ({ route }: { route: any }) => {
     const validaIngreidients = () => {
         for (var key in ingredientes) {
             if (!ingredientes[key].semMedida) {
-                if (ingredientes[key].tipoUnidade === '') {
-                    createButtonAlert('Ingrediente ' + ingredientes[key].nome + ' sem unidade')
+                if (ingredientes[key].unidade === '') {
+                    createButtonAlert('Ingrediente ' + ingredientes[key].nomeIngrediente + ' sem unidade')
                     return false
                 }
                 if (ingredientes[key].quantidade === 0) {
-                    createButtonAlert('Ingrediente ' + ingredientes[key].nome + ' sem quantidade')
+                    createButtonAlert('Ingrediente ' + ingredientes[key].nomeIngrediente + ' sem quantidade')
                     return false
                 }
             }

@@ -15,6 +15,7 @@ interface AuthContextData {
     saveDadosGerais(nomeReceita: string, tipoReceita: string, categorias: string[], minutos: string, porcoes: string, midias: IMidiaPicker[]): Promise<void>,
     saveIngredientes(ingredientes: ICart[], itemsContext: number[]): Promise<void>,
     saveIngredientesQuantidade(ingredientesQuantidade: IIngredienteCadastro[]): Promise<void>,
+    deleteItems(): Promise<void>,
 }
 
 
@@ -136,6 +137,20 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
         setIngredientesQuantidadeContext(ingredientesQuantidade)
     }
 
+    const deleteItems = async () => {
+        const arrItems = ['nomeReceita', 'tipoReceita', 'categorias', 'minutos', 'porcoes', 'midias', 'ingredientes', 'items', 'ingredientesQuantidade' ]
+        AsyncStorage.multiRemove(arrItems)
+        setNomeReceitaContext('')
+        setTipoReceitaContext('')
+        setCategoriasContext([])
+        setMinutosContext('')
+        setPorcoesContext('')
+        setMidiasContext([])
+        setIngredientesContext([])
+        setItemsContext([])
+        setIngredientesQuantidadeContext([])
+    }
+
     return (
         <AuthReceita.Provider 
             value={{ 
@@ -150,7 +165,8 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
                 ingredientesQuantidadeContext,
                 saveDadosGerais,
                 saveIngredientes,
-                saveIngredientesQuantidade
+                saveIngredientesQuantidade,
+                deleteItems,
             }}>
             {children}
         </AuthReceita.Provider>

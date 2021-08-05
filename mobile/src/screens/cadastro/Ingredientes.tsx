@@ -128,7 +128,7 @@ const Ingredientes = () => {
                 onChangeText={ (value) => setnomeIngrediente(value) }
                 value={ nomeIngrediente }
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                style={ globalStyles.inputIngredient }
+                style={ globalStyles.inputPesquisa }
             />
             <ScrollView>
                 { ingredientTypes.map(ingredientTypes => {
