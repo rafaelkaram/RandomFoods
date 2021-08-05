@@ -165,9 +165,9 @@ const Home = () => {
 
                 <View>
 
-                    <RecipeList titulo='Mais Curtidas' receitas={receitas} navegar={(id: number) => handleNavigateToRecipe(id)}  contextUser={null} idUser={null}/>
+                    <RecipeList titulo='Mais Curtidas' receitas={receitas} navegar={(id: number) => handleNavigateToRecipe(id)} />
                     { receitasSeguidor.length > 0 &&
-                        <RecipeList titulo='De quem você segue' receitas={receitasSeguidor} navegar={(id: number) => handleNavigateToRecipe(id)}  contextUser={null} idUser={null}/>
+                        <RecipeList titulo='De quem você segue' receitas={receitasSeguidor} navegar={(id: number) => handleNavigateToRecipe(id)} />
                     }
 
                 </View>

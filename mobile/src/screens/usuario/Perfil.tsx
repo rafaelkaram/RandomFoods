@@ -170,7 +170,7 @@ const Perfil = ({ route }: { route: any }) => {
                     <UserHeader
                         usuario={usuario}
                         seguidores={seguidores.length}
-                        seguidos={seguidores.length}
+                        seguidos={seguindo.length}
                         totalReceitas={recipesUser.length}
                         isPainel={false}
                     />
