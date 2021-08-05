@@ -91,74 +91,86 @@ const Painel = () => {
                     totalReceitas={totalRecipes}
                     isPainel={true}
                 />
+                {
+                    recipeType.length > 0 ?
+                        <>
+                            <View style={styles.typePie}>
+                                <Text style={[globalStyles.subTitleText, styles.chartsTitle]}>{` Receitas por Tipo `}</Text>
+                                <View style={{ marginTop: -(HEIGHT / 15) }}>
+                                    <VictoryPie
+                                        height={((HEIGHT / 2) - 120)}
+                                        width={(WIDTH / 2)}
+                                        colorScale={['orange', colors.primary]}
+                                        labels={({ datum }) => `${datum.y}`}
+                                        data={pieTypeData}
+                                        innerRadius={30}
+                                        style={{ labels: { fontSize: 15 } }}
+                                    />
+                                </View>
+                                <View style={{ position: 'absolute', top: ((HEIGHT / 2) - 210), left: 10 }}>
+                                    <VictoryLegend
+                                        colorScale={['orange', colors.primary]}
+                                        data={pieTypeLegend}
+                                        style={{ labels: { fontSize: 15 } }}
+                                    />
+                                </View>
+                            </View>
+                            {
+                                recipeCategory.length > 0 ?
+                                    <View>
+                                        <Text style={[globalStyles.subTitleText, styles.tableTitle]}>Quantidade de Receitas por Categoria</Text>
+                                        <View style={styles.topVotedTable}>
+                                            <DataTable>
+                                                <DataTable.Header>
+                                                    <DataTable.Title style={{ flexBasis: 30 }} >Categoria</DataTable.Title>
+                                                    <DataTable.Title numeric>#Receitas</DataTable.Title>
+                                                </DataTable.Header>
+                                                {recipeCategory.map((item, index) => {
+                                                    return (
+                                                        <TouchableOpacity key={index}>
+                                                            <DataTable.Row >
+                                                                <DataTable.Cell onPress={() => { handleNavigateToReceitasCategoria(item.categoria) }} style={{ flexBasis: 30 }}>{item.categoria}</DataTable.Cell>
+                                                                <DataTable.Cell numeric>{item.count}</DataTable.Cell>
+                                                            </DataTable.Row>
+                                                        </TouchableOpacity>
+                                                    )
+                                                })}
+                                            </DataTable>
+                                        </View>
+                                    </View>
+                                    :
+                                    null
+                            }
+                            <View>
+                                <Text style={[globalStyles.subTitleText, styles.tableTitle]}>Top receitas mais votadas</Text>
+                                <View style={styles.topVotedTable}>
+                                    <DataTable>
+                                        <DataTable.Header>
+                                            <DataTable.Title style={{ flexBasis: 30 }} >Receita</DataTable.Title>
+                                            <DataTable.Title numeric>Nota</DataTable.Title>
+                                            <DataTable.Title style={{ flexBasis: 10 }} numeric>Nº de Notas</DataTable.Title>
+                                        </DataTable.Header>
+                                        {topVotedRecipe.map(item => {
+                                            return (
+                                                <TouchableOpacity key={item.id}>
+                                                    <DataTable.Row >
+                                                        <DataTable.Cell style={{ flexBasis: 30 }}>{item.nome}</DataTable.Cell>
+                                                        <DataTable.Cell numeric>{item.nota}</DataTable.Cell>
+                                                        <DataTable.Cell numeric>{item.num_notas}</DataTable.Cell>
+                                                    </DataTable.Row>
+                                                </TouchableOpacity>
+                                            )
+                                        })}
+                                    </DataTable>
+                                </View>
+                            </View>
+                        </>
+                        :
+                        <View>
+                            <Text style={[globalStyles.subTitleText, globalStyles.recipeListSubTitle,{marginTop: 20}]}>Você não possui receitas cadastradas!</Text>
+                        </View>
+                }
 
-                <View style={styles.typePie}>
-                    <Text style={[globalStyles.subTitleText, styles.chartsTitle]}>{` Receitas por Tipo `}</Text>
-                    <View style={{ marginTop: -(HEIGHT / 15) }}>
-                        <VictoryPie
-                            height={((HEIGHT / 2) - 120)}
-                            width={(WIDTH / 2)}
-                            colorScale={['orange', colors.primary]}
-                            labels={({ datum }) => `${datum.y}`}
-                            data={pieTypeData}
-                            innerRadius={30}
-                            style={{ labels: { fontSize: 15 } }}
-                        />
-                    </View>
-                    <View style={{ position: 'absolute', top: ((HEIGHT / 2) - 210), left: 10 }}>
-                        <VictoryLegend
-                            colorScale={['orange', colors.primary]}
-                            data={pieTypeLegend}
-                            style={{ labels: { fontSize: 15 } }}
-                        />
-                    </View>
-                </View>
-
-                <View>
-                    <Text style={[globalStyles.subTitleText, styles.tableTitle]}>Quantidade de Receitas por Categoria</Text>
-                    <View style={styles.topVotedTable}>
-                        <DataTable>
-                            <DataTable.Header>
-                                <DataTable.Title style={{ flexBasis: 30 }} >Categoria</DataTable.Title>
-                                <DataTable.Title numeric>#Receitas</DataTable.Title>
-                            </DataTable.Header>
-                            {recipeCategory.map((item, index) => {
-                                return (
-                                    <TouchableOpacity key={index}>
-                                        <DataTable.Row >
-                                            <DataTable.Cell onPress={() => { handleNavigateToReceitasCategoria(item.categoria) }} style={{ flexBasis: 30 }}>{item.categoria}</DataTable.Cell>
-                                            <DataTable.Cell numeric>{item.count}</DataTable.Cell>
-                                        </DataTable.Row>
-                                    </TouchableOpacity>
-                                )
-                            })}
-                        </DataTable>
-                    </View>
-                </View>
-
-                <View>
-                    <Text style={[globalStyles.subTitleText, styles.tableTitle]}>Top receitas mais votadas</Text>
-                    <View style={styles.topVotedTable}>
-                        <DataTable>
-                            <DataTable.Header>
-                                <DataTable.Title style={{ flexBasis: 30 }} >Receita</DataTable.Title>
-                                <DataTable.Title numeric>Nota</DataTable.Title>
-                                <DataTable.Title style={{ flexBasis: 10 }} numeric>Nº de Notas</DataTable.Title>
-                            </DataTable.Header>
-                            {topVotedRecipe.map(item => {
-                                return (
-                                    <TouchableOpacity key={item.id}>
-                                        <DataTable.Row >
-                                            <DataTable.Cell style={{ flexBasis: 30 }}>{item.nome}</DataTable.Cell>
-                                            <DataTable.Cell numeric>{item.nota}</DataTable.Cell>
-                                            <DataTable.Cell numeric>{item.num_notas}</DataTable.Cell>
-                                        </DataTable.Row>
-                                    </TouchableOpacity>
-                                )
-                            })}
-                        </DataTable>
-                    </View>
-                </View>
             </ScrollView>
         </SafeAreaView>
     )

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { Alert, ScrollView, RefreshControl } from 'react-native';
+import { Alert, ScrollView, RefreshControl, View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, TabActions } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
@@ -8,7 +8,7 @@ import api from '../../services/api';
 import { ISeguidor, IReceitaSimples, IUsuarioSimples } from '../../constants/interfaces';
 import screens from '../../constants/screens';
 import colors from '../../constants/colors';
-
+import globalStyles from '../../styles/Global';
 import Loading from '../../components/Loading';
 import RecipeList from '../../components/RecipeList';
 import UserHeader from '../../components/UserHeader';
@@ -102,39 +102,39 @@ const Perfil = ({ route }: { route: any }) => {
         }
     }
 
-    const deletarReceita = (idReceita:number, name:string) => {
+    const deletarReceita = (idReceita: number, name: string) => {
         Alert.alert(
             'Remover receita',
-            '\nDeseja remover a receita '+name+' ?',
+            '\nDeseja remover a receita ' + name + ' ?',
             [
                 { text: 'CANCELAR' },
                 {
                     text: 'OK',
                     onPress: () => {
                         api.post(`remove/receita/${idReceita}`)
-                        .then(response => {
-                            Alert.alert(
-                                'Remoção',
-                                '\nReceita removida com sucesso',
-                                [
-                                    { text: 'OK' }
-                                ]
+                            .then(response => {
+                                Alert.alert(
+                                    'Remoção',
+                                    '\nReceita removida com sucesso',
+                                    [
+                                        { text: 'OK' }
+                                    ]
+                                );
+                            }).catch(error => {
+                                Alert.alert(
+                                    'Falha',
+                                    '\nFalha na remoção da receita',
+                                    [
+                                        { text: 'OK' }
+                                    ]
+                                );
+
+                            }
                             );
-                        }).catch(error => {
-                            Alert.alert(
-                                'Falha',
-                                '\nFalha na remoção da receita',
-                                [
-                                    { text: 'OK' }
-                                ]
-                            );
-                           
-                        }
-                        );
                     }
 
-                 } ]);
-        
+                }]);
+
     }
 
     const onRefresh = useCallback(() => {
@@ -175,11 +175,20 @@ const Perfil = ({ route }: { route: any }) => {
                         isPainel={false}
                     />
                 }
-                <ScrollView style={{ backgroundColor: colors.background, marginTop: 10 }}>
-                    {recipesUser.length > 0 &&
-                        <RecipeList titulo={title} receitas={recipesUser} navegar={(id: number) => handleNavigateToRecipe(id)} idUser={idUser} deletarReceita={(idReceita: number,name:string) => deletarReceita(idReceita,name)} />
-                    }
-                </ScrollView>
+                {
+                    recipesUser.length > 0 ?
+                        <ScrollView style={{ backgroundColor: colors.background, marginTop: 10 }}>
+                            {recipesUser.length > 0 &&
+                                <RecipeList titulo={title} receitas={recipesUser} navegar={(id: number) => handleNavigateToRecipe(id)} idUser={idUser} deletarReceita={(idReceita: number, name: string) => deletarReceita(idReceita, name)} />
+                            }
+                        </ScrollView>
+                        :
+                        <View>
+                            <Text style={[globalStyles.subTitleText, globalStyles.recipeListSubTitle, { marginTop: 20 }]}>Você não possui receitas cadastradas!</Text>
+                        </View>
+                }
+
+
             </ScrollView>
         </SafeAreaView>
     )

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { Alert, ScrollView, RefreshControl, TouchableOpacity, Text, View } from 'react-native';
+import { Alert, ScrollView, RefreshControl, Image, Text, View } from 'react-native';
 import { Avatar, Input } from 'react-native-elements';
-import { Feather } from '@expo/vector-icons'; 
+import { Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
@@ -72,17 +72,17 @@ const Seguidores = ({ route }: { route: any }) => {
 
 
 
-    const deixarSeguir = (id:number,name:string) => {
-       
-            Alert.alert(
-                'Deixar de seguir',
-                '\nDeseja deixar de seguir '+name+' ?',
-                [
-                    { text: 'CANCELAR' },
-                    {
-                        text: 'OK',
-                        onPress: () => {
-                            api.post(`remove/seguidor/${id}`)
+    const deixarSeguir = (id: number, name: string) => {
+
+        Alert.alert(
+            'Deixar de seguir',
+            '\nDeseja deixar de seguir ' + name + ' ?',
+            [
+                { text: 'CANCELAR' },
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        api.post(`remove/seguidor/${id}`)
                             .then(response => {
                                 setSeguindo(false);
                             }).catch(error => {
@@ -96,81 +96,84 @@ const Seguidores = ({ route }: { route: any }) => {
                                 setSeguindo(true);
                             }
                             );
-                        }
+                    }
 
-                     } ]);
-        
+                }]);
+
     }
 
-     const filterSeguidores = () => {
+    const filterSeguidores = () => {
         let list: ISeguidor[] = [];
         if (nomeSeguidor !== '') {
-            if (seguidor){
-               list = seguidores.filter(user=>fixString(user.usuario.login.toLowerCase()).match(nomeSeguidor.toLowerCase()));
-               setSeguidoresFilter(list)
-            }else{
-                list = seguidos.filter(user=>fixString(user.usuario.login.toLowerCase()).match(nomeSeguidor.toLowerCase()));
+            if (seguidor) {
+                list = seguidores.filter(user => fixString(user.usuario.login.toLowerCase()).match(nomeSeguidor.toLowerCase()));
+                setSeguidoresFilter(list)
+            } else {
+                list = seguidos.filter(user => fixString(user.usuario.login.toLowerCase()).match(nomeSeguidor.toLowerCase()));
                 setSeguidosFilter(list)
             }
-    }else{
-        if (seguidor){
-            setSeguidoresFilter(seguidores)
-         }else{
-             setSeguidosFilter(seguidos)
-         }
+        } else {
+            if (seguidor) {
+                setSeguidoresFilter(seguidores)
+            } else {
+                setSeguidosFilter(seguidos)
+            }
+        }
     }
-}
 
-// useEffect(() => {
-//     const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.id === user?.id));
-//     if (seguidor && seguidor.length > 0)
-//         setSeguindo(true);
-// }, [seguidores]);
-
+    // useEffect(() => {
+    //     const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.id === user?.id));
+    //     if (seguidor && seguidor.length > 0)
+    //         setSeguindo(true);
+    // }, [seguidores]);
 
 
-const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 2000);
-}, []);
 
-if (!load || !usuario) {
-    return <Loading />
-}
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => setRefreshing(false), 2000);
+    }, []);
 
-return (
-    <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView
-            refreshControl={
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                />}
-        >
-          
-           
-             <Input
-                placeholder='Pesquisar'
-                onChangeText={ (value) => setNomeSeguidor(value) }
-                value={ nomeSeguidor }
-                inputContainerStyle={{ borderBottomWidth: 0 }}
-                style={ styles.inputPesquisa }  
-            />
-        
-            <ScrollView style={{ backgroundColor: colors.background, marginTop: 10 }}>
-                {seguidor?
-                    <SeguidoresList seguidores={seguidoresFilter} seguidor ={seguidor}  deixarSeguir={(id:number, name:string)=>deixarSeguir(id,name)} contextUser = {user} idUser = {idUser}/>
-                    :
-                    <SeguidoresList seguidores={seguidosFilter} seguidor ={seguidor} deixarSeguir={(id:number,name:string)=>deixarSeguir(id, name)} contextUser={user} idUser={idUser} />
-                }
-                {/* {seguidores.length > 0 &&
+    if (!load || !usuario) {
+        return <Loading />
+    }
+
+    return (
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />}
+            >
+                <Image
+                    source={!seguidor ? require('./../../assets/seguindo.png') : require('./../../assets/seguidores.png')}
+                    style={!seguidor ? styles.imageSeguindo : styles.imageSeguidores}
+                />
+
+                <Input
+                    placeholder='Pesquisar'
+                    onChangeText={(value) => setNomeSeguidor(value)}
+                    value={nomeSeguidor}
+                    inputContainerStyle={{ borderBottomWidth: 0 }}
+                    style={styles.inputPesquisa}
+                />
+
+                <ScrollView style={{ backgroundColor: colors.background, marginTop: 10 }}>
+                    {seguidor ?
+                        <SeguidoresList seguidores={seguidoresFilter} seguidor={seguidor} deixarSeguir={(id: number, name: string) => deixarSeguir(id, name)} contextUser={user} idUser={idUser} />
+                        :
+                        <SeguidoresList seguidores={seguidosFilter} seguidor={seguidor} deixarSeguir={(id: number, name: string) => deixarSeguir(id, name)} contextUser={user} idUser={idUser} />
+                    }
+                    {/* {seguidores.length > 0 &&
                     <SeguidoresList seguidores={seguidores} seguidor ={seguidor} />
                 } */}
-            </ScrollView>
+                </ScrollView>
 
-        </ScrollView>
-    </SafeAreaView>
-)
+            </ScrollView>
+        </SafeAreaView>
+    )
 }
 
 export default Seguidores;
