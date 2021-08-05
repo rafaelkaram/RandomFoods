@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, View, Image } from 'react-native';
+import { Text, TouchableOpacity, View, SafeAreaView, Image } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { SimpleLineIcons } from '@expo/vector-icons';
@@ -24,12 +24,12 @@ const SeguidoresList = ({
     seguidores: ISeguidor[],
     seguidor: boolean,
     deixarSeguir: Function,
-    contextUser:IUsuario | null,
+    contextUser: IUsuario | null,
     idUser: number
 }) => {
-    
+
     let verification = false
-    if (contextUser?.id == idUser){
+    if (contextUser?.id == idUser) {
         verification = true
     }
 
@@ -41,48 +41,58 @@ const SeguidoresList = ({
 
 
     return (
-        <View>
+        <SafeAreaView>
 
-            {seguidores.map(item => {
-                return (
-                    <TouchableOpacity
-                        onPress={() => handleNavigateToPerfil(item.usuario.id)}
-                        style={styles.seguidor} key={item.id}>
+            {seguidores.length > 0 ?
+                <>
+                    {seguidores.map(item => {
+                        return (
+                            <TouchableOpacity
+                                onPress={() => handleNavigateToPerfil(item.usuario.id)}
+                                style={styles.seguidor} key={item.id}>
 
-                        {item.usuario.path ? (
-                            <Avatar
-                                size='small'
-                                rounded
-                                activeOpacity={0.7}
-                                containerStyle={{ backgroundColor: 'lightgrey' }}
-                                source={{ uri: item.usuario.path }}
-                            />)
-                            :
-                            <Avatar
-                                size='small'
-                                rounded
-                                title={item.usuario.iniciais}
-                                activeOpacity={0.7}
-                                containerStyle={{ backgroundColor: 'lightgrey' }}
-                            />
-                        }
-                        <View style={styles.container}>
-                            <View>
-                                <Text style={styles.seguidorName}>{item.usuario.nome}</Text>
-                                <Text style={[styles.seguidorUsername, globalStyles.regularText]}>{item.usuario.login}</Text>
-                            </View>
-                            {verification && !seguidor &&
-                            
-                                <TouchableOpacity onPress={() => deixarSeguir(item.id, item.usuario.nome)} style={[{ alignItems: 'center' }, styles.botaoUnfollow]}>
-                                    <SimpleLineIcons name="user-unfollow" size={20} color={'white'} />
-                                </TouchableOpacity>
-                            
-                        }
-                        </View>
-                    </TouchableOpacity>
-                )
-            })}
-        </View>
+                                {item.usuario.path ? (
+                                    <Avatar
+                                        size='small'
+                                        rounded
+                                        activeOpacity={0.7}
+                                        containerStyle={{ backgroundColor: 'lightgrey' }}
+                                        source={{ uri: item.usuario.path }}
+                                    />)
+                                    :
+                                    <Avatar
+                                        size='small'
+                                        rounded
+                                        title={item.usuario.iniciais}
+                                        activeOpacity={0.7}
+                                        containerStyle={{ backgroundColor: 'lightgrey' }}
+                                    />
+                                }
+                                <View style={styles.container}>
+                                    <View>
+                                        <Text style={styles.seguidorName}>{item.usuario.nome}</Text>
+                                        <Text style={[styles.seguidorUsername, globalStyles.regularText]}>{`@${item.usuario.login}`}</Text>
+                                    </View>
+                                    {verification && !seguidor &&
+
+                                        <TouchableOpacity onPress={() => deixarSeguir(item.id, item.usuario.nome)} style={[{ alignItems: 'center' }, styles.botaoUnfollow]}>
+                                            <SimpleLineIcons name="user-unfollow" size={20} color={'white'} />
+                                        </TouchableOpacity>
+
+                                    }
+                                </View>
+                            </TouchableOpacity>
+                        )
+                    })}
+                </>
+                :
+                <View>
+                    <Text style={[globalStyles.subTitleText, globalStyles.recipeListSubTitle, { marginTop: 20 }]}>{seguidor ? 'Você não possui seguidores!' : 'Você não está seguindo ninguém!'}</Text>
+                </View>
+            }
+
+
+        </SafeAreaView>
 
     );
 }
