@@ -137,6 +137,16 @@ class SeguidorController {
 
         await log.save();
     }
+
+    async findPorSeguidos(id: number): Promise<number[]> {
+        const repository = getCustomRepository(SeguidorRepository);
+
+        const seguidos: { id: number }[] = await repository.findPorSeguidos(id);
+
+        return seguidos.map(seguido => {
+            return seguido.id
+        });
+    }
 }
 
 export default SeguidorController;

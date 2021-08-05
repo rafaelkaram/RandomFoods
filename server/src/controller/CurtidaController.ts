@@ -108,6 +108,16 @@ class CurtidaController {
 
         return curtidas;
     }
+
+    async findPorCurtidas(): Promise<number[]> {
+        const repository = getCustomRepository(CurtidaRepository);
+
+        const curtidas: { id: number }[] = await repository.findPorCurtida();
+
+        return curtidas.map(curtida => {
+            return curtida.id
+        });
+    }
 }
 
 export default CurtidaController;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useContext, useEffect, useRef, useCallback } from 'react';
 import { View, ScrollView, RefreshControl, Platform, Image, Text, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
@@ -13,7 +13,6 @@ import Loading from '../../components/Loading';
 import api from './../../services/api'
 import RecipeList from '../../components/RecipeList';
 import { WIDTH } from '../../constants/dimensions';
-
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -76,6 +75,8 @@ const Home = () => {
     const [receitas, setReceitas] = useState<IReceitaSimples[]>([])
     const [load, setLoad] = useState<boolean>(false);
 
+    const { user } = useContext(AuthContext);
+
     const sendPushNotification = () => {
         let response = fetch('https://exp.host/--/api/v2/push/send', {
             method: 'POST',
@@ -121,7 +122,7 @@ const Home = () => {
 
 
     useEffect(() => {
-        api.get('/busca/receita').then(response => {
+        api.get(`/busca/home/${ user?.id }`).then(response => {
             setReceitas(response.data);
             setLoad(true);
         })

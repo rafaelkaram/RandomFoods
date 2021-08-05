@@ -6,7 +6,6 @@ import { ReceitaIngrediente } from '../model/ReceitaIngrediente';
 
 @EntityRepository(ReceitaIngrediente)
 export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente> {
-	// Métodos internos
 	async findMatches(isPerfect: boolean, ids: number[], tempoPreparo: number, gluten: boolean, derivadoLeite: boolean, categorias: string[]): Promise<{ id: number }[]> {
 
 		const query = this.createQueryBuilder('ri')

@@ -33,4 +33,14 @@ export class SeguidorRepository extends Repository<Seguidor> {
 
 		return seguidor;
 	}
+
+	async findPorSeguidos(id: Number): Promise<{ id: number }[]> {
+		const receitas: { id: number }[] = await this.createQueryBuilder('s')
+			.innerJoin('receita', 'r', 'r.usuario = s.usuario')
+      .select('r.id', 'id')
+			.where('s.seguidor = :id', { id })
+      .getRawMany();
+
+		return receitas;
+	}
 }

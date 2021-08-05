@@ -13,6 +13,7 @@ import IngredienteController from './IngredienteController';
 import LogNotificacaoController from './LogNotificacaoController';
 import MedidaController from './MedidaController';
 import ReceitaIngredienteController from './ReceitaIngredienteController';
+import SeguidorController from './SeguidorController';
 import UnidadeController from './UnidadeController';
 import UsuarioController from './UsuarioController';
 
@@ -238,6 +239,44 @@ class ReceitaController {
 
         } catch (e) {
             syserror(400, response, e);
+        }
+    }
+
+    async findHome(request: Request, response: Response) {
+        const { id } = request.params;
+
+        const curtidaController = new CurtidaController();
+        const seguidorController = new SeguidorController();
+
+        try {
+            const listCurtidas: any[] = [];
+            const listSeguidores: any[] = [];
+
+            const curtidas = await curtidaController.findPorCurtidas();
+            await Promise.all(curtidas.map(async id => {
+                const receita = await ReceitaController.buildReceita(id);
+                listCurtidas.push(receita);
+            }));
+
+            if (id) {
+                const seguidores = await seguidorController.findPorSeguidos(parseInt(id));
+                await Promise.all(seguidores.map(async id => {
+                    const receita = await ReceitaController.buildReceita(id);
+                    listSeguidores.push(receita);
+                }));
+            }
+
+            const sortedListSeguidores = listSeguidores.sort((a, b) => {
+                const n = b.curtidas - a.curtidas;
+                if (n !== 0) return n;
+
+                return b.comentarios - a.comentarios;
+            });
+
+
+            return systrace(200, response, { listCurtidas, listSeguidores: sortedListSeguidores });
+        } catch (e) {
+            return syserror(400, response, e);
         }
     }
 

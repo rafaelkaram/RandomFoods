@@ -76,6 +76,7 @@ routes.get('/busca/ingrediente', ingredienteController.findByIds);
 routes.get('/busca/comentario-receita/:idReceita', comentarioController.findByReceita);
 routes.get('/busca/combinacoes', receitaController.findMatches);
 routes.get('/busca/receita-categoria', receitaController.findByCategorias);
+routes.get('/busca/home/:id', receitaController.findHome);
 routes.get('/busca/tempo-preparo', receitaController.getTempoPreparo);
 routes.get('/busca/receita-usuario/:id', receitaController.findByUsuario);
 routes.get('/busca/seguidos/:id', seguidorController.findByUsuario);
