@@ -64,7 +64,7 @@ const Receita = ({ route }: { route: any }) => {
             }
             );
 
-    }, [refreshing, idRecipe]);
+    }, [refreshing, idRecipe, isCurtida]);
 
     useEffect(() => {
         const curtida: ICurtidaSimples[] = curtidas.filter(curtida2 => (curtida2.usuario.id === user?.id));
@@ -89,8 +89,8 @@ const Receita = ({ route }: { route: any }) => {
                 }
                 );
         } else {
-            const curtida: ICurtidaSimples = curtidas.filter(curtida2 => (curtida2.usuario.id === user?.id))[0];
-            api.post(`remove/curtida/${curtida.id}`)
+            const curtida: ICurtidaSimples[] = curtidas.filter(curtida2 => (curtida2.usuario.id === user?.id));
+            api.post(`remove/curtida/${curtida[0].id}`)
                 .then(response => {
                     setIsCurtida(false);
                 }).catch(error => {
