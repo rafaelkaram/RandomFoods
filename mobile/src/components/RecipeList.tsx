@@ -20,11 +20,10 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
     const navegar = props.navegar;
     const deletarReceita = props.deletarReceita;
    
-    const idUser = props.idUser;
     const { user } = useContext(AuthContext);
     let validar = false
-    if (idUser){
-        if (user?.id == idUser) {
+    if (props.idUser){
+        if (user?.id == props.idUser) {
             validar = true
         }
     }
