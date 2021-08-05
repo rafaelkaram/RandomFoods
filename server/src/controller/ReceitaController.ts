@@ -208,7 +208,7 @@ class ReceitaController {
     }
 
     async findMatches(request: Request, response: Response) {
-        const { ids, tempoPreparo, derivadoLeite, gluten, categorias, porcoes, tipo } = request.query as { ids: string[], tempoPreparo: string, derivadoLeite: string, gluten: string, categorias: string[], porcoes: string, tipo: string };
+        const { ids, tempoPreparo, derivadoLeite, gluten, categorias, porcoes, tipo } = request.query as { ids: string[], tempoPreparo: string, derivadoLeite: string, gluten: string, categorias: string[], porcoes: string, tipo: string[] };
 
         const rIController = new ReceitaIngredienteController();
 

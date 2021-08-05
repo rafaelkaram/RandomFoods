@@ -7,18 +7,20 @@ import { ReceitaIngrediente } from '../model/ReceitaIngrediente';
 
 @EntityRepository(ReceitaIngrediente)
 export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente> {
-	async findMatches(isPerfect: boolean, ids: number[], tempoPreparo: number, gluten: boolean, derivadoLeite: boolean, categorias: string[], porcoes: number, tipo?: string): Promise<{ id: number }[]> {
+	async findMatches(isPerfect: boolean, ids: number[], tempoPreparo: number, gluten: boolean, derivadoLeite: boolean, categorias: string[], porcoes: number, tipo?: string[]): Promise<{ id: number }[]> {
 
 		const query = this.createQueryBuilder('ri')
 			.select('ri.receita.id', 'id')
 			.innerJoin('ri.receita', 'r')
 			.where('r.ativa = :ativa ', { ativa: true });
 
+		if (ids)
 		if (ids.length > 0)
 			query.andWhere('ri.ingrediente IN ( :...ids )', { ids });
 
 		if (tipo)
-			query.andWhere('r.tipo = :tipo', { tipo });
+		if (tipo.length > 0)
+			query.andWhere('r.tipo IN ( :...tipo )', { tipo });
 
 		if (gluten || derivadoLeite) {
 			query.andWhere(qb => {
@@ -61,6 +63,7 @@ export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente>
 			query.setParameter('tempoPreparo', tempoPreparo);
 		}
 
+		if (categorias)
 		if (categorias.length > 0) {
 			query.andWhere(qb => {
 				const subQuery = qb.subQuery()

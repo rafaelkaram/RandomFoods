@@ -34,12 +34,20 @@ const Recipe = ({ route }: { route: any }) => {
             const { tipos } = route.params
             const { tempoDePreparo } = route.params
 
+            const newCategorias = categorias.map((categoria: string) => {
+                return categoria.toUpperCase()
+            })
+
+            const newTipos = tipos.map((tipos: string) => {
+                return tipos.toUpperCase()
+            })
+
             const params = {
                 ids: ingredientes,
                 derivadoLeite: derivadoLeite,
                 gluten: gluten,
-                categorias: categorias,
-                tipos: tipos,
+                categorias: newCategorias,
+                tipo: newTipos,
                 tempoPreparo: tempoDePreparo[0],
             }
 
