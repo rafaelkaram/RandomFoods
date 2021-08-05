@@ -125,7 +125,7 @@ class UsuarioController {
 
             const buffer = encryptMidia(usuario.id.toString());
 
-            moveFile(buffer, image.filename);
+            if (image) moveFile(buffer, image.filename);
 
             return systrace(200, response, usuarioView.render(usuario, 0));
         } catch (err) {
