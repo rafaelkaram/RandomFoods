@@ -39,6 +39,7 @@ export class SeguidorRepository extends Repository<Seguidor> {
 			.innerJoin('receita', 'r', 'r.usuario = s.usuario')
       .select('r.id', 'id')
 			.where('s.seguidor = :id', { id })
+			.andWhere('r.ativa = :ativa', { ativa: true })
       .getRawMany();
 
 		return receitas;

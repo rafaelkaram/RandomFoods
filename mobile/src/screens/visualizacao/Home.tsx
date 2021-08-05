@@ -72,7 +72,8 @@ const Home = () => {
     const responseListener = useRef<any>();
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
-    const [receitas, setReceitas] = useState<IReceitaSimples[]>([])
+    const [receitas, setReceitas] = useState<IReceitaSimples[]>([]);
+    const [receitasSeguidor, setReceitasseguidor] = useState<IReceitaSimples[]>([]);
     const [load, setLoad] = useState<boolean>(false);
 
     const { user } = useContext(AuthContext);
@@ -123,7 +124,8 @@ const Home = () => {
 
     useEffect(() => {
         api.get(`/busca/home/${ user?.id ? user.id : 0 }`).then(response => {
-            setReceitas(response.data);
+            setReceitas(response.data.listCurtidas);
+            if (response.data.listSeguidores.length > 0) setReceitasseguidor(response.data.listSeguidores);
             setLoad(true);
         })
     }, [refreshing]);
@@ -163,7 +165,10 @@ const Home = () => {
 
                 <View>
 
-                    <RecipeList titulo='' receitas={receitas} navegar={(id: number) => handleNavigateToRecipe(id)}  contextUser={null} idUser={user?.id}/>
+                    <RecipeList titulo='Mais Curtidas' receitas={receitas} navegar={(id: number) => handleNavigateToRecipe(id)}  contextUser={null} idUser={null}/>
+                    { receitasSeguidor.length > 0 &&
+                        <RecipeList titulo='De quem você segue' receitas={receitasSeguidor} navegar={(id: number) => handleNavigateToRecipe(id)}  contextUser={null} idUser={null}/>
+                    }
 
                 </View>
             </ScrollView>
