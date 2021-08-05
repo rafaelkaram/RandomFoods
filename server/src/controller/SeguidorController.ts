@@ -47,7 +47,7 @@ class SeguidorController {
             log.seguidor = seguidor;
             await log.save();
 
-            systrace(201, response);
+            systrace(204, response);
         } catch (err) {
             syserror(400, response, { error: err });
         }
