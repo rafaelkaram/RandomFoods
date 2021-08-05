@@ -22,13 +22,13 @@ class ReceitaIngredienteController {
         return ingredientes;
     }
 
-    async findMatches(filtro: { tempoPreparo: number, gluten: boolean, derivadoLeite: boolean, ids?: number[], categorias?: string[] }): Promise<{ perfect: number[], partial: number[] }> {
+    async findMatches(filtro: { tempoPreparo: number, gluten: boolean, derivadoLeite: boolean, ids?: number[], categorias?: string[], porcoes?: number, tipo?: string }): Promise<{ perfect: number[], partial: number[] }> {
         const repository = getCustomRepository(ReceitaIngredienteRepository);
 
-        const { tempoPreparo, gluten, derivadoLeite, ids, categorias } = filtro as { tempoPreparo: number, gluten: boolean, derivadoLeite: boolean, ids: number[], categorias: string[] };
+        const { tempoPreparo, gluten, derivadoLeite, ids, categorias, porcoes, tipo } = filtro as { tempoPreparo: number, gluten: boolean, derivadoLeite: boolean, ids: number[], categorias: string[], porcoes?: number, tipo?: string };
 
-        const perfect = await repository.findMatches(true, ids, tempoPreparo, gluten, derivadoLeite, categorias);
-        const partial = await repository.findMatches(false, ids, tempoPreparo, gluten, derivadoLeite, categorias);
+        const perfect = await repository.findMatches(true, ids, tempoPreparo, gluten, derivadoLeite, categorias, porcoes ? porcoes : 0, tipo);
+        const partial = await repository.findMatches(false, ids, tempoPreparo, gluten, derivadoLeite, categorias, porcoes ? porcoes : 0, tipo);
 
         const receitas = {
             perfect: perfect.map(obj => { return obj.id }),
