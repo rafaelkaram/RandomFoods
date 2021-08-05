@@ -275,8 +275,14 @@ class ReceitaController {
                 return b.comentarios - a.comentarios;
             });
 
+            const sortedListCurtidas = listCurtidas.sort((a, b) => {
+                const n = b.curtidas - a.curtidas;
+                if (n !== 0) return n;
 
-            return systrace(200, response, { listCurtidas, listSeguidores: sortedListSeguidores });
+                return b.comentarios - a.comentarios;
+            });
+
+            return systrace(200, response, { listCurtidas: sortedListCurtidas, listSeguidores: sortedListSeguidores });
         } catch (e) {
             return syserror(400, response, e);
         }
