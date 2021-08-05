@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import { IMidiaPicker, ICart, IIngredienteCadastro } from '../constants/interfaces';
+import { IMidiaPicker, ICart, IIngredienteCadastro, IPassoReceita } from '../constants/interfaces';
 
 interface AuthContextData {
     nomeReceitaContext: string,
@@ -12,9 +12,11 @@ interface AuthContextData {
     ingredientesContext: ICart[],
     itemsContext: number[],
     ingredientesQuantidadeContext: IIngredienteCadastro[],
+    stepsContext: IPassoReceita[],
     saveDadosGerais(nomeReceita: string, tipoReceita: string, categorias: string[], minutos: string, porcoes: string, midias: IMidiaPicker[]): Promise<void>,
     saveIngredientes(ingredientes: ICart[], itemsContext: number[]): Promise<void>,
     saveIngredientesQuantidade(ingredientesQuantidade: IIngredienteCadastro[]): Promise<void>,
+    saveSteps(steps: IPassoReceita[]): Promise<void>,
     deleteItems(): Promise<void>,
 }
 
@@ -32,6 +34,7 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
     const [ingredientesContext, setIngredientesContext] = useState<ICart[]>([])
     const [itemsContext, setItemsContext] = useState<number[]>([])
     const [ingredientesQuantidadeContext, setIngredientesQuantidadeContext] = useState<IIngredienteCadastro[]>([])
+    const [stepsContext, setStepsContext] = useState<IPassoReceita[]>([])
 
     useEffect(() => {
         async function loadStoragedData() {
@@ -50,6 +53,9 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
 
             // Quantidades
             const storageIngredientesQuantidade = await AsyncStorage.getItem('ingredientesQuantidade')
+
+            // Passo a Passo
+            const storageSteps = await AsyncStorage.getItem('steps')
 
             if (storageNomeReceita){
                 const formatNomeReceita: string = JSON.parse(storageNomeReceita)
@@ -105,6 +111,12 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
                 setIngredientesQuantidadeContext(formatIngredientesQuantidade)
             }
 
+            if (storageSteps){
+                const formatSteps: IPassoReceita[] = JSON.parse(storageSteps)
+                console.log('formatSteps: ' + formatSteps)
+                setStepsContext(formatSteps)
+            }
+
         }
         loadStoragedData()
     }, [])
@@ -137,8 +149,13 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
         setIngredientesQuantidadeContext(ingredientesQuantidade)
     }
 
+    const saveSteps = async (steps: IPassoReceita[]) => {
+        AsyncStorage.setItem('steps', JSON.stringify(steps))
+        setStepsContext(steps)
+    }
+
     const deleteItems = async () => {
-        const arrItems = ['nomeReceita', 'tipoReceita', 'categorias', 'minutos', 'porcoes', 'midias', 'ingredientes', 'items', 'ingredientesQuantidade' ]
+        const arrItems = ['nomeReceita', 'tipoReceita', 'categorias', 'minutos', 'porcoes', 'midias', 'ingredientes', 'items', 'ingredientesQuantidade', 'steps' ]
         AsyncStorage.multiRemove(arrItems)
         setNomeReceitaContext('')
         setTipoReceitaContext('')
@@ -149,6 +166,7 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
         setIngredientesContext([])
         setItemsContext([])
         setIngredientesQuantidadeContext([])
+        setStepsContext([])
     }
 
     return (
@@ -163,9 +181,11 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
                 ingredientesContext,
                 itemsContext,
                 ingredientesQuantidadeContext,
+                stepsContext,
                 saveDadosGerais,
                 saveIngredientes,
                 saveIngredientesQuantidade,
+                saveSteps,
                 deleteItems,
             }}>
             {children}
