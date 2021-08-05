@@ -258,7 +258,7 @@ class ReceitaController {
                 listCurtidas.push(receita);
             }));
 
-            if (id) {
+            if (id && id !== '0') {
                 const seguidores = await seguidorController.findPorSeguidos(parseInt(id));
                 await Promise.all(seguidores.map(async id => {
                     const receita = await ReceitaController.buildReceita(id);

@@ -122,7 +122,7 @@ const Home = () => {
 
 
     useEffect(() => {
-        api.get(`/busca/home/${ user?.id }`).then(response => {
+        api.get(`/busca/home/${ user?.id ? user.id : 0 }`).then(response => {
             setReceitas(response.data);
             setLoad(true);
         })
@@ -163,7 +163,7 @@ const Home = () => {
 
                 <View>
 
-                    <RecipeList titulo='' receitas={receitas} navegar={(id: number) => handleNavigateToRecipe(id)}  contextUser={null} idUser={null}/>
+                    <RecipeList titulo='' receitas={receitas} navegar={(id: number) => handleNavigateToRecipe(id)}  contextUser={null} idUser={user?.id}/>
 
                 </View>
             </ScrollView>
