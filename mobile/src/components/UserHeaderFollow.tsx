@@ -73,16 +73,17 @@ const UserHeader = ({
 
                 </View>
                 <View style={usuario.nome.length > 10 ? styles.nameContainer : null}>
+
                     <Text style={[globalStyles.boldText, styles.name]}>{usuario.nome}</Text>
-                    <Text style={[globalStyles.regularText, styles.login]}>@{usuario.login}</Text>
+                    <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigLogin] : [globalStyles.regularText, styles.login]}>@{usuario.login}</Text>
                     <View style={styles.segContainer}>
                         <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id, true)}>
-                            <Text style={[globalStyles.regularText, styles.numberSeg]}>{seguidores ? seguidores : 0}</Text>
-                            <Text style={[globalStyles.boldText, styles.textSeg]}>Seguidores</Text>
+                            <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigNumberSeg] : [globalStyles.regularText, styles.numberSeg]}>{seguidores ? seguidores : 0}</Text>
+                            <Text style={usuario.nome.length > 10 ? [globalStyles.boldText, styles.bigTextSeg] : [globalStyles.boldText, styles.textSeg]}>Seguidores</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id, false)}>
-                            <Text style={[globalStyles.regularText, styles.numberSeg]}>{seguidos ? seguidos : 0}</Text>
-                            <Text style={[globalStyles.boldText, styles.textSeg]}>Seguindo</Text>
+                            <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigNumberSeg] : [globalStyles.regularText, styles.numberSeg]}>{seguidos ? seguidos : 0}</Text>
+                            <Text style={usuario.nome.length > 10 ? [globalStyles.boldText, styles.bigTextSeg] : [globalStyles.boldText, styles.textSeg]}>Seguindo</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

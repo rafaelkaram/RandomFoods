@@ -1,23 +1,18 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { Alert, ScrollView, RefreshControl, Image, Text, View } from 'react-native';
-import { Avatar, Input } from 'react-native-elements';
-import { Feather } from '@expo/vector-icons';
+import { Alert, ScrollView, RefreshControl, Image } from 'react-native';
+import { Input } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import api from '../../services/api';
 
-import { ISeguidor, IReceitaSimples, IUsuarioSimples, IUsuario } from '../../constants/interfaces';
+import { ISeguidor, IUsuarioSimples } from '../../constants/interfaces';
 import screens from '../../constants/screens';
 import colors from '../../constants/colors';
 
-import globalStyles from '../../styles/Global';
 import styles from '../../styles/screens/Seguidores';
 import fixString from '../../assets/functions/utils';
 import Loading from '../../components/Loading';
-import RecipeList from '../../components/RecipeList';
-import UserHeader from '../../components/UserHeader';
-import UserHeaderFollow from '../../components/UserHeaderFollow';
 import SeguidoresList from '../../components/SeguidoresList';
 
 
@@ -64,7 +59,7 @@ const Seguidores = ({ route }: { route: any }) => {
                 setSeguidosFilter(response.data)
             });
         setLoad(true);
-    }, [refreshing, seguindo]);
+    }, [refreshing, seguindo, idUser]);
 
     useEffect(() => {
         filterSeguidores()
@@ -121,12 +116,6 @@ const Seguidores = ({ route }: { route: any }) => {
         }
     }
 
-    // useEffect(() => {
-    //     const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.id === user?.id));
-    //     if (seguidor && seguidor.length > 0)
-    //         setSeguindo(true);
-    // }, [seguidores]);
-
 
 
     const onRefresh = useCallback(() => {
@@ -162,9 +151,9 @@ const Seguidores = ({ route }: { route: any }) => {
 
                 <ScrollView style={{ backgroundColor: colors.background, marginTop: 10 }}>
                     {seguidor ?
-                        <SeguidoresList seguidores={seguidoresFilter} seguidor={seguidor} deixarSeguir={(id: number, name: string) => deixarSeguir(id, name)} contextUser={user} idUser={idUser} />
+                        <SeguidoresList seguidores={seguidoresFilter} seguidor={seguidor} deixarSeguir={(id: number, name: string) => deixarSeguir(id, name)} contextUser={user} user={usuario} />
                         :
-                        <SeguidoresList seguidores={seguidosFilter} seguidor={seguidor} deixarSeguir={(id: number, name: string) => deixarSeguir(id, name)} contextUser={user} idUser={idUser} />
+                        <SeguidoresList seguidores={seguidosFilter} seguidor={seguidor} deixarSeguir={(id: number, name: string) => deixarSeguir(id, name)} contextUser={user} user={usuario} />
                     }
                     {/* {seguidores.length > 0 &&
                     <SeguidoresList seguidores={seguidores} seguidor ={seguidor} />

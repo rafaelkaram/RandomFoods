@@ -1,35 +1,30 @@
 import React from 'react';
-import { Text, TouchableOpacity, View, SafeAreaView, Image } from 'react-native';
+import { Text, TouchableOpacity, View, SafeAreaView } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { SimpleLineIcons } from '@expo/vector-icons';
-import colors from "../../src/constants/colors";
 
-import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-
-import { ISeguidor, IUsuario } from '../constants/interfaces';
+import { ISeguidor, IUsuario, IUsuarioSimples } from '../constants/interfaces';
 import screens from '../constants/screens';
 import styles from '../styles/components/SeguidoresList';
 import globalStyles from '../styles/Global';
-import { WIDTH } from '../constants/dimensions';
-
 
 const SeguidoresList = ({
     seguidores,
     seguidor,
     deixarSeguir,
     contextUser,
-    idUser
+    user
 }: {
     seguidores: ISeguidor[],
     seguidor: boolean,
     deixarSeguir: Function,
     contextUser: IUsuario | null,
-    idUser: number
+    user: IUsuarioSimples
 }) => {
 
     let verification = false
-    if (contextUser?.id == idUser) {
+    if (contextUser?.id == user.id) {
         verification = true
     }
 
@@ -87,7 +82,13 @@ const SeguidoresList = ({
                 </>
                 :
                 <View>
-                    <Text style={[globalStyles.subTitleText, globalStyles.recipeListSubTitle, { marginTop: 20 }]}>{seguidor ? 'Você não possui seguidores!' : 'Você não está seguindo ninguém!'}</Text>
+                    {
+                        verification ?
+                            <Text style={[globalStyles.subTitleText, globalStyles.recipeListSubTitle, { marginTop: 20 }]}>{seguidor ? 'Você não possui seguidores!' : 'Você não está seguindo ninguém!'}</Text>
+                            :
+                            <Text style={[globalStyles.subTitleText, globalStyles.recipeListSubTitle, { marginTop: 20 }]}>{seguidor ? `${user.nome} não possui seguidores!` : `${user.nome} não está seguindo ninguém!`}</Text>
+                    }
+
                 </View>
             }
 

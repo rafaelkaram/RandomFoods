@@ -18,7 +18,7 @@ export default StyleSheet.create({
     nameContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        width: (WIDTH * 0.7),
+        width: ((WIDTH-60) * 0.7),
     },
 
     name: {
@@ -31,7 +31,7 @@ export default StyleSheet.create({
         fontSize: 14,
     },
 
-    following : {
+    following: {
         color: 'white'
     },
 
@@ -99,4 +99,23 @@ export default StyleSheet.create({
         margin: 5,
         fontWeight: 'bold'
     },
+
+    bigNumberSeg: {
+        marginLeft: 20,
+        marginTop: 10,
+        marginBottom: 3,
+        fontSize: 12,
+    },
+
+    bigTextSeg: {
+        marginLeft: 20,
+        fontSize: 12,
+    },
+
+    bigLogin: {
+        marginLeft: 20,
+        marginTop: 5,
+        fontSize: 12,
+    },
+
 });
