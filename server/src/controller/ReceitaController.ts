@@ -255,10 +255,11 @@ class ReceitaController {
             const listSeguidores: any[] = [];
 
             const curtidas = await curtidaController.findPorCurtidas();
-            await Promise.all(curtidas.map(async id => {
+            for (let key in curtidas) {
+                const id = curtidas[key];
                 const receita = await ReceitaController.buildReceita(id);
                 listCurtidas.push(receita);
-            }));
+            }
 
             if (id && id !== '0') {
                 const seguidores = await seguidorController.findPorSeguidos(parseInt(id));
@@ -275,14 +276,7 @@ class ReceitaController {
                 return b.comentarios - a.comentarios;
             });
 
-            const sortedListCurtidas = listCurtidas.sort((a, b) => {
-                const n = b.curtidas - a.curtidas;
-                if (n !== 0) return n;
-
-                return b.comentarios - a.comentarios;
-            });
-
-            return systrace(200, response, { listCurtidas: sortedListCurtidas, listSeguidores: sortedListSeguidores });
+            return systrace(200, response, { listCurtidas, listSeguidores: sortedListSeguidores });
         } catch (e) {
             return syserror(400, response, e);
         }
