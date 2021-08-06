@@ -71,6 +71,10 @@ const Painel = () => {
         navigation.navigate(screens.receitaCategoria, { id: user?.id, categoria });
     }
 
+    const handleNavigateToRecipe = (id: number) => {
+        navigation.navigate(screens.receita, { id: id });
+    }
+
     if (!load || !user) {
         return <Loading />
     }
@@ -123,7 +127,7 @@ const Painel = () => {
                                             <DataTable>
                                                 <DataTable.Header>
                                                     <DataTable.Title style={{ flexBasis: 30 }} >Categoria</DataTable.Title>
-                                                    <DataTable.Title numeric>#Receitas</DataTable.Title>
+                                                    <DataTable.Title numeric>Receitas</DataTable.Title>
                                                 </DataTable.Header>
                                                 {recipeCategory.map((item, index) => {
                                                     return (
@@ -153,8 +157,8 @@ const Painel = () => {
                                             return (
                                                 <TouchableOpacity key={item.id}>
                                                     <DataTable.Row >
-                                                        <DataTable.Cell style={{ flexBasis: 30 }}>{item.nome}</DataTable.Cell>
-                                                        <DataTable.Cell numeric>{item.nota}</DataTable.Cell>
+                                                        <DataTable.Cell onPress={() => { handleNavigateToRecipe(item.id) }} style={{ flexBasis: 250 }}>{item.nome}</DataTable.Cell>
+                                                        <DataTable.Cell numeric>{item.curtidas}</DataTable.Cell>
                                                     </DataTable.Row>
                                                 </TouchableOpacity>
                                             )
@@ -165,7 +169,7 @@ const Painel = () => {
                         </>
                         :
                         <View>
-                            <Text style={[globalStyles.subTitleText, globalStyles.recipeListSubTitle,{marginTop: 20}]}>Você não possui receitas cadastradas!</Text>
+                            <Text style={[globalStyles.subTitleText, globalStyles.recipeListSubTitle, { marginTop: 20 }]}>Você não possui receitas cadastradas!</Text>
                         </View>
                 }
 
