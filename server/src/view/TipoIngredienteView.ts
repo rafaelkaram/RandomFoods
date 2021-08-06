@@ -7,7 +7,7 @@ import IngredienteView from './IngredienteView';
 export default {
 	render(ingredientes: any, tipo: TipoIngrediente) {
 		return {
-			nome: tipo,
+			nome: TipoIngrediente[tipo],
 			url: `http://${ getLocalIP() }:${ process.env.PORT }/uploads/ingredient-types/${ tipo.toLowerCase() }-colored.png`,
 			ingredientes: ingredientes
 		};
