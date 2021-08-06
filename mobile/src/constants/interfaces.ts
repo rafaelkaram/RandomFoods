@@ -195,11 +195,11 @@ interface IReceitaCadastro {
   categorias: string[],
   tempoPreparo: number,
   porcoes: number,
-  ingredientes: IIngredienteCadastro2[],
+  ingredientes: IIngredienteQuantidade[],
   descricao: string,
 }
 
-interface IIngredienteCadastro2 {
+interface IIngredienteQuantidade {
   id: number,
   semMedida?: boolean,
   unidade?: string,
@@ -230,6 +230,6 @@ export {
   IPassoReceita2,
   ISeguidoresSimples,
   IIngredienteCadastro,
-  IIngredienteCadastro2,
+  IIngredienteQuantidade,
   IReceitaCadastro,
 }

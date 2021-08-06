@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Alert, View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Modal } from 'react-native';
 import { CommonActions, useNavigation, TabActions, StackActions, DrawerActions } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,11 +9,12 @@ import { BlurView } from 'expo-blur';
 import screens from '../../constants/screens';
 import styles from '../../styles/screens/PassoAPasso';
 import globalStyles from '../../styles/Global';
-import { IPassoReceita, IReceitaCadastro, IIngredienteCadastro2 } from '../../constants/interfaces';
+import { IPassoReceita, IReceitaCadastro, IIngredienteQuantidade } from '../../constants/interfaces';
 
 import api from '../../services/api';
 
 import StepRecipe from '../../components/StepRecipe';
+import Loading from '../../components/Loading';
 
 import AuthReceita from '../../contexts/authReceita';
 import AuthContext from '../../contexts/auth';
@@ -32,6 +33,8 @@ const PassoAPasso = () => {
         porcoesContext,
         midiasContext,
         ingredientesQuantidadeContext,
+        stepsContext,
+        saveSteps,
         deleteItems,
     } = useContext(AuthReceita)
 
@@ -40,6 +43,20 @@ const PassoAPasso = () => {
     const [steps, setSteps] = useState<IPassoReceita[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [lastFinished, setLastFinished] = useState(true);
+    const [load, setLoad] = useState<boolean>(false);
+
+    useEffect(() => {
+        setSteps(stepsContext)
+        setLoad(true);
+    }, [])
+
+    useEffect(() => {
+        saveSteps(steps)
+    }, [steps])
+
+    if (!load || !user) {
+        return <Loading />
+    }
 
     const addStep = () => {
         if (lastFinished) {
@@ -136,7 +153,7 @@ const PassoAPasso = () => {
             stringSteps += step.id + '. ' + step.descricao + '/n/n'
         })
 
-        const newIngredientes: IIngredienteCadastro2[] = []
+        const newIngredientes: IIngredienteQuantidade[] = []
 
         ingredientesQuantidadeContext.forEach(ingr => {
             newIngredientes.push({
