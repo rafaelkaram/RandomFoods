@@ -145,27 +145,32 @@ const Painel = () => {
                                     :
                                     null
                             }
-                            <View>
-                                <Text style={[globalStyles.subTitleText, styles.tableTitle]}>Top receitas mais votadas</Text>
-                                <View style={styles.table}>
-                                    <DataTable>
-                                        <DataTable.Header>
-                                            <DataTable.Title style={{ flexBasis: 30 }} >Receita</DataTable.Title>
-                                            <DataTable.Title numeric>Nota</DataTable.Title>
-                                        </DataTable.Header>
-                                        {topCurtidas.map(item => {
-                                            return (
-                                                <TouchableOpacity key={item.id}>
-                                                    <DataTable.Row >
-                                                        <DataTable.Cell onPress={() => { handleNavigateToRecipe(item.id) }} style={{ flexBasis: 250 }}>{item.nome}</DataTable.Cell>
-                                                        <DataTable.Cell numeric>{item.curtidas}</DataTable.Cell>
-                                                    </DataTable.Row>
-                                                </TouchableOpacity>
-                                            )
-                                        })}
-                                    </DataTable>
-                                </View>
-                            </View>
+                            {
+                                topCurtidas.length > 0 ?
+                                    <View>
+                                        <Text style={[globalStyles.subTitleText, styles.tableTitle]}>Top receitas mais votadas</Text>
+                                        <View style={styles.table}>
+                                            <DataTable>
+                                                <DataTable.Header>
+                                                    <DataTable.Title style={{ flexBasis: 30 }} >Receita</DataTable.Title>
+                                                    <DataTable.Title numeric>Nota</DataTable.Title>
+                                                </DataTable.Header>
+                                                {topCurtidas.map(item => {
+                                                    return (
+                                                        <TouchableOpacity key={item.id}>
+                                                            <DataTable.Row >
+                                                                <DataTable.Cell onPress={() => { handleNavigateToRecipe(item.id) }} style={{ flexBasis: 250 }}>{item.nome}</DataTable.Cell>
+                                                                <DataTable.Cell numeric>{item.curtidas}</DataTable.Cell>
+                                                            </DataTable.Row>
+                                                        </TouchableOpacity>
+                                                    )
+                                                })}
+                                            </DataTable>
+                                        </View>
+                                    </View>
+                                    :
+                                    null
+                            }
                         </>
                         :
                         <View>
