@@ -83,7 +83,7 @@ routes.get('/busca/seguidos/:id', seguidorController.findByUsuario);
 routes.get('/busca/seguidores/:id', seguidorController.findSeguidosByUsuario);
 
 // Rotas Dashboard
-routes.get('/dashboard/avaliacoes/:id', avaliacaoController.findVoted);
+routes.get('/dashboard/curtidas/:id', curtidaController.findTopCurtidas);
 routes.get('/dashboard/categorias/:id', categoriaController.countCategoryByUserId);
 routes.get('/dashboard/tipos-receita/:id', receitaController.countTypeByUserId);
 

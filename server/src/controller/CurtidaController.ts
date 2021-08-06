@@ -46,6 +46,17 @@ class CurtidaController {
         }
     }
 
+    async findTopCurtidas(request: Request, response: Response){
+        const repository = getCustomRepository(CurtidaRepository);
+
+        const { id } = request.params;
+        const usuarioId = parseInt(id);
+
+        const avaliacoes = await repository.findTopCurtidas(usuarioId);
+
+        return response.status(200).json(avaliacoes);
+    }
+
     async remove(request: Request, response: Response) {
         const repository = getCustomRepository(CurtidaRepository);
         const { id } = request.params;

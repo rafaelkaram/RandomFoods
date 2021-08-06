@@ -12,4 +12,20 @@ export class CurtidaRepository extends Repository<Curtida> {
 
     return receitas;
   }
+
+	async findTopCurtidas(id: number): Promise<any[]> {
+		const curtidas = await this.createQueryBuilder('c')
+      .innerJoin('c.receita', 'r', 'r.id = c.receita')
+      .select('r.id', 'id')
+      .addSelect('r.nome', 'nome')
+      .addSelect('COUNT(c.*)', 'curtidas')
+      .where('r.usuario.id = :id', { id })
+      .groupBy('r.id')
+      .addGroupBy('r.nome')
+      .orderBy('COUNT(c.*)', 'DESC')
+      .limit(5)
+      .getRawMany();
+
+		return curtidas;
+	}
 }
