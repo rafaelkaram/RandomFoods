@@ -9,7 +9,7 @@ import AuthContext from './../../contexts/auth';
 
 import api from '../../services/api';
 
-import { IPainelTipoReceita, IPainelCategorias, IPainelVotos, ISeguidor } from '../../constants/interfaces';
+import { IPainelTipoReceita, IPainelCategorias, IPainelCurtidas, ISeguidor } from '../../constants/interfaces';
 import { HEIGHT, WIDTH } from '../../constants/dimensions';
 import colors from '../../constants/colors';
 import screens from '../../constants/screens';
@@ -119,7 +119,7 @@ const Painel = () => {
                                 recipeCategory.length > 0 ?
                                     <View>
                                         <Text style={[globalStyles.subTitleText, styles.tableTitle]}>Quantidade de Receitas por Categoria</Text>
-                                        <View style={styles.topVotedTable}>
+                                        <View style={styles.table}>
                                             <DataTable>
                                                 <DataTable.Header>
                                                     <DataTable.Title style={{ flexBasis: 30 }} >Categoria</DataTable.Title>
@@ -143,11 +143,11 @@ const Painel = () => {
                             }
                             <View>
                                 <Text style={[globalStyles.subTitleText, styles.tableTitle]}>Top receitas mais votadas</Text>
-                                <View style={styles.topCurtidasTable}>
+                                <View style={styles.table}>
                                     <DataTable>
                                         <DataTable.Header>
                                             <DataTable.Title style={{ flexBasis: 30 }} >Receita</DataTable.Title>
-                                            <DataTable.Title numeric>Curtidas</DataTable.Title>
+                                            <DataTable.Title numeric>Nota</DataTable.Title>
                                         </DataTable.Header>
                                         {topCurtidas.map(item => {
                                             return (

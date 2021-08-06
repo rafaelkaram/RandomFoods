@@ -33,7 +33,7 @@ export default StyleSheet.create({
         textAlign: 'center',
     },
 
-    topCurtidasTable: {
+    table: {
         marginHorizontal: 20,
         backgroundColor: 'white',
         borderRadius: 10,
