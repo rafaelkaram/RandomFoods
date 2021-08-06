@@ -24,7 +24,7 @@ const Painel = () => {
 
     const [recipeType, setRecipeType] = useState<IPainelTipoReceita[]>([]);
     const [recipeCategory, setRecipeCategory] = useState<IPainelCategorias[]>([]);
-    const [topVotedRecipe, setTopVotedRecipe] = useState<IPainelVotos[]>([]);
+    const [topCurtidas, setTopCurtidas] = useState<IPainelCurtidas[]>([]);
     const [seguidores, setSeguidores] = useState<ISeguidor[]>([]);
     const [seguindo, setSeguindo] = useState<ISeguidor[]>([]);
     const [load, setLoad] = useState<boolean>(false);
@@ -38,8 +38,8 @@ const Painel = () => {
                 .then(response => { setRecipeType(response.data); });
             api.get(`/dashboard/categorias/${user.id}`)
                 .then(response => { setRecipeCategory(response.data); });
-            api.get(`/dashboard/avaliacoes/${user.id}`)
-                .then(response => { setTopVotedRecipe(response.data); });
+            api.get(`/dashboard/curtidas/${user.id}`)
+                .then(response => { setTopCurtidas(response.data); });
             api.get(`/busca/seguidores/${user.id}`)
                 .then(response => { setSeguidores(response.data) });
             api.get(`/busca/seguidos/${user.id}`)
@@ -143,20 +143,18 @@ const Painel = () => {
                             }
                             <View>
                                 <Text style={[globalStyles.subTitleText, styles.tableTitle]}>Top receitas mais votadas</Text>
-                                <View style={styles.topVotedTable}>
+                                <View style={styles.topCurtidasTable}>
                                     <DataTable>
                                         <DataTable.Header>
                                             <DataTable.Title style={{ flexBasis: 30 }} >Receita</DataTable.Title>
-                                            <DataTable.Title numeric>Nota</DataTable.Title>
-                                            <DataTable.Title style={{ flexBasis: 10 }} numeric>Nº de Notas</DataTable.Title>
+                                            <DataTable.Title numeric>Curtidas</DataTable.Title>
                                         </DataTable.Header>
-                                        {topVotedRecipe.map(item => {
+                                        {topCurtidas.map(item => {
                                             return (
                                                 <TouchableOpacity key={item.id}>
                                                     <DataTable.Row >
                                                         <DataTable.Cell style={{ flexBasis: 30 }}>{item.nome}</DataTable.Cell>
                                                         <DataTable.Cell numeric>{item.nota}</DataTable.Cell>
-                                                        <DataTable.Cell numeric>{item.num_notas}</DataTable.Cell>
                                                     </DataTable.Row>
                                                 </TouchableOpacity>
                                             )

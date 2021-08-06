@@ -33,7 +33,7 @@ export default StyleSheet.create({
         textAlign: 'center',
     },
 
-    topVotedTable: {
+    topCurtidasTable: {
         marginHorizontal: 20,
         backgroundColor: 'white',
         borderRadius: 10,

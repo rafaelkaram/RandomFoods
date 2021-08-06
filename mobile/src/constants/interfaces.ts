@@ -153,11 +153,10 @@ interface IPainelTipoReceita {
   count: number,
 }
 
-interface IPainelVotos {
+interface IPainelCurtidas {
   id: number,
   nome: string,
-  nota: string,
-  num_notas: number
+  curtidas: number,
 }
 
 interface IPassoReceita {
@@ -225,7 +224,7 @@ export {
   IMidiaPicker,
   IPainelCategorias,
   IPainelTipoReceita,
-  IPainelVotos,
+  IPainelCurtidas,
   IPassoReceita,
   IPassoReceita2,
   ISeguidoresSimples,
