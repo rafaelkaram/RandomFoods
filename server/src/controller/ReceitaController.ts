@@ -36,7 +36,6 @@ import { ReceitaIngrediente } from '../model/ReceitaIngrediente';
 import { Usuario } from '../model/Usuario';
 
 import receitaView from '../view/ReceitaView';
-import { CategoriaRepository } from '../repository/CategoriaRepository';
 
 class ReceitaController {
     // Métodos das rotas
@@ -68,33 +67,63 @@ class ReceitaController {
 
     async create(request: Request, response: Response) {
         const {
-            teste,
+            idUsuario,
             nome,
+            tipo,
+            categorias,
             tempoPreparo,
             porcoes,
             descricao,
-            tipo,
-            usuarioId
+            ingredientes
         } = request.body as {
-            teste?: string,
+            idUsuario: string,
             nome: string,
+            tipo: string,
+            categorias: string[],
             tempoPreparo: string,
             porcoes: string,
             descricao: string,
-            tipo: Tipo,
-            usuarioId: string
+            ingredientes: {
+                id: string,
+                unidade: string,
+                quantidade: string,
+            }[],
         };
 
         const arquivos = request.files as Express.Multer.File[];
 
-        if (teste === 'sim') return systrace(200, response, 'Recebi as info bro, deu boa');
-
+        const ingredienteController = new IngredienteController();
+        const medidaController = new MedidaController();
         const usuarioController = new UsuarioController();
+        const unidadeController = new UnidadeController();
 
-        const usuario: Usuario = await usuarioController.find(parseInt(usuarioId));
-        const receita: Receita = new Receita(nome, descricao, parseInt(tempoPreparo), parseInt(porcoes), tipo, usuario);
+        const usuario: Usuario = await usuarioController.find(parseInt(idUsuario));
+        const receita: Receita = new Receita(nome, descricao, parseInt(tempoPreparo), parseInt(porcoes), <Tipo> tipo.trim().toUpperCase(), usuario);
 
         await receita.save();
+
+        await Promise.all(categorias.map(async nome => {
+            const categoria: Categoria = new Categoria(<TipoCategoria> nome, receita);
+
+            await categoria.save();
+        }));
+
+        await Promise.all(ingredientes.map(async item => {
+            const ingrediente: Ingrediente = await ingredienteController.find(parseInt(item.id));
+            const receitaIngrediente = new ReceitaIngrediente(ingrediente, receita);
+
+            if (item.unidade) {
+                const medida: Medida = await medidaController.findByType(item.unidade, ingrediente.tipoUnidade);
+                receitaIngrediente.unidade = await unidadeController.find(medida, ingrediente);
+            } else if (item.quantidade) {
+                const unidades = await unidadeController.findSI2();
+                receitaIngrediente.unidade = unidades[0];
+            }
+
+            if (item.quantidade) receitaIngrediente.quantidade = parseFloat(item.quantidade);
+
+            receitaIngrediente.save();
+        }));
 
         const buffer: string = encryptMidia(receita.id.toString());
         const midiaPath: string = getPath('midia', buffer);

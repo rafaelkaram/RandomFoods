@@ -131,6 +131,18 @@ class IngredienteController {
 
         return ingrediente;
     }
+
+    async find(id: number): Promise<Ingrediente> {
+        const repository = getCustomRepository(IngredienteRepository);
+
+        const ingrediente: Ingrediente = await repository.findOneOrFail(id);
+
+        if (!ingrediente) {
+            throw Error('Ingrediente não encontrado.');
+        }
+
+        return ingrediente;
+    }
 }
 
 export default IngredienteController;
