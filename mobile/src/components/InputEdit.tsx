@@ -13,6 +13,7 @@ const InputSignUp = (props: {
     value: string
 }) => {
     const value = props.value;
+    
     const [data, setData] = useState(value);
     const [errorMessage, setErrorMessage] = useState('');
     const [eye, setEye] = useState(false);
@@ -94,7 +95,8 @@ const InputSignUp = (props: {
             />
         );
     } else {
-        return (
+        console.log(value)
+        return ( 
             <Input
                 autoCapitalize={props.tipo === 'name' ? 'words' : 'none'}
                 onEndEditing={() => { validateField(data) }}
