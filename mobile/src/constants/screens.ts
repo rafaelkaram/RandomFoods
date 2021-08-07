@@ -11,6 +11,7 @@ export default {
   logout: 'Logout',
   painel: 'Painel de Controle',
   perfil: 'Perfil',
+  editarPerfil: 'EditarPerfil',
   receita: 'Visualizar Receita',
   receita2: 'Visualizar Receita2',
   resultadoPesquisa: 'Resultado Pesquisa',
