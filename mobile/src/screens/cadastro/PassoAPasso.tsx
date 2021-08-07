@@ -22,7 +22,7 @@ const createFormData = (object: Object, form?: FormData, name?: string): FormDat
     const formData = form || new FormData();
     for (let property in object) {
         const item = object[property];
-        if (object.hasOwnProperty(property) && item != null && item !== undefined) {
+        if (!object.hasOwnProperty(property) && item == null && item == undefined) {
             continue;
         }
         const formKey = name ? `${ name }[${ property }]` : property;
