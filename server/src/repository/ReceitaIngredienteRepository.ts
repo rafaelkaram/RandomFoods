@@ -14,12 +14,10 @@ export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente>
 			.innerJoin('ri.receita', 'r')
 			.where('r.ativa = :ativa ', { ativa: true });
 
-		if (ids)
-		if (ids.length > 0)
+		if (ids && ids.length > 0)
 			query.andWhere('ri.ingrediente IN ( :...ids )', { ids });
 
-		if (tipo)
-		if (tipo.length > 0)
+		if (tipo && tipo.length > 0)
 			query.andWhere('r.tipo IN ( :...tipo )', { tipo });
 
 		if (gluten || derivadoLeite) {
@@ -63,8 +61,7 @@ export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente>
 			query.setParameter('tempoPreparo', tempoPreparo);
 		}
 
-		if (categorias)
-		if (categorias.length > 0) {
+		if (categorias && categorias.length > 0) {
 			query.andWhere(qb => {
 				const subQuery = qb.subQuery()
 				.select('c.receita.id')
@@ -99,7 +96,7 @@ export class ReceitaIngredienteRepository extends Repository<ReceitaIngrediente>
 		if (isPerfect) query.having('COUNT(ri.*) = :count', { count: ids.length });
 		else query.having('COUNT(ri.*) < :count', { count: ids.length });
 
-		query.orderBy('ri.receita.id', 'ASC');
+		query.orderBy('COUNT(ri.*)', 'ASC');
 
 		const receitas = await query.getRawMany();
 
