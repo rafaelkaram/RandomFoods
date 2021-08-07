@@ -325,12 +325,14 @@ class ReceitaController {
 
             const list = await repository.find({
                 select: [ 'id' ],
-                where: [ { usuario } ]
+                where: [ { usuario } ],
+                order: { dataCadastro: 'DESC' }
             });
-            await Promise.all(list?.map(async item => {
+            for (let key in list) {
+                const item: { id: number } = list[key];
                 const receita = await ReceitaController.buildReceita(item.id);
                 receitas.push(receita);
-            }));
+            }
 
             return systrace(200, response, { receitas });
 
