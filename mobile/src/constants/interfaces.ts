@@ -200,9 +200,8 @@ interface IReceitaCadastro {
 
 interface IIngredienteQuantidade {
   id: number,
-  semMedida?: boolean,
-  unidade?: string,
-  quantidade?: number,
+  unidade: string,
+  quantidade: number,
 }
 
 export {

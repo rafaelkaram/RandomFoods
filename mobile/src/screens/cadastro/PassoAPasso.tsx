@@ -126,12 +126,12 @@ const PassoAPasso = () => {
     }
 
     const handleNavigateToReceita = () => {
-        navigation.dispatch(CommonActions.reset({
-            index: 0,
-            routes: [
-                { name: screens.perfil},
-            ]
-        }))
+        // navigation.dispatch(CommonActions.reset({
+        //     index: 0,
+        //     routes: [
+        //         { name: screens.perfil, params: {idReceita: 331}},
+        //     ]
+        // }))
         //navigation.dispatch(StackActions.replace(screens.receita, ))
         //navigation.dispatch(StackActions.popToTop());
         //StackActions.popToTop()
@@ -158,12 +158,12 @@ const PassoAPasso = () => {
         ingredientesQuantidadeContext.forEach(ingr => {
             newIngredientes.push({
                 id: ingr.id,
-                quantidade: ingr.quantidade,
-                semMedida: ingr.semMedida,
-                unidade: ingr.unidade
+                quantidade: ingr.semMedida ? 0 : ingr.quantidade ?? 0,
+                unidade: ingr.semMedida ? '' : ingr.unidade ?? '',
             })
         })
 
+        console.log(newIngredientes)
         const newCategorias = categoriasContext.map(categoria => {
             return categoria.toUpperCase()
         })
@@ -180,7 +180,7 @@ const PassoAPasso = () => {
         }
 
         // Apaga do storage e do contexto
-        deleteItems()
+        //deleteItems()
 
         Alert.alert(
             "Finge que Cadastrou",
