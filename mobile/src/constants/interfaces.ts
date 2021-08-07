@@ -187,21 +187,10 @@ interface IIngredienteCadastro {
   quantidade?: number,
 }
 
-interface IReceitaCadastro {
-  idUsuario: number,
-  nome: string,
-  tipo: string,
-  categorias: string[],
-  tempoPreparo: number,
-  porcoes: number,
-  ingredientes: IIngredienteQuantidade[],
-  descricao: string,
-}
-
 interface IIngredienteQuantidade {
-  id: number,
+  id: string,
   unidade: string,
-  quantidade: number,
+  quantidade: string,
 }
 
 export {
@@ -229,5 +218,4 @@ export {
   ISeguidoresSimples,
   IIngredienteCadastro,
   IIngredienteQuantidade,
-  IReceitaCadastro,
 }

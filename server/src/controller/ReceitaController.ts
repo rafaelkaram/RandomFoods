@@ -79,15 +79,11 @@ class ReceitaController {
             idUsuario: string,
             nome: string,
             tipo: string,
-            categorias: string[],
+            categorias: string,
             tempoPreparo: string,
             porcoes: string,
             descricao: string,
-            ingredientes: {
-                id: string,
-                unidade: string,
-                quantidade: string,
-            }[],
+            ingredientes: string
         };
 
         const arquivos = request.files as Express.Multer.File[];
@@ -102,13 +98,15 @@ class ReceitaController {
 
         await receita.save();
 
-        await Promise.all(categorias.map(async nome => {
+        const newCategorias: string[] = JSON.parse(categorias)
+        await Promise.all(newCategorias.map(async nome => {
             const categoria: Categoria = new Categoria(<TipoCategoria> nome, receita);
 
             await categoria.save();
         }));
 
-        await Promise.all(ingredientes.map(async item => {
+        const newIngredientes: any[] = JSON.parse(ingredientes)
+        await Promise.all(newIngredientes.map(async item => {
             const ingrediente: Ingrediente = await ingredienteController.find(parseInt(item.id));
             const receitaIngrediente = new ReceitaIngrediente(ingrediente, receita);
 

@@ -9,7 +9,7 @@ import { BlurView } from 'expo-blur';
 import screens from '../../constants/screens';
 import styles from '../../styles/screens/PassoAPasso';
 import globalStyles from '../../styles/Global';
-import { IPassoReceita, IReceitaCadastro, IIngredienteQuantidade } from '../../constants/interfaces';
+import { IPassoReceita, IIngredienteQuantidade } from '../../constants/interfaces';
 
 import api from '../../services/api';
 
@@ -44,6 +44,7 @@ const PassoAPasso = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [lastFinished, setLastFinished] = useState(true);
     const [load, setLoad] = useState<boolean>(false);
+    const [receitaId, setReceitaId] = useState<number>(0)
 
     useEffect(() => {
         setSteps(stepsContext)
@@ -126,20 +127,21 @@ const PassoAPasso = () => {
     }
 
     const handleNavigateToReceita = () => {
-        // navigation.dispatch(CommonActions.reset({
-        //     index: 0,
-        //     routes: [
-        //         { name: screens.perfil, params: {idReceita: 331}},
-        //     ]
-        // }))
-        //navigation.dispatch(StackActions.replace(screens.receita, ))
+        navigation.dispatch(CommonActions.reset({
+            index: 0,
+            routes: [
+                { name: 'User' },
+            ]
+        }))
+        //navigation.dispatch(StackActions.replace(screens.receita, {id: 331}))
         //navigation.dispatch(StackActions.popToTop());
-        //StackActions.popToTop()
         //navigation.reset({index: 0, routes:[{ name: screens.receita, params: { id: 331 } }]})
-        //navigation.dispatch(DrawerActions.jumpTo(screens.perfil))
+        //const jumpToAction = TabActions.jumpTo('HomeStack');
+        //navigation.dispatch(TabActions.jumpTo('HomeStack', {receita: 331}))
+        //navigation.navigate(screens.receita, {id: 331})
     }
 
-    const vaiPraAlgumLugar = async () => {
+    const cadastraReceita = async () => {
         if (steps.length < 1) {
             Alert.alert(
                 "Adicione pelo menos um passo",
@@ -149,78 +151,73 @@ const PassoAPasso = () => {
             return;
         }
         let stringSteps: string = '';
-        steps.map(step => {
-            stringSteps += step.id + '. ' + step.descricao + '/n/n'
-        })
+        var i = 0
+        for (i = 0; i < steps.length - 1; i++) {
+            stringSteps += steps[i].id + '. ' + steps[i].descricao + '\\n\\n'
+        }
+        stringSteps += steps[i].id + '. ' + steps[i].descricao
 
         const newIngredientes: IIngredienteQuantidade[] = []
 
         ingredientesQuantidadeContext.forEach(ingr => {
             newIngredientes.push({
-                id: ingr.id,
-                quantidade: ingr.semMedida ? 0 : ingr.quantidade ?? 0,
+                id: ingr.id.toString(),
+                quantidade: ingr.semMedida ? '0' : ingr.quantidade?.toString() ?? '0',
                 unidade: ingr.semMedida ? '' : ingr.unidade ?? '',
             })
         })
 
-        console.log(newIngredientes)
         const newCategorias = categoriasContext.map(categoria => {
             return categoria.toUpperCase()
         })
 
-        const receitaCadastro: IReceitaCadastro = {
-            idUsuario: user?.id ?? 0,
-            nome: nomeReceitaContext,
-            tipo: tipoReceitaContext.toUpperCase(),
-            categorias: newCategorias,
-            tempoPreparo: Number(minutosContext),
-            porcoes: Number(porcoesContext),
-            ingredientes: newIngredientes,
-            descricao: stringSteps
-        }
+        // Alert.alert(
+        //     "Receita Cadastrada com Sucesso",
+        //     "Receita: " + nomeReceitaContext,
+        //     [{
+        //         text: "OK", onPress: () => handleNavigateToReceita()
+        //     }]
+        // )
 
-        // Apaga do storage e do contexto
-        //deleteItems()
+        const data = new FormData()
 
-        Alert.alert(
-            "Finge que Cadastrou",
-            "Falta só backend",
-            [{
-                text: "OK", onPress: () => handleNavigateToReceita()
-            }]
-        )
+        data.append('idUsuario', user?.id.toString() ?? '0')
+        data.append('nome', nomeReceitaContext)
+        data.append('tipo', tipoReceitaContext.toUpperCase())
+        data.append('categorias', JSON.stringify(newCategorias))
+        data.append('tempoPreparo', minutosContext.toString())
+        data.append('porcoes', porcoesContext.toString())
+        data.append('ingredientes', JSON.stringify(newIngredientes))
+        data.append('descricao', stringSteps)
 
-        // const data = new FormData()
+        midiasContext?.forEach((midia, index) => {
+            if (midia.type === 'image')
+                data.append('midias', {
+                    name: `image_${index}.png`,
+                    type: 'image/png',
+                    uri: midia.uri
+                } as any);
+            if (midia.type === 'video')
+                data.append('midias', {
+                    name: `video_${index}.mp4`,
+                    type: 'video/mp4',
+                    uri: midia.uri
+                } as any);
+        })
 
-        // data.append('receita', receitaCadastro as any)
+        await api.post('cadastro/receita', data).then(response => {
+            // Apaga do storage e do contexto
+            deleteItems()
+            setReceitaId(response.data)
 
-        // midiasContext?.forEach((midia, index) => {
-        //     if (midia.type === 'image')
-        //         data.append('midias', {
-        //             name: `image_${index}.png`,
-        //             type: 'image/png',
-        //             uri: midia.uri
-        //         } as any);
-        //     if (midia.type === 'video')
-        //         data.append('midias', {
-        //             name: `video_${index}.mp4`,
-        //             type: 'video/mp4',
-        //             uri: midia.uri
-        //         } as any);
-        // })
-
-        // await api.post('cadastro/receita', data).then(response => {
-        //     // Apaga do storage e do contexto
-        //     deleteItems()
-
-        //     Alert.alert(
-        //         "Finge que Cadastrou",
-        //         "Falta só backend",
-        //         [{
-        //             text: "OK", onPress: () => handleNavigateToReceita()
-        //         }]
-        //     )
-        // })
+            Alert.alert(
+                "Receita Cadastrada com Sucesso",
+                "Receita: " + nomeReceitaContext,
+                [{
+                    text: "OK", onPress: () => handleNavigateToReceita()
+                }]
+            )
+        })
     }
 
     const removeStep = (id: number) => {
@@ -336,7 +333,7 @@ const PassoAPasso = () => {
             </View>
             <TouchableOpacity
                 style={globalStyles.arrow}
-                onPress={vaiPraAlgumLugar}
+                onPress={cadastraReceita}
             >
                 <AntDesign style={{ alignSelf: 'center' }} name='arrowright' size={24} color='white' />
             </TouchableOpacity>
