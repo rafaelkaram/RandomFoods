@@ -148,12 +148,12 @@ const Painel = () => {
                             {
                                 topCurtidas.length > 0 ?
                                     <View>
-                                        <Text style={[globalStyles.subTitleText, styles.tableTitle]}>Top receitas mais votadas</Text>
+                                        <Text style={[globalStyles.subTitleText, styles.tableTitle]}>Top receitas mais curtidas</Text>
                                         <View style={styles.table}>
                                             <DataTable>
                                                 <DataTable.Header>
                                                     <DataTable.Title style={{ flexBasis: 30 }} >Receita</DataTable.Title>
-                                                    <DataTable.Title numeric>Nota</DataTable.Title>
+                                                    <DataTable.Title numeric>Curtidas</DataTable.Title>
                                                 </DataTable.Header>
                                                 {topCurtidas.map(item => {
                                                     return (
