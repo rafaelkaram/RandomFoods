@@ -1,3 +1,21 @@
+interface IAuthContextData {
+  nomeReceitaContext: string,
+  tipoReceitaContext: string,
+  categoriasContext: string[],
+  minutosContext: string,
+  porcoesContext: string,
+  midiasContext: IMidiaPicker[],
+  ingredientesContext: ICart[],
+  itemsContext: number[],
+  ingredientesQuantidadeContext: IIngredienteCadastro[],
+  stepsContext: IPassoReceita[],
+  saveDadosGerais(nomeReceita: string, tipoReceita: string, categorias: string[], minutos: string, porcoes: string, midias: IMidiaPicker[]): Promise<void>,
+  saveIngredientes(ingredientes: ICart[], itemsContext: number[]): Promise<void>,
+  saveIngredientesQuantidade(ingredientesQuantidade: IIngredienteCadastro[]): Promise<void>,
+  saveSteps(steps: IPassoReceita[]): Promise<void>,
+  deleteItems(): Promise<void>,
+}
+
 interface IComentario {
   id: number,
   conteudo: string,
@@ -188,12 +206,13 @@ interface IIngredienteCadastro {
 }
 
 interface IIngredienteQuantidade {
-  id: string,
-  unidade: string,
-  quantidade: string,
+  id: number,
+  unidade?: string,
+  quantidade?: number,
 }
 
 export {
+  IAuthContextData,
   IComentario,
   IComentarioSend,
   IComentarioProps,

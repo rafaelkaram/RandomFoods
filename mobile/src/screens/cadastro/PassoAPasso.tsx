@@ -1,15 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Alert, View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Modal } from 'react-native';
-import { CommonActions, useNavigation, TabActions, StackActions, DrawerActions } from '@react-navigation/native';
+import { Alert, View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Modal } from 'react-native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import { BlurView } from 'expo-blur';
 
-import screens from '../../constants/screens';
 import styles from '../../styles/screens/PassoAPasso';
 import globalStyles from '../../styles/Global';
-import { IPassoReceita, IIngredienteQuantidade } from '../../constants/interfaces';
+import { IAuthContextData, IPassoReceita, IIngredienteQuantidade } from '../../constants/interfaces';
 
 import api from '../../services/api';
 
@@ -18,6 +17,23 @@ import Loading from '../../components/Loading';
 
 import AuthReceita from '../../contexts/authReceita';
 import AuthContext from '../../contexts/auth';
+
+const createFormData = (object: Object, form?: FormData, name?: string): FormData => {
+    const formData = form || new FormData();
+    for (let property in object) {
+        const item = object[property];
+        if (object.hasOwnProperty(property) && item != null && item !== undefined) {
+            continue;
+        }
+        const formKey = name ? `${ name }[${ property }]` : property;
+        if (typeof item === 'object') {
+            createFormData(item, formData, formKey);
+        } else {
+            formData.append(formKey, item);
+        }
+    }
+    return formData;
+}
 
 const PassoAPasso = () => {
 
@@ -36,7 +52,7 @@ const PassoAPasso = () => {
         stepsContext,
         saveSteps,
         deleteItems,
-    } = useContext(AuthReceita)
+    } = useContext(AuthReceita) as IAuthContextData;
 
 
     const [id, setId] = useState(1);
@@ -151,44 +167,41 @@ const PassoAPasso = () => {
             return;
         }
         let stringSteps: string = '';
-        var i = 0
-        for (i = 0; i < steps.length - 1; i++) {
-            stringSteps += steps[i].id + '. ' + steps[i].descricao + '\\n\\n'
+        for (let i = 0; i < steps.length; i++) {
+            stringSteps += `${ steps[i].id }. ${ steps[i].descricao }\\n\\n`;
         }
-        stringSteps += steps[i].id + '. ' + steps[i].descricao
+        stringSteps = stringSteps.substring(0, stringSteps.length - 4);
 
-        const newIngredientes: IIngredienteQuantidade[] = []
+        const newIngredientes: IIngredienteQuantidade[] = [];
 
         ingredientesQuantidadeContext.forEach(ingr => {
-            newIngredientes.push({
-                id: ingr.id.toString(),
-                quantidade: ingr.semMedida ? '0' : ingr.quantidade?.toString() ?? '0',
-                unidade: ingr.semMedida ? '' : ingr.unidade ?? '',
-            })
-        })
+            if (ingr.semMedida) {
+                newIngredientes.push({
+                    id: ingr.id,
+                })
+            } else {
+                newIngredientes.push({
+                    id: ingr.id,
+                    quantidade: ingr.quantidade,
+                    unidade: ingr.unidade,
+                })
+            }
+        });
 
         const newCategorias = categoriasContext.map(categoria => {
             return categoria.toUpperCase()
-        })
+        });
 
-        // Alert.alert(
-        //     "Receita Cadastrada com Sucesso",
-        //     "Receita: " + nomeReceitaContext,
-        //     [{
-        //         text: "OK", onPress: () => handleNavigateToReceita()
-        //     }]
-        // )
-
-        const data = new FormData()
-
-        data.append('idUsuario', user?.id.toString() ?? '0')
-        data.append('nome', nomeReceitaContext)
-        data.append('tipo', tipoReceitaContext.toUpperCase())
-        data.append('categorias', JSON.stringify(newCategorias))
-        data.append('tempoPreparo', minutosContext.toString())
-        data.append('porcoes', porcoesContext.toString())
-        data.append('ingredientes', JSON.stringify(newIngredientes))
-        data.append('descricao', stringSteps)
+        const data = createFormData({
+            idUsuario: user.id,
+            nome: nomeReceitaContext,
+            tipo: tipoReceitaContext.toUpperCase(),
+            tempoPreparo: minutosContext,
+            porcoes: porcoesContext,
+            descricao: stringSteps,
+            categorias: newCategorias,
+            ingredientes: newIngredientes
+        });
 
         midiasContext?.forEach((midia, index) => {
             if (midia.type === 'image')
@@ -203,7 +216,7 @@ const PassoAPasso = () => {
                     type: 'video/mp4',
                     uri: midia.uri
                 } as any);
-        })
+        });
 
         await api.post('cadastro/receita', data).then(response => {
             // Apaga do storage e do contexto
@@ -258,7 +271,6 @@ const PassoAPasso = () => {
         );
     }
 
-    //steps.sort((a, b) => a.id - b.id)
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <Image
