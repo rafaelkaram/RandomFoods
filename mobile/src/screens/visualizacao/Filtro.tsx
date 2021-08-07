@@ -79,7 +79,7 @@ const Filtro = () => {
         let qtde = 0;
         if (categoriasSelecionadas && categoriasSelecionadas.length > 0) qtde++;
         if (tiposSelecionados && tiposSelecionados.length > 0) qtde++;
-        if (tempoDePreparo && !(tempoDePreparo[1] === baseTempoPreparo[1])) qtde++;
+        if (tempoDePreparo && (tempoDePreparo[1] !== tempoDePreparo[0])) qtde++;
         setSelectedFiltro(qtde);
 
     }, [categoriasSelecionadas, tiposSelecionados, tempoDePreparo]);
