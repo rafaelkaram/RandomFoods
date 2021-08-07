@@ -257,14 +257,16 @@ class ReceitaController {
             const matchesPerfeitos: any[] = [];
             const matchesParciais: any[] = [];
 
-            await Promise.all(perfect.map(async id => {
+            for (let key in perfect) {
+                const id = perfect[key];
                 const receita = await ReceitaController.buildReceita(id);
                 matchesPerfeitos.push(receita);
-            }));
-            await Promise.all(partial.map(async id => {
+            }
+            for (let key in partial) {
+                const id = partial[key];
                 const receita = await ReceitaController.buildReceita(id);
                 matchesParciais.push(receita);
-            }));
+            }
 
             return systrace(200, response, { matchesPerfeitos, matchesParciais });
 
