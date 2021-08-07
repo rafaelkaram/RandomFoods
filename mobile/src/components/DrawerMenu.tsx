@@ -19,7 +19,7 @@ function DrawerMenu(props: any) {
             <DrawerItem label={() => 
             <View style={{flexDirection: 'row'}}>
                 <MaterialIcons name="logout" size={24} color="black" />
-                <Text style={{marginLeft: 10}}>Logout</Text>
+                <Text style={{marginLeft: 15}}>Logout</Text>
             </View>
         }
                 onPress={() => {

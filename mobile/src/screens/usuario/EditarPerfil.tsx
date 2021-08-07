@@ -33,7 +33,7 @@ const EditarPerfil = ({ route }: { route: any }) => {
     const [midiaCarregada, setMidiaCarregada] = useState<string>();
 
 
-    const idUser = route.params.id;
+   // const idUser = route.params.id;
 
     const { user } = useContext(AuthContext);
     // if (user){
