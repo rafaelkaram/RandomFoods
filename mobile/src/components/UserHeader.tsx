@@ -18,11 +18,11 @@ const UserHeader = ({
 }: {
     usuario: IUsuarioSimples,
     seguidores: number,
-    seguidos:number,
+    seguidos: number,
     totalReceitas: number,
     isPainel: boolean
 }) => {
-    
+
     const navigation = useNavigation();
 
     const toggleDrawer = () => {
@@ -30,7 +30,7 @@ const UserHeader = ({
     };
 
     const handleNavigateToPerfil = (id: number) => {
-        navigation.navigate(screens.perfil, { id: id });
+        navigation.dispatch(DrawerActions.jumpTo('Receitas Cadastradas', {screen: 'Perfil', params: {id: id} }));
     }
 
     const handleNavigateToNovaReceita = () => {
@@ -65,7 +65,7 @@ const UserHeader = ({
 
                 <View style={usuario.nome.length > 10 ? styles.nameContainer : null}>
                     <Text style={[globalStyles.boldText, styles.name]}>{usuario.nome}</Text>
-                    <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigLogin] : [globalStyles.regularText, styles.login] }>@{usuario.login}</Text>
+                    <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigLogin] : [globalStyles.regularText, styles.login]}>@{usuario.login}</Text>
                     <View style={styles.segContainer}>
                         <TouchableOpacity style={styles.seg} onPress={() => handleNavigateToSeguidores(usuario.id, true)}>
                             <Text style={usuario.nome.length > 10 ? [globalStyles.regularText, styles.bigNumberSeg] : [globalStyles.regularText, styles.numberSeg]}>{seguidores ? seguidores : 0}</Text>

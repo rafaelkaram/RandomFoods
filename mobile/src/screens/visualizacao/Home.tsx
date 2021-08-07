@@ -123,12 +123,12 @@ const Home = () => {
 
 
     useEffect(() => {
-        api.get(`/busca/home/${ user?.id ? user.id : 0 }`).then(response => {
+        api.get(`/busca/home/${user?.id ? user.id : 0}`).then(response => {
             setReceitas(response.data.listCurtidas);
             if (response.data.listSeguidores.length > 0) setReceitasseguidor(response.data.listSeguidores);
             setLoad(true);
         })
-    }, [refreshing]);
+    }, [refreshing, user]);
 
 
     const handleNavigateToRecipe = (id: number) => {
@@ -166,7 +166,7 @@ const Home = () => {
                 <View>
 
                     <RecipeList titulo='Mais Curtidas' receitas={receitas} navegar={(id: number) => handleNavigateToRecipe(id)} />
-                    { receitasSeguidor.length > 0 &&
+                    {receitasSeguidor.length > 0 &&
                         <RecipeList titulo='De quem você segue' receitas={receitasSeguidor} navegar={(id: number) => handleNavigateToRecipe(id)} />
                     }
 

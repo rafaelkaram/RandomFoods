@@ -24,14 +24,16 @@ const EditarPerfil = ({ route }: { route: any }) => {
 
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
-    const [username, setUsername] = useState<string>('');
-    const [usuario, setUsuario] = useState<IUsuarioSimples>();
+    const [username, setUsername] = useState('');
+    const [usuario, setUsuario] = useState<IUsuario>();
     const [userSub, setUserSub] = useState<IUsuario>()
     const [load, setLoad] = useState<boolean>(false);
     const [refreshing, setRefreshing] = useState(false);
     const [midia, setMidia] = useState<IMidiaPicker>();
+    const [midiaCarregada, setMidiaCarregada] = useState<string>();
 
-    //const idUser = route.params.id;
+
+   // const idUser = route.params.id;
 
     const { user } = useContext(AuthContext);
     // if (user){
@@ -48,19 +50,28 @@ const EditarPerfil = ({ route }: { route: any }) => {
 
     useEffect(() => {
 
-        api.get(`/busca/usuario/${user?.id}`)
-            .then(response => { setUsuario(response.data) });
-            setLoad(true);
-
-            console.log(usuario)
-            if (usuario){
-                setName(usuario.nome);
-               // setEmail(usuario.email)
-                setUsername(usuario.login)
+        // api.get(`/busca/usuario/${idUser}`)
+        //     .then(response => { 
+        //         //console.log(response.data)
+        //         setUsuario(response.data) 
+        //     });
+            
+            
+            console.log(user)
+            if (user){
+                
+                setName(user.nome);
+                setEmail(user.email)
+                setUsername(user.login)
+                setMidiaCarregada(user.path)
+                
+              //console.log(midia)
             }
-            console.log(name)
+            console.log("saiu")
+            setLoad(true);
+             
 
-    }, [refreshing]);
+    }, [refreshing, user]);
 
     const handleSubmit = async () => {
 
@@ -82,9 +93,9 @@ const EditarPerfil = ({ route }: { route: any }) => {
             
             const data = new FormData();
 
-            data.append('nome', usuario.nome);
-            //data.append('login', usuario.login.toLowerCase());
-            data.append('email', usuario.email.toLowerCase());
+            data.append('nome', name);
+            data.append('login', username.toLowerCase());
+            data.append('email', email.toLowerCase());
             
 
             if (midia) data.append('image', {
@@ -97,6 +108,22 @@ const EditarPerfil = ({ route }: { route: any }) => {
             //     console.log({ msg: 'Recebemos resposta!', response: response.data });
             //     setUserSub(response.data);
             // });
+        }
+    }
+
+    
+    const LoadMidia= async (path: string) => {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            uri: path
+        });
+
+        if (!result.cancelled) {
+            const midia: IMidiaPicker = result as IMidiaPicker;
+            setMidia(midia);
         }
     }
 
@@ -116,6 +143,7 @@ const EditarPerfil = ({ route }: { route: any }) => {
 
     const handleRemoveMidia = async () => {
         setMidia({} as IMidiaPicker);
+        setMidiaCarregada('')
     }
    
 
@@ -125,7 +153,7 @@ const EditarPerfil = ({ route }: { route: any }) => {
         setTimeout(() => setRefreshing(false), 2000);
     }, []);
 
-    if (!load || !usuario) {
+    if (!load || !user) {
         return <Loading />
     }
 
@@ -140,24 +168,38 @@ const EditarPerfil = ({ route }: { route: any }) => {
             >
                  <View style={ styles.container }>
                     <View style={ styles.midiaContainer }>
-                        { midia?.uri ?
-                            <View style={ styles.midiaView }>
-                                <Image
-                                    source={{ uri: midia?.uri }}
-                                    style={ styles.midia }
-                                />
-                                <TouchableOpacity style={ styles.midiaRemove } onPress={() => handleRemoveMidia()} >
-                                    <Text style={{ ...globalStyles.regularText, color: colors.primary }}>X</Text>
-                                </TouchableOpacity>
+                        {midiaCarregada ?
+                        <View style={ styles.midiaView }>
+                        <Image
+                            source={{ uri: midiaCarregada }}
+                            style={ styles.midia }
+                        />
+                        <TouchableOpacity style={ styles.midiaRemove } onPress={() => handleRemoveMidia()} >
+                            <Text style={{ ...globalStyles.regularText, color: colors.primary }}>X</Text>
+                        </TouchableOpacity>
 
-                            </View>
-                            :
-                            <TouchableOpacity style={ styles.midiaInput } onPress={ handleAddMidia } >
-                                <Image source={ require('./../../assets/user-foto.png') } style={ styles.midiaIcon } />
-                                <AntDesign style={ styles.editIcon } name='edit' size={30} color='black' />
-                                <Text style={{ ...globalStyles.regularText, bottom: 20 }}>Escolha sua foto</Text>
+                    </View>
+                    :
+                     midia?.uri ?
+                        <View style={ styles.midiaView }>
+                            <Image
+                                source={{ uri: midia?.uri }}
+                                style={ styles.midia }
+                            />
+                            <TouchableOpacity style={ styles.midiaRemove } onPress={() => handleRemoveMidia()} >
+                                <Text style={{ ...globalStyles.regularText, color: colors.primary }}>X</Text>
                             </TouchableOpacity>
-                        }
+
+                        </View>
+                        :
+                        <TouchableOpacity style={ styles.midiaInput } onPress={ handleAddMidia } >
+                            <Image source={ require('./../../assets/user-foto.png') } style={ styles.midiaIcon } />
+                            <AntDesign style={ styles.editIcon } name='edit' size={30} color='black' />
+                            <Text style={{ ...globalStyles.regularText, bottom: 20 }}>Escolha sua foto</Text>
+                        </TouchableOpacity>
+                    
+                    }
+                       
                         <InputEdit tipo='username' placeholder='username' icon='person-outline' security={ false } setState={ setUsername } value={username}></InputEdit>
                         <InputEdit tipo='email' placeholder='Email' icon='mail-outline' security={ false } setState={ setEmail } value={email} ></InputEdit>
                         <InputEdit tipo='name' placeholder='Nome' icon='person-outline' security={ false } setState={ setName } value={name}></InputEdit>
