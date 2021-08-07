@@ -94,6 +94,17 @@ export const getBoolean2 = (value?: string | boolean): boolean => {
 	return bool ? true : false;
 }
 
+export const getFraction = (value: number): string => {
+	const floor: number = Math.floor(value);
+	if (value == floor) return value.toString();
+
+	const fraction: number = value - floor;
+	const partition: number = Math.floor(1 / fraction);
+
+	if(floor === 0) return `1/${ partition }`;
+	return `${ floor } e 1/${ partition }`;
+}
+
 export const getImportData = (nome: string): { sheetName: string, controller: any } => {
 	if (nome === 'avaliacao' || nome === 'avaliacões') {
 

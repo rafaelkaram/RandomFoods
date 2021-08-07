@@ -14,7 +14,6 @@ export default StyleSheet.create({
         margin: 15,
         padding: 10,
         width: WIDTH / 3,
-
         flexDirection: 'column',
         borderRadius: 20,
     },
@@ -41,13 +40,17 @@ export default StyleSheet.create({
         borderRadius: 20,
     },
 
+    nameContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        width: ((WIDTH-60) * 0.6),
+    },
+
     textContainer: {
         padding: 5,
         marginVertical: 10,
         flexDirection:'row',
         justifyContent:'space-between',
-        
-
     },
 
     image: {

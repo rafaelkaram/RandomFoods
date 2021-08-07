@@ -1,8 +1,8 @@
-import { Ingrediente } from "../model/Ingrediente";
-import { Medida } from "../model/Medida";
-import { ReceitaIngrediente } from "../model/ReceitaIngrediente";
-import { TipoUnidade } from "../model/TipoUnidade";
-import { Unidade } from "../model/Unidade";
+import { Ingrediente } from '../model/Ingrediente';
+import { ReceitaIngrediente } from '../model/ReceitaIngrediente';
+import { TipoUnidade } from '../model/TipoUnidade';
+import { Unidade } from '../model/Unidade';
+import { getFraction } from '../util/util';
 
 export default {
 	render(rI: ReceitaIngrediente) {
@@ -15,7 +15,7 @@ export default {
 				{ nome: 'Ml', taxaConversao: 0.001, tipo: TipoUnidade.VOLUME }
 			];
 
-			let medida: string = rI.quantidade ? `${ rI.quantidade.toString() }` : 'a gosto';
+			let medida: string = rI.quantidade ? `${ getFraction(rI.quantidade) }` : 'a gosto';
 
 			if (rI.quantidade) {
 				if (rI.ingrediente.tipoUnidade === TipoUnidade.UNIDADE) {

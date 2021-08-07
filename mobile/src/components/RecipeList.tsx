@@ -1,12 +1,11 @@
-import React,{useContext} from 'react';
+import React, { useContext } from 'react';
 import { Text, TouchableOpacity, View, Image } from 'react-native';
 import { Avatar, Icon } from 'react-native-elements';
-import { Feather } from '@expo/vector-icons';
+import { Feather, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import colors from "../../src/constants/colors";
 import AuthContext from '../contexts/auth';
 
 import Category from '../components/Category';
-import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { IReceitaSimples, IUsuario } from '../constants/interfaces';
 import styles from '../styles/components/RecipeList';
@@ -14,20 +13,20 @@ import globalStyles from '../styles/Global';
 import { WIDTH } from '../constants/dimensions';
 
 
-const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navegar: Function, idUser?: number, deletarReceita?:Function }) => {
+const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navegar: Function, idUser?: number, deletarReceita?: Function }) => {
     const titulo = props.titulo;
     const receitas = props.receitas;
     const navegar = props.navegar;
     const deletarReceita = props.deletarReceita;
-   
+
     const { user } = useContext(AuthContext);
     let validar = false
-    if (props.idUser){
+    if (props.idUser) {
         if (user?.id == props.idUser) {
             validar = true
         }
     }
-    
+
 
     return (
         <View>
@@ -50,7 +49,9 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
 
                                 <View style={styles.textContainer}>
                                     <View>
-                                        <Text>{item.receita}</Text>
+                                        <View style={styles.nameContainer}>
+                                            <Text>{item.receita}</Text>
+                                        </View>
                                         <Text style={[globalStyles.regularText, { fontSize: 10, margin: 5 }]} >@{item.usuario.login}</Text>
                                         <View style={styles.likeComment}>
                                             <AntDesign style={{ margin: 5 }} name='heart' size={20} color={colors.primary} />
@@ -63,7 +64,7 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                                     </View>
                                     <View>
                                         {validar && deletarReceita &&
-                                            <TouchableOpacity  onPress={() => deletarReceita(item.id, item.receita)}>
+                                            <TouchableOpacity onPress={() => deletarReceita(item.id, item.receita)}>
                                                 <AntDesign name="close" size={24} color="red" />
                                             </TouchableOpacity>
                                         }
