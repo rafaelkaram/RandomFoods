@@ -75,9 +75,12 @@ const PesquisaStack = () => {
 }
 
 const UserRecipesStack = () => {
+
+    const { user } = useContext(AuthContext)
+
     return (
         <AppStack.Navigator headerMode={'none'}>
-            <AppStack.Screen name={screens.perfil} component={Perfil} />
+            <AppStack.Screen initialParams={{id : user?.id}} name={screens.perfil} component={Perfil} />
             <AppStack.Screen name={screens.receita} component={Receita} />
         </AppStack.Navigator>
     )
