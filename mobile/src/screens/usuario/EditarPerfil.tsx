@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { Alert, ScrollView, RefreshControl, View, Image, TouchableOpacity, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, DrawerActions } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import api from '../../services/api';
 import * as ImagePicker from 'expo-image-picker';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Feather } from '@expo/vector-icons';
 
 
-import {  IMidiaPicker, IUsuario} from '../../constants/interfaces';
+import { IMidiaPicker, IUsuario } from '../../constants/interfaces';
 import colors from '../../constants/colors';
 import styles from '../../styles/screens/Usuario';
 import globalStyles from '../../styles/Global';
@@ -16,6 +16,7 @@ import InputEdit from '../../components/InputEdit';
 import SmallButton from '../../components/SmallButton';
 
 import Loading from '../../components/Loading';
+import { WIDTH } from '../../constants/dimensions';
 
 
 const EditarPerfil = ({ route }: { route: any }) => {
@@ -32,13 +33,13 @@ const EditarPerfil = ({ route }: { route: any }) => {
     const { user, headers } = useContext(AuthContext);
 
     useEffect(() => {
-            if (user){
-                setName(user.nome);
-                setEmail(user.email)
-                setUsername(user.login)
-                setMidiaCarregada(user.path)
-            }
-            setLoad(true);
+        if (user) {
+            setName(user.nome);
+            setEmail(user.email)
+            setUsername(user.login)
+            setMidiaCarregada(user.path)
+        }
+        setLoad(true);
     }, [refreshing, user]);
 
     const handleSubmit = async () => {
@@ -53,7 +54,7 @@ const EditarPerfil = ({ route }: { route: any }) => {
             Alert.alert(
                 'Campos incorretos',
                 'Todos os campos devem ser preenchidos corretamente',
-                [ { text: 'OK', onPress: () => console.log('OK Pressed') } ]
+                [{ text: 'OK', onPress: () => console.log('OK Pressed') }]
             );
         } else {
             const data = new FormData();
@@ -83,7 +84,7 @@ const EditarPerfil = ({ route }: { route: any }) => {
     }
 
 
-    const loadMidia= async (path: string) => {
+    const loadMidia = async (path: string) => {
         const result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
             aspect: [4, 3],
@@ -117,6 +118,9 @@ const EditarPerfil = ({ route }: { route: any }) => {
         setMidiaCarregada('');
     }
 
+    const toggleDrawer = () => {
+        navigation.dispatch(DrawerActions.openDrawer());
+    };
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -137,53 +141,64 @@ const EditarPerfil = ({ route }: { route: any }) => {
                         onRefresh={onRefresh}
                     />}
             >
-                 <View style={ styles.container }>
-                    <View style={ styles.midiaContainer }>
+                <View style={styles.headerContainer}>
+                    <Image
+                        source={require('./../../assets/editar-perfil.png')}
+                        style={{ width: 348, height: 90 }}
+                    />
+                    <TouchableOpacity style={{ position: 'absolute', left: WIDTH - 40, top: 20 }} onPress={() => toggleDrawer()}>
+                        <Feather name="menu" size={30} color="black" />
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.container}>
+                    <View style={styles.midiaContainer}>
                         {midiaCarregada ?
-                            <View style={ styles.midiaView }>
+                            <View style={styles.midiaView}>
                                 <Image
                                     source={{ uri: midiaCarregada }}
-                                    style={ styles.midia }
+                                    style={styles.midia}
                                 />
-                                <TouchableOpacity style={ styles.midiaRemove } onPress={() => handleRemoveMidia()} >
+                                <TouchableOpacity style={styles.midiaRemove} onPress={() => handleRemoveMidia()} >
                                     <Text style={{ ...globalStyles.regularText, color: colors.primary }}>X</Text>
                                 </TouchableOpacity>
                             </View>
-                        :
+                            :
                             midia?.uri ?
-                                <View style={ styles.midiaView }>
+                                <View style={styles.midiaView}>
                                     <Image
                                         source={{ uri: midia?.uri }}
-                                        style={ styles.midia }
+                                        style={styles.midia}
                                     />
-                                    <TouchableOpacity style={ styles.midiaRemove } onPress={() => handleRemoveMidia()} >
+                                    <TouchableOpacity style={styles.midiaRemove} onPress={() => handleRemoveMidia()} >
                                         <Text style={{ ...globalStyles.regularText, color: colors.primary }}>X</Text>
                                     </TouchableOpacity>
 
                                 </View>
                                 :
-                                <TouchableOpacity style={ styles.midiaInput } onPress={ handleAddMidia } >
-                                    <Image source={ require('./../../assets/user-foto.png') } style={ styles.midiaIcon } />
-                                    <AntDesign style={ styles.editIcon } name='edit' size={30} color='black' />
+                                <TouchableOpacity style={styles.midiaInput} onPress={handleAddMidia} >
+                                    <Image source={require('./../../assets/user-foto.png')} style={styles.midiaIcon} />
+                                    <AntDesign style={styles.editIcon} name='edit' size={30} color='black' />
                                     <Text style={{ ...globalStyles.regularText, bottom: 20 }}>Escolha sua foto</Text>
                                 </TouchableOpacity>
 
-                            }
 
-                        <InputEdit tipo='username' placeholder='username' icon='person-outline' security={ false } setState={ setUsername } value={username}></InputEdit>
-                        <InputEdit tipo='email' placeholder='Email' icon='mail-outline' security={ false } setState={ setEmail } value={email} ></InputEdit>
-                        <InputEdit tipo='name' placeholder='Nome' icon='person-outline' security={ false } setState={ setName } value={name}></InputEdit>
+                        }
 
-                        <View style={ styles.buttons }>
-                        <View style={ styles.singleButt }>
-                            <SmallButton onPress={() => { navigation.goBack() }}>Voltar</SmallButton>
+                        <InputEdit tipo='username' placeholder='username' icon='person-outline' security={false} setState={setUsername} value={username}></InputEdit>
+                        <InputEdit tipo='email' placeholder='Email' icon='mail-outline' security={false} setState={setEmail} value={email} ></InputEdit>
+                        <InputEdit tipo='name' placeholder='Nome' icon='person-outline' security={false} setState={setName} value={name}></InputEdit>
+
+                        <View style={styles.buttons}>
+                            <View style={styles.singleButt}>
+                                <SmallButton onPress={() => { navigation.goBack() }}>Voltar</SmallButton>
+                            </View>
+                            <View style={styles.singleButt}>
+                                <SmallButton onPress={() => { handleSubmit() }}>Confirmar</SmallButton>
+                            </View>
                         </View>
-                        <View style={ styles.singleButt }>
-                            <SmallButton onPress={() => { handleSubmit() }}>Confirmar</SmallButton>
-                        </View>
                     </View>
-                    </View>
-                    </View>
+                </View>
             </ScrollView>
         </SafeAreaView>
     )

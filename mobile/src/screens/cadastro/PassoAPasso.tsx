@@ -25,7 +25,7 @@ const createFormData = (object: Object, form?: FormData, name?: string): FormDat
         if (!object.hasOwnProperty(property) && item == null && item == undefined) {
             continue;
         }
-        const formKey = name ? `${ name }[${ property }]` : property;
+        const formKey = name ? `${name}[${property}]` : property;
         if (typeof item === 'object') {
             createFormData(item, formData, formKey);
         } else {
@@ -168,7 +168,7 @@ const PassoAPasso = () => {
         }
         let stringSteps: string = '';
         for (let i = 0; i < steps.length; i++) {
-            stringSteps += `${ steps[i].id }. ${ steps[i].descricao }\\n\\n`;
+            stringSteps += `${steps[i].id}. ${steps[i].descricao}\\n\\n`;
         }
         stringSteps = stringSteps.substring(0, stringSteps.length - 4);
 
@@ -218,11 +218,13 @@ const PassoAPasso = () => {
                 } as any);
         });
 
+        setLoad(false);
+
         await api.post('cadastro/receita', data, { headers }).then(response => {
             // Apaga do storage e do contexto
             deleteItems()
             setReceitaId(response.data)
-
+            setLoad(true);
             Alert.alert(
                 "Receita Cadastrada com Sucesso",
                 "Receita: " + nomeReceitaContext,

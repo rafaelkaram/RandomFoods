@@ -41,6 +41,12 @@ export default StyleSheet.create({
     midiaContainer: {
         alignItems: 'center',
         paddingBottom: 10,
+        marginTop: 20,
+    },
+
+    headerContainer:{
+        flexDirection: "row",
+        width: ((WIDTH-60) * 0.7),
     },
 
     midia: {
@@ -51,7 +57,6 @@ export default StyleSheet.create({
         borderColor: colors.primary,
         justifyContent: 'center',
         alignItems: 'center',
-
     },
 
     midiaInput: {
