@@ -168,9 +168,9 @@ const PassoAPasso = () => {
         }
         let stringSteps: string = '';
         for (let i = 0; i < steps.length; i++) {
-            stringSteps += `${steps[i].id}. ${steps[i].descricao}\\n\\n`;
+            stringSteps += `${steps[i].id}- ${steps[i].descricao}\\n`;
         }
-        stringSteps = stringSteps.substring(0, stringSteps.length - 4);
+        stringSteps = stringSteps.substring(0, stringSteps.length - 2);
 
         const newIngredientes: IIngredienteQuantidade[] = [];
 
@@ -232,6 +232,15 @@ const PassoAPasso = () => {
                     text: "OK", onPress: () => handleNavigateToReceita()
                 }]
             )
+        }).catch(error => {
+            setLoad(true);
+            Alert.alert(
+                'Ocorreu um erro ao processar sua solicitação.',
+                '',
+                [
+                    { text: 'OK' }
+                ]
+            );
         })
     }
 
