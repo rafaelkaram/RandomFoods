@@ -35,8 +35,8 @@ class CurtidaController {
             console.log(curtida);
             await curtida.save();
 
-            log.curtida = curtida;
-            await log.save();
+            // log.curtida = curtida;
+            // await log.save();
 
             systrace(204, response);
         } catch (err) {
