@@ -16,6 +16,7 @@ import InputEdit from '../../components/InputEdit';
 import SmallButton from '../../components/SmallButton';
 
 import Loading from '../../components/Loading';
+import { WIDTH } from '../../constants/dimensions';
 
 
 const EditarPerfil = ({ route }: { route: any }) => {
@@ -146,6 +147,16 @@ const EditarPerfil = ({ route }: { route: any }) => {
                         onRefresh={onRefresh}
                     />}
             >
+                <View style={styles.headerContainer}>
+                    <Image
+                        source={require('./../../assets/editar-perfil.png')}
+                        style={{ width: 348, height: 90 }}
+                    />
+                    <TouchableOpacity style={{ position: 'absolute', left: WIDTH - 40, top: 20 }} onPress={() => toggleDrawer()}>
+                        <Feather name="menu" size={30} color="black" />
+                    </TouchableOpacity>
+                </View>
+
                 <View style={styles.container}>
                     <View style={styles.midiaContainer}>
                         {midiaCarregada ?
@@ -179,9 +190,6 @@ const EditarPerfil = ({ route }: { route: any }) => {
 
 
                         }
-                        <TouchableOpacity style={{ position: 'absolute', left: 300, top: -10 }} onPress={() => toggleDrawer()}>
-                            <Feather name="menu" size={30} color="black" />
-                        </TouchableOpacity>
 
                         <InputEdit tipo='username' placeholder='username' icon='person-outline' security={false} setState={setUsername} value={username}></InputEdit>
                         <InputEdit tipo='email' placeholder='Email' icon='mail-outline' security={false} setState={setEmail} value={email} ></InputEdit>

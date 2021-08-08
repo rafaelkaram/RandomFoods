@@ -4,13 +4,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { AntDesign } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, FontAwesome, AntDesign, Ionicons } from '@expo/vector-icons';
 import AuthContext, { AuthProvider } from './contexts/auth';
 import { AuthProviderFilter } from './contexts/authFilter';
 import { AuthProviderReceita } from './contexts/authReceita';
-import { Ionicons } from '@expo/vector-icons';
-
 import Home from './screens/visualizacao/Home';
 import DadosGerais from './screens/cadastro/DadosGerais';
 import Ingredientes from './screens/cadastro/Ingredientes';
@@ -78,7 +75,7 @@ const UserRecipesStack = () => {
 
     return (
         <AppStack.Navigator headerMode={'none'}>
-            <AppStack.Screen initialParams={{id : user?.id}} name={screens.perfil} component={Perfil} />
+            <AppStack.Screen initialParams={{ id: user?.id }} name={screens.perfil} component={Perfil} />
             <AppStack.Screen name={screens.receita} component={Receita} />
         </AppStack.Navigator>
     )
@@ -154,10 +151,8 @@ const Routes = () => {
                             <Tab.Screen
                                 options={{
                                     tabBarLabel: 'Pesquisar Receitas',
-                                    tabBarIcon: () => (
-                                        <Image
-                                            style={{ width: 32, height: 25 }}
-                                            source={require('../assets/chapeu.png')} />
+                                    tabBarIcon: ({ color, size }) => (
+                                        <Ionicons name="md-search-sharp" size={size} color={color} />
                                     ),
                                 }}
                                 name='Search'
