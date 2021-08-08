@@ -43,6 +43,7 @@ const Receita = ({ route }: { route: any }) => {
     const [curtidas, setCurtidas] = useState<ICurtidaSimples[]>([]);
     const [refreshing, setRefreshing] = useState(false);
     const [idComentarioPai, setIdComentarioPai] = useState<number | null>(null);
+    const [numCurtida, setNumCurtida] = useState(0);
 
     const [newC, setNewC] = useState<boolean>(false);
     const [isCurtida, setIsCurtida] = useState<boolean>(false);
@@ -69,9 +70,23 @@ const Receita = ({ route }: { route: any }) => {
 
     useEffect(() => {
         const curtida: ICurtidaSimples[] = curtidas.filter(curtida2 => (curtida2.usuario.id === user?.id));
-        if (curtida && curtida.length > 0)
+        if (curtida && curtida.length > 0) {
             setIsCurtida(true);
+        }
+        setNumCurtida(curtidas.length)
+
+
     }, [curtidas]);
+
+    // useEffect(() => {
+    //     {curtidas.map((curtida, index) => {
+    //         setNumCurtida(numCurtida+1)
+    // })}
+
+
+    // }, [numCurtida]);
+
+
 
     const curtirReceita = () => {
         if (!isCurtida) {
@@ -245,11 +260,15 @@ const Receita = ({ route }: { route: any }) => {
                     </View>
                     {user ?
                         <View style={styles.buttonActions}>
-                            <TouchableOpacity style={isCurtida ? styles.buttonFavTrue : styles.buttonFavFalse}
-                                onPress={() => { curtirReceita() }}
-                            >
-                                <AntDesign name='heart' size={20} color='white' />
-                            </TouchableOpacity>
+                            <View style={styles.curtidas}>
+                            <Text style={styles.numCurtida}>{numCurtida==1? numCurtida+" curtida ": numCurtida+" curtidas "}</Text>
+                                    <TouchableOpacity style={isCurtida ? styles.buttonFavTrue : styles.buttonFavFalse}
+                                        onPress={() => { curtirReceita() }}
+                                    >
+                                   
+                                    <AntDesign name='heart' size={20} color='white' />
+                                </TouchableOpacity>
+                            </View>
                             <TouchableOpacity style={styles.buttonComentar}
                                 onPress={() => {
                                     setIdComentarioPai(null);

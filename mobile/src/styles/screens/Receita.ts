@@ -198,5 +198,16 @@ export default StyleSheet.create({
     buttonActions: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
+    },
+    curtidas:{
+        flexDirection:'row',
+        alignItems:'center'
+    },
+    numCurtida:{
+        fontFamily: 'Ubuntu_700Bold',
+        color:colors.primary,
+        marginRight:10,
+        fontSize:20
+
     }
 });
