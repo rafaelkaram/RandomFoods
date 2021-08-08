@@ -114,7 +114,7 @@ const Perfil = ({ route }: { route: any }) => {
                                     'Remoção',
                                     '\nReceita removida com sucesso',
                                     [
-                                        { text: 'OK' }
+                                        { text: 'OK', onPress: () => onRefresh() }
                                     ]
                                 );
                             }).catch(error => {
