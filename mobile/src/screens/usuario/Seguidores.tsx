@@ -54,7 +54,7 @@ const Seguidores = ({ route }: { route: any }) => {
                 setSeguidosFilter(response.data)
             });
         setLoad(true);
-    }, [refreshing, seguindo, idUser, seguindo]);
+    }, [refreshing, seguindo, idUser]);
 
     useEffect(() => {
         filterSeguidores()
@@ -74,8 +74,8 @@ const Seguidores = ({ route }: { route: any }) => {
                                 setSeguindo(false);
                             }).catch(error => {
                                 Alert.alert(
-                                    'Falha na remoção de seguidor',
-                                    '\nFalha na remoção de seguidor',
+                                    'Ocorreu um erro ao processar sua solicitação.',
+                                    '',
                                     [
                                         { text: 'OK' }
                                     ]

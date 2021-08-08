@@ -38,7 +38,7 @@ export class CreateLogNotificacao1619148937669 implements MigrationInterface {
                     isNullable: true
                 },
                 {
-                    name: 'favorito_id',
+                    name: 'curtida_id',
                     type: 'integer',
                     isNullable: true
                 },
@@ -110,9 +110,9 @@ export class CreateLogNotificacao1619148937669 implements MigrationInterface {
                     onDelete: 'CASCADE'
                 },
                 {
-                    name: 'logNotificacaoFavorito',
-                    columnNames: [ 'favorito_id' ],
-                    referencedTableName: 'favorito',
+                    name: 'logNotificacaoCurtida',
+                    columnNames: [ 'curtida_id' ],
+                    referencedTableName: 'curtida',
                     referencedColumnNames: [ 'id' ],
                     onUpdate: 'CASCADE',
                     onDelete: 'CASCADE'
