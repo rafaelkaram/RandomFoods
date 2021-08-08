@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AuthContext, { AuthProvider } from './contexts/auth';
@@ -74,8 +74,7 @@ const PesquisaStack = () => {
 }
 
 const UserRecipesStack = () => {
-
-    const { user } = useContext(AuthContext)
+    const { user } = useContext(AuthContext);
 
     return (
         <AppStack.Navigator headerMode={'none'}>
@@ -87,7 +86,6 @@ const UserRecipesStack = () => {
 
 
 const UserDrawerStack = () => {
-
     return (
         <AppStack.Navigator headerMode={'none'}>
             <AppStack.Screen name={screens.painel} component={Painel} />
@@ -96,7 +94,6 @@ const UserDrawerStack = () => {
             <AppStack.Screen name={screens.receitaCategoria} component={ReceitaCategoria} />
         </AppStack.Navigator>
     )
-
 }
 
 const UserStack = () => {
@@ -132,7 +129,6 @@ const UserStack = () => {
                     }} />
                 </Drawer.Navigator>
             </AuthProviderReceita>
-
         )
     }
 }

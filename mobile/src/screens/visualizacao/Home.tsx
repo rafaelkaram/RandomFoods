@@ -60,7 +60,6 @@ const registerForPushNotificationsAsync = async () => {
             lightColor: '#FF231F7C',
         });
     }
-
     return token;
 }
 
@@ -108,11 +107,8 @@ const Home = () => {
             console.log('recebido');
 
         });
-
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
             console.log('clicado');
-
-            console.log(response);
         });
 
         return () => {
@@ -121,7 +117,6 @@ const Home = () => {
         };
     }, []);
 
-
     useEffect(() => {
         api.get('busca/home', { headers }).then(response => {
             setReceitas(response.data.listCurtidas);
@@ -129,7 +124,6 @@ const Home = () => {
             setLoad(true);
         })
     }, [refreshing, user]);
-
 
     const handleNavigateToRecipe = (id: number) => {
         navigation.navigate(screens.receita, { id: id });

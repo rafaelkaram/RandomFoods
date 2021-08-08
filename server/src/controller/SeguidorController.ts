@@ -24,24 +24,22 @@ class SeguidorController {
 
     async create(request: Request, response: Response) {
         const idUsuario: number = request.idUsuario as number;
-        const { idSeguidor } = request.body as {
-            idSeguidor: number
+        const { idSeguido } = request.body as {
+            idSeguido: number
         };
 
         try {
             const usuarioController = new UsuarioController();
 
-            console.log({ idUsuario, idSeguidor});
-
-            const usuarioSeguidor: Usuario = await usuarioController.find(idSeguidor);
+            const usuarioSeguido: Usuario = await usuarioController.find(idSeguido);
             const usuario: Usuario         = await usuarioController.find(idUsuario);
 
-            console.log({ usuario, usuarioSeguidor });
+            console.log({ usuario, usuarioSeguido });
 
             const log: LogNotificacao = new LogNotificacao(usuario);
             await log.save();
 
-            const seguidor: Seguidor = new Seguidor(usuario, usuarioSeguidor, log);
+            const seguidor: Seguidor = new Seguidor(usuarioSeguido, usuario, log);
 
             console.log(seguidor);
             await seguidor.save();

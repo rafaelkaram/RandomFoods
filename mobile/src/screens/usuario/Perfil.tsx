@@ -65,7 +65,7 @@ const Perfil = ({ route }: { route: any }) => {
             navigation.dispatch(jumpToAction);
         } else {
             if (!seguidor) {
-                api.post('cadastro/seguidor', { idSeguidor: usuario?.id }, { headers })
+                api.post('cadastro/seguidor', { idSeguido: usuario?.id }, { headers })
                     .then(response => {
                         setSeguidor(true);
                     }).catch(error => {
