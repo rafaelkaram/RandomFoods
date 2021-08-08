@@ -76,8 +76,8 @@ export default StyleSheet.create({
         height: 60,
         borderRadius: 80,
         position: 'absolute',
-        bottom: 20, 
-        right: 20, 
+        bottom: 20,
+        right: 20,
         backgroundColor: colors.primary,
         justifyContent: 'center',
     },
@@ -89,7 +89,7 @@ export default StyleSheet.create({
         borderColor: '#E5EAFA',
         borderWidth: 3,
         width: WIDTH * 0.9,
-        height: HEIGHT * 0.6,
+        maxHeight: HEIGHT * 0.6,
     },
 
     modalList: {
