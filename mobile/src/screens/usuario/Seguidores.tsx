@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import api from '../../services/api';
 
-import { ISeguidor, IUsuarioSimples } from '../../constants/interfaces';
+import { ISeguidor, IUsuarioSimples, IUsuario, IHeader } from '../../constants/interfaces';
 import screens from '../../constants/screens';
 import colors from '../../constants/colors';
 
@@ -32,7 +32,7 @@ const Seguidores = ({ route }: { route: any }) => {
     const idUser = route.params.id;
     const seguidor = route.params.seguidor;
 
-    const { user } = useContext(AuthContext);
+    const { user, headers }: { user: IUsuario | undefined, headers: IHeader | undefined } = useContext(AuthContext);
 
 
     const handleNavigateToPerfil = (id: number) => {
@@ -54,7 +54,7 @@ const Seguidores = ({ route }: { route: any }) => {
                 setSeguidosFilter(response.data)
             });
         setLoad(true);
-    }, [refreshing, seguindo, idUser]);
+    }, [refreshing, seguindo, idUser, seguindo]);
 
     useEffect(() => {
         filterSeguidores()
@@ -69,7 +69,7 @@ const Seguidores = ({ route }: { route: any }) => {
                 {
                     text: 'OK',
                     onPress: () => {
-                        api.post(`remove/seguidor/${id}`)
+                        api.delete(`remove/seguidor/${id}`, { headers })
                             .then(response => {
                                 setSeguindo(false);
                             }).catch(error => {

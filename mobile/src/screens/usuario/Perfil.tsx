@@ -108,7 +108,7 @@ const Perfil = ({ route }: { route: any }) => {
                 {
                     text: 'OK',
                     onPress: () => {
-                        api.post(`remove/receita/${idReceita}`, { headers })
+                        api.get(`remove/receita/${idReceita}`, { headers })
                             .then(response => {
                                 Alert.alert(
                                     'Remoção',

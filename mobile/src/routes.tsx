@@ -15,7 +15,6 @@ import Home from './screens/visualizacao/Home';
 import DadosGerais from './screens/cadastro/DadosGerais';
 import Ingredientes from './screens/cadastro/Ingredientes';
 import Quantidades from './screens/cadastro/Quantidades';
-import Configuracoes from './screens/usuario/Configuracoes';
 import ResultadoPesquisa from './screens/visualizacao/ResultadoPesquisa';
 import Receita from './screens/visualizacao/Receita';
 import Login from './screens/usuario/Login';
@@ -95,7 +94,6 @@ const UserDrawerStack = () => {
             <AppStack.Screen name={screens.seguidores} component={Seguidores} />
             <AppStack.Screen name={screens.receita} component={Receita} />
             <AppStack.Screen name={screens.receitaCategoria} component={ReceitaCategoria} />
-            <AppStack.Screen name={screens.configuracoes} component={Configuracoes} />
         </AppStack.Navigator>
     )
 
