@@ -32,7 +32,7 @@ class SeguidorController {
             const usuarioController = new UsuarioController();
 
             const usuarioSeguido: Usuario = await usuarioController.find(idSeguido);
-            const usuario: Usuario         = await usuarioController.find(idUsuario);
+            const usuario: Usuario        = await usuarioController.find(idUsuario);
 
             console.log({ usuario, usuarioSeguido });
 
