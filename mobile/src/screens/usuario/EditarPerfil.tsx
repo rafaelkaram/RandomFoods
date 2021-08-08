@@ -29,11 +29,22 @@ const EditarPerfil = ({ route }: { route: any }) => {
     const [refreshing, setRefreshing] = useState(false);
     const [midia, setMidia] = useState<IMidiaPicker>();
     const [midiaCarregada, setMidiaCarregada] = useState<string>();
+    const [userFacebook, setuserFacebook] = useState<boolean>(false);
+    const [userEditable, setuserEditable] = useState<boolean>(false);
 
     const { user, headers } = useContext(AuthContext);
 
     useEffect(() => {
         if (user) {
+            if (user.idExterno) {
+                console.log('tst1')
+                setuserFacebook(true)
+                if (user.trocaLogin) {
+                    setuserEditable(true)
+                }
+            } else {
+                setuserFacebook(false)
+            }
             setName(user.nome);
             setEmail(user.email)
             setUsername(user.login)
@@ -50,7 +61,7 @@ const EditarPerfil = ({ route }: { route: any }) => {
             email,
         }
 
-        if (usuario.nome == '' || usuario.login == '' || usuario.email == '' ) {
+        if (usuario.nome == '' || usuario.login == '' || usuario.email == '') {
             Alert.alert(
                 'Campos incorretos',
                 'Todos os campos devem ser preenchidos corretamente',
@@ -72,14 +83,14 @@ const EditarPerfil = ({ route }: { route: any }) => {
 
             await api.post('edicao/usuario', data, { headers })
                 .then(response => {
-                // Colocar navigate aqui
-            }).catch((error) => {
-                Alert.alert(
-                    'Erro na atualização dos dados.',
-                    `${ error.error }`,
-                    [ { text: 'OK' } ]
-                );
-            });
+                    // Colocar navigate aqui
+                }).catch((error) => {
+                    Alert.alert(
+                        'Erro na atualização dos dados.',
+                        `${error.error}`,
+                        [{ text: 'OK' }]
+                    );
+                });
         }
     }
 
@@ -159,9 +170,12 @@ const EditarPerfil = ({ route }: { route: any }) => {
                                     source={{ uri: midiaCarregada }}
                                     style={styles.midia}
                                 />
-                                <TouchableOpacity style={styles.midiaRemove} onPress={() => handleRemoveMidia()} >
-                                    <Text style={{ ...globalStyles.regularText, color: colors.primary }}>X</Text>
-                                </TouchableOpacity>
+                                {!userFacebook &&
+                                    <TouchableOpacity style={styles.midiaRemove} onPress={() => handleRemoveMidia()} >
+                                        <Text style={{ ...globalStyles.regularText, color: colors.primary }}>X</Text>
+                                    </TouchableOpacity>
+                                }
+
                             </View>
                             :
                             midia?.uri ?
@@ -170,9 +184,12 @@ const EditarPerfil = ({ route }: { route: any }) => {
                                         source={{ uri: midia?.uri }}
                                         style={styles.midia}
                                     />
-                                    <TouchableOpacity style={styles.midiaRemove} onPress={() => handleRemoveMidia()} >
-                                        <Text style={{ ...globalStyles.regularText, color: colors.primary }}>X</Text>
-                                    </TouchableOpacity>
+                                    {!userFacebook &&
+                                        <TouchableOpacity style={styles.midiaRemove} onPress={() => handleRemoveMidia()} >
+                                            <Text style={{ ...globalStyles.regularText, color: colors.primary }}>X</Text>
+                                        </TouchableOpacity>
+                                    }
+
 
                                 </View>
                                 :
@@ -184,10 +201,19 @@ const EditarPerfil = ({ route }: { route: any }) => {
 
 
                         }
+                        {userFacebook ?
+                            <>
+                                <InputEdit tipo='username' placeholder='username' icon='person-outline' security={false} setState={setUsername} value={username} editable={userEditable} />
+                                <InputEdit tipo='name' placeholder='Nome' icon='person-outline' security={false} setState={setName} value={name} editable={false} />
+                            </>
+                            :
+                            <>
+                                <InputEdit tipo='username' placeholder='username' icon='person-outline' security={false} setState={setUsername} value={username} editable={false} />
+                                <InputEdit tipo='email' placeholder='Email' icon='mail-outline' security={false} setState={setEmail} value={email} editable={true} />
+                                <InputEdit tipo='name' placeholder='Nome' icon='person-outline' security={false} setState={setName} value={name} editable={true} />
+                            </>
+                        }
 
-                        <InputEdit tipo='username' placeholder='username' icon='person-outline' security={false} setState={setUsername} value={username}></InputEdit>
-                        <InputEdit tipo='email' placeholder='Email' icon='mail-outline' security={false} setState={setEmail} value={email} ></InputEdit>
-                        <InputEdit tipo='name' placeholder='Nome' icon='person-outline' security={false} setState={setName} value={name}></InputEdit>
 
                         <View style={styles.buttons}>
                             <View style={styles.singleButt}>

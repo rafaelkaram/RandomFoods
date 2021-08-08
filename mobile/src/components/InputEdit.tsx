@@ -11,9 +11,10 @@ const InputSignUp = (props: {
     security: boolean
     setState: Function
     value: string
+    editable: boolean
 }) => {
     const value = props.value;
-    
+    const editable = props.editable;
     const [data, setData] = useState(value);
     const [errorMessage, setErrorMessage] = useState('');
     const [eye, setEye] = useState(false);
@@ -84,6 +85,8 @@ const InputSignUp = (props: {
                 secureTextEntry={!eye}
                 onChangeText={(value) => setData(value)}
                 value={data}
+                editable={editable}
+                disabled={!editable}
                 leftIcon={
                     <Ionicons name={props.icon} style={{ paddingRight: 10 }} size={24} color='black' />
                 }
@@ -105,6 +108,8 @@ const InputSignUp = (props: {
                 autoCompleteType={props.tipo}
                 onChangeText={props.tipo === 'name' ? (value) => setData(value) : (value) => setData(value.trim())}
                 value={data}
+                editable={editable}
+                disabled={!editable}
                 leftIcon={
                     <Ionicons name={props.icon} style={{ paddingRight: 10 }} size={24} color='black' />
                 }
