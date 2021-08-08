@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     borderColor: '#E5EAFA',
     borderWidth: 3,
     width: Width * 0.9,
-    height: Height * 0.43,
+    maxHeight: Height * 0.43,
   },
 
   nonBlurredContent: {

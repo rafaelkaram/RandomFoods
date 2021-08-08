@@ -73,7 +73,6 @@ const EditarPerfil = ({ route }: { route: any }) => {
             data.append('nome', name);
             data.append('login', username.toLowerCase());
             data.append('email', email.toLowerCase());
-            data.append('nomeUsuario', username.toLowerCase());
 
             if (midia) data.append('image', {
                 name: 'image.png',

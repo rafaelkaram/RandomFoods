@@ -112,7 +112,7 @@ const Receita = ({ route }: { route: any }) => {
                 }).catch(error => {
                     Alert.alert(
                         'Ocorreu um erro ao processar sua solicitação.',
-                        '',
+                        `${ error }`,
                         [
                             { text: 'OK' }
                         ]
@@ -144,9 +144,10 @@ const Receita = ({ route }: { route: any }) => {
                 setComentarios(response.data);
                 setLoadComentario(false);
             }).catch(error => {
+                console.log({ error, pao: 'oi'});
                 Alert.alert(
-                    'Falha no resgistro de comentário',
-                    '\nArruma o texto depois',
+                    'Resgistro de comentário',
+                    `${ error }`,
                     [
                         { text: 'OK' }
                     ]
@@ -265,7 +266,7 @@ const Receita = ({ route }: { route: any }) => {
                                     <TouchableOpacity style={isCurtida ? styles.buttonFavTrue : styles.buttonFavFalse}
                                         onPress={() => { curtirReceita() }}
                                     >
-                                   
+
                                     <AntDesign name='heart' size={20} color='white' />
                                 </TouchableOpacity>
                             </View>
