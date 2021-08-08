@@ -65,13 +65,13 @@ const Perfil = ({ route }: { route: any }) => {
             navigation.dispatch(jumpToAction);
         } else {
             if (!seguidor) {
-                api.post('cadastro/seguidor', { idSeguido: usuario?.id }, { headers })
+                api.post('cadastro/seguidor', { idSeguidor: usuario?.id }, { headers })
                     .then(response => {
                         setSeguidor(true);
                     }).catch(error => {
                         Alert.alert(
-                            'Falha no resgistro de seguidor',
-                            '\nFalha no resgistro de seguidor',
+                            'Ocorreu um erro ao processar sua solicitação.',
+                            '',
                             [
                                 { text: 'OK' }
                             ]
@@ -86,8 +86,8 @@ const Perfil = ({ route }: { route: any }) => {
                         setSeguidor(false);
                     }).catch(error => {
                         Alert.alert(
-                            'Falha na remoção de seguidor',
-                            '\nFalha na remoção de seguidor',
+                            'Ocorreu um erro ao processar sua solicitação.',
+                            '',
                             [
                                 { text: 'OK' }
                             ]

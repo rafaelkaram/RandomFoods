@@ -80,8 +80,8 @@ const Receita = ({ route }: { route: any }) => {
                     setIsCurtida(true);
                 }).catch(error => {
                     Alert.alert(
-                        'Falha no resgistro de curtida',
-                        '\nFalha no resgistro de curtida',
+                        'Ocorreu um erro ao processar sua solicitação.',
+                        '',
                         [
                             { text: 'OK' }
                         ]
@@ -96,8 +96,8 @@ const Receita = ({ route }: { route: any }) => {
                     setIsCurtida(false);
                 }).catch(error => {
                     Alert.alert(
-                        'Falha no resgistro de curtida',
-                        '\nFalha no resgistro de curtida',
+                        'Ocorreu um erro ao processar sua solicitação.',
+                        '',
                         [
                             { text: 'OK' }
                         ]

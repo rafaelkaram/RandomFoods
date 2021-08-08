@@ -43,9 +43,7 @@ class ReceitaController {
         const repository = getCustomRepository(ReceitaRepository);
 
         const receitas = await repository.find({
-            where: {
-                ativa: true
-            },
+            where: { ativa: true },
             relations: [ 'usuario', 'midias', 'categorias' ],
             order: { dataCadastro: 'ASC' }
         });

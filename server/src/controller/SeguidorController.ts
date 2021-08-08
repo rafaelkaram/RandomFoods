@@ -23,8 +23,6 @@ class SeguidorController {
     }
 
     async create(request: Request, response: Response) {
-        const repository = getCustomRepository(SeguidorRepository);
-
         const idUsuario: number = request.idUsuario as number;
         const { idSeguidor } = request.body as {
             idSeguidor: number
@@ -33,8 +31,12 @@ class SeguidorController {
         try {
             const usuarioController = new UsuarioController();
 
+            console.log({ idUsuario, idSeguidor});
+
             const usuarioSeguidor: Usuario = await usuarioController.find(idSeguidor);
             const usuario: Usuario         = await usuarioController.find(idUsuario);
+
+            console.log({ usuario, usuarioSeguidor });
 
             const log: LogNotificacao = new LogNotificacao(usuario);
             await log.save();
@@ -44,8 +46,8 @@ class SeguidorController {
             console.log(seguidor);
             await seguidor.save();
 
-            log.seguidor = seguidor;
-            await log.save();
+            // log.seguidor = seguidor;
+            // await log.save();
 
             systrace(204, response);
         } catch (err) {
