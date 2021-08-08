@@ -197,17 +197,30 @@ export default StyleSheet.create({
 
     buttonActions: {
         flexDirection: 'row',
-        justifyContent: 'flex-end',
     },
-    curtidas:{
-        flexDirection:'row',
-        alignItems:'center'
-    },
-    numCurtida:{
-        fontFamily: 'Ubuntu_700Bold',
-        color:colors.primary,
-        marginRight:10,
-        fontSize:20
 
-    }
+    curtidasContainer: {
+        backgroundColor: 'white',
+        justifyContent: "center",
+        borderRadius: 10,
+        marginLeft: 12,
+        marginBottom: 10,
+        marginTop: 10,
+        padding: 5
+    },
+
+    nonBlurredContent: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    curtidas: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    numCurtida: {
+        fontFamily: 'Ubuntu_700Bold',
+        color: colors.primary,
+        fontSize: 14,
+    },
 });
