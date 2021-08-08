@@ -124,7 +124,8 @@ const PassoAPasso = () => {
                                         newUpdate={(stepParam: IPassoReceita) => newUpdate(stepParam)}
                                         finished={(id: number, desc: string) => { finishedStep(id, desc) }}
                                         update={(index: number, step: IPassoReceita) => { updateStep(index, step) }}
-                                        removeStep={(id: number) => removeStep(id)} />
+                                        removeStep={(id: number) => removeStep(id)}
+                                    />
                                 </View>
                             </ScrollView>
                         </View>
@@ -160,9 +161,9 @@ const PassoAPasso = () => {
     const cadastraReceita = async () => {
         if (steps.length < 1) {
             Alert.alert(
-                "Adicione pelo menos um passo",
-                "",
-                [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+                'Adicione pelo menos um passo',
+                '',
+                [{ text: 'OK', onPress: () => console.log('OK Pressed') }]
             );
             return;
         }
@@ -226,10 +227,10 @@ const PassoAPasso = () => {
             setReceitaId(response.data)
             setLoad(true);
             Alert.alert(
-                "Receita Cadastrada com Sucesso",
-                "Receita: " + nomeReceitaContext,
+                `Receita: ${ nomeReceitaContext }`,
+                'Receita cadastrada com Sucesso',
                 [{
-                    text: "OK", onPress: () => handleNavigateToReceita()
+                    text: 'OK', onPress: () => handleNavigateToReceita()
                 }]
             )
         }).catch(error => {
@@ -276,7 +277,8 @@ const PassoAPasso = () => {
                     newUpdate={(stepParam: IPassoReceita) => newUpdate(stepParam)}
                     update={(index: number, step: IPassoReceita) => { updateStep(index, step) }}
                     finished={(index: number, desc: string) => { finishedStep(index, desc) }}
-                    removeStep={(id: number) => removeStep(id)} />
+                    removeStep={(id: number) => removeStep(id)}
+                />
                 {/* } */}
             </TouchableOpacity>
         );
@@ -318,7 +320,8 @@ const PassoAPasso = () => {
                                                                 newUpdate={(stepParam: IPassoReceita) => newUpdate(stepParam)}
                                                                 finished={(id: number, desc: string) => { finishedStep(id, desc) }}
                                                                 update={(index: number, step: IPassoReceita) => { updateStep(index, step) }}
-                                                                removeStep={(id: number) => removeStep(id)} />
+                                                                removeStep={(id: number) => removeStep(id)}
+                                                            />
                                                         </View>
                                                     }
                                                 </ScrollView>

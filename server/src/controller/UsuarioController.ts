@@ -181,10 +181,28 @@ class UsuarioController {
 
         const idUsuario: number = request.idUsuario as number;
         const image = request.file as Express.Multer.File;
+        const {
+            nome,
+            login,
+            email
+        } = request.body as {
+            nome: string,
+            login: string,
+            email: string
+        }
 
         try{
             const usuario = await repository.findOneOrFail({ id: idUsuario });
             if (!usuario) throw 'Usuário não encontrado.';
+            if (usuario.trocaLogin && usuario.idExterno && usuario.login !== login) {
+                usuario.login = login;
+                usuario.trocaLogin = false;
+            }
+
+            usuario.nome = nome;
+            usuario.email = email;
+
+            await usuario.save();
 
             const buffer: string = encryptMidia(usuario.id.toString());
             if (image) moveFile(buffer, image.filename);
