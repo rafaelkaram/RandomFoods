@@ -52,11 +52,10 @@ const Painel = () => {
             api.get(`busca/seguidores/${user.id}`)
                 .then(response => { setSeguidores(response.data) });
             api.get(`busca/seguidos/${user.id}`)
-                .then(response => { setSeguindo(response.data) });
+                .then(response => { setSeguindo(response.data), setLoad(true); });
         } else {
             navigation.navigate(screens.login);
         }
-        setLoad(true);
     }, [user, refreshing]);
 
     const pieTypeData = recipeType.map((item) => {

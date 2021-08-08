@@ -46,10 +46,10 @@ const Perfil = ({ route }: { route: any }) => {
 
     useEffect(() => {
         api.get(`busca/receita-usuario/${idUser}`)
-            .then(response => { setRecipesUser(response.data.receitas) });
+            .then(response => { setRecipesUser(response.data.receitas), setLoad(true); });
 
         setTitle(`Receitas de ${usuario?.nome}`);
-        setLoad(true);
+
     }, [usuario]);
 
     useEffect(() => {
@@ -78,7 +78,7 @@ const Perfil = ({ route }: { route: any }) => {
                         );
                         setSeguidor(false);
                     }
-                );
+                    );
             } else {
                 const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.usuario.id === user?.id));
                 api.post(`remove/seguidor/${seguidor[0].id}`, { headers })
@@ -177,7 +177,7 @@ const Perfil = ({ route }: { route: any }) => {
                         </ScrollView>
                         :
                         <View>
-                            <Text style={[globalStyles.subTitleText, globalStyles.recipeListSubTitle, { marginTop: 20 }]}>Você não possui receitas cadastradas!</Text>
+                            <Text style={[globalStyles.subTitleText, globalStyles.recipeListSubTitle, { marginTop: 20 }]}>{idUser == user?.id ? `Você não possui receitas cadastradas!` : `${usuario.nome} não possui receitas cadastradas!` }</Text>
                         </View>
                 }
 

@@ -40,7 +40,7 @@ const Ingredientes = () => {
         api.get('/busca/tipo-ingrediente')
             .then(response => {
                 setIngredientTypes(response.data);
-                setLoad(true)
+                setLoad(true);
             })
 
         setIngredientsCart(ingredientesContext)

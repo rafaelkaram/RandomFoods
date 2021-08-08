@@ -48,6 +48,7 @@ const Filtro = () => {
             .then(response => {
                 setIngredientTypes(response.data);
                 setIngredientList(response.data);
+                setLoad(true);
             });
         api.get('busca/categoria')
             .then(response => { setCategorias(response.data) });
@@ -55,15 +56,13 @@ const Filtro = () => {
             .then(response => { setTipos(response.data) });
         api.get('busca/tempo-preparo')
             .then(response => {
-                setTempoDePreparo([response.data[1], response.data[1]])
-                setBaseTempoPreparo(response.data)
+                setTempoDePreparo([response.data[1], response.data[1]]);
+                setBaseTempoPreparo(response.data);
             });
-        setDerivadoLeite(derivadoLeiteContext)
-        setGluten(glutenContext)
-        setCategoriasSelecionadas(categoriasContext)
-        setTiposSelecionados(tiposContext)
-
-        setLoad(true);
+        setDerivadoLeite(derivadoLeiteContext);
+        setGluten(glutenContext);
+        setCategoriasSelecionadas(categoriasContext);
+        setTiposSelecionados(tiposContext);
     }, []);
 
     useEffect(() => {
@@ -80,7 +79,7 @@ const Filtro = () => {
     }, [categoriasSelecionadas, tiposSelecionados, tempoDePreparo]);
 
     const handleNavigateToRecipe = () => {
-        if (ingredientsCart.length > 0){
+        if (ingredientsCart.length > 0) {
             saveFilter(derivadoLeite, gluten, categoriasSelecionadas, tiposSelecionados);
             navigation.navigate(screens.resultadoPesquisa,
                 {
@@ -172,37 +171,37 @@ const Filtro = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <BasketCounter
-                ingredientes={ ingredientsCart }
-                isCadastro={ false }
-                setVisible={ setModalVisible }
+                ingredientes={ingredientsCart}
+                isCadastro={false}
+                setVisible={setModalVisible}
             />
-            <Text style={[ globalStyles.subTitleText, globalStyles.subTitle ]}>Selecione os ingredientes</Text>
+            <Text style={[globalStyles.subTitleText, globalStyles.subTitle]}>Selecione os ingredientes</Text>
             <Modal
                 animationType='none'
-                transparent={ true }
-                visible={ modalVisible }
+                transparent={true}
+                visible={modalVisible}
                 onRequestClose={() => { setModalVisible(!modalVisible); }}
             >
-                <BlurView intensity={200} style={[ StyleSheet.absoluteFill, styles.nonBlurredContent ]}>
+                <BlurView intensity={200} style={[StyleSheet.absoluteFill, styles.nonBlurredContent]}>
                     <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center' }}>
                         <TouchableOpacity
-                            style={ globalStyles.modalX }
-                            onPress={ () => setModalVisible(!modalVisible) }
+                            style={globalStyles.modalX}
+                            onPress={() => setModalVisible(!modalVisible)}
                         >
                             <Text style={{ ...globalStyles.boldText, alignSelf: 'center', color: 'white' }}>X</Text>
                         </TouchableOpacity>
-                        <View style={{ ...globalStyles.modalContainer, width: WIDTH * 0.8, height: 400 } }>
+                        <View style={{ ...globalStyles.modalContainer, width: WIDTH * 0.8, height: 400 }}>
                             <Text style={{ ...globalStyles.boldText, marginBottom: 10 }}>Ingredientes Selecionados</Text>
                             <ScrollView>
-                                { ingredientsCart.map(ingrediente => {
+                                {ingredientsCart.map(ingrediente => {
                                     return (
                                         <View
-                                            style={ globalStyles.modalList }
-                                            key={ ingrediente.id }
+                                            style={globalStyles.modalList}
+                                            key={ingrediente.id}
                                         >
-                                            <Text style={{ lineHeight: 30 }}>{ ingrediente.nome }</Text>
+                                            <Text style={{ lineHeight: 30 }}>{ingrediente.nome}</Text>
                                             <TouchableOpacity
-                                                onPress={ () => handleSelectItem(ingrediente.id, ingrediente.nome) }>
+                                                onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}>
                                                 <Feather name='trash-2' size={24} color='black' />
                                             </TouchableOpacity>
                                         </View>
@@ -215,78 +214,78 @@ const Filtro = () => {
             </Modal>
             <Input
                 placeholder='Pesquise por algum ingrediente'
-                onChangeText={ (value) => setnomeIngrediente(value) }
-                value={ nomeIngrediente }
+                onChangeText={(value) => setnomeIngrediente(value)}
+                value={nomeIngrediente}
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                style={ globalStyles.inputPesquisa }
+                style={globalStyles.inputPesquisa}
             />
             <FilterModal
-                modalFilter={ modalFilter }
-                categoriasSelecionadas={ categoriasSelecionadas }
-                categorias={ categorias }
-                tipos={ tipos }
-                tiposSelecionados={ tiposSelecionados }
-                tempoDePreparo={ tempoDePreparo }
-                tempos={ baseTempoPreparo }
-                css={ styles }
-                filterCategory={ (categoria: string) => filterCategory(categoria) }
-                filterType={ (tipo: string) => filterType(tipo) }
-                setModalFilter={ (modalFilter: boolean) => setModalFilter(modalFilter) }
-                setTempoDePreparo={ (tempo: [number, number]) => setTempoDePreparo(tempo) }
+                modalFilter={modalFilter}
+                categoriasSelecionadas={categoriasSelecionadas}
+                categorias={categorias}
+                tipos={tipos}
+                tiposSelecionados={tiposSelecionados}
+                tempoDePreparo={tempoDePreparo}
+                tempos={baseTempoPreparo}
+                css={styles}
+                filterCategory={(categoria: string) => filterCategory(categoria)}
+                filterType={(tipo: string) => filterType(tipo)}
+                setModalFilter={(modalFilter: boolean) => setModalFilter(modalFilter)}
+                setTempoDePreparo={(tempo: [number, number]) => setTempoDePreparo(tempo)}
             />
-            <View style={ styles.modalFilter }>
-                <View style={ styles.filterContainer }>
+            <View style={styles.modalFilter}>
+                <View style={styles.filterContainer}>
                     <TouchableOpacity
-                        style={ derivadoLeite ? globalStyles.filterBoxSelected : globalStyles.filterBox }
+                        style={derivadoLeite ? globalStyles.filterBoxSelected : globalStyles.filterBox}
                         onPress={() => { setDerivadoLeite(!derivadoLeite) }}
                     >
-                        <Text style={[ globalStyles.regularText, derivadoLeite && globalStyles.filterNameSelected ]}>Sem lactose</Text>
+                        <Text style={[globalStyles.regularText, derivadoLeite && globalStyles.filterNameSelected]}>Sem lactose</Text>
 
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={ gluten ? globalStyles.filterBoxSelected : globalStyles.filterBox }
+                        style={gluten ? globalStyles.filterBoxSelected : globalStyles.filterBox}
                         onPress={() => { setGluten(!gluten) }}
                     >
-                        <Text style={[ globalStyles.regularText, gluten && globalStyles.filterNameSelected ]}>Sem glúten</Text>
+                        <Text style={[globalStyles.regularText, gluten && globalStyles.filterNameSelected]}>Sem glúten</Text>
                     </TouchableOpacity>
                 </View>
                 <View>
                     <TouchableOpacity
-                        style={ selectedFiltro !== 0 ? globalStyles.filterBoxSelected : globalStyles.filterBox }
-                        onPress={ () => setModalFilter(true) }
+                        style={selectedFiltro !== 0 ? globalStyles.filterBoxSelected : globalStyles.filterBox}
+                        onPress={() => setModalFilter(true)}
                     >
-                        <Text style={[ globalStyles.regularText, selectedFiltro !== 0 && globalStyles.filterNameSelected ]}>Filtro</Text>
+                        <Text style={[globalStyles.regularText, selectedFiltro !== 0 && globalStyles.filterNameSelected]}>Filtro</Text>
                         <View style={{ paddingLeft: 5 }}>
-                        { selectedFiltro > 0 ?
-                            <View style={ styles.filterBubble }>
-                                <Text style={[ globalStyles.boldText, styles.bubbleText ]}>{ selectedFiltro }</Text>
-                            </View>
-                            :
-                            <FontAwesome name='filter' size={18} color={ selectedFiltro !== 0 ? 'white' : 'rgba(0, 0, 0, 0.7)' } />
-                        }
+                            {selectedFiltro > 0 ?
+                                <View style={styles.filterBubble}>
+                                    <Text style={[globalStyles.boldText, styles.bubbleText]}>{selectedFiltro}</Text>
+                                </View>
+                                :
+                                <FontAwesome name='filter' size={18} color={selectedFiltro !== 0 ? 'white' : 'rgba(0, 0, 0, 0.7)'} />
+                            }
                         </View>
                     </TouchableOpacity>
                 </View>
             </View>
             <ScrollView>
-                { ingredientList.map(ingredientList => {
+                {ingredientList.map(ingredientList => {
                     return (
-                        <View key={ ingredientList.nome } style={ globalStyles.container }>
+                        <View key={ingredientList.nome} style={globalStyles.container}>
                             <View>
                                 <View style={styles.ingredientTypeNameImageContainer}>
-                                    <Text style={[ globalStyles.boldText, styles.ingredientTypeName ]}>{ingredientList.nome}</Text>
-                                    <Image style={ styles.ingredientTypeIcon }
+                                    <Text style={[globalStyles.boldText, styles.ingredientTypeName]}>{ingredientList.nome}</Text>
+                                    <Image style={styles.ingredientTypeIcon}
                                         source={{ uri: ingredientList.url }} />
                                 </View>
-                                <View style={ styles.ingredientContainer }>
-                                    { ingredientList.ingredientes.map(ingrediente => {
+                                <View style={styles.ingredientContainer}>
+                                    {ingredientList.ingredientes.map(ingrediente => {
                                         return (
                                             <TouchableOpacity
-                                                style={ selectedItems.includes(ingrediente.id) ? globalStyles.filterBoxSelected : globalStyles.filterBox }
-                                                onPress={ () => handleSelectItem(ingrediente.id, ingrediente.nome) }
-                                                key={ ingrediente.id }
+                                                style={selectedItems.includes(ingrediente.id) ? globalStyles.filterBoxSelected : globalStyles.filterBox}
+                                                onPress={() => handleSelectItem(ingrediente.id, ingrediente.nome)}
+                                                key={ingrediente.id}
                                             >
-                                                <Text style={[ globalStyles.regularText, selectedItems.includes(ingrediente.id) && globalStyles.filterNameSelected ]}>{ ingrediente.nome }</Text>
+                                                <Text style={[globalStyles.regularText, selectedItems.includes(ingrediente.id) && globalStyles.filterNameSelected]}>{ingrediente.nome}</Text>
                                             </TouchableOpacity>
                                         )
                                     })}
@@ -297,8 +296,8 @@ const Filtro = () => {
                 })}
             </ScrollView>
             <TouchableOpacity
-                style={ globalStyles.arrow }
-                onPress={ handleNavigateToRecipe }
+                style={globalStyles.arrow}
+                onPress={handleNavigateToRecipe}
             >
                 <AntDesign style={{ alignSelf: 'center' }} name='arrowright' size={24} color='white' />
             </TouchableOpacity>
