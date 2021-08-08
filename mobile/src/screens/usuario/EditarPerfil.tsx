@@ -49,22 +49,19 @@ const EditarPerfil = ({ route }: { route: any }) => {
             email,
         }
 
-        if (usuario.nome == '' || usuario.login == '' || usuario.email == '' || midia == null) {
+        if (usuario.nome == '' || usuario.login == '' || usuario.email == '' ) {
             Alert.alert(
                 'Campos incorretos',
                 'Todos os campos devem ser preenchidos corretamente',
                 [ { text: 'OK', onPress: () => console.log('OK Pressed') } ]
             );
         } else {
-
-            setLoad(false);
-
             const data = new FormData();
 
             data.append('nome', name);
             data.append('login', username.toLowerCase());
             data.append('email', email.toLowerCase());
-
+            data.append('nomeUsuario', username.toLowerCase());
 
             if (midia) data.append('image', {
                 name: 'image.png',
@@ -72,17 +69,14 @@ const EditarPerfil = ({ route }: { route: any }) => {
                 uri: midia.uri
             } as any);
 
-             await api.post('edicao/usuario', data, { headers }).then(response => {
-                Alert.alert(
-                    'Deu boa',
-                    '',
-                    [ { text: 'OK', onPress: () => setLoad(true) } ]
-                );
+            await api.post('edicao/usuario', data, { headers })
+                .then(response => {
+                // Colocar navigate aqui
             }).catch((error) => {
                 Alert.alert(
-                    'Deu Ruim',
-                    '',
-                    [ { text: 'OK', onPress: () => setLoad(true) } ]
+                    'Erro na atualização dos dados.',
+                    `${ error.error }`,
+                    [ { text: 'OK' } ]
                 );
             });
         }
@@ -120,7 +114,7 @@ const EditarPerfil = ({ route }: { route: any }) => {
 
     const handleRemoveMidia = async () => {
         setMidia({} as IMidiaPicker);
-        setMidiaCarregada('')
+        setMidiaCarregada('');
     }
 
 

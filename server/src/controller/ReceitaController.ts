@@ -102,11 +102,12 @@ class ReceitaController {
 
         await receita.save();
 
-        await Promise.all(categorias.map(async nome => {
-            const categoria: Categoria = new Categoria(<TipoCategoria> nome, receita);
+        if (categorias && categorias.length > 0)
+            await Promise.all(categorias.map(async nome => {
+                const categoria: Categoria = new Categoria(<TipoCategoria> nome, receita);
 
-            await categoria.save();
-        }));
+                await categoria.save();
+            }));
 
         await Promise.all(ingredientes.map(async item => {
             const ingrediente: Ingrediente = await ingredienteController.find(parseInt(item.id));
