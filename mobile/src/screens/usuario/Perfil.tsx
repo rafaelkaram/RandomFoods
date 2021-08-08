@@ -81,7 +81,7 @@ const Perfil = ({ route }: { route: any }) => {
                     );
             } else {
                 const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.usuario.id === user?.id));
-                api.post(`remove/seguidor/${seguidor[0].id}`, { headers })
+                api.delete(`remove/seguidor/${seguidor[0].id}`, { headers })
                     .then(response => {
                         setSeguidor(false);
                     }).catch(error => {
