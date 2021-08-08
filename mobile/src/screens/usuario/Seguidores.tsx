@@ -69,7 +69,7 @@ const Seguidores = ({ route }: { route: any }) => {
                 {
                     text: 'OK',
                     onPress: () => {
-                        api.post(`remove/seguidor/${id}`)
+                        api.delete(`remove/seguidor/${id}`)
                             .then(response => {
                                 setSeguindo(false);
                             }).catch(error => {

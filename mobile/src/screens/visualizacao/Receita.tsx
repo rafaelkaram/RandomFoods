@@ -91,7 +91,7 @@ const Receita = ({ route }: { route: any }) => {
                 );
         } else {
             const curtida: ICurtidaSimples[] = curtidas.filter(curtida2 => (curtida2.usuario.id === user?.id));
-            api.post(`remove/curtida/${curtida[0].id}`, { headers })
+            api.delete(`remove/curtida/${curtida[0].id}`, { headers })
                 .then(response => {
                     setIsCurtida(false);
                 }).catch(error => {
