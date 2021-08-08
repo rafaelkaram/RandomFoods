@@ -49,7 +49,7 @@ const EditarPerfil = ({ route }: { route: any }) => {
             email,
         }
 
-        if (usuario.nome == '' || usuario.login == '' || usuario.email == '' ) {
+        if (usuario.nome == '' || usuario.login == '' || usuario.email == '' || midia == null) {
             Alert.alert(
                 'Campos incorretos',
                 'Todos os campos devem ser preenchidos corretamente',
@@ -72,8 +72,19 @@ const EditarPerfil = ({ route }: { route: any }) => {
                 uri: midia.uri
             } as any);
 
-            // await api.post('edicao/usuario', data, { headers }).then(response => {
-            // });
+             await api.post('edicao/usuario', data, { headers }).then(response => {
+                Alert.alert(
+                    'Deu boa',
+                    '',
+                    [ { text: 'OK', onPress: () => setLoad(true) } ]
+                );
+            }).catch((error) => {
+                Alert.alert(
+                    'Deu Ruim',
+                    '',
+                    [ { text: 'OK', onPress: () => setLoad(true) } ]
+                );
+            });
         }
     }
 
