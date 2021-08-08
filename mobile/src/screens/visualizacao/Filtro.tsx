@@ -44,25 +44,20 @@ const Filtro = () => {
     const [baseTempoPreparo, setBaseTempoPreparo] = useState<number[]>([]);
 
     useEffect(() => {
-        api.get('/busca/tipo-ingrediente')
+        api.get('busca/tipo-ingrediente')
             .then(response => {
                 setIngredientTypes(response.data);
                 setIngredientList(response.data);
             });
-        api.get('/busca/categoria')
-            .then(response => {
-                setCategorias(response.data)
-            });
-        api.get('/busca/tipo-receita')
-            .then(response => {
-                setTipos(response.data)
-            });
-        api.get('/busca/tempo-preparo')
+        api.get('busca/categoria')
+            .then(response => { setCategorias(response.data) });
+        api.get('busca/tipo-receita')
+            .then(response => { setTipos(response.data) });
+        api.get('busca/tempo-preparo')
             .then(response => {
                 setTempoDePreparo([response.data[1], response.data[1]])
                 setBaseTempoPreparo(response.data)
             });
-        
         setDerivadoLeite(derivadoLeiteContext)
         setGluten(glutenContext)
         setCategoriasSelecionadas(categoriasContext)
@@ -83,7 +78,6 @@ const Filtro = () => {
         setSelectedFiltro(qtde);
 
     }, [categoriasSelecionadas, tiposSelecionados, tempoDePreparo]);
-
 
     const handleNavigateToRecipe = () => {
         if (ingredientsCart.length > 0){

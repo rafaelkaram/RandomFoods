@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { Button, ScrollView, Text, TouchableOpacity, View, RefreshControl } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { VictoryPie, VictoryLegend } from 'victory-native';
 import { useNavigation } from '@react-navigation/native';
@@ -9,7 +9,14 @@ import AuthContext from './../../contexts/auth';
 
 import api from '../../services/api';
 
-import { IPainelTipoReceita, IPainelCategorias, IPainelCurtidas, ISeguidor } from '../../constants/interfaces';
+import {
+    IPainelTipoReceita,
+    IPainelCategorias,
+    IPainelCurtidas,
+    ISeguidor,
+    IUsuario,
+    IHeader
+} from '../../constants/interfaces';
 import { HEIGHT, WIDTH } from '../../constants/dimensions';
 import colors from '../../constants/colors';
 import screens from '../../constants/screens';
@@ -30,19 +37,21 @@ const Painel = () => {
     const [load, setLoad] = useState<boolean>(false);
     const [refreshing, setRefreshing] = useState(false);
 
-    const { user } = useContext(AuthContext);
+    const { user, headers }: { user: IUsuario | undefined, headers: IHeader | undefined } = useContext(AuthContext);
 
     useEffect(() => {
         if (user) {
-            api.get(`/dashboard/tipos-receita/${user.id}`)
+            console.log({ user, headers });
+
+            api.get('dashboard/tipos-receita', { headers })
                 .then(response => { setRecipeType(response.data); });
-            api.get(`/dashboard/categorias/${user.id}`)
+            api.get('dashboard/categorias', { headers })
                 .then(response => { setRecipeCategory(response.data); });
-            api.get(`/dashboard/curtidas/${user.id}`)
+            api.get('dashboard/curtidas', { headers })
                 .then(response => { setTopCurtidas(response.data); });
-            api.get(`/busca/seguidores/${user.id}`)
+            api.get(`busca/seguidores/${user.id}`)
                 .then(response => { setSeguidores(response.data) });
-            api.get(`/busca/seguidos/${user.id}`)
+            api.get(`busca/seguidos/${user.id}`)
                 .then(response => { setSeguindo(response.data) });
         } else {
             navigation.navigate(screens.login);
@@ -58,7 +67,6 @@ const Painel = () => {
         return { name: item.tipo }
     });
 
-
     const totalRecipes: number = pieTypeData.reduce(function (a, b) { return a + b.y }, 0);
 
     const onRefresh = useCallback(() => {
@@ -68,7 +76,7 @@ const Painel = () => {
     }, []);
 
     const handleNavigateToReceitasCategoria = (categoria: string) => {
-        navigation.navigate(screens.receitaCategoria, { id: user?.id, categoria });
+        navigation.navigate(screens.receitaCategoria, { categoria });
     }
 
     const handleNavigateToRecipe = (id: number) => {

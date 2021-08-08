@@ -12,6 +12,7 @@ import colors from '../../constants/colors';
 
 import styles from '../../styles/screens/Seguidores';
 import fixString from '../../assets/functions/utils';
+
 import Loading from '../../components/Loading';
 import SeguidoresList from '../../components/SeguidoresList';
 
@@ -40,21 +41,15 @@ const Seguidores = ({ route }: { route: any }) => {
 
 
     useEffect(() => {
-        api.get(`/busca/usuario/${idUser}`)
+        api.get(`busca/usuario/${idUser}`)
+            .then(response => { setUsuario(response.data); });
+        api.get(`busca/seguidores/${idUser}`)
             .then(response => {
-                // console.log(response.data)
-                setUsuario(response.data)
-            });
-
-        api.get(`/busca/seguidores/${idUser}`)
-            .then(response => {
-                //console.log(response.data)
                 setSeguidores(response.data)
                 setSeguidoresFilter(response.data)
             });
-        api.get(`/busca/seguidos/${idUser}`)
+        api.get(`busca/seguidos/${idUser}`)
             .then(response => {
-                //console.log(response.data)
                 setSeguidos(response.data)
                 setSeguidosFilter(response.data)
             });
@@ -65,10 +60,7 @@ const Seguidores = ({ route }: { route: any }) => {
         filterSeguidores()
     }, [nomeSeguidor]);
 
-
-
     const deixarSeguir = (id: number, name: string) => {
-
         Alert.alert(
             'Deixar de seguir',
             '\nDeseja deixar de seguir ' + name + ' ?',
@@ -89,12 +81,9 @@ const Seguidores = ({ route }: { route: any }) => {
                                     ]
                                 );
                                 setSeguindo(true);
-                            }
-                            );
+                            });
                     }
-
                 }]);
-
     }
 
     const filterSeguidores = () => {
@@ -116,8 +105,6 @@ const Seguidores = ({ route }: { route: any }) => {
         }
     }
 
-
-
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         setTimeout(() => setRefreshing(false), 2000);
@@ -134,7 +121,8 @@ const Seguidores = ({ route }: { route: any }) => {
                     <RefreshControl
                         refreshing={refreshing}
                         onRefresh={onRefresh}
-                    />}
+                    />
+                }
             >
                 <Image
                     source={!seguidor ? require('./../../assets/seguindo.png') : require('./../../assets/seguidores.png')}

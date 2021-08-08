@@ -28,7 +28,7 @@ const InputSignUp = (props: {
 
         if (props.tipo == 'username') {
             if (value.length < 6) {
-                setErrorMessage('Username deve ter pelo menos 6 caracteres');
+                setErrorMessage('Nome de usuário deve ter pelo menos 6 caracteres');
                 setTimeout(() => { setErrorMessage('') }, 2000);
                 props.setState('');
             } else {

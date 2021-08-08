@@ -5,7 +5,7 @@ import { useNavigation, TabActions } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import api from '../../services/api';
 
-import { ISeguidor, IReceitaSimples, IUsuarioSimples } from '../../constants/interfaces';
+import { ISeguidor, IReceitaSimples, IUsuarioSimples, IUsuario, IHeader } from '../../constants/interfaces';
 import screens from '../../constants/screens';
 import colors from '../../constants/colors';
 import globalStyles from '../../styles/Global';
@@ -27,7 +27,7 @@ const Perfil = ({ route }: { route: any }) => {
 
     const idUser = route.params.id;
 
-    const { user } = useContext(AuthContext);
+    const { user, headers }: { user: IUsuario | undefined, headers: IHeader | undefined } = useContext(AuthContext);
 
 
     const handleNavigateToRecipe = (id: number) => {
@@ -35,19 +35,17 @@ const Perfil = ({ route }: { route: any }) => {
     }
 
     useEffect(() => {
-
-        api.get(`/busca/usuario/${idUser}`)
+        api.get(`busca/usuario/${idUser}`)
             .then(response => { setUsuario(response.data) });
-        api.get(`/busca/seguidores/${idUser}`)
+        api.get(`busca/seguidores/${idUser}`)
             .then(response => { setSeguidores(response.data) });
-        api.get(`/busca/seguidos/${idUser}`)
+        api.get(`busca/seguidos/${idUser}`)
             .then(response => { setSeguindo(response.data) });
-
     }, [refreshing, seguidor, idUser]);
 
 
     useEffect(() => {
-        api.get(`/busca/receita-usuario/${idUser}`)
+        api.get(`busca/receita-usuario/${idUser}`)
             .then(response => { setRecipesUser(response.data.receitas) });
 
         setTitle(`Receitas de ${usuario?.nome}`);
@@ -66,9 +64,8 @@ const Perfil = ({ route }: { route: any }) => {
             const jumpToAction = TabActions.jumpTo('User');
             navigation.dispatch(jumpToAction);
         } else {
-
             if (!seguidor) {
-                api.post('cadastro/seguidor', { idSeguidor: user?.id, idUsuario: usuario?.id })
+                api.post('cadastro/seguidor', { idSeguido: usuario?.id }, { headers })
                     .then(response => {
                         setSeguidor(true);
                     }).catch(error => {
@@ -81,10 +78,10 @@ const Perfil = ({ route }: { route: any }) => {
                         );
                         setSeguidor(false);
                     }
-                    );
+                );
             } else {
                 const seguidor: ISeguidor[] = seguidores.filter(seguidor2 => (seguidor2.usuario.id === user?.id));
-                api.post(`remove/seguidor/${seguidor[0].id}`)
+                api.post(`remove/seguidor/${seguidor[0].id}`, { headers })
                     .then(response => {
                         setSeguidor(false);
                     }).catch(error => {
@@ -111,7 +108,7 @@ const Perfil = ({ route }: { route: any }) => {
                 {
                     text: 'OK',
                     onPress: () => {
-                        api.post(`remove/receita/${idReceita}`)
+                        api.post(`remove/receita/${idReceita}`, { headers })
                             .then(response => {
                                 Alert.alert(
                                     'Remoção',
@@ -128,13 +125,9 @@ const Perfil = ({ route }: { route: any }) => {
                                         { text: 'OK' }
                                     ]
                                 );
-
-                            }
-                            );
+                            });
                     }
-
                 }]);
-
     }
 
     const onRefresh = useCallback(() => {

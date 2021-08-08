@@ -6,7 +6,6 @@ import { AntDesign } from '@expo/vector-icons';
 
 import api from '../../services/api';
 
-import componentStyles from '../../styles/components/RecipeList';
 import globalStyles from '../../styles/Global';
 import styles from '../../styles/screens/Quantidade';
 import screens from '../../constants/screens';
@@ -60,9 +59,9 @@ const Quantidades = ({ route }: { route: any }) => {
 
     const createButtonAlert = (mensagem: string) => {
         Alert.alert(
-            "Dados não preenchidos",
+            'Dados não preenchidos',
             mensagem,
-            [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+            [{ text: 'OK', onPress: () => console.log('OK Pressed') }]
         );
     }
 

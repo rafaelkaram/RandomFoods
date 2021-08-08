@@ -55,7 +55,7 @@ const Usuario = () => {
         } else {
 
             setLoad(false);
-            
+
             const data = new FormData();
 
             data.append('nome', usuario.nome);
@@ -70,7 +70,6 @@ const Usuario = () => {
             } as any);
 
             await api.post('cadastro/usuario', data).then(response => {
-                console.log({ msg: 'Recebemos resposta!', response: response.data });
                 setUser(response.data);
             });
         }

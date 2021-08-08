@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
-import fs, { lchown } from 'fs';
+import fs from 'fs';
 import path from 'path';
+import jwt from 'jsonwebtoken';
 
 import { getBoolean, getHash, getPath, moveFile, systrace, syserror, encryptMidia } from '../util/util';
 
@@ -12,6 +13,14 @@ import LogNotificacaoController from './LogNotificacaoController';
 import { Usuario, Perfil } from '../model/Usuario';
 
 import usuarioView from '../view/UsuarioView';
+
+const generateToken = (id: number, isAdmin?: boolean): string => {
+    const secret: string = (isAdmin ? process.env.JWT_ADMIN_SECRET : process.env.JWT_SECRET) as string;
+    const token: string = jwt.sign({ id }, secret, {
+        expiresIn: 82800,
+    });
+    return token;
+}
 
 class UsuarioController {
     // Métodos das rotas
@@ -50,24 +59,26 @@ class UsuarioController {
         const { id, name } = request.body;
 
         try {
-            const usuario: Usuario = await repository.findOneOrFail({ idExterno: id });
-
             const logNotificacaoController = new LogNotificacaoController();
-            const qtdeLogs = await logNotificacaoController.countNotRead(usuario);
 
-            return systrace(200, response, usuarioView.render(usuario, qtdeLogs));
+            const usuario: Usuario = await repository.findOneOrFail({ idExterno: id });
+            const qtdeLogs: number = await logNotificacaoController.countNotRead(usuario);
+            const token: string = generateToken(usuario.id);
+
+            return systrace(200, response, usuarioView.render(usuario, qtdeLogs, token ));
         } catch (err) {
             const dados: string = name.replace(' ', '').toLowerCase();
             const now: number = Date.now();
 
-            const usuario = new Usuario(dados + now, dados + now, getHash(now.toString()));
+            const usuario: Usuario = new Usuario(dados + now, dados + now, getHash(now.toString()));
             usuario.idExterno = id;
             usuario.nome = name;
             usuario.trocaLogin = true;
 
             await usuario.save();
+            const token: string = generateToken(usuario.id);
 
-            return systrace(200, response, usuarioView.render(usuario, 0));
+            return systrace(200, response, usuarioView.render(usuario, 0, token));
         }
     }
 
@@ -84,7 +95,32 @@ class UsuarioController {
 
             if (usuario.idExterno) throw 'Login ou senha inválidos.';
             if (usuario && usuario.senha === getHash(senha)) {
-                return systrace(200, response, usuarioView.render(usuario, qtdeLogs));
+                const token: string = generateToken(usuario.id);
+
+                return systrace(200, response, usuarioView.render(usuario, qtdeLogs, token));
+            }
+            throw 'Login ou senha inválidos.';
+
+        } catch (err) {
+            return syserror(400, response, err);
+        }
+    }
+
+    async loginAdmin(request: Request, response: Response) {
+        const repository = getCustomRepository(UsuarioRepository);
+
+        const { login, senha } = request.body as { login: string, senha: string };
+
+        try {
+            const logNotificacaoController = new LogNotificacaoController();
+
+            const usuario: Usuario = await repository.findByLoginOrEmail(login ? login.toLowerCase() : '');
+            const qtdeLogs: number = await logNotificacaoController.countNotRead(usuario);
+
+            if (usuario.idExterno) throw 'Login ou senha inválidos.';
+            if (usuario && usuario.senha === getHash(senha) && Perfil[usuario.perfil] === Perfil.ADMIN) {
+                const token: string = generateToken(usuario.id, true);
+                return systrace(200, response, usuarioView.render(usuario, qtdeLogs, token));
             }
             throw 'Login ou senha inválidos.';
 
@@ -123,17 +159,43 @@ class UsuarioController {
             if (nome) usuario.nome = nome;
             await usuario.save();
 
-            const buffer = encryptMidia(usuario.id.toString());
+            const buffer: string = encryptMidia(usuario.id.toString());
 
             if (image) moveFile(buffer, image.filename);
 
-            return systrace(200, response, usuarioView.render(usuario, 0));
+            const token: string = generateToken(usuario.id);
+            return systrace(200, response, { usuario: usuarioView.render(usuario, 0), token });
         } catch (err) {
             const nomeArquivo: string = image.filename;
 
             console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
             fs.unlink(path.join(getPath('usuario'), nomeArquivo), (e) => {
-                if (e) return syserror(400, response, e);;
+                if (e) return syserror(400, response, e);
+            });
+            return syserror(400, response, err);
+        }
+    }
+
+    async update(request: Request, response: Response) {
+        const repository = getCustomRepository(UsuarioRepository);
+
+        const idUsuario: number = request.idUsuario as number;
+        const image = request.file as Express.Multer.File;
+
+        try{
+            const usuario = await repository.findOneOrFail({ id: idUsuario });
+            if (!usuario) throw 'Usuário não encontrado.';
+
+            const buffer: string = encryptMidia(usuario.id.toString());
+            if (image) moveFile(buffer, image.filename);
+
+            return systrace(204, response);
+        } catch (err) {
+            const nomeArquivo: string = image.filename;
+
+            console.log(`Removendo arquivo ${ nomeArquivo }.\nTipo de arquivo inválido`);
+            fs.unlink(path.join(getPath('usuario'), nomeArquivo), (e) => {
+                if (e) return syserror(400, response, e);
             });
             return syserror(400, response, err);
         }
@@ -141,9 +203,10 @@ class UsuarioController {
 
     async remove(request: Request, response: Response) {
         const repository = getCustomRepository(UsuarioRepository);
-        const { id } = request.params;
 
-        const usuario = await repository.findOneOrFail({ id: parseInt(id) });
+        const idUsuario = request.idUsuario as number;
+
+        const usuario = await repository.findOneOrFail({ id: idUsuario });
         usuario.ativo = false;
         usuario.save();
 

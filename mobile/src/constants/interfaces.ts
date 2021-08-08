@@ -104,6 +104,7 @@ interface IUnidade {
 interface IUsuario {
   id: number,
   idExterno?: string,
+  token: string,
   login: string,
   nome: string,
   iniciais: string,
@@ -135,6 +136,10 @@ interface IUsuarioSimples {
 interface ICart {
   id: number,
   nome: string
+}
+
+interface IHeader {
+  'x-access-token': string
 }
 
 interface IIngredienteReceita {
@@ -226,6 +231,7 @@ export {
   IUsuario,
   IUsuarioSimples,
   ICart,
+  IHeader,
   IIngredienteReceita,
   IListaIngredientes,
   IMidiaPicker,

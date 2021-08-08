@@ -1,13 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from 'react-native-elements';
 import { SimpleLineIcons } from '@expo/vector-icons';
+
 import styles from '../styles/components/UserHeaderFollow';
 import globalStyles from '../styles/Global';
-import screens from '../constants/screens';
+
 import { IUsuarioSimples } from '../constants/interfaces';
-import AuthContext from '../contexts/auth';
+import screens from '../constants/screens';
+
 const UserHeader = ({
     usuario,
     totalReceitas,
@@ -26,8 +28,6 @@ const UserHeader = ({
     seguirUsuario: Function
 }) => {
     const navigation = useNavigation();
-
-    const { user, signOut } = useContext(AuthContext);
 
     const handleNavigateToPerfil = (id: number) => {
         navigation.navigate(screens.perfil, { id: id });

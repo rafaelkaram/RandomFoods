@@ -25,9 +25,9 @@ class SeguidorController {
     async create(request: Request, response: Response) {
         const repository = getCustomRepository(SeguidorRepository);
 
-        const { idSeguidor, idUsuario } = request.body as {
-            idSeguidor: number,
-            idUsuario: number
+        const idUsuario: number = request.idUsuario as number;
+        const { idSeguidor } = request.body as {
+            idSeguidor: number
         };
 
         try {
@@ -97,9 +97,18 @@ class SeguidorController {
 
     async remove(request: Request, response: Response) {
         const repository = getCustomRepository(SeguidorRepository);
+        const idUsuario: number = request.idUsuario as number;
         const { id } = request.params;
 
-        const seguidor = await repository.findOneOrFail({ id: parseInt(id) });
+        const usuarioController = new UsuarioController();
+
+        const usuario: Usuario = await usuarioController.find(idUsuario);
+        const seguidor: Seguidor = await repository.findOneOrFail({
+            where: {
+                id: parseInt(id),
+                seguidor: usuario
+            }
+        });
         seguidor.remove();
         seguidor.save();
 

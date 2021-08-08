@@ -21,11 +21,11 @@ class ComentarioController {
     async create(request: Request, response: Response) {
         const repository = getCustomRepository(ComentarioRepository);
 
-        const { conteudo, idPai, idReceita, idUsuario } = request.body as {
+        const idUsuario: number = request.idUsuario as number;
+        const { conteudo, idPai, idReceita } = request.body as {
             conteudo: string,
             idPai: number,
-            idReceita: number,
-            idUsuario: number
+            idReceita: number
         };
 
         try {

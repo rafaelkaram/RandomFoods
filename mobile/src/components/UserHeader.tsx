@@ -30,7 +30,7 @@ const UserHeader = ({
     };
 
     const handleNavigateToPerfil = (id: number) => {
-        navigation.dispatch(DrawerActions.jumpTo('Receitas Cadastradas', {screen: 'Perfil', params: {id: id} }));
+        navigation.dispatch(DrawerActions.jumpTo('Receitas Cadastradas', { screen: 'Perfil', params: { id } }));
     }
 
     const handleNavigateToNovaReceita = () => {

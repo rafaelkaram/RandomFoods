@@ -19,7 +19,7 @@ const SeguidoresList = ({
     seguidores: ISeguidor[],
     seguidor: boolean,
     deixarSeguir: Function,
-    contextUser: IUsuario | null,
+    contextUser: IUsuario | undefined,
     user: IUsuarioSimples
 }) => {
 

@@ -31,6 +31,7 @@ class MidiaController {
     }
 
     async create(request: Request, response: Response) {
+        const idUsuario: number = request.idUsuario as number;
         const { idReceita } = request.body as { idReceita: string | undefined};
         const midias = request.files as Express.Multer.File[];
 
@@ -50,7 +51,7 @@ class MidiaController {
 
         const receitaController = new ReceitaController();
 
-        const receita: Receita = await receitaController.find(parseInt(idReceita));
+        const receita: Receita = await receitaController.findByIdAndUser(parseInt(idReceita), idUsuario);
 
         const buffer: string = encryptMidia(idReceita);
         const midiaPath: string = getPath('midia', buffer);

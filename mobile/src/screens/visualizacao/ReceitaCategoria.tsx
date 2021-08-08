@@ -1,13 +1,19 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { ScrollView, Image, TouchableOpacity, View, RefreshControl } from 'react-native';
+import { ScrollView, Image, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import Loading from '../../components/Loading';
+
 import api from '../../services/api';
+
+import { IHeader, IReceitaSimples } from '../../constants/interfaces';
 import screens from '../../constants/screens';
-import { IReceitaSimples } from '../../constants/interfaces';
+
+import Loading from '../../components/Loading';
 import RecipeList from '../../components/RecipeList';
+
 import globalStyles from '../../styles/Global';
+
+import AuthContext from '../../contexts/auth';
 
 const ReceitaCategoria = ({ route }: { route: any }) => {
     const navigation = useNavigation();
@@ -15,12 +21,13 @@ const ReceitaCategoria = ({ route }: { route: any }) => {
     const [load, setLoad] = useState<boolean>(false);
     const [refreshing, setRefreshing] = useState(false);
 
+    const { headers }: { headers: IHeader | undefined } = useContext(AuthContext);
+
     useEffect(() => {
         const params = {
-            id: route.params.id,
             categoria: route.params.categoria
         }
-        api.get('/busca/receita-categoria', { params })
+        api.get('busca/receita-categoria', { params, headers })
             .then(response => {
                 setReceitas(response.data)
                 console.log(receitas);

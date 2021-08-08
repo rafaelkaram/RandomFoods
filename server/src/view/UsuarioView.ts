@@ -29,14 +29,13 @@ export default {
 		};
 	},
 
-	render(usuario: Usuario, qtdeLogs: number) {
-
+	render(usuario: Usuario, qtdeLogs: number, token?: string) {
 		if (!usuario) return null;
 
-		const nomeCompleto = usuario.nome.split(" ");
-		const tam  = nomeCompleto.length - 1;
-		const firstName :string = nomeCompleto[0];
-		const lastName :string = nomeCompleto[tam];
+		const nomeCompleto: string[] = usuario.nome.split(' ');
+		const tam: number  = nomeCompleto.length - 1;
+		const firstName: string = nomeCompleto[0];
+		const lastName: string = nomeCompleto[tam];
 		const imgName: string = `${ encryptMidia(usuario.id.toString()) }.png`;
 		const existImg: boolean = fs.existsSync(path.join(getPath('usuario'), imgName));
 
@@ -45,6 +44,7 @@ export default {
 		return {
 			id: usuario.id,
 			idExterno: usuario.idExterno ? usuario.idExterno : null,
+			token: token,
 			login: usuario.login,
 			nome: usuario.nome,
 			iniciais: firstName[0] + lastName[0],

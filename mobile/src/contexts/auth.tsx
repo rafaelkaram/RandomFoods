@@ -1,10 +1,11 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import { IUsuario } from './../constants/interfaces';
+import { IHeader, IUsuario } from './../constants/interfaces';
 
 interface AuthContextData {
     signed: boolean
-    user: IUsuario | null
+    user: IUsuario | undefined,
+    headers: IHeader | undefined,
     signIn(usuario: IUsuario): Promise<void>
     signOut(): void
 }
@@ -13,21 +14,28 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
 export const AuthProvider: React.FC = ({ children }) => {
 
-    const [user, setUser] = useState<IUsuario | null>(null)
+    const [user, setUser] = useState<IUsuario | undefined>();
+    const [headers, setHeaders] = useState<IHeader | undefined>();
+
+    const logaUsuario = (usuario: IUsuario) => {
+        setUser(usuario);
+        setHeaders({
+            'x-access-token': usuario.token
+        });
+    }
 
     useEffect(() => {
         async function loadStoragedData() {
 
-            const storagedUser = await AsyncStorage.getItem('user')
+            const storagedUser = await AsyncStorage.getItem('user');
 
             if (storagedUser) {
-                const usuario: IUsuario = JSON.parse(storagedUser)
+                const usuario: IUsuario = JSON.parse(storagedUser);
                 console.log('Usuário no Storage: ', usuario.nome);
-                setUser(usuario)
-
+                logaUsuario(usuario);
             }
         }
-        loadStoragedData()
+        loadStoragedData();
     }, []);
 
     //resolver async
@@ -37,24 +45,23 @@ export const AuthProvider: React.FC = ({ children }) => {
         } else {
             AsyncStorage.setItem('user', JSON.stringify(usuario));
             console.log('Login realizado com sucesso');
-            setUser(usuario)
+            logaUsuario(usuario);
         }
     }
 
     const signOut = async () => {
         await AsyncStorage.clear().then(() => {
-            setUser(null);
-            console.log("LogOff");
-        })
+            console.log('LogOff');
+            setUser(undefined);
+            setHeaders(undefined);
+        });
     }
 
     return (
-        <AuthContext.Provider value={{ signed: !!user, user, signIn, signOut }}>
-            {children}
+        <AuthContext.Provider value={{ signed: !!user, user, headers, signIn, signOut }}>
+            { children }
         </AuthContext.Provider>
-
-    )
-
+    );
 }
 
 export default AuthContext;

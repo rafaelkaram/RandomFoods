@@ -1,4 +1,3 @@
-import fs from 'fs';
 import multer from 'multer';
 import { getPath } from '../util/util';
 

@@ -44,8 +44,7 @@ export const fbLogin = async () => {
             };
             return { type, token, user: userObject };
         } else {
-            // ???
-            return { type, token }
+            return { type, token };
         }
     } catch ({ message }) {
         Alert.alert(`Falha no Login pelo Facebook: ${message}`);
@@ -112,7 +111,6 @@ const Login = () => {
                         usuario.path = user.photoUrl;
                         if (usuario) {
                             setUsuario(usuario);
-                            //navigation.navigate(screens.cadastroIngredientes);
                         }
                         else {
                             Alert.alert(`Falha no Login pelo Facebook: ${response.data}`);

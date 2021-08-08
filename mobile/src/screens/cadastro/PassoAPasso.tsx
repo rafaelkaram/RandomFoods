@@ -8,7 +8,7 @@ import { BlurView } from 'expo-blur';
 
 import styles from '../../styles/screens/PassoAPasso';
 import globalStyles from '../../styles/Global';
-import { IAuthContextData, IPassoReceita, IIngredienteQuantidade } from '../../constants/interfaces';
+import { IAuthContextData, IPassoReceita, IIngredienteQuantidade, IUsuario, IHeader } from '../../constants/interfaces';
 
 import api from '../../services/api';
 
@@ -39,7 +39,7 @@ const PassoAPasso = () => {
 
     const navigation = useNavigation();
 
-    const { user } = useContext(AuthContext);
+    const { user, headers }: { user: IUsuario | undefined, headers: IHeader | undefined } = useContext(AuthContext);
 
     const {
         nomeReceitaContext,
@@ -218,7 +218,7 @@ const PassoAPasso = () => {
                 } as any);
         });
 
-        await api.post('cadastro/receita', data).then(response => {
+        await api.post('cadastro/receita', data, { headers }).then(response => {
             // Apaga do storage e do contexto
             deleteItems()
             setReceitaId(response.data)

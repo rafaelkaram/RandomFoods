@@ -19,7 +19,8 @@ import {
     IComentario,
     ICurtidaSimples,
     IMidia,
-    IReceita
+    IReceita,
+    IHeader
 } from '../../constants/interfaces';
 
 import Loading from '../../components/Loading';
@@ -47,10 +48,10 @@ const Receita = ({ route }: { route: any }) => {
     const [isCurtida, setIsCurtida] = useState<boolean>(false);
     const [loadComentario, setLoadComentario] = useState<boolean>(false);
 
-    const { user }: { user: IUsuario | null } = useContext(AuthContext);
+    const { user, headers }: { user: IUsuario | undefined, headers: IHeader | undefined } = useContext(AuthContext);
 
     useEffect(() => {
-        api.get(`/busca/receita/${idRecipe}`)
+        api.get(`busca/receita/${idRecipe}`)
             .then(response => {
                 setRecipe(response.data);
                 setEtapas(response.data?.descricao.split('\\n'));
@@ -74,7 +75,7 @@ const Receita = ({ route }: { route: any }) => {
 
     const curtirReceita = () => {
         if (!isCurtida) {
-            api.post('cadastro/curtida', { idUsuario: user?.id, idReceita: recipe?.id })
+            api.post('cadastro/curtida', { idReceita: recipe?.id }, { headers })
                 .then(response => {
                     setIsCurtida(true);
                 }).catch(error => {
@@ -90,7 +91,7 @@ const Receita = ({ route }: { route: any }) => {
                 );
         } else {
             const curtida: ICurtidaSimples[] = curtidas.filter(curtida2 => (curtida2.usuario.id === user?.id));
-            api.post(`remove/curtida/${curtida[0].id}`)
+            api.post(`remove/curtida/${curtida[0].id}`, { headers })
                 .then(response => {
                     setIsCurtida(false);
                 }).catch(error => {
@@ -123,7 +124,7 @@ const Receita = ({ route }: { route: any }) => {
 
     const submitComentario = async (idReceita: number, idPai: number, conteudo: string) => {
         setLoadComentario(true);
-        api.post('cadastro/comentario', { conteudo, idPai, idReceita, idUsuario: user?.id })
+        api.post('cadastro/comentario', { conteudo, idPai, idReceita }, { headers })
             .then(response => {
                 setComentarios(response.data);
                 setLoadComentario(false);

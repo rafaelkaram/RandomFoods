@@ -12,7 +12,7 @@ const StepModal = (props: { index: number, visible: boolean, closeModal: Functio
 
   return (
     <Modal
-      animationType="none"
+      animationType='none'
       transparent={ true }
       visible={ visible }
       onRequestClose={ closeModal(index, descricao) }
@@ -21,12 +21,12 @@ const StepModal = (props: { index: number, visible: boolean, closeModal: Functio
         <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center' }}>
           <View style={styles.modalContainer}>
             <TextInput
-              placeholder="Descrição"
+              placeholder='Descrição'
               onChangeText={(value) => setDescricao(value)}
               value={ descricao }
             />
             <TouchableOpacity onPress={() => { closeModal(descricao, index) }}>
-              <Feather name="check" size={24} color="green" />
+              <Feather name='check' size={24} color='green' />
             </TouchableOpacity>
           </View>
         </View>
@@ -35,8 +35,8 @@ const StepModal = (props: { index: number, visible: boolean, closeModal: Functio
   );
 }
 
-const Height = Dimensions.get("window").height
-const Width = Dimensions.get("window").width;
+const Height = Dimensions.get('window').height
+const Width = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   modalContainer: {

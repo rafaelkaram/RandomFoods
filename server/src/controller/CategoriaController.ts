@@ -18,10 +18,9 @@ class CategoriaController {
     async countCategoryByUserId(request: Request, response: Response) {
         const repository = getCustomRepository(CategoriaRepository);
 
-        const { id } = request.params;
-        const usuarioId = parseInt(id);
+        const idUsuario: number = request.idUsuario as number;
 
-        const categorias = await repository.countCategoryByUserId(usuarioId);
+        const categorias = await repository.countCategoryByUserId(idUsuario);
 
         return systrace(200, response, categorias);
     }

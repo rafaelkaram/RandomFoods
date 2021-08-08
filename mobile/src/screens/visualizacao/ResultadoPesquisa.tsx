@@ -3,7 +3,6 @@ import { ScrollView, Text, View, RefreshControl, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Picker } from '@react-native-picker/picker';
-import { AntDesign } from '@expo/vector-icons';
 import { IReceitaSimples } from '../../constants/interfaces';
 
 import api from '../../services/api';
@@ -27,20 +26,20 @@ const Recipe = ({ route }: { route: any }) => {
 
     useEffect(() => {
         if (route.params) {
-            const { ingredientes } = route.params
-            const { derivadoLeite } = route.params
-            const { gluten } = route.params
-            const { categorias } = route.params
-            const { tipos } = route.params
-            const { tempoDePreparo } = route.params
+            const { ingredientes } = route.params;
+            const { derivadoLeite } = route.params;
+            const { gluten } = route.params;
+            const { categorias } = route.params;
+            const { tipos } = route.params;
+            const { tempoDePreparo } = route.params;
 
             const newCategorias = categorias.map((categoria: string) => {
-                return categoria.toUpperCase()
-            })
+                return categoria.toUpperCase();
+            });
 
             const newTipos = tipos.map((tipos: string) => {
-                return tipos.toUpperCase()
-            })
+                return tipos.toUpperCase();
+            });
 
             const params = {
                 ids: ingredientes,
@@ -51,25 +50,24 @@ const Recipe = ({ route }: { route: any }) => {
                 tempoPreparo: tempoDePreparo[0],
             }
 
-            api.get('/busca/combinacoes', { params }
+            api.get('busca/combinacoes', { params }
             ).then(response => {
                 if (response.data) {
-                    setMatchesPerfeitos(response.data.matchesPerfeitos)
-                    setMatchesParciais(response.data.matchesParciais)
+                    setMatchesPerfeitos(response.data.matchesPerfeitos);
+                    setMatchesParciais(response.data.matchesParciais);
                 } else {
                     api.get('busca/receita').then(response => {
-                        setReceitas(response.data)
-                        setLoad(true)
-                    })
+                        setReceitas(response.data);
+                        setLoad(true);
+                    });
                 }
-
-                setLoad(true)
+                setLoad(true);
             })
         } else {
             api.get('busca/receita').then(response => {
-                setReceitas(response.data)
-                setLoad(true)
-            })
+                setReceitas(response.data);
+                setLoad(true);
+            });
         }
 
     }, [refreshing])

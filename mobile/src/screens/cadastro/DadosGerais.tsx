@@ -37,7 +37,6 @@ const DadosGerais = () => {
     const [nomeReceita, setNomeReceita] = useState<string>('');
     const [tipoReceita, setTipoReceita] = useState<string>('');
     const [minutos, setMinutos] = useState<string>('');
-    const [tempoPreparo, setTempoPreparo] = useState<string>('00:00');
     const [porcoes, setPorcoes] = useState<string>('');
     const [tipos, setTipos] = useState<string[]>([]);
     const [midias, setMidias] = useState<IMidiaPicker[]>([]);
@@ -66,12 +65,12 @@ const DadosGerais = () => {
                     );
             }
         })();
-        setNomeReceita(nomeReceitaContext)
-        setTipoReceita(tipoReceitaContext)
-        setCategoriasSelecionadas(categoriasContext)
-        setMinutos(minutosContext)
-        setPorcoes(porcoesContext)
-        setMidias(midiasContext)
+        setNomeReceita(nomeReceitaContext);
+        setTipoReceita(tipoReceitaContext);
+        setCategoriasSelecionadas(categoriasContext);
+        setMinutos(minutosContext);
+        setPorcoes(porcoesContext);
+        setMidias(midiasContext);
     }, []);
 
     if (!load) {
@@ -80,9 +79,9 @@ const DadosGerais = () => {
 
     const createButtonAlert = (mensagem: string) => {
         Alert.alert(
-            "Dados não preenchidos",
+            'Dados não preenchidos',
             mensagem,
-            [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+            [{ text: 'OK', onPress: () => console.log('OK Pressed') }]
         );
     }
 
@@ -120,7 +119,7 @@ const DadosGerais = () => {
             minutos === '' ||
             porcoes === ''
         )
-            createButtonAlert("Preencha todos os dados");
+            createButtonAlert('Preencha todos os dados');
         else {
             saveDadosGerais(nomeReceita, tipoReceita, categoriasSelecionadas, minutos, porcoes, midias)
             navigation.navigate(screens.cadastroIngredientes);
@@ -179,7 +178,7 @@ const DadosGerais = () => {
 
                 </View>
                 <TouchableOpacity style={{ position: 'absolute', right: 10, top: 20 }} onPress={() => toggleDrawer()}>
-                    <Feather name="menu" size={30} color="black" />
+                    <Feather name='menu' size={30} color='black' />
                 </TouchableOpacity>
                 <View style={{ ...globalStyles.container, minHeight: 130, }}>
                     <Text style={[globalStyles.boldText, styles.textContainer]}>Nome da receita</Text>
@@ -255,13 +254,13 @@ const DadosGerais = () => {
                     <View style={styles.dadosDisplay}>
                         <TouchableOpacity
                             onPress={() => handleInputValue(true, false)}>
-                            <AntDesign name="minuscircleo" size={24} color='black' />
+                            <AntDesign name='minuscircleo' size={24} color='black' />
 
                         </TouchableOpacity>
                         <View>
                             <Input
-                                placeholder="0"
-                                keyboardType="numeric"
+                                placeholder='0'
+                                keyboardType='numeric'
                                 onChangeText={(value) => inputValueValidator(value, true)}
                                 value={minutos}
                                 style={{ textAlign: 'center' }}
@@ -271,7 +270,7 @@ const DadosGerais = () => {
                         <TouchableOpacity
                             onPress={() => handleInputValue(true, true)}
                         >
-                            <AntDesign name="pluscircleo" size={24} color='black' />
+                            <AntDesign name='pluscircleo' size={24} color='black' />
                         </TouchableOpacity>
                     </View>
 
@@ -281,14 +280,14 @@ const DadosGerais = () => {
                     <View style={styles.dadosDisplay}>
                         <TouchableOpacity
                             onPress={() => handleInputValue(false, false)}>
-                            <AntDesign name="minuscircleo" size={24} color='black' />
+                            <AntDesign name='minuscircleo' size={24} color='black' />
 
                         </TouchableOpacity>
                         <View>
                             <Input
-                                placeholder="0"
+                                placeholder='0'
                                 onChangeText={(value) => inputValueValidator(value, false)}
-                                keyboardType="numeric"
+                                keyboardType='numeric'
                                 value={porcoes}
                                 style={{ textAlign: 'center' }}
                                 inputContainerStyle={{ borderWidth: 1, marginTop: 20, marginLeft: 10, marginRight: 10, width: 50, borderRadius: 10 }}
@@ -297,7 +296,7 @@ const DadosGerais = () => {
                         <TouchableOpacity
                             onPress={() => handleInputValue(false, true)}
                             onLongPress={() => handleInputValue(false, true)}>
-                            <AntDesign name="pluscircleo" size={24} color='black' />
+                            <AntDesign name='pluscircleo' size={24} color='black' />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -306,7 +305,7 @@ const DadosGerais = () => {
                 style={globalStyles.arrow}
                 onPress={handleNavigateToIngredients}
             >
-                <AntDesign style={{ alignSelf: 'center' }} name="arrowright" size={24} color="white" />
+                <AntDesign style={{ alignSelf: 'center' }} name='arrowright' size={24} color='white' />
             </TouchableOpacity>
 
         </SafeAreaView>

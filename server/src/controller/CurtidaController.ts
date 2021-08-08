@@ -17,10 +17,8 @@ class CurtidaController {
     async create(request: Request, response: Response) {
         const repository = getCustomRepository(CurtidaRepository);
 
-        const { idReceita, idUsuario } = request.body as {
-            idReceita: number,
-            idUsuario: number
-        };
+        const idUsuario: number = request.idUsuario as number;
+        const { idReceita } = request.body as { idReceita: number };
 
         try {
             const usuarioController = new UsuarioController();
@@ -49,19 +47,28 @@ class CurtidaController {
     async findTopCurtidas(request: Request, response: Response){
         const repository = getCustomRepository(CurtidaRepository);
 
-        const { id } = request.params;
-        const usuarioId = parseInt(id);
+        const idUsuario: number = request.idUsuario as number;
 
-        const avaliacoes = await repository.findTopCurtidas(usuarioId);
+        const curtidas = await repository.findTopCurtidas(idUsuario);
 
-        return response.status(200).json(avaliacoes);
+        return response.status(200).json(curtidas);
     }
 
     async remove(request: Request, response: Response) {
         const repository = getCustomRepository(CurtidaRepository);
+
+        const idUsuario: number = request.idUsuario as number;
         const { id } = request.params;
 
-        const curtida = await repository.findOneOrFail({ id: parseInt(id) });
+        const usuarioController = new UsuarioController();
+
+        const usuario: Usuario = await usuarioController.find(idUsuario);
+        const curtida: Curtida = await repository.findOneOrFail({
+            where: {
+                id: parseInt(id),
+                usuario
+            }
+        });
         curtida.remove();
         curtida.save();
 

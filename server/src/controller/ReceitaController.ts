@@ -43,6 +43,9 @@ class ReceitaController {
         const repository = getCustomRepository(ReceitaRepository);
 
         const receitas = await repository.find({
+            where: {
+                ativa: true
+            },
             relations: [ 'usuario', 'midias', 'categorias' ],
             order: { dataCadastro: 'ASC' }
         });
@@ -66,8 +69,8 @@ class ReceitaController {
     }
 
     async create(request: Request, response: Response) {
+        const idUsuario: number = request.idUsuario as number;
         const {
-            idUsuario,
             nome,
             tipo,
             categorias,
@@ -76,7 +79,6 @@ class ReceitaController {
             descricao,
             ingredientes
         } = request.body as {
-            idUsuario: string,
             nome: string,
             tipo: string,
             categorias: string[],
@@ -97,7 +99,7 @@ class ReceitaController {
         const usuarioController = new UsuarioController();
         const unidadeController = new UnidadeController();
 
-        const usuario: Usuario = await usuarioController.find(parseInt(idUsuario));
+        const usuario: Usuario = await usuarioController.find(idUsuario);
         const receita: Receita = new Receita(nome, descricao, parseInt(tempoPreparo), parseInt(porcoes), <Tipo> tipo.trim().toUpperCase(), usuario);
 
         await receita.save();
@@ -169,10 +171,9 @@ class ReceitaController {
     async countTypeByUserId(request: Request, response: Response) {
         const repository = getCustomRepository(ReceitaRepository);
 
-        const { id } = request.params;
-        const usuarioId = parseInt(id);
+        const idUsuario: number = request.idUsuario as number;
 
-        const tipos = await repository.countTypeByUserId(usuarioId);
+        const tipos = await repository.countTypeByUserId(idUsuario);
 
         return systrace(200, response, tipos);
     }
@@ -276,7 +277,7 @@ class ReceitaController {
     }
 
     async findHome(request: Request, response: Response) {
-        const { id } = request.params;
+        const idUsuario: number = request.idUsuario as number;
 
         const curtidaController = new CurtidaController();
         const seguidorController = new SeguidorController();
@@ -292,8 +293,8 @@ class ReceitaController {
                 listCurtidas.push(receita);
             }
 
-            if (id && id !== '0') {
-                const seguidores = await seguidorController.findPorSeguidos(parseInt(id));
+            if (idUsuario && idUsuario !== 0) {
+                const seguidores = await seguidorController.findPorSeguidos(idUsuario);
                 await Promise.all(seguidores.map(async id => {
                     const receita = await ReceitaController.buildReceita(id);
                     listSeguidores.push(receita);
@@ -303,7 +304,6 @@ class ReceitaController {
             const sortedListSeguidores = listSeguidores.sort((a, b) => {
                 const n = b.curtidas - a.curtidas;
                 if (n !== 0) return n;
-
                 return b.comentarios - a.comentarios;
             });
 
@@ -327,7 +327,7 @@ class ReceitaController {
 
             const list = await repository.find({
                 select: [ 'id' ],
-                where: [ { usuario } ],
+                where: [ { usuario, ativa: true } ],
                 order: { dataCadastro: 'DESC' }
             });
             for (let key in list) {
@@ -344,9 +344,8 @@ class ReceitaController {
     }
 
     async findByCategorias(request: Request, response: Response) {
-        const { id, categoria } = request.query as { id: string, categoria: string };
-
-        const idUsuario: number = parseInt(id);
+        const idUsuario: number = request.idUsuario as number;
+        const { categoria } = request.query as { categoria: string };
 
         try {
             const categoriaController = new CategoriaController();
@@ -370,9 +369,18 @@ class ReceitaController {
 
     async remove(request: Request, response: Response) {
         const repository = getCustomRepository(ReceitaRepository);
+
+        const idUsuario: number = request.idUsuario as number;
         const { id } = request.params;
 
-        const receita = await repository.findOneOrFail({ id: parseInt(id) });
+        const usuarioController = new UsuarioController();
+
+        const usuario = await usuarioController.find(idUsuario);
+        const receita = await repository.findOneOrFail({
+            where: {
+                id: parseInt(id), usuario
+            }
+        });
         receita.ativa = false;
         receita.save();
 
@@ -440,6 +448,26 @@ class ReceitaController {
         const repository = getCustomRepository(ReceitaRepository);
 
         const receita: Receita = await repository.findOneOrFail({ id });
+
+        if (!receita) {
+            throw 'Receita não encontrada';
+        }
+
+        return receita;
+    }
+
+    async findByIdAndUser(id: number, idUsuario: number): Promise<Receita> {
+        const repository = getCustomRepository(ReceitaRepository);
+
+        const usuarioController = new UsuarioController();
+
+        const usuario: Usuario = await usuarioController.find(idUsuario);
+        const receita: Receita = await repository.findOneOrFail({
+            where: {
+                id,
+                usuario
+            }
+        });
 
         if (!receita) {
             throw 'Receita não encontrada';
