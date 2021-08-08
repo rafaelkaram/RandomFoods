@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { Alert,StyleSheet, View, Text } from 'react-native';
 import { DrawerContentScrollView ,DrawerItemList,DrawerItem} from '@react-navigation/drawer';
 import AuthContext from '../contexts/auth'
 import { MaterialIcons } from '@expo/vector-icons';
@@ -24,7 +24,8 @@ function DrawerMenu(props: any) {
         }
                 onPress={() => {
                     handleSignOut()
-                    alert('Você foi desconectado')
+                    Alert.alert('Desconectado','\nVocê foi desconectado')
+                    
                 }}
             />
         </DrawerContentScrollView>
