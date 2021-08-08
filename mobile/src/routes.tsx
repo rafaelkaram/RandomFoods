@@ -91,6 +91,7 @@ const UserDrawerStack = () => {
             <AppStack.Screen name={screens.painel} component={Painel} />
             <AppStack.Screen name={screens.seguidores} component={Seguidores} />
             <AppStack.Screen name={screens.receita} component={Receita} />
+            <AppStack.Screen name={screens.perfil} component={Perfil} />
             <AppStack.Screen name={screens.receitaCategoria} component={ReceitaCategoria} />
         </AppStack.Navigator>
     )
