@@ -13,21 +13,13 @@
   - Incluir a variável `PRD_DB` com os nome do banco de produção.
   - Incluir a variável `HML_DB` com os nome do banco de homologação.
   - Incluir a variável `DEV_DB` com os nome do banco de desenvolvimento.
-  - Incluir a variável `LOCAL_IP` com o número de IP local.
   - Incluir a variável `PORT` com o número da porta a se usar (Padrão é 3333).
+  - Incluir a variável `JWT_SECRET` com um text para assinatura do token do JWT.
+  - Incluir a variável `JWT_ADMIN_SECRET` com um text para assinatura do token do JWT para ADMINS.
 ### Inciar Servidor
   - `npm run dev` ou `yarn dev` (Inicia em modo de desenvolvimento).
   - `npm run prod` ou `yarn prod` (Inicia em modo de produção).
 
-## WEB
-### Iniciar versão Web
-  - `npm start` ou `yarn start`
-
 ## MOBILE
 ### Iniciar versão Mobile
-  - `npm start` ou `yarn start` (Inicia em modo de desenvolvimento).
-  - `npm run dev` (Inicia em modo de desenvolvimento).
-
-### Iniciar Servidor + Mobile
-  - `npm run dev` ou `yarn yDev` (Inicia servidor e mobile em modo de desenvolvimento).
-  - `npm run prod` ou `yarn yProd` (Inicia servidor e mobile em modo de produção).
+  - `npm start` ou `yarn start` (Inicia aplicação mobile).
