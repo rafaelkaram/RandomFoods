@@ -6,11 +6,11 @@ import AuthContext from '../contexts/auth';
 
 import Category from '../components/Category';
 
-import { IReceitaSimples, IUsuario } from '../constants/interfaces';
 import styles from '../styles/components/RecipeList';
 import globalStyles from '../styles/Global';
-import { WIDTH } from '../constants/dimensions';
 
+import { IReceitaSimples } from '../constants/interfaces';
+import { WIDTH } from '../constants/dimensions';
 
 const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navegar: Function, idUser?: number, deletarReceita?: Function, limitar?: boolean }) => {
     const titulo = props.titulo;
@@ -29,7 +29,6 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
         }
     }
 
-
     return (
         <View>
             <Text style={[globalStyles.subTitleText, globalStyles.recipeListSubTitle]}>{titulo}</Text>
@@ -47,9 +46,7 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                                         style={styles.image}
                                     />
                                 </View>
-
                                 <View style={{ width: WIDTH - 140 }}>
-
                                     <View style={styles.textContainer}>
                                         <View>
                                             <View style={styles.nameContainer}>
@@ -73,9 +70,7 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                                             }
 
                                         </View>
-
                                     </View>
-
                                     <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
                                         {
                                             item.categorias.length > 0 ?
@@ -92,9 +87,9 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                                     </View>
                                 </View>
                             </TouchableOpacity>
-                        )
+                        );
                 })}
-                { limitar &&
+                { (limitar && qtdeMostrados < receitas.length) &&
                     <TouchableOpacity onPress={() => setQtdeMostrados(qtde => qtde + 5)}>
                         <Text>mostrar mais...</Text>
                     </TouchableOpacity>
