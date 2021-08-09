@@ -280,33 +280,7 @@ const Receita = ({ route }: { route: any }) => {
                     {user ?
                         <>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <TouchableOpacity onPress={() => curtidas.length > 0 ? setModalVisible(true) : null} style={styles.curtidasContainer}>
-                                    <Text style={styles.numCurtida}>{numCurtida == 1 ? numCurtida + " curtida " : numCurtida + " curtidas "}</Text>
-                                </TouchableOpacity>
-                                <Modal
-                                    animationType='none'
-                                    transparent={true}
-                                    visible={modalVisible}
-                                    onRequestClose={() => { setModalVisible(!modalVisible); }}
-                                >
-                                    <BlurView intensity={200} style={[StyleSheet.absoluteFill, styles.nonBlurredContent]}>
-                                        <TouchableOpacity
-                                            style={globalStyles.modalX}
-                                            onPress={() => setModalVisible(!modalVisible)}
-                                        >
-                                            <Text style={{ ...globalStyles.boldText, alignSelf: 'center', color: 'white' }}>X</Text>
-                                        </TouchableOpacity>
-                                        <View style={{ ...globalStyles.modalContainer }}>
-                                            <ScrollView>
-                                                <TouchableOpacity
-                                                    onPress={() => setModalVisible(!modalVisible)}
-                                                >
-                                                    <CurtidasModal curtidas={curtidas} navigate={handleNavigateToPerfilCurtida} />
-                                                </TouchableOpacity>
-                                            </ScrollView>
-                                        </View>
-                                    </BlurView>
-                                </Modal>
+                                <CurtidasModal curtidas={curtidas} navigate={handleNavigateToPerfilCurtida} logado={true} />
                                 <View style={styles.buttonActions}>
                                     <View style={styles.curtidas}>
                                         <TouchableOpacity style={isCurtida ? styles.buttonFavTrue : styles.buttonFavFalse}
@@ -329,33 +303,7 @@ const Receita = ({ route }: { route: any }) => {
                         </>
                         :
                         <>
-                            <TouchableOpacity onPress={() => curtidas.length > 0 ? setModalVisible(true) : null} style={[styles.curtidasContainer, { maxWidth: WIDTH - 250 }]}>
-                                <Text style={[styles.numCurtida, { alignSelf: 'center' }]}>{numCurtida == 1 ? numCurtida + " curtida " : numCurtida + " curtidas "}</Text>
-                            </TouchableOpacity>
-                            <Modal
-                                animationType='none'
-                                transparent={true}
-                                visible={modalVisible}
-                                onRequestClose={() => { setModalVisible(!modalVisible); }}
-                            >
-                                <BlurView intensity={200} style={[StyleSheet.absoluteFill, styles.nonBlurredContent]}>
-                                    <TouchableOpacity
-                                        style={[globalStyles.modalX, { alignSelf: 'flex-end' }]}
-                                        onPress={() => setModalVisible(!modalVisible)}
-                                    >
-                                        <Text style={{ ...globalStyles.boldText, alignSelf: 'center', color: 'white' }}>X</Text>
-                                    </TouchableOpacity>
-                                    <View style={{ ...globalStyles.modalContainer }}>
-                                        <ScrollView>
-                                            <TouchableOpacity
-                                                onPress={() => setModalVisible(!modalVisible)}
-                                            >
-                                                <CurtidasModal curtidas={curtidas} navigate={handleNavigateToPerfilCurtida} />
-                                            </TouchableOpacity>
-                                        </ScrollView>
-                                    </View>
-                                </BlurView>
-                            </Modal>
+                            <CurtidasModal curtidas={curtidas} navigate={handleNavigateToPerfilCurtida} logado={false} />
                             <TouchableOpacity style={styles.textLogin} onPress={() => handleNavigateToLogin()}>
                                 <Text style={{ ...globalStyles.boldText, color: 'white', fontSize: 16, textAlign: 'center' }}>Gostou da Receita?</Text>
                                 <Text style={{ ...globalStyles.boldText, color: 'white', fontSize: 16, textAlign: 'center' }}>Faça seu login, curta e comente!</Text>

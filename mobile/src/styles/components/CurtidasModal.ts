@@ -21,8 +21,28 @@ export default StyleSheet.create({
         marginTop: 5,
         fontSize: 14,
     },
-  
+
     containerCurtidas: {
         justifyContent: "space-between",
+    },
+
+    nonBlurredContent: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    numCurtida: {
+        fontFamily: 'Ubuntu_700Bold',
+        color: colors.primary,
+        fontSize: 14,
+    },
+
+    curtidasContainer: {
+        backgroundColor: 'white',
+        justifyContent: "center",
+        borderRadius: 10,
+        marginLeft: 12,
+        marginBottom: 10,
+        marginTop: 10,
+        padding: 5
     },
 });
