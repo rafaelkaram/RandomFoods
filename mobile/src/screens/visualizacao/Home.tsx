@@ -123,7 +123,7 @@ const Home = () => {
             if (response.data.listSeguidores.length > 0) setReceitasseguidor(response.data.listSeguidores);
             setLoad(true);
         })
-    }, [refreshing, user]);
+    }, [refreshing, headers]);
 
     const handleNavigateToRecipe = (id: number) => {
         navigation.navigate(screens.receita, { id: id });
