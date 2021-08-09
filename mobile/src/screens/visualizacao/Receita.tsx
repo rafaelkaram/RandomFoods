@@ -115,7 +115,7 @@ const Receita = ({ route }: { route: any }) => {
                 }).catch(error => {
                     Alert.alert(
                         'Ocorreu um erro ao processar sua solicitação.',
-                        `${ error }`,
+                        `${error}`,
                         [
                             { text: 'OK' }
                         ]
@@ -161,10 +161,10 @@ const Receita = ({ route }: { route: any }) => {
                 setComentarios(response.data);
                 setLoadComentario(false);
             }).catch(error => {
-                console.log({ error, pao: 'oi'});
+                console.log({ error, pao: 'oi' });
                 Alert.alert(
                     'Resgistro de comentário',
-                    `${ error }`,
+                    `${error}`,
                     [
                         { text: 'OK' }
                     ]
@@ -280,7 +280,7 @@ const Receita = ({ route }: { route: any }) => {
                     {user ?
                         <>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.curtidasContainer}>
+                                <TouchableOpacity onPress={() => curtidas.length > 0 ? setModalVisible(true) : null} style={styles.curtidasContainer}>
                                     <Text style={styles.numCurtida}>{numCurtida == 1 ? numCurtida + " curtida " : numCurtida + " curtidas "}</Text>
                                 </TouchableOpacity>
                                 <Modal
@@ -296,7 +296,7 @@ const Receita = ({ route }: { route: any }) => {
                                         >
                                             <Text style={{ ...globalStyles.boldText, alignSelf: 'center', color: 'white' }}>X</Text>
                                         </TouchableOpacity>
-                                        <View style={{ ...globalStyles.modalContainer, width: WIDTH * 0.8, height: 400 }}>
+                                        <View style={{ ...globalStyles.modalContainer }}>
                                             <ScrollView>
                                                 <TouchableOpacity
                                                     onPress={() => setModalVisible(!modalVisible)}
@@ -328,10 +328,39 @@ const Receita = ({ route }: { route: any }) => {
                             </View>
                         </>
                         :
-                        <TouchableOpacity style={styles.textLogin} onPress={() => handleNavigateToLogin()}>
-                            <Text style={{ ...globalStyles.boldText, color: 'white', fontSize: 16, textAlign: 'center' }}>Gostou da Receita?</Text>
-                            <Text style={{ ...globalStyles.boldText, color: 'white', fontSize: 16, textAlign: 'center' }}>Faça seu login, curta e comente!</Text>
-                        </TouchableOpacity>
+                        <>
+                            <TouchableOpacity onPress={() => curtidas.length > 0 ? setModalVisible(true) : null} style={[styles.curtidasContainer, { maxWidth: WIDTH - 250 }]}>
+                                <Text style={[styles.numCurtida, { alignSelf: 'center' }]}>{numCurtida == 1 ? numCurtida + " curtida " : numCurtida + " curtidas "}</Text>
+                            </TouchableOpacity>
+                            <Modal
+                                animationType='none'
+                                transparent={true}
+                                visible={modalVisible}
+                                onRequestClose={() => { setModalVisible(!modalVisible); }}
+                            >
+                                <BlurView intensity={200} style={[StyleSheet.absoluteFill, styles.nonBlurredContent]}>
+                                    <TouchableOpacity
+                                        style={[globalStyles.modalX, { alignSelf: 'flex-end' }]}
+                                        onPress={() => setModalVisible(!modalVisible)}
+                                    >
+                                        <Text style={{ ...globalStyles.boldText, alignSelf: 'center', color: 'white' }}>X</Text>
+                                    </TouchableOpacity>
+                                    <View style={{ ...globalStyles.modalContainer }}>
+                                        <ScrollView>
+                                            <TouchableOpacity
+                                                onPress={() => setModalVisible(!modalVisible)}
+                                            >
+                                                <CurtidasModal curtidas={curtidas} navigate={handleNavigateToPerfilCurtida} />
+                                            </TouchableOpacity>
+                                        </ScrollView>
+                                    </View>
+                                </BlurView>
+                            </Modal>
+                            <TouchableOpacity style={styles.textLogin} onPress={() => handleNavigateToLogin()}>
+                                <Text style={{ ...globalStyles.boldText, color: 'white', fontSize: 16, textAlign: 'center' }}>Gostou da Receita?</Text>
+                                <Text style={{ ...globalStyles.boldText, color: 'white', fontSize: 16, textAlign: 'center' }}>Faça seu login, curta e comente!</Text>
+                            </TouchableOpacity>
+                        </>
                     }
                     {
                         loadComentario ?
