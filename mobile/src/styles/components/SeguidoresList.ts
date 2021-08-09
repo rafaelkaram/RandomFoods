@@ -17,12 +17,12 @@ export default StyleSheet.create({
     seguidorName: {
         marginLeft: 15,
     },
-    seguidorUsername:{
+    seguidorUsername: {
         marginLeft: 15,
-        marginTop:5,
+        marginTop: 5,
         fontSize: 14,
     },
-    botaoUnfollow:{
+    botaoUnfollow: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -35,18 +35,17 @@ export default StyleSheet.create({
     },
 
 
-    container:{
-        flex:1,
-       flexDirection:"row" ,
-       justifyContent:"space-between",
+    container: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "space-between",
     },
-    inputPesquisa:{
+    inputPesquisa: {
         borderWidth: 1,
         paddingLeft: 5,
         borderRadius: 10,
         borderColor: 'gray',
         marginBottom: -20,
-    }
-
+    },
 
 });

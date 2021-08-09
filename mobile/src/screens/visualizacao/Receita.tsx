@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react'
-import { Alert, ScrollView, Text, TouchableOpacity, View, RefreshControl } from 'react-native';
-import { Rating, Avatar, Icon } from 'react-native-elements';
+import { Alert, ScrollView, Text, TouchableOpacity, View, RefreshControl, Modal, StyleSheet } from 'react-native';
+import { Avatar, Icon } from 'react-native-elements';
+import { BlurView } from 'expo-blur';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, TabActions } from '@react-navigation/native';
 import { Entypo, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+import { WIDTH } from '../../constants/dimensions';
 import moment from 'moment';
 
 import 'moment/min/locales';
@@ -28,6 +30,7 @@ import Comment from '../../components/Comment';
 import Category from '../../components/Category';
 import CarouselItems from '../../components/Carousel';
 import InputComment from '../../components/InputComment';
+import CurtidasModal from '../../components/CurtidasModal'
 
 moment.locale('pt-br');
 
@@ -44,7 +47,7 @@ const Receita = ({ route }: { route: any }) => {
     const [refreshing, setRefreshing] = useState(false);
     const [idComentarioPai, setIdComentarioPai] = useState<number | null>(null);
     const [numCurtida, setNumCurtida] = useState(0);
-
+    const [modalVisible, setModalVisible] = useState(false)
     const [newC, setNewC] = useState<boolean>(false);
     const [isCurtida, setIsCurtida] = useState<boolean>(false);
     const [loadComentario, setLoadComentario] = useState<boolean>(false);
@@ -130,6 +133,20 @@ const Receita = ({ route }: { route: any }) => {
         } else {
             navigation.navigate(screens.perfil, { id: id });
         }
+    }
+
+    const handleNavigateToPerfilCurtida = (id: number | undefined) => {
+        setModalVisible(false);
+
+        if (id == user?.id) {
+            const jumpToAction = TabActions.jumpTo('User');
+            navigation.dispatch(jumpToAction);
+        } else {
+            navigation.navigate(screens.perfil, { id: id });
+        }
+
+
+
     }
 
     const handleNavigateToLogin = () => {
@@ -259,27 +276,57 @@ const Receita = ({ route }: { route: any }) => {
                             )
                         })}
                     </View>
-                    {user ?
-                        <View style={styles.buttonActions}>
-                            <View style={styles.curtidas}>
-                            <Text style={styles.numCurtida}>{numCurtida==1? numCurtida+" curtida ": numCurtida+" curtidas "}</Text>
-                                    <TouchableOpacity style={isCurtida ? styles.buttonFavTrue : styles.buttonFavFalse}
-                                        onPress={() => { curtirReceita() }}
-                                    >
 
-                                    <AntDesign name='heart' size={20} color='white' />
+                    {user ?
+                        <>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.curtidasContainer}>
+                                    <Text style={styles.numCurtida}>{numCurtida == 1 ? numCurtida + " curtida " : numCurtida + " curtidas "}</Text>
                                 </TouchableOpacity>
+                                <Modal
+                                    animationType='none'
+                                    transparent={true}
+                                    visible={modalVisible}
+                                    onRequestClose={() => { setModalVisible(!modalVisible); }}
+                                >
+                                    <BlurView intensity={200} style={[StyleSheet.absoluteFill, styles.nonBlurredContent]}>
+                                        <TouchableOpacity
+                                            style={globalStyles.modalX}
+                                            onPress={() => setModalVisible(!modalVisible)}
+                                        >
+                                            <Text style={{ ...globalStyles.boldText, alignSelf: 'center', color: 'white' }}>X</Text>
+                                        </TouchableOpacity>
+                                        <View style={{ ...globalStyles.modalContainer, width: WIDTH * 0.8, height: 400 }}>
+                                            <ScrollView>
+                                                <TouchableOpacity
+                                                    onPress={() => setModalVisible(!modalVisible)}
+                                                >
+                                                    <CurtidasModal curtidas={curtidas} navigate={handleNavigateToPerfilCurtida} />
+                                                </TouchableOpacity>
+                                            </ScrollView>
+                                        </View>
+                                    </BlurView>
+                                </Modal>
+                                <View style={styles.buttonActions}>
+                                    <View style={styles.curtidas}>
+                                        <TouchableOpacity style={isCurtida ? styles.buttonFavTrue : styles.buttonFavFalse}
+                                            onPress={() => { curtirReceita() }}
+                                        >
+                                            <AntDesign name='heart' size={20} color='white' />
+                                        </TouchableOpacity>
+                                    </View>
+                                    <TouchableOpacity style={styles.buttonComentar}
+                                        onPress={() => {
+                                            setIdComentarioPai(null);
+                                            setNewC(!newC)
+                                        }}
+                                    >
+                                        <Text style={{ ...globalStyles.boldText, color: 'white', fontSize: 16 }}>Comentar</Text>
+                                        <MaterialCommunityIcons name='comment' size={20} color='white' style={{ marginLeft: 10 }} />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                            <TouchableOpacity style={styles.buttonComentar}
-                                onPress={() => {
-                                    setIdComentarioPai(null);
-                                    setNewC(!newC)
-                                }}
-                            >
-                                <Text style={{ ...globalStyles.boldText, color: 'white', fontSize: 16 }}>Comentar</Text>
-                                <MaterialCommunityIcons name='comment' size={20} color='white' style={{ marginLeft: 10 }} />
-                            </TouchableOpacity>
-                        </View>
+                        </>
                         :
                         <TouchableOpacity style={styles.textLogin} onPress={() => handleNavigateToLogin()}>
                             <Text style={{ ...globalStyles.boldText, color: 'white', fontSize: 16, textAlign: 'center' }}>Gostou da Receita?</Text>
