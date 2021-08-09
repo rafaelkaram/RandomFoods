@@ -144,26 +144,11 @@ const Home = () => {
                         refreshing={refreshing}
                         onRefresh={onRefresh}
                     />}>
-                {/* <Button
-                    title="Pesquisar Receitas"
-                    onPress={handleNavigateToSearchRecipe}
-                /> */}
-
-                {/* <View style={{ marginTop: 100 }}>
-                    <Text>Your expo push token: {expoPushToken}</Text>
-                    <Button title="Notificação Local" onPress={async () => { await schedulePushNotification() }} />
-                    <View style={{ margin: 10 }}></View>
-                    <Button title="Push Notification" onPress={() => sendPushNotification()} />
-                    <View style={{ margin: 10 }}></View>
-                </View> */}
-
                 <View>
-
-                    <RecipeList titulo='Mais Curtidas' receitas={receitas} navegar={(id: number) => handleNavigateToRecipe(id)} />
+                    <RecipeList titulo='Mais Curtidas' receitas={receitas} navegar={(id: number) => handleNavigateToRecipe(id)} limitar={ true } />
                     {receitasSeguidor.length > 0 &&
-                        <RecipeList titulo='De quem você segue' receitas={receitasSeguidor} navegar={(id: number) => handleNavigateToRecipe(id)} />
+                        <RecipeList titulo='De quem você segue' receitas={receitasSeguidor} navegar={(id: number) => handleNavigateToRecipe(id)} limitar={ true } />
                     }
-
                 </View>
             </ScrollView>
         </SafeAreaView>

@@ -81,16 +81,6 @@ const Receita = ({ route }: { route: any }) => {
 
     }, [curtidas]);
 
-    // useEffect(() => {
-    //     {curtidas.map((curtida, index) => {
-    //         setNumCurtida(numCurtida+1)
-    // })}
-
-
-    // }, [numCurtida]);
-
-
-
     const curtirReceita = () => {
         if (!isCurtida) {
             api.post('cadastro/curtida', { idReceita: recipe?.id }, { headers })
