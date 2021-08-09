@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Text, TouchableOpacity, View, Image } from 'react-native';
 import { Feather, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-import colors from "../../src/constants/colors";
 import AuthContext from '../contexts/auth';
 
 import Category from '../components/Category';
@@ -11,6 +10,7 @@ import globalStyles from '../styles/Global';
 
 import { IReceitaSimples } from '../constants/interfaces';
 import { WIDTH } from '../constants/dimensions';
+import colors from '../constants/colors';
 
 const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navegar: Function, idUser?: number, deletarReceita?: Function, limitar?: boolean }) => {
     const titulo = props.titulo;
@@ -38,8 +38,8 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                         return (
                             <TouchableOpacity
                                 onPress={() => navegar(item.id)}
-                                style={styles.main} key={item.id}>
-
+                                style={styles.main} key={item.id}
+                            >
                                 <View>
                                     <Image
                                         source={{ uri: item.foto }}
@@ -58,14 +58,14 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                                                 <Text style={{ margin: 5 }}>{item.curtidas}</Text>
                                                 <MaterialCommunityIcons style={{ margin: 5 }} name='comment' size={20} color='gray' />
                                                 <Text style={{ margin: 5 }}>{item.comentarios}</Text>
-                                                <Feather name="clock" style={{ margin: 5 }} size={20} color="black" />
+                                                <Feather name='clock' style={{ margin: 5 }} size={20} color='black' />
                                                 <Text style={{ margin: 5 }}>{item.tempoPreparo}</Text>
                                             </View>
                                         </View>
                                         <View>
                                             {validar && deletarReceita &&
                                                 <TouchableOpacity onPress={() => deletarReceita(item.id, item.receita)}>
-                                                    <AntDesign name="close" size={24} color="red" />
+                                                    <AntDesign name='close' size={24} color='red' />
                                                 </TouchableOpacity>
                                             }
 
@@ -73,16 +73,12 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                                     </View>
                                     <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
                                         {
-                                            item.categorias.length > 0 ?
-
+                                            item.categorias.length > 0 &&
                                                 item.categorias.map((categoria, index) => {
-
                                                     return (
-
                                                         <Category key={index} nome={categoria} />
-
-                                                    )
-                                                }) : null
+                                                    );
+                                                })
                                         }
                                     </View>
                                 </View>
