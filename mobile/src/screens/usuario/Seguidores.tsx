@@ -71,6 +71,7 @@ const Seguidores = ({ route }: { route: any }) => {
                     onPress: () => {
                         api.delete(`remove/seguidor/${id}`, { headers })
                             .then(response => {
+                                onRefresh();
                                 setSeguindo(false);
                             }).catch(error => {
                                 Alert.alert(
