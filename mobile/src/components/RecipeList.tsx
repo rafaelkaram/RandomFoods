@@ -88,7 +88,7 @@ const RecipeList = (props: { titulo: string, receitas: IReceitaSimples[], navega
                 { (limitar && qtdeMostrados < receitas.length) &&
                     <TouchableOpacity
                         onPress={() => setQtdeMostrados(qtde => qtde + 5)}
-                        style={ globalStyles.filterBox }
+                        style={{ ...globalStyles.filterBox, backgroundColor: '#FFF' }}
                     >
                         <Text style={ globalStyles.regularText }>mostrar mais...</Text>
                     </TouchableOpacity>
