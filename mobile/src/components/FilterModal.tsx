@@ -35,8 +35,8 @@ const FilterModal = (props: {
     const setModalFilter = props.setModalFilter;
     const setTempoDePreparo = props.setTempoDePreparo;
 
-    function handleTempo (time: number){
-        
+    const handleTempo = (time: number) => {
+
     }
 
     return (

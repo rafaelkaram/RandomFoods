@@ -89,7 +89,7 @@ const Recipe = ({ route }: { route: any }) => {
         return <Loading />
     }
 
-    function orderArray(value: any) {
+    const orderArray = (value: any) => {
         const newArrayParciais = matchesParciais
         const newArrayPerfeitas = matchesPerfeitos
         switch (value) {

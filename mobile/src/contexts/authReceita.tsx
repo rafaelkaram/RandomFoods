@@ -18,7 +18,7 @@ export const AuthProviderReceita: React.FC = ({ children }) => {
     const [stepsContext, setStepsContext] = useState<IPassoReceita[]>([]);
 
     useEffect(() => {
-        async function loadStoragedData() {
+        const loadStoragedData = async () => {
 
             // Dados Gerais
             const storageNomeReceita = await AsyncStorage.getItem('nomeReceita');

@@ -103,9 +103,10 @@ export default StyleSheet.create({
     },
 
     actions: {
-        borderRadius: 5,
+        borderRadius: 30,
         marginHorizontal: 10,
         paddingVertical: 10,
+        paddingHorizontal: 5,
         width: 60,
         alignItems: 'center'
     },

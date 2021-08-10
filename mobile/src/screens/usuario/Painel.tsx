@@ -66,7 +66,7 @@ const Painel = () => {
         return { name: item.tipo }
     });
 
-    const totalRecipes: number = pieTypeData.reduce(function (a, b) { return a + b.y }, 0);
+    const totalRecipes: number = pieTypeData.reduce((a, b) => { return a + b.y }, 0);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);

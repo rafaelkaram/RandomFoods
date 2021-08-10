@@ -83,7 +83,7 @@ const CarouselItems = ({ midias }: { midias: IMidia[] }) => {
         )
     }
 
-    function videoStatus(ind: number) {
+    const videoStatus = (ind: number) => {
         if (midias[ind].tipo === 'VIDEO') {
             setStatus({ isPlaying: true })
             video.current?.playAsync()

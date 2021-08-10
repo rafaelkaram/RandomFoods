@@ -20,7 +20,7 @@ export const AuthProviderFilter: React.FC = ({ children }) => {
     const [tiposContext, setTiposContext] = useState<string[]>([])
 
     useEffect(() => {
-        async function loadStoragedData() {
+        const loadStoragedData = async () => {
 
             const storageDerivadoLeite = await AsyncStorage.getItem('derivadoLeite')
             const storageGluten = await AsyncStorage.getItem('gluten')

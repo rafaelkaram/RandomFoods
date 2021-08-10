@@ -25,8 +25,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     }
 
     useEffect(() => {
-        async function loadStoragedData() {
-
+        const loadStoragedData = async () => {
             const storagedUser = await AsyncStorage.getItem('user');
 
             if (storagedUser) {

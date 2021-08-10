@@ -6,11 +6,11 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 
 
-function DrawerMenu(props: any) {
+const DrawerMenu = (props: any) => {
     const { signOut } = useContext(AuthContext)
 
-    function handleSignOut() {
-        signOut()
+    const handleSignOut = () => {
+        signOut();
     }
     return (
         <DrawerContentScrollView {...props}>
@@ -25,7 +25,7 @@ function DrawerMenu(props: any) {
                 onPress={() => {
                     handleSignOut()
                     Alert.alert('Desconectado','\nVocê foi desconectado')
-                    
+
                 }}
             />
         </DrawerContentScrollView>

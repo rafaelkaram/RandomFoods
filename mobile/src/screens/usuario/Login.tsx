@@ -74,16 +74,15 @@ const Login = () => {
     }, []);
 
     useEffect(() => {
-        if (usuario) {
-            signIn(usuario)
-        }
+        if (usuario)
+            signIn(usuario);
     }, [usuario]);
 
     const handleNavigateCreateUser = () => {
         navigation.navigate(screens.cadastroUsuario);
     }
 
-    async function handleLogin(login: string, senha: string) {
+    const handleLogin = async (login: string, senha: string) => {
         const params = {
             login,
             senha
