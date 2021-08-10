@@ -3,12 +3,11 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import moment from 'moment-timezone';
 
-//import 'moment/min/locales';
-
-import SubComment from './SubComment';
 import { IComentarioProps } from '../constants/interfaces';
 import styles from '../styles/components/Comment';
 import globalStyles from '../styles/Global';
+
+import SubComment from './SubComment';
 
 const Comment = ({ comentario, lista, isLogado, setNew, setIdPai } : IComentarioProps) => {
     moment.tz.setDefault("America/Sao_paulo");
@@ -25,9 +24,6 @@ const Comment = ({ comentario, lista, isLogado, setNew, setIdPai } : IComentario
                 </View>
 
                 <Text style={ globalStyles.regularText }>{ comentario.conteudo }</Text>
-                {/* <View style={ styles.commentHour }>
-                    <Text>{ moment(comentario.data).format('HH:mm') }</Text>
-                </View> */}
                 { isLogado &&
                     <TouchableOpacity style={ styles.commentButton }
                         onPress={() => {

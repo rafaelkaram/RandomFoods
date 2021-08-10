@@ -62,12 +62,12 @@ const Receita = ({ route }: { route: any }) => {
                 setMidias(response.data?.midias);
                 setCurtidas(response.data?.curtidas);
             }
-            );
+        );
         api.get(`busca/comentario-receita/${idRecipe}`)
             .then(response => {
                 setComentarios(response.data);
             }
-            );
+        );
 
     }, [refreshing, idRecipe, isCurtida]);
 
@@ -77,7 +77,6 @@ const Receita = ({ route }: { route: any }) => {
             setIsCurtida(true);
         }
         setNumCurtida(curtidas.length)
-
 
     }, [curtidas]);
 
@@ -96,7 +95,7 @@ const Receita = ({ route }: { route: any }) => {
                     );
                     setIsCurtida(false);
                 }
-                );
+            );
         } else {
             const curtida: ICurtidaSimples[] = curtidas.filter(curtida2 => (curtida2.usuario.id === user?.id));
             api.delete(`remove/curtida/${curtida[0].id}`, { headers })
@@ -112,7 +111,7 @@ const Receita = ({ route }: { route: any }) => {
                     );
                     setIsCurtida(true);
                 }
-                );
+            );
         }
     }
 
@@ -134,9 +133,6 @@ const Receita = ({ route }: { route: any }) => {
         } else {
             navigation.navigate(screens.perfil, { id: id });
         }
-
-
-
     }
 
     const handleNavigateToLogin = () => {
@@ -300,25 +296,24 @@ const Receita = ({ route }: { route: any }) => {
                             </TouchableOpacity>
                         </>
                     }
-                    {
-                        loadComentario ?
-                            <Loading /> :
-                            <View>
-                                {
-                                    comentarios.filter(comentario2 => (!comentario2.comentarioPai)).map(comentario => {
-                                        return (
-                                            <Comment
-                                                key={comentario.id}
-                                                comentario={comentario}
-                                                lista={comentarios}
-                                                isLogado={user ? true : false}
-                                                setNew={setNew}
-                                                setIdPai={setIdComentarioPai}
-                                            />
-                                        )
-                                    })
-                                }
-                            </View>
+                    { loadComentario ?
+                        <Loading /> :
+                        <View>
+                            {
+                                comentarios.filter(comentario2 => (!comentario2.comentarioPai)).map(comentario => {
+                                    return (
+                                        <Comment
+                                            key={comentario.id}
+                                            comentario={comentario}
+                                            lista={comentarios}
+                                            isLogado={user ? true : false}
+                                            setNew={setNew}
+                                            setIdPai={setIdComentarioPai}
+                                        />
+                                    )
+                                })
+                            }
+                        </View>
                     }
                     {
                         (newC) &&
