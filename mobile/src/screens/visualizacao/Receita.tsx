@@ -46,8 +46,6 @@ const Receita = ({ route }: { route: any }) => {
     const [curtidas, setCurtidas] = useState<ICurtidaSimples[]>([]);
     const [refreshing, setRefreshing] = useState(false);
     const [idComentarioPai, setIdComentarioPai] = useState<number | null>(null);
-    const [numCurtida, setNumCurtida] = useState(0);
-    const [modalVisible, setModalVisible] = useState(false)
     const [newC, setNewC] = useState<boolean>(false);
     const [isCurtida, setIsCurtida] = useState<boolean>(false);
     const [loadComentario, setLoadComentario] = useState<boolean>(false);
@@ -76,7 +74,6 @@ const Receita = ({ route }: { route: any }) => {
         if (curtida && curtida.length > 0) {
             setIsCurtida(true);
         }
-        setNumCurtida(curtidas.length)
 
     }, [curtidas]);
 
@@ -125,7 +122,6 @@ const Receita = ({ route }: { route: any }) => {
     }
 
     const handleNavigateToPerfilCurtida = (id: number | undefined) => {
-        setModalVisible(false);
 
         if (id == user?.id) {
             const jumpToAction = TabActions.jumpTo('User');
@@ -147,7 +143,6 @@ const Receita = ({ route }: { route: any }) => {
                 setComentarios(response.data);
                 setLoadComentario(false);
             }).catch(error => {
-                console.log({ error, pao: 'oi' });
                 Alert.alert(
                     'Resgistro de comentário',
                     `${error}`,
