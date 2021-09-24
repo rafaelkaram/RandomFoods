@@ -1,10 +1,15 @@
-# RandomFoods - Sistema de Sugestão de Receitas Culinárias
+# RandomFoods - Rede social de Sugestão de Receitas Culinárias
 ## Membros
   - André Vitor Kuduavski GRR20184595
   - Carlos Felipe Godinho Silva GRR20184630
   - Gleidison Novais dos Santos GRR20186250
   - Guilherme Vinicius Valério GRR20184636
   - Rafael Henrique Karam GRR20184601
+
+## Documentação
+Toda a documentação referente ao trabalho de conclusão de curso está disponível na biblioteca digital da Universidade Federal do Paraná pelo link:
+
+[Random Foods : Rede social de sugestão de receitas culinárias](https://acervodigital.ufpr.br/handle/1884/71966)
 
 # Instruções de uso
 ## SERVIDOR
