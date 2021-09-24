@@ -9,7 +9,7 @@
 ## Documentação
 Toda a documentação referente ao trabalho de conclusão de curso está disponível na biblioteca digital da Universidade Federal do Paraná pelo link:
 
-[Random Foods : Rede social de sugestão de receitas culinárias](https://acervodigital.ufpr.br/handle/1884/71966)
+[Random Foods : Rede social de sugestão de receitas culinárias](https://hdl.handle.net/1884/71966)
 
 # Instruções de uso
 ## SERVIDOR
